@@ -23,11 +23,8 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <img src="/logo.png" alt="Harkuhh Logo" className="h-8 w-auto object-contain" />
-          <span className="text-xl font-bold tracking-tight text-[var(--accent)]">
-            HARKUHH
-          </span>
+        <Link href="/" className="flex items-center">
+          <img src="/logo.png" alt="Harkuhh Logo" className="h-14 w-auto object-contain" />
         </Link>
 
         {/* Desktop Navigation */}
