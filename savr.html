@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Savr – Kortingscodes & Deals</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f2efe6;
+      --surface:   #e8e4d8;
+      --card:      #faf8f2;
+      --card-hover:#f4f1e8;
+      --border:    #d8d3c4;
+      --accent:    #5a7a48;
+      --accent2:   #3d5c30;
+      --text:      #1c1e18;
+      --muted:     #6e6e5c;
+      --tag-bg:    #e4e0d2;
+      --radius:    14px;
+      --shadow:    0 2px 16px rgba(0,0,0,.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ───────────────────────────────────────────────── */
+    header {
+      background: #e8e4d8;
+      border-bottom: 1px solid var(--border);
+      padding: 52px 24px 44px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 100% at 50% -10%, rgba(90,122,72,.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .logo {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--accent2);
+      display: inline-block;
+    }
+
+    .tagline {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 1rem;
+      letter-spacing: .5px;
+    }
+
+    /* ── Controls ─────────────────────────────────────────────── */
+    .controls {
+      max-width: 860px;
+      margin: 36px auto 0;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    #search {
+      width: 100%;
+      padding: 14px 16px 14px 46px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    #search::placeholder { color: var(--muted); }
+
+    #search:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(90,122,72,.15);
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: .875rem;
+      cursor: pointer;
+      transition: all .18s;
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* ── Stats bar ────────────────────────────────────────────── */
+    .stats-bar {
+      max-width: 860px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .result-count {
+      font-size: .85rem;
+      color: var(--muted);
+    }
+
+    .result-count span {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    /* ── Grid ─────────────────────────────────────────────────── */
+    .grid {
+      max-width: 860px;
+      margin: 24px auto 60px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    /* ── Card ─────────────────────────────────────────────────── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: var(--shadow);
+      transition: transform .18s, border-color .18s, background .18s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      background: var(--card-hover);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: #dfe8d8;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .category-tag {
+      font-size: .72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--tag-bg);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+
+    .card-brand {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card-product {
+      font-size: .85rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* Code box */
+    .code-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .code-box {
+      flex: 1;
+      background: var(--bg);
+      border: 1.5px dashed var(--accent);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-family: 'Courier New', monospace;
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--accent2);
+      letter-spacing: 1px;
+      user-select: all;
+    }
+
+    .copy-btn {
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: .8rem;
+      font-weight: 600;
+      transition: opacity .15s, transform .1s;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover { opacity: .85; }
+    .copy-btn:active { transform: scale(.96); }
+    .copy-btn.copied { background: #3d6030; }
+
+    /* Savings badge */
+    .savings {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--accent2);
+    }
+
+    .savings::before {
+      content: '';
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent2);
+      flex-shrink: 0;
+    }
+
+    /* Meta row */
+    .meta {
+      display: flex;
+      gap: 14px;
+      font-size: .78rem;
+      color: var(--muted);
+    }
+
+    .meta-item { display: flex; align-items: center; gap: 4px; }
+
+    /* CTA button */
+    .cta {
+      display: block;
+      text-align: center;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      padding: 11px;
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: .9rem;
+      transition: opacity .15s, transform .1s;
+      letter-spacing: .3px;
+    }
+
+    .cta:hover { opacity: .88; transform: translateY(-1px); }
+    .cta:active { transform: scale(.98); }
+
+    /* ── Empty state ──────────────────────────────────────────── */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 0;
+      color: var(--muted);
+    }
+
+    .empty svg { margin-bottom: 14px; opacity: .4; }
+    .empty p { font-size: 1rem; }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 28px;
+      color: var(--muted);
+      font-size: .8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── Toast ────────────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--accent);
+      color: #fff;
+      padding: 11px 24px;
+      border-radius: 999px;
+      font-size: .9rem;
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(0,0,0,.4);
+      transition: transform .28s cubic-bezier(.34,1.56,.64,1);
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── Dark mode overrides ──────────────────────────────────── */
+    body.dark {
+      --bg:        #111310;
+      --surface:   #191c17;
+      --card:      #1f2219;
+      --card-hover:#252a20;
+      --border:    #2d3228;
+      --accent:    #6b8c5a;
+      --accent2:   #a8bf94;
+      --text:      #ede9df;
+      --muted:     #7a8270;
+      --tag-bg:    #252a20;
+      --shadow:    0 4px 24px rgba(0,0,0,.4);
+    }
+
+    body.dark header        { background: #151813; }
+    body.dark .card-icon    { background: #2a3025; }
+    body.dark .copy-btn.copied { background: #4a7a3a; }
+
+    /* ── Theme toggle button ──────────────────────────────────── */
+    #theme-toggle {
+      position: fixed;
+      top: 18px;
+      right: 20px;
+      z-index: 100;
+      background: var(--accent);
+      border: none;
+      border-radius: 999px;
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,.2);
+      transition: background .2s, transform .15s, box-shadow .2s;
+      user-select: none;
+    }
+
+    #theme-toggle:hover {
+      transform: scale(1.08);
+      box-shadow: 0 4px 16px rgba(0,0,0,.28);
+    }
+
+    body:not(.dark) #theme-icon { color: #f2efe6; }
+    body.dark       #theme-icon { color: #111310; }
+
+    /* smooth transition on theme switch */
+    body, header, .card, #search, .filter-btn, footer {
+      transition: background .25s, color .25s, border-color .25s;
+    }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 500px) {
+      .logo { font-size: 2.2rem; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Theme toggle ── -->
+<button id="theme-toggle" onclick="toggleTheme()">
+  <span id="theme-icon">🌙</span>
+</button>
+
+<!-- ── Header ── -->
+<header>
+  <div class="logo">Savr</div>
+  <p class="tagline">Exclusieve kortingscodes & affiliate deals</p>
+</header>
+
+<!-- ── Controls ── -->
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+         viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input id="search" type="text" placeholder="Zoek op merk, product of categorie…" />
+  </div>
+  <div class="filters" id="filters"></div>
+</div>
+
+<div class="stats-bar">
+  <p class="result-count">
+    <span id="count">0</span> deals gevonden
+  </p>
+</div>
+
+<!-- ── Grid ── -->
+<main class="grid" id="grid"></main>
+
+<!-- ── Footer ── -->
+<footer>
+  © 2025 Savr &mdash; Alle links zijn affiliate links.
+  Door gebruik te maken van onze codes steun je dit platform. ❤️
+</footer>
+
+<!-- ── Toast ── -->
+<div id="toast">✓ Code gekopieerd!</div>
+
+<script>
+  /* ═══════════════════════════════════════════════════════════════
+     DATA  –  Voeg hier nieuwe partners toe
+     Velden: brand, product, category, code, savings, link,
+             commission, cookieDuration, notes, emoji
+  ═══════════════════════════════════════════════════════════════ */
+  const deals = [
+    {
+      brand:          "Engwe",
+      product:        "Alle producten (websitebreed)",
+      category:       "E-bikes",
+      code:           "ENGWE100",
+      savings:        "€100 korting",
+      link:           "https://engwe.com/?ref=uzjsbqmm",
+      commission:     "5%",
+      cookieDuration: "Altijd actief",
+      notes:          "€100 korting op alle producten",
+      emoji:          "🚲",
+    },
+    /* ── Voeg nieuwe partners hieronder toe ── */
+  ];
+
+  /* ══ Category colours ══════════════════════════════════════ */
+  const catColours = {
+    "E-bikes":   "#5a7a48",
+    "Tech":      "#4a7a6a",
+    "Beauty":    "#8a6a4a",
+    "Fitness":   "#6a8a4a",
+    "Reizen":    "#4a6a7a",
+    "Fashion":   "#8a5a4a",
+    "Overig":    "#6e6e5c",
+  };
+
+  function catColour(cat) {
+    return catColours[cat] || "#8888aa";
+  }
+
+  /* ══ Build filter buttons ═══════════════════════════════════ */
+  const categories = ["Alle", ...new Set(deals.map(d => d.category))];
+  let activeFilter = "Alle";
+  let searchQuery  = "";
+
+  const filtersEl = document.getElementById("filters");
+
+  function buildFilters() {
+    filtersEl.innerHTML = "";
+    const allCats = ["Alle", ...new Set(deals.map(d => d.category))];
+    allCats.forEach(cat => {
+      const btn = document.createElement("button");
+      btn.className = "filter-btn" + (cat === activeFilter ? " active" : "");
+      btn.textContent = cat === "Alle" ? "✦ Alle deals" : cat;
+      btn.addEventListener("click", () => {
+        activeFilter = cat;
+        buildFilters();
+        render();
+      });
+      filtersEl.appendChild(btn);
+    });
+  }
+
+  /* ══ Copy to clipboard ═══════════════════════════════════════ */
+  function copyCode(code, btn) {
+    navigator.clipboard.writeText(code).then(() => {
+      btn.textContent = "✓ Gekopieerd";
+      btn.classList.add("copied");
+      showToast();
+      setTimeout(() => {
+        btn.textContent = "Kopieer";
+        btn.classList.remove("copied");
+      }, 2000);
+    });
+  }
+
+  function showToast() {
+    const t = document.getElementById("toast");
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 2200);
+  }
+
+  /* ══ Render cards ════════════════════════════════════════════ */
+  function render() {
+    const grid = document.getElementById("grid");
+    const q    = searchQuery.toLowerCase();
+
+    const filtered = deals.filter(d => {
+      const matchCat  = activeFilter === "Alle" || d.category === activeFilter;
+      const matchSearch = !q ||
+        d.brand.toLowerCase().includes(q)    ||
+        d.product.toLowerCase().includes(q)  ||
+        d.category.toLowerCase().includes(q) ||
+        d.code.toLowerCase().includes(q)     ||
+        d.savings.toLowerCase().includes(q);
+      return matchCat && matchSearch;
+    });
+
+    document.getElementById("count").textContent = filtered.length;
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `
+        <div class="empty">
+          <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <p>Geen deals gevonden voor "<strong>${searchQuery || activeFilter}</strong>"</p>
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = "";
+
+    filtered.forEach(d => {
+      const colour = catColour(d.category);
+      const card   = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="card-icon">${d.emoji}</div>
+          <span class="category-tag" style="color:${colour};border-color:${colour}22;background:${colour}15">
+            ${d.category}
+          </span>
+        </div>
+
+        <div>
+          <div class="card-brand">${d.brand}</div>
+          <div class="card-product">${d.product}</div>
+        </div>
+
+        <div class="code-row">
+          <div class="code-box">${d.code}</div>
+          <button class="copy-btn" onclick="copyCode('${d.code}', this)">Kopieer</button>
+        </div>
+
+        <div class="savings">${d.savings}</div>
+
+        <div class="meta">
+          <span class="meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 6v6l4 2"/>
+            </svg>
+            ${d.cookieDuration}
+          </span>
+          <span class="meta-item">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+            ${d.commission} commissie
+          </span>
+        </div>
+
+        <a class="cta" href="${d.link}" target="_blank" rel="noopener">
+          Ga naar ${d.brand} →
+        </a>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  /* ══ Search listener ════════════════════════════════════════ */
+  document.getElementById("search").addEventListener("input", e => {
+    searchQuery = e.target.value;
+    render();
+  });
+
+  /* ══ Theme toggle ═══════════════════════════════════════════ */
+  function toggleTheme() {
+    const isDark = document.body.classList.toggle("dark");
+    document.getElementById("theme-icon").textContent = isDark ? "☀️" : "🌙";
+    localStorage.setItem("savr-theme", isDark ? "dark" : "light");
+  }
+
+  // Restore saved preference on load
+  if (localStorage.getItem("savr-theme") === "dark") {
+    document.body.classList.add("dark");
+    document.getElementById("theme-icon").textContent = "☀️";
+  }
+
+  /* ══ Init ═══════════════════════════════════════════════════ */
+  buildFilters();
+  render();
+</script>
+</body>
+</html>
