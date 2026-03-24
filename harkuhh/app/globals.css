@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* ============================================
+   HARKUHH DESIGN SYSTEM - Tailwind v4 Theme
+   ============================================ */
+
+@theme inline {
+  /* Brand Colors */
+  --color-harkuhh-green: #5A7A48;
+  --color-harkuhh-dark-green: #3D5C30;
+  --color-harkuhh-light-green: #6B8C5A;
+  --color-harkuhh-soft-green: #A8BF94;
+  --color-harkuhh-sage: #7A8270;
+
+  --color-offwhite: #F2EFE6;
+  --color-cream: #FAF8F2;
+  --color-surface: #E8E4D8;
+  --color-warm-grey: #D8D3C4;
+  --color-ink: #1C1E18;
+
+  /* Semantic Colors */
+  --color-background: #F2EFE6;
+  --color-foreground: #1C1E18;
+  --color-card: #FAF8F2;
+  --color-accent: #5A7A48;
+  --color-accent-hover: #3D5C30;
+  --color-muted: #7A8270;
+  --color-border: #D8D3C4;
+
+  /* Typography */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+
+  /* Shadows */
+  --shadow-soft: 0 2px 12px rgba(28, 30, 24, 0.06);
+  --shadow-card: 0 4px 16px rgba(28, 30, 24, 0.08);
+
+  /* Border Radius */
+  --radius-card: 12px;
+  --radius-button: 9999px;
+  --radius-input: 8px;
+}
+
+/* Light mode (default) */
+:root {
+  --background: #F2EFE6;
+  --foreground: #1C1E18;
+  --card-bg: #FAF8F2;
+  --accent: #5A7A48;
+  --accent-hover: #3D5C30;
+  --muted: #7A8270;
+  --border: #D8D3C4;
+  --surface: #E8E4D8;
+}
+
+/* Dark mode */
+.dark {
+  --background: #111310;
+  --foreground: #EDE9DF;
+  --card-bg: #1A1D18;
+  --accent: #6B8C5A;
+  --accent-hover: #7FA06B;
+  --muted: #9A9E92;
+  --border: #2A2D26;
+  --surface: #1E211B;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* Smooth transitions for dark mode */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
