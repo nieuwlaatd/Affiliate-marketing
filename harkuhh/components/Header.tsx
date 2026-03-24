@@ -24,7 +24,8 @@ export default function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <img src="/logo.png" alt="Harkuhh Logo" className="h-14 w-auto object-contain" />
+          <img src="/logo-light.png" alt="Harkuhh Logo" className="h-14 w-auto object-contain dark:hidden" />
+          <img src="/logo-dark.png" alt="Harkuhh Logo" className="h-14 w-auto object-contain hidden dark:block" />
         </Link>
 
         {/* Desktop Navigation */}

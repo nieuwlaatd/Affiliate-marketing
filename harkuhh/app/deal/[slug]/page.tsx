@@ -89,12 +89,11 @@ export default async function DealDetailPage({ params }: Props) {
         {/* Meta info */}
         <div className="mt-6 flex flex-wrap gap-4 border-t border-[var(--border)] pt-6 text-sm text-[var(--muted)]">
           <span>Categorie: {deal.category}</span>
-          {deal.expires_at && (
-            <span>Geldig tot: {new Date(deal.expires_at).toLocaleDateString("nl-NL")}</span>
-          )}
-          {deal.verified_at && (
-            <span>Geverifieerd: {new Date(deal.verified_at).toLocaleDateString("nl-NL")}</span>
-          )}
+          <span>
+            {deal.expires_at
+              ? `Geldig tot: ${new Date(deal.expires_at).toLocaleDateString("nl-NL")}`
+              : "Altijd geldig"}
+          </span>
         </div>
 
         {deal.notes && (

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* ============================================
    HARKUHH DESIGN SYSTEM - Tailwind v4 Theme

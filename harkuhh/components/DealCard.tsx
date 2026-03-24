@@ -60,11 +60,11 @@ export default function DealCard({
       </div>
 
       {/* Expiry */}
-      {deal.expires_at && (
-        <p className="mt-3 text-xs text-[var(--muted)]">
-          Geldig tot {new Date(deal.expires_at).toLocaleDateString("nl-NL")}
-        </p>
-      )}
+      <p className="mt-3 text-xs text-[var(--muted)]">
+        {deal.expires_at
+          ? `Geldig tot ${new Date(deal.expires_at).toLocaleDateString("nl-NL")}`
+          : "Altijd geldig"}
+      </p>
     </div>
   );
 }
