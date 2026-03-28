@@ -40,7 +40,7 @@ export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarP
   const activeCount =
     filters.suitableFor.length +
     filters.frameTypes.length +
-    (filters.priceRange[1] < 5000 ? 1 : 0);
+    (filters.priceRange[1] < 2000 ? 1 : 0);
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm mb-8">
@@ -77,14 +77,14 @@ export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarP
           <div>
             <input
               type="range"
-              min={1000}
-              max={5000}
-              step={100}
+              min={500}
+              max={2000}
+              step={50}
               value={filters.priceRange[1]}
               onChange={(e) =>
                 onFiltersChange({
                   ...filters,
-                  priceRange: [1000, Number(e.target.value)],
+                  priceRange: [500, Number(e.target.value)],
                 })
               }
               className="w-full accent-[#5A7A48]"
@@ -133,7 +133,7 @@ export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarP
                 ...filters,
                 suitableFor: [],
                 frameTypes: [],
-                priceRange: [1000, 5000],
+                priceRange: [500, 2000],
               })
             }
             className="text-sm font-medium text-red-600 hover:underline"

@@ -1,10 +1,13 @@
 import Link from 'next/link';
 import BikeCard from '@/components/BikeCard';
-import { bikes } from '@/lib/ebike-data';
 import { EBike } from '@/lib/types';
+import { getAllBikes } from '@/lib/ebike-data';
+import { getAllBrands } from '@/lib/ebike-filters';
 
-export default function FietsenHomePage() {
-  const popularBikes: EBike[] = [...bikes].sort((a, b) => b.scoreOverall - a.scoreOverall).slice(0, 6);
+export default async function FietsenHomePage() {
+  const allBikes = await getAllBikes();
+  const popularBikes: EBike[] = [...allBikes].sort((a, b) => b.scoreOverall - a.scoreOverall).slice(0, 6);
+  const brandsList = getAllBrands(allBikes).slice(0, 10);
 
   return (
     <div className="w-full">
@@ -107,7 +110,7 @@ export default function FietsenHomePage() {
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Vertrouwde merken</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {['Gazelle', 'Batavus', 'Stella', 'Giant', 'Cube', 'Trek', 'Specialized', 'Cortina', 'Sparta', 'Tenways'].map(brand => (
+            {brandsList.map(brand => (
               <div key={brand} className="flex items-center justify-center p-5 rounded-lg border border-gray-200 bg-white">
                 <span className="font-bold text-gray-700">{brand}</span>
               </div>

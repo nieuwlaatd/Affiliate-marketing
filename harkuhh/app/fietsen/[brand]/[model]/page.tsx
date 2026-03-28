@@ -1,36 +1,40 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import BikeCard from '@/components/BikeCard';
-import { bikes, getBikeBySlug, getSimilarBikes } from '@/lib/ebike-data';
+import { getAllBikes, getBikeBySlug, getSimilarBikes } from '@/lib/ebike-data';
 
 const motorLabels: Record<string, string> = { 'midden': 'Middenmotor', 'naaf-voor': 'Voornaafmotor', 'naaf-achter': 'Achternaafmotor' };
 const frameLabels: Record<string, string> = { 'laag-instap': 'Laag instap', 'hoog-instap': 'Hoog instap', 'sportief': 'Sportief' };
 const gearLabels: Record<string, string> = { 'derailleur': 'Derailleur', 'naaf': 'Naafversnelling', 'cvt': 'CVT' };
 const usageLabels: Record<string, string> = { 'woon-werk': 'Woon-werk', 'recreatief': 'Recreatief', 'sportief': 'Sportief', 'transport': 'Transport', 'off-road': 'Off-road' };
 
-export function generateStaticParams() {
-  return bikes.map(bike => ({
+export async function generateStaticParams() {
+  const allBikes = await getAllBikes();
+  return allBikes.map(bike => ({
     brand: bike.brand.toLowerCase().replace(/\s+/g, '-'),
     model: bike.slug,
   }));
 }
 
+const ScoreBar = ({ score, label }: { score: number; label: string }) => (
+  <div className="flex items-center gap-3">
+    <span className="text-sm text-gray-600 w-28 shrink-0">{label}</span>
+    <div className="flex-1 bg-gray-200 rounded-full h-2.5">
+      <div className="h-2.5 rounded-full" style={{ width: `${score * 10}%`, backgroundColor: '#5A7A48' }} />
+    </div>
+    <span className="text-sm font-bold w-8 text-right">{score}</span>
+  </div>
+);
+
 export default async function ProductPage({ params }: { params: Promise<{ brand: string; model: string }> }) {
   const { model } = await params;
-  const bike = getBikeBySlug(model);
+  const bike = await getBikeBySlug(model);
   if (!bike) notFound();
 
-  const similar = getSimilarBikes(bike, 3);
+  const similar = await getSimilarBikes(bike, 3);
 
-  const ScoreBar = ({ score, label }: { score: number; label: string }) => (
-    <div className="flex items-center gap-3">
-      <span className="text-sm text-gray-600 w-28 shrink-0">{label}</span>
-      <div className="flex-1 bg-gray-200 rounded-full h-2.5">
-        <div className="h-2.5 rounded-full" style={{ width: `${score * 10}%`, backgroundColor: '#5A7A48' }} />
-      </div>
-      <span className="text-sm font-bold w-8 text-right">{score}</span>
-    </div>
-  );
+
 
   return (
     <div className="w-full bg-gray-50 min-h-screen">
@@ -46,11 +50,22 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
 
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
           {/* Image */}
-          <div className="bg-white rounded-xl border border-gray-200 aspect-[4/3] flex items-center justify-center">
-            <svg className="w-24 h-24 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-10l2.4 2.4-2.8 2.8c-.5.5-.8 1.1-.8 1.8V20h2v-3.5l2.8-2.8 2.3 2.3.5 3h2l-1.3-6.5-2.8-2.8 2-3.5-1.7-1L12 8l-3 1v4h2V9.7l1.8-.7z" />
-              <path d="M19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z" />
-            </svg>
+          <div className="bg-white rounded-xl border border-gray-200 aspect-[4/3] flex items-center justify-center relative overflow-hidden">
+            {bike.images && bike.images.length > 0 ? (
+              <Image 
+                src={bike.images[0]} 
+                alt={`${bike.brand} ${bike.model}`} 
+                fill
+                className="object-contain p-4"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
+              />
+            ) : (
+              <svg className="w-24 h-24 text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-10l2.4 2.4-2.8 2.8c-.5.5-.8 1.1-.8 1.8V20h2v-3.5l2.8-2.8 2.3 2.3.5 3h2l-1.3-6.5-2.8-2.8 2-3.5-1.7-1L12 8l-3 1v4h2V9.7l1.8-.7z" />
+                <path d="M19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z" />
+              </svg>
+            )}
           </div>
 
           {/* Info */}
@@ -122,7 +137,7 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
             <div>
               <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">Accu</h3>
               <dl className="space-y-3">
-                <div className="flex justify-between text-sm"><dt className="text-gray-600">Capaciteit</dt><dd className="font-medium">{bike.batteryCapacity} Wh</dd></div>
+                <div className="flex justify-between text-sm"><dt className="text-gray-600">Capaciteit</dt><dd className="font-medium">{bike.batteryCapacity} Ah</dd></div>
                 <div className="flex justify-between text-sm"><dt className="text-gray-600">Bereik (fabrikant)</dt><dd className="font-medium">{bike.rangeManufacturer} km</dd></div>
                 <div className="flex justify-between text-sm"><dt className="text-gray-600">Bereik (praktijk)</dt><dd className="font-medium">~{bike.rangePractical} km</dd></div>
                 <div className="flex justify-between text-sm"><dt className="text-gray-600">Laadtijd</dt><dd className="font-medium">{bike.chargeTime} uur</dd></div>
