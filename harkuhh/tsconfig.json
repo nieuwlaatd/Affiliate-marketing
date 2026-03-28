@@ -30,5 +30,12 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "map-bikes.ts",
+    "migrate.ts",
+    "test-db.ts",
+    "test-scrape.ts",
+    "update-specs.ts"
+  ]
 }
