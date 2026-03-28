@@ -38,7 +38,9 @@ export default function DealsPage() {
     let query = supabase
       .from("deals")
       .select("*")
-      .eq("is_active", true);
+      .eq("is_active", true)
+      .not("code", "is", null)
+      .neq("code", "");
 
     if (selectedCategory) {
       const cat = categories.find((c) => c.slug === selectedCategory);

@@ -36,6 +36,9 @@ export default function Header() {
           <Link href="/deals" className="text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--foreground)]">
             Deals
           </Link>
+          <Link href="/fietsen" className="text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--foreground)]">
+            E-bikes
+          </Link>
         </nav>
 
         {/* Right side */}
@@ -83,6 +86,9 @@ export default function Header() {
             </Link>
             <Link href="/deals" onClick={() => setMenuOpen(false)} className="text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)]">
               Deals
+            </Link>
+            <Link href="/fietsen" onClick={() => setMenuOpen(false)} className="text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)]">
+              E-bikes
             </Link>
           </nav>
         </div>

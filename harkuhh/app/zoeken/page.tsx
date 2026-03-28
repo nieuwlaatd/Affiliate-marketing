@@ -29,6 +29,8 @@ function ZoekenContent() {
       .from("deals")
       .select("*")
       .eq("is_active", true)
+      .not("code", "is", null)
+      .neq("code", "")
       .or(`brand.ilike.%${q}%,product.ilike.%${q}%,category.ilike.%${q}%`)
       .order("created_at", { ascending: false })
       .limit(20);

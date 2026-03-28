@@ -40,6 +40,8 @@ export default async function CategoryPage({ params }: Props) {
     .select("*")
     .eq("is_active", true)
     .eq("category", category.name)
+    .not("code", "is", null)
+    .neq("code", "")
     .order("created_at", { ascending: false });
 
   return (

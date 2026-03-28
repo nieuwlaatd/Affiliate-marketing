@@ -48,6 +48,7 @@ export default function Footer() {
             <nav className="mt-3 flex flex-col gap-2">
               <Link href="/zoeken" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Zoeken</Link>
               <Link href="/deals" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Alle deals</Link>
+              <Link href="/fietsen" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">E-bikes</Link>
               <Link href="/account" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Mijn account</Link>
             </nav>
           </div>

@@ -9,7 +9,7 @@ export default function HeroSection() {
       <div className="mx-auto max-w-3xl">
 
 
-        {/* Twee grote knoppen */}
+        {/* Twee grote knoppen + e-bike button */}
         <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
           <Link
             href="/zoeken"
@@ -31,6 +31,21 @@ export default function HeroSection() {
               <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
             </svg>
             Ik wil browsen
+          </Link>
+          <Link
+            href="/fietsen"
+            className="flex items-center justify-center gap-3 rounded-2xl border-2 px-8 py-5 text-lg font-semibold transition-all hover:text-white"
+            style={{ borderColor: '#5A7A48', color: '#5A7A48', backgroundColor: 'transparent' }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#5A7A48'; e.currentTarget.style.color = 'white'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#5A7A48'; }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="18.5" cy="17.5" r="3.5" />
+              <circle cx="5.5" cy="17.5" r="3.5" />
+              <circle cx="15" cy="5" r="1" />
+              <path d="M12 17.5V14l-3-3 4-3 2 3h2" />
+            </svg>
+            Zoek een e-bike
           </Link>
         </div>
 
