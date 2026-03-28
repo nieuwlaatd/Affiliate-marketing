@@ -90,3 +90,138 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
 }
+/* Custom slider (range) */
+.harkuhh-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 999px;
+  outline: none;
+  margin: 12px 0;
+}
+
+.harkuhh-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s ease-in-out, background-color 0.2s ease;
+}
+
+.harkuhh-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  background: var(--accent-hover);
+}
+
+.harkuhh-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s ease-in-out, background-color 0.2s ease;
+}
+
+.harkuhh-slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  background: var(--accent-hover);
+}
+
+/* Custom Checkbox */
+.harkuhh-checkbox {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: white;
+  margin: 0;
+  font: inherit;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.harkuhh-checkbox::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transform: scale(0);
+  transform-origin: bottom left;
+  transition: 120ms transform ease-in-out;
+  background-color: white;
+}
+
+.harkuhh-checkbox:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.harkuhh-checkbox:checked::before {
+  transform: scale(1);
+}
+
+.harkuhh-checkbox:hover {
+  border-color: var(--accent);
+}
+
+.harkuhh-checkbox:focus {
+  outline: 2px solid var(--accent-hover);
+  outline-offset: 2px;
+}
+
+/* Custom Select */
+.harkuhh-select {
+  appearance: none;
+  background-color: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 36px 8px 16px;
+  font-size: 14px;
+  color: var(--foreground);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%235A7A48' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.harkuhh-select:hover {
+  border-color: var(--accent);
+}
+
+.harkuhh-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(90, 122, 72, 0.15);
+}
+
+/* Custom Input */
+.harkuhh-input {
+  background-color: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: var(--foreground);
+  transition: all 0.2s ease;
+}
+
+.harkuhh-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(90, 122, 72, 0.15);
+}

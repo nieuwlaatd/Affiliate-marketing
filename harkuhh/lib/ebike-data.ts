@@ -51,6 +51,11 @@ export function mapRowToEBike(row: Record<string, unknown>): EBike {
     testRideUrl: withAffiliateTag(row.test_ride_url as string),
     description: row.description as string,
     highlights: (row.highlights as string[]) || [],
+    availableFrameSizes: (row.available_frame_sizes as number[]) || [],
+    minRiderHeight: row.min_rider_height as number,
+    maxRiderHeight: row.max_rider_height as number,
+    dimensions: row.dimensions as EBike['dimensions'],
+    fullSpecs: row.full_specs as Record<string, string>,
   };
 }
 

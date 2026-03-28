@@ -165,6 +165,21 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
           </div>
         </div>
 
+        {/* All Specs (Dynamic) */}
+        {bike.fullSpecs && Object.keys(bike.fullSpecs).length > 0 && (
+          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Alle Technische Details</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-4">
+              {Object.entries(bike.fullSpecs).map(([key, value]) => (
+                <div key={key} className="flex flex-col border-b border-gray-50 pb-2">
+                  <dt className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{key}</dt>
+                  <dd className="text-sm font-medium text-gray-800 mt-1">{value}</dd>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Compare CTA */}
         <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-12 text-center">
           <h2 className="text-lg font-bold text-gray-900 mb-2">Wil je deze fiets vergelijken?</h2>

@@ -7,7 +7,6 @@ import { getAllBrands, filterBikes } from '@/lib/ebike-filters';
 import { EBike, FilterState } from '@/lib/types';
 
 const motorLabels: Record<string, string> = { 'midden': 'Middenmotor', 'naaf-voor': 'Voornaaf', 'naaf-achter': 'Achternaaf' };
-const frameLabels: Record<string, string> = { 'laag-instap': 'Laag instap', 'hoog-instap': 'Hoog instap', 'sportief': 'Sportief' };
 const doelLabels: Record<string, string> = { 'woon-werk': 'Woon-werk', 'recreatief': 'Recreatief', 'sportief': 'Sportief', 'transport': 'Transport', 'off-road': 'Off-road' };
 const sortLabels: Record<string, string> = { 'score': 'Beste score', 'price-asc': 'Prijs laag-hoog', 'price-desc': 'Prijs hoog-laag', 'range': 'Grootste bereik', 'newest': 'Nieuwste' };
 
@@ -15,13 +14,14 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
   const allBrands = getAllBrands(initialBikes);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
-    priceRange: [500, 2000],
+    priceRange: [500, 4000],
     brands: [],
     motorTypes: [],
     frameTypes: [],
     suitableFor: [],
     minRange: 0,
     sortBy: 'score',
+    frameSizes: []
   });
 
   const filteredBikes = useMemo(() => filterBikes(initialBikes, filters), [initialBikes, filters]);
@@ -34,11 +34,29 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
     });
   };
 
-  const activeFilterCount = filters.brands.length + filters.motorTypes.length + filters.frameTypes.length + filters.suitableFor.length + (filters.minRange > 0 ? 1 : 0);
+  const activeFilterCount = filters.brands.length + filters.motorTypes.length + filters.frameTypes.length + filters.suitableFor.length + (filters.minRange > 0 ? 1 : 0) + (filters.afstandPerRit ? 1 : 0) + (filters.omgeving ? 1 : 0) + (filters.lichaamslengte ? 1 : 0) + (filters.priceRange[1] < 4000 ? 1 : 0) + (filters.frameSizes.length > 0 ? 1 : 0);
 
   const resetFilters = () => setFilters({
-    priceRange: [500, 2000], brands: [], motorTypes: [], frameTypes: [], suitableFor: [], minRange: 0, sortBy: filters.sortBy,
+    priceRange: [500, 4000], brands: [], motorTypes: [], frameTypes: [], suitableFor: [], minRange: 0, sortBy: filters.sortBy,
+    afstandPerRit: undefined, omgeving: undefined, lichaamslengte: undefined, frameSizes: []
   });
+
+  const handleFiltersChange = (newFilters: FilterState) => {
+    // Sync height to frame size if height changed
+    if (newFilters.lichaamslengte !== filters.lichaamslengte && newFilters.lichaamslengte) {
+      if (newFilters.lichaamslengte > 140) {
+        const estFrame = Math.round(newFilters.lichaamslengte * 0.31);
+        const commonSizes = [47, 50, 53, 57, 61];
+        const closest = commonSizes.reduce((prev, curr) => 
+          Math.abs(curr - estFrame) < Math.abs(prev - estFrame) ? curr : prev
+        );
+        newFilters.frameSizes = [closest];
+      } else {
+        newFilters.frameSizes = [];
+      }
+    }
+    setFilters(newFilters);
+  };
 
   return (
     <div className="w-full bg-gray-50 min-h-screen">
@@ -56,7 +74,7 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
             <select
               value={filters.sortBy}
               onChange={(e) => setFilters(prev => ({ ...prev, sortBy: e.target.value as FilterState['sortBy'] }))}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-sm bg-white"
+              className="harkuhh-select"
             >
               {Object.entries(sortLabels).map(([val, label]) => (
                 <option key={val} value={val}>{label}</option>
@@ -66,7 +84,7 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
         </div>
 
         {/* KeuzehulpBar — inline filterbalk */}
-        <KeuzehulpBar filters={filters} onFiltersChange={setFilters} />
+        <KeuzehulpBar filters={filters} onFiltersChange={handleFiltersChange} />
 
         <div className="flex gap-8">
           {/* Sidebar filters */}
@@ -84,8 +102,11 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
                 <h3 className="text-sm font-semibold text-gray-700 mb-3">Prijs (max)</h3>
                 <input type="range" min={500} max={2000} step={50} value={filters.priceRange[1]}
                   onChange={(e) => setFilters(prev => ({ ...prev, priceRange: [500, Number(e.target.value)] }))}
-                  className="w-full" />
-                <div className="text-sm text-gray-600 mt-1">Tot €{filters.priceRange[1].toLocaleString('nl-NL')}</div>
+                  className="harkuhh-slider" />
+                <div className="flex justify-between text-xs font-semibold text-gray-500 mt-1">
+                  <span>€500</span>
+                  <span>Tot €{filters.priceRange[1].toLocaleString('nl-NL')}</span>
+                </div>
               </div>
 
               {/* Brands */}
@@ -94,8 +115,8 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
                 <div className="space-y-2 max-h-48 overflow-y-auto">
                   {allBrands.map(brand => (
                     <label key={brand} className="flex items-center gap-2 text-sm cursor-pointer">
-                      <input type="checkbox" checked={filters.brands.includes(brand)} onChange={() => toggleFilter('brands', brand)} className="rounded" />
-                      <span className="text-gray-700">{brand}</span>
+                      <input type="checkbox" checked={filters.brands.includes(brand)} onChange={() => toggleFilter('brands', brand)} className="harkuhh-checkbox" />
+                      <span className="text-gray-700 font-medium">{brand}</span>
                     </label>
                   ))}
                 </div>
@@ -107,25 +128,13 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
                 <div className="space-y-2">
                   {Object.entries(motorLabels).map(([val, label]) => (
                     <label key={val} className="flex items-center gap-2 text-sm cursor-pointer">
-                      <input type="checkbox" checked={filters.motorTypes.includes(val)} onChange={() => toggleFilter('motorTypes', val)} className="rounded" />
-                      <span className="text-gray-700">{label}</span>
+                      <input type="checkbox" checked={filters.motorTypes.includes(val)} onChange={() => toggleFilter('motorTypes', val)} className="harkuhh-checkbox" />
+                      <span className="text-gray-700 font-medium">{label}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
-              {/* Frame type */}
-              <div className="mb-6">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">Frametype</h3>
-                <div className="space-y-2">
-                  {Object.entries(frameLabels).map(([val, label]) => (
-                    <label key={val} className="flex items-center gap-2 text-sm cursor-pointer">
-                      <input type="checkbox" checked={filters.frameTypes.includes(val)} onChange={() => toggleFilter('frameTypes', val)} className="rounded" />
-                      <span className="text-gray-700">{label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
 
               {/* Usage */}
               <div className="mb-6">
@@ -133,11 +142,44 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
                 <div className="space-y-2">
                   {Object.entries(doelLabels).map(([val, label]) => (
                     <label key={val} className="flex items-center gap-2 text-sm cursor-pointer">
-                      <input type="checkbox" checked={filters.suitableFor.includes(val)} onChange={() => toggleFilter('suitableFor', val)} className="rounded" />
-                      <span className="text-gray-700">{label}</span>
+                      <input type="checkbox" checked={filters.suitableFor.includes(val)} onChange={() => toggleFilter('suitableFor', val)} className="harkuhh-checkbox" />
+                      <span className="text-gray-700 font-medium">{label}</span>
                     </label>
                   ))}
                 </div>
+              </div>
+
+              {/* Frame size */}
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">Framemaat (cm)</h3>
+                <div className="flex flex-wrap gap-2">
+                  {[47, 50, 53, 57, 61].map(size => {
+                    const isActive = filters.frameSizes.includes(size);
+                    return (
+                      <button
+                        key={size}
+                        onClick={() => {
+                          const newSizes = isActive 
+                            ? filters.frameSizes.filter(s => s !== size)
+                            : [...filters.frameSizes, size];
+                          setFilters(prev => ({ ...prev, frameSizes: newSizes }));
+                        }}
+                        className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all border ${
+                          isActive
+                            ? 'bg-[#5A7A48] text-white border-[#5A7A48] shadow-sm'
+                            : 'bg-white text-gray-600 border-gray-200 hover:border-[#5A7A48]'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    );
+                  })}
+                </div>
+                {filters.lichaamslengte && (
+                  <p className="text-[10px] text-gray-400 mt-2 italic font-medium">
+                    * Gebaseerd op lengte {filters.lichaamslengte} cm
+                  </p>
+                )}
               </div>
 
               {/* Min range */}
@@ -145,9 +187,15 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
                 <h3 className="text-sm font-semibold text-gray-700 mb-3">Min. bereik (km)</h3>
                 <input type="range" min={0} max={120} step={10} value={filters.minRange}
                   onChange={(e) => setFilters(prev => ({ ...prev, minRange: Number(e.target.value) }))}
-                  className="w-full" />
-                <div className="text-sm text-gray-600 mt-1">{filters.minRange > 0 ? `Minimaal ${filters.minRange} km` : 'Geen minimum'}</div>
+                  className="harkuhh-slider" />
+                <div className="flex justify-between text-xs font-semibold text-gray-500 mt-1">
+                  <span>0 km</span>
+                  <span>{filters.minRange > 0 ? `Minimaal ${filters.minRange} km` : 'Geen minimum'}</span>
+                </div>
               </div>
+
+
+
             </div>
           </aside>
 
@@ -156,7 +204,7 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
             {filteredBikes.length > 0 ? (
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredBikes.map(bike => (
-                  <BikeCard key={bike.id} bike={bike} />
+                  <BikeCard key={bike.id} bike={bike} userHeight={filters.lichaamslengte} />
                 ))}
               </div>
             ) : (

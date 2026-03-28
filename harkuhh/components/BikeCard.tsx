@@ -5,6 +5,7 @@ import { EBike } from '@/lib/types';
 interface BikeCardProps {
   bike: EBike;
   compact?: boolean;
+  userHeight?: number;
 }
 
 const motorTypeLabels: Record<string, string> = {
@@ -21,9 +22,13 @@ const usageLabels: Record<string, string> = {
   'off-road': 'Off-road',
 };
 
-export default function BikeCard({ bike, compact = false }: BikeCardProps) {
+export default function BikeCard({ bike, compact = false, userHeight }: BikeCardProps) {
   const brandSlug = bike.brand.toLowerCase().replace(/\s+/g, '-');
   const href = `/fietsen/${brandSlug}/${bike.slug}`;
+
+  const isFit = userHeight && bike.minRiderHeight && bike.maxRiderHeight 
+    ? (userHeight >= bike.minRiderHeight && userHeight <= bike.maxRiderHeight)
+    : null;
 
   return (
     <Link href={href} className="group block bg-white rounded-xl border border-gray-200 hover:border-green-400 hover:shadow-lg transition-all overflow-hidden">
@@ -49,6 +54,13 @@ export default function BikeCard({ bike, compact = false }: BikeCardProps) {
         <div className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-bold text-white" style={{ backgroundColor: '#5A7A48' }}>
           {bike.scoreOverall}/10
         </div>
+        
+        {isFit && (
+          <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg shadow-sm border border-green-200 flex items-center gap-1.5 animate-in fade-in slide-in-from-bottom-2">
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            <span className="text-[10px] font-bold text-green-700 uppercase tracking-wider">Past jou</span>
+          </div>
+        )}
       </div>
 
       <div className="p-4">
@@ -70,6 +82,24 @@ export default function BikeCard({ bike, compact = false }: BikeCardProps) {
                 </span>
               ))}
             </div>
+
+            {/* Dimensions Preview */}
+            {(bike.minRiderHeight || bike.dimensions) && (
+              <div className="mt-4 pt-3 border-t border-gray-100 grid grid-cols-2 gap-2 text-[10px]">
+                {bike.minRiderHeight && (
+                  <div className="flex flex-col">
+                    <span className="text-gray-400 uppercase font-bold">Lengte</span>
+                    <span className="text-gray-700 font-medium">{bike.minRiderHeight} - {bike.maxRiderHeight} cm</span>
+                  </div>
+                )}
+                {bike.dimensions?.standoverHeight && (
+                  <div className="flex flex-col">
+                    <span className="text-gray-400 uppercase font-bold">Standover</span>
+                    <span className="text-gray-700 font-medium">{bike.dimensions.standoverHeight} cm</span>
+                  </div>
+                )}
+              </div>
+            )}
           </>
         )}
       </div>

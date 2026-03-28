@@ -102,6 +102,18 @@ export interface EBike {
 
   description: string;
   highlights: string[];
+  availableFrameSizes?: number[];
+  minRiderHeight?: number;
+  maxRiderHeight?: number;
+  dimensions?: {
+    standoverHeight?: number;
+    reach?: number;
+    totalLength?: number;
+    saddleHeightRange?: [number, number];
+    handlebarHeight?: number;
+    foldedSize?: string;
+  };
+  fullSpecs?: Record<string, string>;
 }
 
 export type KennisNiveau = 'beginner' | 'gemiddeld' | 'expert';
@@ -124,4 +136,8 @@ export interface FilterState {
   suitableFor: string[];
   minRange: number;
   sortBy: 'price-asc' | 'price-desc' | 'score' | 'range' | 'newest';
+  afstandPerRit?: number;
+  omgeving?: 'stad' | 'heuvelachtig' | 'onverhard';
+  lichaamslengte?: number;
+  frameSizes: number[];
 }
