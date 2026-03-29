@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import BikeCard from '@/components/BikeCard';
+import FilterMatchBlock from '@/components/FilterMatchBlock';
 import { getAllBikes, getBikeBySlug, getSimilarBikes } from '@/lib/ebike-data';
 
 const motorLabels: Record<string, string> = { 'midden': 'Middenmotor', 'naaf-voor': 'Voornaafmotor', 'naaf-achter': 'Achternaafmotor' };
@@ -109,6 +111,11 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
             </div>
           </div>
         </div>
+
+        {/* Filter Match Block (shows when user came from filtered overview) */}
+        <Suspense fallback={null}>
+          <FilterMatchBlock bike={bike} />
+        </Suspense>
 
         {/* Scores */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">

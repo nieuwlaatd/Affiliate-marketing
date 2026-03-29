@@ -41,10 +41,32 @@ export function filterBikes(bikesList: EBike[], filters: FilterState): EBike[] {
     }
   }
 
-  if (filters.frameSizes.length > 0) {
-    result = result.filter(b => 
-      b.availableFrameSizes?.some(size => filters.frameSizes.includes(size))
-    );
+  if (filters.heightRanges?.length > 0) {
+    result = result.filter(b => {
+      // If we don't have height info for the bike, we can't filter positively
+      if (!b.minRiderHeight && !b.maxRiderHeight) return true;
+      
+      return filters.heightRanges.some(range => {
+        let min = 0;
+        let max = 999;
+        
+        if (range.startsWith('<')) {
+          max = parseInt(range.substring(1));
+        } else if (range.endsWith('+')) {
+          min = parseInt(range.substring(0, range.length - 1));
+        } else {
+          const parts = range.split('-');
+          min = parseInt(parts[0]);
+          max = parseInt(parts[1]);
+        }
+        
+        // Check for overlap [min, max] and [b.min, b.max]
+        const bikeMin = b.minRiderHeight || 0;
+        const bikeMax = b.maxRiderHeight || 999;
+        
+        return bikeMin <= max && bikeMax >= min;
+      });
+    });
   }
 
   if (filters.lichaamslengte) {
@@ -57,6 +79,18 @@ export function filterBikes(bikesList: EBike[], filters: FilterState): EBike[] {
       // Fallback: If we only have specific frame sizes, we can't be sure, but let's keep it visible
       return true;
     });
+  }
+
+  if (filters.foldable) {
+    result = result.filter(b => b.dimensions?.foldedSize && b.dimensions.foldedSize !== 'Yes');
+  }
+
+  if (filters.removableBattery) {
+    result = result.filter(b => b.batteryRemovable);
+  }
+
+  if (filters.maxBikeWeight && filters.maxBikeWeight > 0) {
+    result = result.filter(b => b.weight <= filters.maxBikeWeight!);
   }
 
   switch (filters.sortBy) {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import BikeCard from '@/components/BikeCard';
 import KeuzehulpBar from '@/components/KeuzehulpBar';
 import { getAllBrands, filterBikes } from '@/lib/ebike-filters';
@@ -21,7 +21,10 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
     suitableFor: [],
     minRange: 0,
     sortBy: 'score',
-    frameSizes: []
+    heightRanges: [],
+    foldable: undefined,
+    removableBattery: undefined,
+    maxBikeWeight: undefined,
   });
 
   const filteredBikes = useMemo(() => filterBikes(initialBikes, filters), [initialBikes, filters]);
@@ -34,29 +37,83 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
     });
   };
 
-  const activeFilterCount = filters.brands.length + filters.motorTypes.length + filters.frameTypes.length + filters.suitableFor.length + (filters.minRange > 0 ? 1 : 0) + (filters.afstandPerRit ? 1 : 0) + (filters.omgeving ? 1 : 0) + (filters.lichaamslengte ? 1 : 0) + (filters.priceRange[1] < 4000 ? 1 : 0) + (filters.frameSizes.length > 0 ? 1 : 0);
+  const activeFilterCount = filters.brands.length + filters.motorTypes.length + filters.frameTypes.length + filters.suitableFor.length + (filters.minRange > 0 ? 1 : 0) + (filters.afstandPerRit ? 1 : 0) + (filters.omgeving ? 1 : 0) + (filters.lichaamslengte ? 1 : 0) + (filters.priceRange[1] < 4000 ? 1 : 0) + (filters.heightRanges.length > 0 ? 1 : 0) + (filters.foldable ? 1 : 0) + (filters.removableBattery ? 1 : 0) + (filters.maxBikeWeight ? 1 : 0);
 
   const resetFilters = () => setFilters({
     priceRange: [500, 4000], brands: [], motorTypes: [], frameTypes: [], suitableFor: [], minRange: 0, sortBy: filters.sortBy,
-    afstandPerRit: undefined, omgeving: undefined, lichaamslengte: undefined, frameSizes: []
+    afstandPerRit: undefined, omgeving: undefined, lichaamslengte: undefined, heightRanges: [],
+    foldable: undefined, removableBattery: undefined, maxBikeWeight: undefined,
   });
 
   const handleFiltersChange = (newFilters: FilterState) => {
-    // Sync height to frame size if height changed
+    // Sync height to heightRanges if height changed
     if (newFilters.lichaamslengte !== filters.lichaamslengte && newFilters.lichaamslengte) {
-      if (newFilters.lichaamslengte > 140) {
-        const estFrame = Math.round(newFilters.lichaamslengte * 0.31);
-        const commonSizes = [47, 50, 53, 57, 61];
-        const closest = commonSizes.reduce((prev, curr) => 
-          Math.abs(curr - estFrame) < Math.abs(prev - estFrame) ? curr : prev
-        );
-        newFilters.frameSizes = [closest];
-      } else {
-        newFilters.frameSizes = [];
-      }
+      const h = newFilters.lichaamslengte;
+      let range = "";
+      if (h < 160) range = "< 160";
+      else if (h < 170) range = "160-170";
+      else if (h < 180) range = "170-180";
+      else if (h < 190) range = "180-190";
+      else if (h < 200) range = "190-200";
+      else range = "200+";
+      
+      newFilters.heightRanges = [range];
     }
     setFilters(newFilters);
   };
+
+  // ── Smart Sticky Sidebar Logic ──────────────────────────────
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const [sidebarStyle, setSidebarStyle] = useState<React.CSSProperties>({
+    position: 'sticky',
+    top: '128px', // Start with top-offset
+    transition: 'top 0.1s ease-out'
+  });
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    
+    const onScroll = () => {
+      if (!sidebarRef.current) return;
+      
+      const currentScrollY = window.scrollY;
+      const scrollingDown = currentScrollY > lastScrollY;
+      const sidebarHeight = sidebarRef.current.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const topOffset = 120; // Room for header
+      const bottomOffset = 20; // Room at bottom
+      
+      // If sidebar fits entirely in viewport, just keep it sticky at the top
+      if (sidebarHeight + topOffset + bottomOffset < viewportHeight) {
+        setSidebarStyle({ position: 'sticky', top: `${topOffset}px` });
+        lastScrollY = currentScrollY;
+        return;
+      }
+
+      // If sidebar is taller than viewport:
+      if (scrollingDown) {
+        // When scrolling down, stick to the bottom
+        setSidebarStyle({ 
+          position: 'sticky', 
+          top: `${viewportHeight - sidebarHeight - bottomOffset}px`,
+          transition: 'top 0.3s ease-out' // Smooth transition to bottom stick
+        });
+      } else {
+        // When scrolling up, stick to the top
+        setSidebarStyle({ 
+          position: 'sticky', 
+          top: `${topOffset}px`,
+          transition: 'top 0.3s ease-out' // Smooth transition to top stick
+        });
+      }
+      
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
 
   return (
     <div className="w-full bg-gray-50 min-h-screen">
@@ -89,7 +146,11 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
         <div className="flex gap-8">
           {/* Sidebar filters */}
           <aside className={`w-64 shrink-0 ${showFilters ? 'block' : 'hidden'} lg:block`}>
-            <div className="bg-white rounded-xl border border-gray-200 p-6 sticky top-24">
+            <div 
+              ref={sidebarRef}
+              style={sidebarStyle}
+              className="bg-white rounded-xl border border-gray-200 pt-8 pb-10 px-6"
+            >
               <div className="flex items-center justify-between mb-6">
                 <h2 className="font-bold text-gray-900">Filters</h2>
                 {activeFilterCount > 0 && (
@@ -149,20 +210,20 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
                 </div>
               </div>
 
-              {/* Frame size */}
+              {/* Height Ranges */}
               <div className="mb-6">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">Framemaat (cm)</h3>
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">Lengte berijder (cm)</h3>
                 <div className="flex flex-wrap gap-2">
-                  {[47, 50, 53, 57, 61].map(size => {
-                    const isActive = filters.frameSizes.includes(size);
+                  {["< 160", "160-170", "170-180", "180-190", "190-200", "200+"].map(range => {
+                    const isActive = filters.heightRanges.includes(range);
                     return (
                       <button
-                        key={size}
+                        key={range}
                         onClick={() => {
-                          const newSizes = isActive 
-                            ? filters.frameSizes.filter(s => s !== size)
-                            : [...filters.frameSizes, size];
-                          setFilters(prev => ({ ...prev, frameSizes: newSizes }));
+                          const newRanges = isActive 
+                            ? filters.heightRanges.filter(r => r !== range)
+                            : [...filters.heightRanges, range];
+                          setFilters(prev => ({ ...prev, heightRanges: newRanges }));
                         }}
                         className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all border ${
                           isActive
@@ -170,14 +231,14 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
                             : 'bg-white text-gray-600 border-gray-200 hover:border-[#5A7A48]'
                         }`}
                       >
-                        {size}
+                        {range}
                       </button>
                     );
                   })}
                 </div>
                 {filters.lichaamslengte && (
                   <p className="text-[10px] text-gray-400 mt-2 italic font-medium">
-                    * Gebaseerd op lengte {filters.lichaamslengte} cm
+                    * Gebaseerd op keuze {filters.lichaamslengte} cm
                   </p>
                 )}
               </div>
@@ -194,6 +255,50 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
                 </div>
               </div>
 
+              {/* Foldable toggle */}
+              <div className="mb-6">
+                <label className="flex items-center justify-between cursor-pointer group">
+                  <span className="text-sm font-semibold text-gray-700">Opvouwbaar</span>
+                  <button
+                    onClick={() => setFilters(prev => ({ ...prev, foldable: prev.foldable ? undefined : true }))}
+                    className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${filters.foldable ? 'bg-[#5A7A48]' : 'bg-gray-300'}`}
+                  >
+                    <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${filters.foldable ? 'translate-x-5' : ''}`} />
+                  </button>
+                </label>
+                <p className="text-[10px] text-gray-400 mt-1">Alleen fietsen die je kunt opvouwen</p>
+              </div>
+
+              {/* Removable battery toggle */}
+              <div className="mb-6">
+                <label className="flex items-center justify-between cursor-pointer group">
+                  <span className="text-sm font-semibold text-gray-700">Afneembare accu</span>
+                  <button
+                    onClick={() => setFilters(prev => ({ ...prev, removableBattery: prev.removableBattery ? undefined : true }))}
+                    className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${filters.removableBattery ? 'bg-[#5A7A48]' : 'bg-gray-300'}`}
+                  >
+                    <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${filters.removableBattery ? 'translate-x-5' : ''}`} />
+                  </button>
+                </label>
+                <p className="text-[10px] text-gray-400 mt-1">Handig als je de accu apart wilt opladen</p>
+              </div>
+
+              {/* Max weight slider */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">Max. fietsgewicht (kg)</h3>
+                <input type="range" min={0} max={50} step={5}
+                  value={filters.maxBikeWeight || 50}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    setFilters(prev => ({ ...prev, maxBikeWeight: val >= 50 ? undefined : val }));
+                  }}
+                  className="harkuhh-slider" />
+                <div className="flex justify-between text-xs font-semibold text-gray-500 mt-1">
+                  <span>15 kg</span>
+                  <span>{filters.maxBikeWeight && filters.maxBikeWeight < 50 ? `Max ${filters.maxBikeWeight} kg` : 'Geen maximum'}</span>
+                </div>
+                <p className="text-[10px] text-gray-400 mt-1">Belangrijk als je de fiets moet tillen</p>
+              </div>
 
 
             </div>
@@ -204,7 +309,7 @@ export default function OverzichtClient({ initialBikes }: { initialBikes: EBike[
             {filteredBikes.length > 0 ? (
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredBikes.map(bike => (
-                  <BikeCard key={bike.id} bike={bike} userHeight={filters.lichaamslengte} />
+                  <BikeCard key={bike.id} bike={bike} userHeight={filters.lichaamslengte} activeFilters={filters} />
                 ))}
               </div>
             ) : (

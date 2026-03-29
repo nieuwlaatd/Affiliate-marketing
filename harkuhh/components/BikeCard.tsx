@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { EBike } from '@/lib/types';
+import { EBike, FilterState } from '@/lib/types';
 
 interface BikeCardProps {
   bike: EBike;
   compact?: boolean;
   userHeight?: number;
+  activeFilters?: FilterState;
 }
 
 const motorTypeLabels: Record<string, string> = {
@@ -22,9 +23,29 @@ const usageLabels: Record<string, string> = {
   'off-road': 'Off-road',
 };
 
-export default function BikeCard({ bike, compact = false, userHeight }: BikeCardProps) {
+export default function BikeCard({ bike, compact = false, userHeight, activeFilters }: BikeCardProps) {
   const brandSlug = bike.brand.toLowerCase().replace(/\s+/g, '-');
-  const href = `/fietsen/${brandSlug}/${bike.slug}`;
+  
+  // Build query string from active filters
+  const buildFilterQuery = () => {
+    if (!activeFilters) return '';
+    const params = new URLSearchParams();
+    if (activeFilters.priceRange[1] < 4000) params.set('budget', String(activeFilters.priceRange[1]));
+    if (activeFilters.suitableFor.length > 0) params.set('doel', activeFilters.suitableFor.join(','));
+    if (activeFilters.omgeving) params.set('omgeving', activeFilters.omgeving);
+    if (activeFilters.lichaamslengte) params.set('lengte', String(activeFilters.lichaamslengte));
+    if (activeFilters.frameTypes.length > 0) params.set('frame', activeFilters.frameTypes.join(','));
+    if (activeFilters.minRange > 0) params.set('bereik', String(activeFilters.minRange));
+    if (activeFilters.foldable) params.set('opvouwbaar', '1');
+    if (activeFilters.removableBattery) params.set('accuAfneembaar', '1');
+    if (activeFilters.maxBikeWeight) params.set('maxGewicht', String(activeFilters.maxBikeWeight));
+    if (activeFilters.motorTypes.length > 0) params.set('motor', activeFilters.motorTypes.join(','));
+    if (activeFilters.heightRanges.length > 0) params.set('lengteRanges', activeFilters.heightRanges.join(','));
+    const qs = params.toString();
+    return qs ? `?${qs}` : '';
+  };
+
+  const href = `/fietsen/${brandSlug}/${bike.slug}${buildFilterQuery()}`;
 
   const isFit = userHeight && bike.minRiderHeight && bike.maxRiderHeight 
     ? (userHeight >= bike.minRiderHeight && userHeight <= bike.maxRiderHeight)

@@ -139,5 +139,8 @@ export interface FilterState {
   afstandPerRit?: number;
   omgeving?: 'stad' | 'heuvelachtig' | 'onverhard';
   lichaamslengte?: number;
-  frameSizes: number[];
+  heightRanges: string[];
+  foldable?: boolean;
+  removableBattery?: boolean;
+  maxBikeWeight?: number;
 }
