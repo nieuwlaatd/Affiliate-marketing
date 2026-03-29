@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { ShortlistProvider } from '@/lib/shortlist-context';
+import ShortlistBar from '@/components/ShortlistBar';
 
 export default function FietsenLayout({
   children,
@@ -55,7 +57,10 @@ export default function FietsenLayout({
           </Link>
         </div>
       </nav>
-      {children}
+      <ShortlistProvider>
+        {children}
+        <ShortlistBar />
+      </ShortlistProvider>
     </>
   );
 }

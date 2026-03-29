@@ -13,20 +13,20 @@ export default async function FietsenHomePage() {
     <div className="w-full">
       {/* Hero Section */}
       <section className="relative w-full py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-white to-orange-50 opacity-80"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-white to-orange-50 dark:from-[#1a2418] dark:via-[var(--background)] dark:to-[#1a1d18] opacity-80"></div>
         <div className="relative max-w-6xl mx-auto">
           <div className="max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--foreground)] mb-6 leading-tight">
               Vind jouw ideale elektrische fiets
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl leading-relaxed">
+            <p className="text-lg sm:text-xl text-[var(--muted)] mb-8 max-w-2xl leading-relaxed">
               Ontdek welke e-bike perfect bij jou past met onze intelligente keuzehulp. In slechts enkele stappen vinden we de juiste match voor jouw behoeften en budget.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/e-bikes/overzicht" className="inline-flex items-center justify-center px-8 py-4 text-white font-bold rounded-lg transition-colors shadow-lg hover:shadow-xl" style={{ backgroundColor: '#5A7A48' }}>
                 Vind jouw e-bike
               </Link>
-              <Link href="/e-bikes/overzicht" className="inline-flex items-center justify-center px-8 py-4 bg-white border-2 font-bold rounded-lg hover:bg-green-50 transition-colors" style={{ borderColor: '#5A7A48', color: '#5A7A48' }}>
+              <Link href="/e-bikes/overzicht" className="inline-flex items-center justify-center px-8 py-4 bg-[var(--card-bg)] border-2 font-bold rounded-lg hover:bg-[var(--surface)] transition-colors" style={{ borderColor: '#5A7A48', color: '#5A7A48' }}>
                 Bekijk alle e-bikes
               </Link>
             </div>
@@ -35,11 +35,11 @@ export default async function FietsenHomePage() {
       </section>
 
       {/* How It Works */}
-      <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-[var(--card-bg)]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Zo werkt het</h2>
-            <p className="text-gray-600 text-lg">Onze keuzehulp maakt het gemakkelijk om de perfecte e-bike te vinden</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-[var(--foreground)] mb-4">Zo werkt het</h2>
+            <p className="text-[var(--muted)] text-lg">Onze keuzehulp maakt het gemakkelijk om de perfecte e-bike te vinden</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
@@ -51,8 +51,8 @@ export default async function FietsenHomePage() {
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-6" style={{ backgroundColor: '#5A7A4820' }}>
                   <span className="text-2xl font-bold" style={{ color: '#5A7A48' }}>{item.step}</span>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
+                <h3 className="text-xl font-bold text-[var(--foreground)] mb-2">{item.title}</h3>
+                <p className="text-[var(--muted)]">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -60,11 +60,11 @@ export default async function FietsenHomePage() {
       </section>
 
       {/* Popular Bikes */}
-      <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-[var(--background)]">
         <div className="max-w-6xl mx-auto">
           <div className="mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Populaire e-bikes</h2>
-            <p className="text-gray-600 text-lg">De best beoordeelde elektrische fietsen</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-[var(--foreground)] mb-2">Populaire e-bikes</h2>
+            <p className="text-[var(--muted)] text-lg">De best beoordeelde elektrische fietsen</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {popularBikes.map(bike => (
@@ -80,11 +80,11 @@ export default async function FietsenHomePage() {
       </section>
 
       {/* Categories */}
-      <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-[var(--card-bg)]">
         <div className="max-w-6xl mx-auto">
           <div className="mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Naar gebruiksdoel</h2>
-            <p className="text-gray-600 text-lg">Vind e-bikes voor jouw favoriete manier van fietsen</p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-[var(--foreground)] mb-2">Naar gebruiksdoel</h2>
+            <p className="text-[var(--muted)] text-lg">Vind e-bikes voor jouw favoriete manier van fietsen</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -93,10 +93,10 @@ export default async function FietsenHomePage() {
               { name: 'Sportief', icon: '⚡', href: '/e-bikes/overzicht?doel=sportief', desc: 'Actief en snel' },
               { name: 'Transport', icon: '📦', href: '/e-bikes/overzicht?doel=transport', desc: 'Voor boodschappen' },
             ].map(cat => (
-              <Link key={cat.name} href={cat.href} className="group p-8 rounded-lg border border-gray-200 hover:border-green-500 hover:shadow-lg transition-all bg-white">
+              <Link key={cat.name} href={cat.href} className="group p-8 rounded-lg border border-[var(--border)] hover:border-green-500 hover:shadow-lg transition-all bg-[var(--card-bg)]">
                 <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{cat.icon}</div>
-                <h3 className="text-lg font-bold text-gray-900 mb-1">{cat.name}</h3>
-                <p className="text-sm text-gray-600">{cat.desc}</p>
+                <h3 className="text-lg font-bold text-[var(--foreground)] mb-1">{cat.name}</h3>
+                <p className="text-sm text-[var(--muted)]">{cat.desc}</p>
               </Link>
             ))}
           </div>
@@ -104,15 +104,15 @@ export default async function FietsenHomePage() {
       </section>
 
       {/* Brands */}
-      <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-[var(--background)]">
         <div className="max-w-6xl mx-auto">
           <div className="mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Vertrouwde merken</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-[var(--foreground)] mb-2">Vertrouwde merken</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {brandsList.map(brand => (
-              <div key={brand} className="flex items-center justify-center p-5 rounded-lg border border-gray-200 bg-white">
-                <span className="font-bold text-gray-700">{brand}</span>
+              <div key={brand} className="flex items-center justify-center p-5 rounded-lg border border-[var(--border)] bg-[var(--card-bg)]">
+                <span className="font-bold text-[var(--foreground)]">{brand}</span>
               </div>
             ))}
           </div>

@@ -1,5 +1,8 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useShortlist } from '@/lib/shortlist-context';
 import { EBike, FilterState } from '@/lib/types';
 
 interface BikeCardProps {
@@ -25,6 +28,23 @@ const usageLabels: Record<string, string> = {
 
 export default function BikeCard({ bike, compact = false, userHeight, activeFilters }: BikeCardProps) {
   const brandSlug = bike.brand.toLowerCase().replace(/\s+/g, '-');
+  const { isInShortlist, addToShortlist, removeFromShortlist } = useShortlist();
+  const selected = isInShortlist(bike.slug);
+
+  const toggleShortlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (selected) {
+      removeFromShortlist(bike.slug);
+    } else {
+      addToShortlist({
+        slug: bike.slug,
+        brand: bike.brand,
+        model: bike.model,
+        image: bike.images?.[0]
+      });
+    }
+  };
   
   // Build query string from active filters
   const buildFilterQuery = () => {
@@ -52,9 +72,9 @@ export default function BikeCard({ bike, compact = false, userHeight, activeFilt
     : null;
 
   return (
-    <Link href={href} className="group block bg-white rounded-xl border border-gray-200 hover:border-green-400 hover:shadow-lg transition-all overflow-hidden">
+    <Link href={href} className="group block bg-[var(--card-bg)] rounded-xl border border-[var(--border)] hover:border-green-400 hover:shadow-lg transition-all overflow-hidden">
       {/* Image placeholder or realistic image */}
-      <div className="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center relative overflow-hidden">
+      <div className="aspect-[4/3] bg-gradient-to-br from-[var(--surface)] to-[var(--background)] flex items-center justify-center relative overflow-hidden">
         {bike.images && bike.images.length > 0 ? (
           <Image 
             src={bike.images[0]} 
@@ -69,28 +89,47 @@ export default function BikeCard({ bike, compact = false, userHeight, activeFilt
             <path d="M19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z" />
           </svg>
         )}
-        <div className="absolute top-3 right-3 bg-white px-3 py-1 rounded-full shadow-md">
-          <span className="text-sm font-bold text-gray-900">€{bike.price.toLocaleString('nl-NL')}</span>
+        <div className="absolute top-3 right-3 bg-[var(--card-bg)] px-3 py-1 rounded-full shadow-md">
+          <span className="text-sm font-bold text-[var(--foreground)]">€{bike.price.toLocaleString('nl-NL')}</span>
         </div>
         <div className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-bold text-white" style={{ backgroundColor: '#5A7A48' }}>
-          {bike.scoreOverall}/10
+          {bike.scoreOverall}
         </div>
         
         {isFit && (
-          <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg shadow-sm border border-green-200 flex items-center gap-1.5 animate-in fade-in slide-in-from-bottom-2">
+          <div className="absolute bottom-3 left-3 bg-[var(--card-bg)]/90 backdrop-blur-sm px-2 py-1 rounded-lg shadow-sm border border-green-200 flex items-center gap-1.5 animate-in fade-in slide-in-from-bottom-2">
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
             <span className="text-[10px] font-bold text-green-700 uppercase tracking-wider">Past jou</span>
           </div>
         )}
+
+        {/* Shortlist Toggle Button */}
+        <button 
+          onClick={toggleShortlist}
+          title={selected ? "Verwijder uit vergelijking" : "Voeg toe aan vergelijking"}
+          className={`absolute bottom-3 right-3 w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
+            selected 
+              ? 'bg-[#5A7A48] text-white' 
+              : 'bg-[var(--card-bg)]/90 text-[var(--muted)] hover:text-[#5A7A48] hover:bg-white'
+          }`}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            {selected ? (
+              <path d="m5 12 5 5L19 7" />
+            ) : (
+              <path d="M12 5v14M5 12h14" />
+            )}
+          </svg>
+        </button>
       </div>
 
       <div className="p-4">
-        <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{bike.brand}</p>
-        <h3 className="text-base font-bold text-gray-900 mt-0.5 group-hover:text-green-700 transition-colors">{bike.model}</h3>
+        <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">{bike.brand}</p>
+        <h3 className="text-base font-bold text-[var(--foreground)] mt-0.5 group-hover:text-green-700 transition-colors">{bike.model}</h3>
 
         {!compact && (
           <>
-            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-gray-600">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-[var(--muted)]">
               <span>{motorTypeLabels[bike.motorType]}</span>
               <span>{bike.batteryCapacity} Ah</span>
               <span>~{bike.rangePractical} km</span>
@@ -98,7 +137,7 @@ export default function BikeCard({ bike, compact = false, userHeight, activeFilt
             </div>
             <div className="flex flex-wrap gap-1.5 mt-3">
               {bike.suitableFor.slice(0, 3).map(use => (
-                <span key={use} className="text-xs px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-200">
+                <span key={use} className="text-xs px-2 py-0.5 rounded-full bg-[var(--surface)] text-[var(--accent)] border border-[var(--border)]">
                   {usageLabels[use]}
                 </span>
               ))}
@@ -106,17 +145,17 @@ export default function BikeCard({ bike, compact = false, userHeight, activeFilt
 
             {/* Dimensions Preview */}
             {(bike.minRiderHeight || bike.dimensions) && (
-              <div className="mt-4 pt-3 border-t border-gray-100 grid grid-cols-2 gap-2 text-[10px]">
+              <div className="mt-4 pt-3 border-t border-[var(--border)] grid grid-cols-2 gap-2 text-[10px]">
                 {bike.minRiderHeight && (
                   <div className="flex flex-col">
-                    <span className="text-gray-400 uppercase font-bold">Lengte</span>
-                    <span className="text-gray-700 font-medium">{bike.minRiderHeight} - {bike.maxRiderHeight} cm</span>
+                    <span className="text-[var(--muted)] opacity-70 uppercase font-bold">Lengte</span>
+                    <span className="text-[var(--foreground)] font-medium">{bike.minRiderHeight} - {bike.maxRiderHeight} cm</span>
                   </div>
                 )}
                 {bike.dimensions?.standoverHeight && (
                   <div className="flex flex-col">
-                    <span className="text-gray-400 uppercase font-bold">Standover</span>
-                    <span className="text-gray-700 font-medium">{bike.dimensions.standoverHeight} cm</span>
+                    <span className="text-[var(--muted)] opacity-70 uppercase font-bold">Standover</span>
+                    <span className="text-[var(--foreground)] font-medium">{bike.dimensions.standoverHeight} cm</span>
                   </div>
                 )}
               </div>

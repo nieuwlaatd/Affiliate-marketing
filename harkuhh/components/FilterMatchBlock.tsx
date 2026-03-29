@@ -225,7 +225,10 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
   const overviewUrl = `/e-bikes/overzicht?${searchParams.toString()}`;
 
   return (
-    <div className={`rounded-xl border-2 p-6 mb-8 ${allMatch ? 'bg-green-50 border-green-300' : 'bg-amber-50 border-amber-200'}`}>
+    <div className={`rounded-xl border-2 p-6 mb-8 ${allMatch 
+      ? 'bg-green-50 border-green-300 dark:bg-green-950/20 dark:border-green-800' 
+      : 'bg-amber-50 border-amber-200 dark:bg-amber-950/20 dark:border-amber-900'}`
+    }>
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
@@ -233,24 +236,24 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
             {matchCount}/{totalCount}
           </div>
           <div>
-            <h2 className="text-lg font-bold text-gray-900">
+            <h2 className="text-lg font-bold text-[var(--foreground)]">
               {allMatch ? 'Past perfect bij jouw wensen!' : 'Past bij jouw wensen'}
             </h2>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[var(--muted)]">
               Op basis van jouw geselecteerde filters
             </p>
           </div>
         </div>
         <Link 
           href={overviewUrl}
-          className="text-xs font-bold px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors"
+          className="text-xs font-bold px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--card-bg)] text-[var(--muted)] hover:bg-[var(--surface)] transition-colors"
         >
           ← Terug naar overzicht
         </Link>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-gray-200 rounded-full h-2 mb-5">
+      <div className="w-full bg-[var(--surface)] rounded-full h-2 mb-5">
         <div 
           className={`h-2 rounded-full transition-all duration-500 ${allMatch ? 'bg-[#5A7A48]' : 'bg-amber-500'}`}
           style={{ width: `${matchPct}%` }}
@@ -264,14 +267,14 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
             key={i} 
             className={`flex items-start gap-3 px-4 py-3 rounded-lg border ${
               r.matches 
-                ? 'bg-white border-green-200' 
-                : 'bg-white border-red-100'
+                ? 'bg-[var(--card-bg)] border-green-200 dark:border-green-800' 
+                : 'bg-[var(--card-bg)] border-red-100 dark:border-red-900'
             }`}
           >
             <span className="text-lg mt-0.5">{r.matches ? '✅' : '❌'}</span>
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-gray-800">{r.wens}</p>
-              <p className={`text-xs mt-0.5 ${r.matches ? 'text-green-600' : 'text-red-500'}`}>{r.detail}</p>
+              <p className="text-sm font-semibold text-[var(--foreground)]">{r.wens}</p>
+              <p className={`text-xs mt-0.5 ${r.matches ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>{r.detail}</p>
             </div>
           </div>
         ))}

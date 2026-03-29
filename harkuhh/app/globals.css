@@ -140,7 +140,7 @@ body {
 .harkuhh-checkbox {
   -webkit-appearance: none;
   appearance: none;
-  background-color: white;
+  background-color: var(--card-bg);
   margin: 0;
   font: inherit;
   width: 18px;
@@ -185,7 +185,7 @@ body {
 /* Custom Select */
 .harkuhh-select {
   appearance: none;
-  background-color: white;
+  background-color: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px 36px 8px 16px;
@@ -211,7 +211,7 @@ body {
 
 /* Custom Input */
 .harkuhh-input {
-  background-color: white;
+  background-color: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 16px;

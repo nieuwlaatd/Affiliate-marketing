@@ -71,24 +71,24 @@ export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarP
     `flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 border ${
       active
         ? 'bg-[#5A7A48] text-white border-[#5A7A48] shadow-sm'
-        : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-100'
+        : 'bg-[var(--card-bg)] text-[var(--foreground)] border-[var(--border)] hover:border-gray-300 hover:bg-[var(--surface)]'
     }`;
 
   /* ── render ──────────────────────────────────────── */
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 sm:p-6 mb-8 mt-4">
+    <div className="bg-[var(--card-bg)] rounded-2xl border border-[var(--border)] shadow-sm p-5 sm:p-6 mb-8 mt-4">
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
         <div>
-          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-[var(--foreground)] flex items-center gap-2">
             <svg className="w-5 h-5 text-[#5A7A48]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
             Vind jouw perfecte e-bike
           </h2>
-          <p className="text-gray-500 text-sm mt-1">Beantwoord een paar vragen en wij filteren het aanbod voor je.</p>
+          <p className="text-[var(--muted)] text-sm mt-1">Beantwoord een paar vragen en wij filteren het aanbod voor je.</p>
         </div>
 
         {totalActive > 0 && (
@@ -108,8 +108,8 @@ export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarP
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-5">
 
         {/* 1. Waarvoor */}
-        <div className="bg-gray-50 p-4 rounded-xl">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">Waarvoor gebruik je hem?</h3>
+        <div className="bg-[var(--surface)] p-4 rounded-xl">
+          <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3">Waarvoor gebruik je hem?</h3>
           <div className="flex flex-wrap gap-2">
             {doelOptions.map((opt) => (
               <button
@@ -125,8 +125,8 @@ export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarP
         </div>
 
         {/* 2. Omgeving */}
-        <div className="bg-gray-50 p-4 rounded-xl">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">Waar rijd je het meest?</h3>
+        <div className="bg-[var(--surface)] p-4 rounded-xl">
+          <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3">Waar rijd je het meest?</h3>
           <div className="flex flex-wrap gap-2">
             {omgevingOptions.map((opt) => (
               <button
@@ -142,10 +142,10 @@ export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarP
         </div>
 
         {/* 3. Lichaamslengte */}
-        <div className="bg-gray-50 p-4 rounded-xl">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3 flex justify-between items-center">
+        <div className="bg-[var(--surface)] p-4 rounded-xl">
+          <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex justify-between items-center">
             Hoe lang ben je?
-            <span className="text-xs font-normal text-gray-500 bg-white px-2 py-0.5 rounded border border-gray-100">Maatadvies</span>
+            <span className="text-xs font-normal text-[var(--muted)] bg-[var(--card-bg)] px-2 py-0.5 rounded border border-[var(--border)]">Maatadvies</span>
           </h3>
           <div className="relative">
             <input
@@ -158,15 +158,15 @@ export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarP
                 onFiltersChange({ ...filters, lichaamslengte: val });
               }}
             />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm pointer-events-none">
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted)] opacity-50 font-bold text-sm pointer-events-none">
               cm
             </span>
           </div>
         </div>
 
         {/* 4. Frametype */}
-        <div className="bg-gray-50 p-4 rounded-xl">
-          <h3 className="text-sm font-semibold text-gray-900 mb-3">Voorkeur frametype</h3>
+        <div className="bg-[var(--surface)] p-4 rounded-xl">
+          <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3">Voorkeur frametype</h3>
           <div className="flex flex-wrap gap-2">
             {frameOptions.map((opt) => (
               <button

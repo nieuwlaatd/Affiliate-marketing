@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+// import Script removed to use raw script for React 19 resource management
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,18 +25,7 @@ export default function RootLayout({
   return (
     <html lang="nl" className={`${inter.variable} h-full`} suppressHydrationWarning>
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                var theme = localStorage.getItem('theme');
-                if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.documentElement.classList.add('dark');
-                }
-              })();
-            `,
-          }}
-        />
+        <script src="/theme.js" async />
       </head>
       <body className="flex min-h-full flex-col antialiased">
         <Header />
