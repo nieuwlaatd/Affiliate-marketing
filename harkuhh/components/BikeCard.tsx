@@ -45,7 +45,7 @@ export default function BikeCard({ bike, compact = false, userHeight, activeFilt
     return qs ? `?${qs}` : '';
   };
 
-  const href = `/fietsen/${brandSlug}/${bike.slug}${buildFilterQuery()}`;
+  const href = `/e-bikes/${brandSlug}/${bike.slug}${buildFilterQuery()}`;
 
   const isFit = userHeight && bike.minRiderHeight && bike.maxRiderHeight 
     ? (userHeight >= bike.minRiderHeight && userHeight <= bike.maxRiderHeight)

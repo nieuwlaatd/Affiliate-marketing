@@ -23,7 +23,7 @@ export default function Home() {
               <Link href="/keuzehulp" className="inline-flex items-center justify-center px-8 py-4 text-white font-bold rounded-lg transition-colors shadow-lg hover:shadow-xl" style={{ backgroundColor: '#5A7A48' }}>
                 Start de Keuzehulp
               </Link>
-              <Link href="/fietsen" className="inline-flex items-center justify-center px-8 py-4 bg-white border-2 font-bold rounded-lg hover:bg-green-50 transition-colors" style={{ borderColor: '#5A7A48', color: '#5A7A48' }}>
+              <Link href="/e-bikes" className="inline-flex items-center justify-center px-8 py-4 bg-white border-2 font-bold rounded-lg hover:bg-green-50 transition-colors" style={{ borderColor: '#5A7A48', color: '#5A7A48' }}>
                 Bekijk alle e-bikes
               </Link>
             </div>
@@ -69,7 +69,7 @@ export default function Home() {
             ))}
           </div>
           <div className="text-center">
-            <Link href="/fietsen" className="inline-flex items-center px-6 py-3 text-white font-bold rounded-lg transition-colors" style={{ backgroundColor: '#5A7A48' }}>
+            <Link href="/e-bikes" className="inline-flex items-center px-6 py-3 text-white font-bold rounded-lg transition-colors" style={{ backgroundColor: '#5A7A48' }}>
               Bekijk alle modellen →
             </Link>
           </div>
@@ -85,10 +85,10 @@ export default function Home() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { name: 'Woon-werk', icon: '🚴', href: '/fietsen?doel=woon-werk', desc: 'Voor dagelijks pendelen' },
-              { name: 'Recreatief', icon: '🌳', href: '/fietsen?doel=recreatief', desc: 'Ontspannen uitstapjes' },
-              { name: 'Sportief', icon: '⚡', href: '/fietsen?doel=sportief', desc: 'Actief en snel' },
-              { name: 'Transport', icon: '📦', href: '/fietsen?doel=transport', desc: 'Voor boodschappen' },
+              { name: 'Woon-werk', icon: '🚴', href: '/e-bikes?doel=woon-werk', desc: 'Voor dagelijks pendelen' },
+              { name: 'Recreatief', icon: '🌳', href: '/e-bikes?doel=recreatief', desc: 'Ontspannen uitstapjes' },
+              { name: 'Sportief', icon: '⚡', href: '/e-bikes?doel=sportief', desc: 'Actief en snel' },
+              { name: 'Transport', icon: '📦', href: '/e-bikes?doel=transport', desc: 'Voor boodschappen' },
             ].map(cat => (
               <Link key={cat.name} href={cat.href} className="group p-8 rounded-lg border border-gray-200 hover:border-green-500 hover:shadow-lg transition-all bg-white">
                 <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{cat.icon}</div>
@@ -131,3 +131,4 @@ export default function Home() {
     </div>
   );
 }
+

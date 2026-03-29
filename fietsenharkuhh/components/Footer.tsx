@@ -26,7 +26,7 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-white mb-4">Navigatie</h3>
             <ul className="space-y-2 text-sm">
               <li><Link href="/keuzehulp" className="hover:text-white transition-colors">Keuzehulp</Link></li>
-              <li><Link href="/fietsen" className="hover:text-white transition-colors">Alle e-bikes</Link></li>
+              <li><Link href="/e-bikes" className="hover:text-white transition-colors">Alle e-bikes</Link></li>
               <li><Link href="/vergelijk" className="hover:text-white transition-colors">Vergelijken</Link></li>
             </ul>
           </div>
@@ -49,3 +49,4 @@ export default function Footer() {
     </footer>
   );
 }
+

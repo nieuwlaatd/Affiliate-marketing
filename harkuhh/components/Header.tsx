@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import ThemeToggle from "./ThemeToggle";
 import type { User } from "@supabase/supabase-js";
@@ -9,6 +10,7 @@ import type { User } from "@supabase/supabase-js";
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
   const supabase = createClient();
 
   useEffect(() => {
@@ -23,9 +25,17 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <img src="/logo-light.png" alt="Harkuhh Logo" className="h-14 w-auto object-contain dark:hidden" />
-          <img src="/logo-dark.png" alt="Harkuhh Logo" className="h-14 w-auto object-contain hidden dark:block" />
+        <Link href={pathname.startsWith('/e-bikes') ? "/e-bikes" : "/"} className="flex items-center">
+          <img 
+            src={pathname.startsWith('/e-bikes') ? "/logo-fietsen-light.png" : "/logo-light.png"} 
+            alt="Harkuhh Logo" 
+            className="h-14 w-auto object-contain dark:hidden" 
+          />
+          <img 
+            src={pathname.startsWith('/e-bikes') ? "/logo-fietsen-dark.png" : "/logo-dark.png"} 
+            alt="Harkuhh Logo" 
+            className="h-14 w-auto object-contain hidden dark:block" 
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -36,7 +46,7 @@ export default function Header() {
           <Link href="/deals" className="text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--foreground)]">
             Deals
           </Link>
-          <Link href="/fietsen" className="text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--foreground)]">
+          <Link href="/e-bikes" className="text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--foreground)]">
             E-bikes
           </Link>
         </nav>
@@ -87,7 +97,7 @@ export default function Header() {
             <Link href="/deals" onClick={() => setMenuOpen(false)} className="text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)]">
               Deals
             </Link>
-            <Link href="/fietsen" onClick={() => setMenuOpen(false)} className="text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)]">
+            <Link href="/e-bikes" onClick={() => setMenuOpen(false)} className="text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)]">
               E-bikes
             </Link>
           </nav>

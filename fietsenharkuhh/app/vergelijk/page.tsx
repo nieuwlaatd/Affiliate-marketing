@@ -191,7 +191,7 @@ export default function VergelijkPage() {
                   <a href={bike.affiliateUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 text-white text-sm font-bold rounded-lg text-center" style={{ backgroundColor: '#5A7A48' }}>
                     Bekijk prijs
                   </a>
-                  <Link href={`/fietsen/${bike.brand.toLowerCase().replace(/\s+/g, '-')}/${bike.slug}`} className="px-4 py-2 border text-sm font-medium rounded-lg text-center hover:bg-gray-50" style={{ borderColor: '#5A7A48', color: '#5A7A48' }}>
+                  <Link href={`/e-bikes/${bike.brand.toLowerCase().replace(/\s+/g, '-')}/${bike.slug}`} className="px-4 py-2 border text-sm font-medium rounded-lg text-center hover:bg-gray-50" style={{ borderColor: '#5A7A48', color: '#5A7A48' }}>
                     Meer info
                   </Link>
                 </div>
@@ -203,3 +203,4 @@ export default function VergelijkPage() {
     </div>
   );
 }
+

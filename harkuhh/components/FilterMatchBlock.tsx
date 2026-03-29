@@ -222,7 +222,7 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
   const allMatch = matchCount === totalCount;
 
   // Build return-to-overview link with same filters
-  const overviewUrl = `/fietsen/overzicht?${searchParams.toString()}`;
+  const overviewUrl = `/e-bikes/overzicht?${searchParams.toString()}`;
 
   return (
     <div className={`rounded-xl border-2 p-6 mb-8 ${allMatch ? 'bg-green-50 border-green-300' : 'bg-amber-50 border-amber-200'}`}>

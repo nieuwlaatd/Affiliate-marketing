@@ -37,9 +37,9 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="text-sm text-gray-500 mb-6">
-          <Link href="/fietsen" className="hover:text-gray-700">Alle e-bikes</Link>
+          <Link href="/e-bikes" className="hover:text-gray-700">Alle e-bikes</Link>
           <span className="mx-2">›</span>
-          <Link href={`/fietsen?merk=${bike.brand}`} className="hover:text-gray-700">{bike.brand}</Link>
+          <Link href={`/e-bikes?merk=${bike.brand}`} className="hover:text-gray-700">{bike.brand}</Link>
           <span className="mx-2">›</span>
           <span className="text-gray-900">{bike.model}</span>
         </nav>

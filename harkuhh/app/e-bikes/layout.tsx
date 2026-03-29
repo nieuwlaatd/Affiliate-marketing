@@ -11,9 +11,9 @@ export default function FietsenLayout({
   const pathname = usePathname();
 
   const navItems = [
-    { href: '/fietsen', label: 'Home', exact: true },
-    { href: '/fietsen/overzicht', label: 'Overzicht', exact: false },
-    { href: '/fietsen/vergelijk', label: 'Vergelijk', exact: false },
+    { href: '/e-bikes', label: 'Home', exact: true },
+    { href: '/e-bikes/overzicht', label: 'Overzicht', exact: false },
+    { href: '/e-bikes/vergelijk', label: 'Vergelijk', exact: false },
   ];
 
   const isActive = (href: string, exact: boolean) => {
@@ -59,3 +59,4 @@ export default function FietsenLayout({
     </>
   );
 }
+

@@ -23,10 +23,10 @@ export default async function FietsenHomePage() {
               Ontdek welke e-bike perfect bij jou past met onze intelligente keuzehulp. In slechts enkele stappen vinden we de juiste match voor jouw behoeften en budget.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/fietsen/overzicht" className="inline-flex items-center justify-center px-8 py-4 text-white font-bold rounded-lg transition-colors shadow-lg hover:shadow-xl" style={{ backgroundColor: '#5A7A48' }}>
+              <Link href="/e-bikes/overzicht" className="inline-flex items-center justify-center px-8 py-4 text-white font-bold rounded-lg transition-colors shadow-lg hover:shadow-xl" style={{ backgroundColor: '#5A7A48' }}>
                 Vind jouw e-bike
               </Link>
-              <Link href="/fietsen/overzicht" className="inline-flex items-center justify-center px-8 py-4 bg-white border-2 font-bold rounded-lg hover:bg-green-50 transition-colors" style={{ borderColor: '#5A7A48', color: '#5A7A48' }}>
+              <Link href="/e-bikes/overzicht" className="inline-flex items-center justify-center px-8 py-4 bg-white border-2 font-bold rounded-lg hover:bg-green-50 transition-colors" style={{ borderColor: '#5A7A48', color: '#5A7A48' }}>
                 Bekijk alle e-bikes
               </Link>
             </div>
@@ -72,7 +72,7 @@ export default async function FietsenHomePage() {
             ))}
           </div>
           <div className="text-center">
-            <Link href="/fietsen/overzicht" className="inline-flex items-center px-6 py-3 text-white font-bold rounded-lg transition-colors" style={{ backgroundColor: '#5A7A48' }}>
+            <Link href="/e-bikes/overzicht" className="inline-flex items-center px-6 py-3 text-white font-bold rounded-lg transition-colors" style={{ backgroundColor: '#5A7A48' }}>
               Bekijk alle modellen →
             </Link>
           </div>
@@ -88,10 +88,10 @@ export default async function FietsenHomePage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { name: 'Woon-werk', icon: '🚴', href: '/fietsen/overzicht?doel=woon-werk', desc: 'Voor dagelijks pendelen' },
-              { name: 'Recreatief', icon: '🌳', href: '/fietsen/overzicht?doel=recreatief', desc: 'Ontspannen uitstapjes' },
-              { name: 'Sportief', icon: '⚡', href: '/fietsen/overzicht?doel=sportief', desc: 'Actief en snel' },
-              { name: 'Transport', icon: '📦', href: '/fietsen/overzicht?doel=transport', desc: 'Voor boodschappen' },
+              { name: 'Woon-werk', icon: '🚴', href: '/e-bikes/overzicht?doel=woon-werk', desc: 'Voor dagelijks pendelen' },
+              { name: 'Recreatief', icon: '🌳', href: '/e-bikes/overzicht?doel=recreatief', desc: 'Ontspannen uitstapjes' },
+              { name: 'Sportief', icon: '⚡', href: '/e-bikes/overzicht?doel=sportief', desc: 'Actief en snel' },
+              { name: 'Transport', icon: '📦', href: '/e-bikes/overzicht?doel=transport', desc: 'Voor boodschappen' },
             ].map(cat => (
               <Link key={cat.name} href={cat.href} className="group p-8 rounded-lg border border-gray-200 hover:border-green-500 hover:shadow-lg transition-all bg-white">
                 <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{cat.icon}</div>
@@ -126,7 +126,7 @@ export default async function FietsenHomePage() {
           <p className="text-lg text-green-100 mb-8 max-w-2xl mx-auto">
             Onze keuzehulp helpt je in slechts 2 minuten om de perfecte elektrische fiets te vinden.
           </p>
-          <Link href="/fietsen/overzicht" className="inline-flex items-center px-8 py-4 bg-white hover:bg-gray-100 font-bold rounded-lg transition-colors shadow-lg" style={{ color: '#5A7A48' }}>
+          <Link href="/e-bikes/overzicht" className="inline-flex items-center px-8 py-4 bg-white hover:bg-gray-100 font-bold rounded-lg transition-colors shadow-lg" style={{ color: '#5A7A48' }}>
             Vind jouw e-bike →
           </Link>
         </div>
@@ -134,3 +134,4 @@ export default async function FietsenHomePage() {
     </div>
   );
 }
+

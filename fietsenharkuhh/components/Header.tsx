@@ -2,22 +2,28 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#5A7A48' }}>
-              <span className="text-white font-bold text-sm">FH</span>
-            </div>
-            <span className="text-lg font-bold text-gray-900">
-              Fietsen<span style={{ color: '#5A7A48' }}>Harkuhh</span>
-            </span>
+          <Link href="/e-bikes" className="flex items-center">
+            <img 
+              src="/logo-light.png" 
+              alt="FietsenHarkuhh Logo" 
+              className="h-12 w-auto object-contain dark:hidden" 
+            />
+            <img 
+              src="/logo-dark.png" 
+              alt="FietsenHarkuhh Logo" 
+              className="h-12 w-auto object-contain hidden dark:block" 
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -25,7 +31,7 @@ export default function Header() {
             <Link href="/keuzehulp" className="text-sm font-semibold px-4 py-2 rounded-lg text-white transition-colors" style={{ backgroundColor: '#5A7A48' }}>
               Keuzehulp
             </Link>
-            <Link href="/fietsen" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
+            <Link href="/e-bikes" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
               Alle e-bikes
             </Link>
             <Link href="/vergelijk" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
@@ -62,7 +68,7 @@ export default function Header() {
                 Keuzehulp
               </Link>
               <Link
-                href="/fietsen"
+                href="/e-bikes"
                 onClick={() => setMenuOpen(false)}
                 className="text-sm font-medium px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
               >
@@ -82,3 +88,4 @@ export default function Header() {
     </header>
   );
 }
+

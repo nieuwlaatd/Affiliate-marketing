@@ -232,7 +232,7 @@ export default function KeuzehulpPage() {
               <button onClick={() => setState(initialState)} className="px-6 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors">
                 Opnieuw beginnen
               </button>
-              <Link href="/fietsen" className="px-6 py-3 text-white font-bold rounded-lg transition-colors" style={{ backgroundColor: '#5A7A48' }}>
+              <Link href="/e-bikes" className="px-6 py-3 text-white font-bold rounded-lg transition-colors" style={{ backgroundColor: '#5A7A48' }}>
                 Bekijk alle e-bikes
               </Link>
             </div>
@@ -264,3 +264,4 @@ export default function KeuzehulpPage() {
     </div>
   );
 }
+

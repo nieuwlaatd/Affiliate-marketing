@@ -22,7 +22,7 @@ const usageLabels: Record<string, string> = {
 
 export default function BikeCard({ bike, compact = false }: BikeCardProps) {
   const brandSlug = bike.brand.toLowerCase().replace(/\s+/g, '-');
-  const href = `/fietsen/${brandSlug}/${bike.slug}`;
+  const href = `/e-bikes/${brandSlug}/${bike.slug}`;
 
   return (
     <Link href={href} className="group block bg-white rounded-xl border border-gray-200 hover:border-green-400 hover:shadow-lg transition-all overflow-hidden">
@@ -71,3 +71,4 @@ export default function BikeCard({ bike, compact = false }: BikeCardProps) {
     </Link>
   );
 }
+

@@ -33,7 +33,7 @@ export default function HeroSection() {
             Ik wil browsen
           </Link>
           <Link
-            href="/fietsen"
+            href="/e-bikes"
             className="flex items-center justify-center gap-3 rounded-2xl border-2 px-8 py-5 text-lg font-semibold transition-all hover:text-white"
             style={{ borderColor: '#5A7A48', color: '#5A7A48', backgroundColor: 'transparent' }}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#5A7A48'; e.currentTarget.style.color = 'white'; }}

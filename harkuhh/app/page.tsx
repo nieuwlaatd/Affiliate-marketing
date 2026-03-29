@@ -95,7 +95,7 @@ export default async function HomePage() {
         </h2>
         <div className="mt-6">
           <Link
-            href="/fietsen"
+            href="/e-bikes"
             className="group flex items-center gap-6 rounded-2xl border border-[var(--border)] bg-[var(--card-bg)] p-6 sm:p-8 transition-all hover:border-[#5A7A48] hover:shadow-lg"
           >
             <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-3xl" style={{ backgroundColor: '#5A7A4820' }}>
