@@ -1,1 +1,44 @@
+# Vercel
 .vercel
+
+# Google Drive / OneDrive sync temp files
+.tmp.driveupload/
+.tmp.drivedownload/
+.tmp.drive*/
+desktop.ini
+thumbs.db
+
+# Node.js / Next.js
+node_modules/
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+.npm
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Editor
+.vscode/settings.json
+.idea/
+
+# Office temp files
+~$*.docx
+~$*.xlsx
+~$*.pptx
