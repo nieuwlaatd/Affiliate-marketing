@@ -1,74 +1,50 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { useState } from "react";
 import ThemeToggle from "./ThemeToggle";
-import type { User } from "@supabase/supabase-js";
+import Logo from "./Logo";
+
+const NAV = [
+  { href: "/e-bikes", label: "All E-Bikes" },
+  { href: "/compare", label: "Compare" },
+  { href: "/stores", label: "Stores" },
+];
 
 export default function Header() {
-  const [user, setUser] = useState<User | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const pathname = usePathname();
-  const supabase = createClient();
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        {/* Logo */}
-        <Link href={pathname.startsWith('/e-bikes') ? "/e-bikes" : "/"} className="flex items-center">
-          <img 
-            src={pathname.startsWith('/e-bikes') ? "/logo-fietsen-light.png" : "/logo-light.png"} 
-            alt="Harkuhh Logo" 
-            className="h-14 w-auto object-contain dark:hidden" 
-          />
-          <img 
-            src={pathname.startsWith('/e-bikes') ? "/logo-fietsen-dark.png" : "/logo-dark.png"} 
-            alt="Harkuhh Logo" 
-            className="h-14 w-auto object-contain hidden dark:block" 
-          />
+        {/* Wordmark */}
+        <Link href="/" aria-label="BestBikeForMe home">
+          <Logo className="h-10 w-auto text-[var(--foreground)]" />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-6 md:flex">
-          <Link href="/zoeken" className="text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--foreground)]">
-            Zoeken
-          </Link>
-          <Link href="/deals" className="text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--foreground)]">
-            Deals
-          </Link>
-          <Link href="/e-bikes" className="text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--foreground)]">
-            E-bikes
-          </Link>
+        <nav className="hidden items-center gap-7 md:flex">
+          {NAV.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--foreground)]"
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         {/* Right side */}
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          {user ? (
-            <Link
-              href="/account"
-              className="flex h-9 items-center rounded-full bg-[var(--accent)] px-4 text-sm font-medium text-white transition-colors hover:bg-[var(--accent-hover)]"
-            >
-              Mijn account
-            </Link>
-          ) : (
-            <Link
-              href="/auth/login"
-              className="flex h-9 items-center rounded-full bg-[var(--accent)] px-4 text-sm font-medium text-white transition-colors hover:bg-[var(--accent-hover)]"
-            >
-              Inloggen
-            </Link>
-          )}
+          <Link
+            href="/"
+            className="hidden h-9 items-center rounded-full px-5 text-sm font-bold transition-transform hover:-translate-y-0.5 sm:flex"
+            style={{ backgroundColor: "var(--cta)", color: "var(--cta-ink)" }}
+          >
+            Find My E-Bike
+          </Link>
 
           {/* Mobile menu button */}
           <button
@@ -77,11 +53,7 @@ export default function Header() {
             aria-label="Menu"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              {menuOpen ? (
-                <path d="M18 6 6 18M6 6l12 12" />
-              ) : (
-                <path d="M4 12h16M4 6h16M4 18h16" />
-              )}
+              {menuOpen ? <path d="M18 6 6 18M6 6l12 12" /> : <path d="M4 12h16M4 6h16M4 18h16" />}
             </svg>
           </button>
         </div>
@@ -91,15 +63,19 @@ export default function Header() {
       {menuOpen && (
         <div className="border-t border-[var(--border)] bg-[var(--background)] px-4 py-4 md:hidden">
           <nav className="flex flex-col gap-3">
-            <Link href="/zoeken" onClick={() => setMenuOpen(false)} className="text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)]">
-              Zoeken
+            <Link href="/" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-[var(--accent)]">
+              Find My E-Bike
             </Link>
-            <Link href="/deals" onClick={() => setMenuOpen(false)} className="text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)]">
-              Deals
-            </Link>
-            <Link href="/e-bikes" onClick={() => setMenuOpen(false)} className="text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)]">
-              E-bikes
-            </Link>
+            {NAV.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                className="text-sm font-medium text-[var(--muted)] hover:text-[var(--foreground)]"
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
       )}

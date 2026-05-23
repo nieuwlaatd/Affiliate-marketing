@@ -14,6 +14,26 @@ const nextConfig: NextConfig = {
       {
         protocol: 'http',
         hostname: 'engwe-bikes-eu.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'duotts.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.samebike.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'samebike.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'dyucycle.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'vtuviaebike.com',
       }
     ],
   },

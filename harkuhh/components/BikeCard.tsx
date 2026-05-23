@@ -13,16 +13,16 @@ interface BikeCardProps {
 }
 
 const motorTypeLabels: Record<string, string> = {
-  'midden': 'Middenmotor',
-  'naaf-voor': 'Voornaafmotor',
-  'naaf-achter': 'Achternaafmotor',
+  'mid-drive': 'Mid-drive',
+  'front-hub': 'Front hub',
+  'rear-hub': 'Rear hub',
 };
 
 const usageLabels: Record<string, string> = {
-  'woon-werk': 'Woon-werk',
-  'recreatief': 'Recreatief',
-  'sportief': 'Sportief',
-  'transport': 'Transport',
+  'commuting': 'Commuting',
+  'recreation': 'Recreation',
+  'sport': 'Sport',
+  'cargo': 'Cargo',
   'off-road': 'Off-road',
 };
 
@@ -50,17 +50,17 @@ export default function BikeCard({ bike, compact = false, userHeight, activeFilt
   const buildFilterQuery = () => {
     if (!activeFilters) return '';
     const params = new URLSearchParams();
-    if (activeFilters.priceRange[1] < 4000) params.set('budget', String(activeFilters.priceRange[1]));
-    if (activeFilters.suitableFor.length > 0) params.set('doel', activeFilters.suitableFor.join(','));
-    if (activeFilters.omgeving) params.set('omgeving', activeFilters.omgeving);
-    if (activeFilters.lichaamslengte) params.set('lengte', String(activeFilters.lichaamslengte));
+    if (activeFilters.priceRange[1] < 5000) params.set('budget', String(activeFilters.priceRange[1]));
+    if (activeFilters.suitableFor.length > 0) params.set('purpose', activeFilters.suitableFor.join(','));
+    if (activeFilters.terrain) params.set('terrain', activeFilters.terrain);
+    if (activeFilters.riderHeight) params.set('height', String(activeFilters.riderHeight));
     if (activeFilters.frameTypes.length > 0) params.set('frame', activeFilters.frameTypes.join(','));
-    if (activeFilters.minRange > 0) params.set('bereik', String(activeFilters.minRange));
-    if (activeFilters.foldable) params.set('opvouwbaar', '1');
-    if (activeFilters.removableBattery) params.set('accuAfneembaar', '1');
-    if (activeFilters.maxBikeWeight) params.set('maxGewicht', String(activeFilters.maxBikeWeight));
+    if (activeFilters.minRange > 0) params.set('range', String(activeFilters.minRange));
+    if (activeFilters.foldable) params.set('foldable', '1');
+    if (activeFilters.removableBattery) params.set('removableBattery', '1');
+    if (activeFilters.maxBikeWeight) params.set('maxWeight', String(activeFilters.maxBikeWeight));
     if (activeFilters.motorTypes.length > 0) params.set('motor', activeFilters.motorTypes.join(','));
-    if (activeFilters.heightRanges.length > 0) params.set('lengteRanges', activeFilters.heightRanges.join(','));
+    if (activeFilters.heightRanges.length > 0) params.set('heightRanges', activeFilters.heightRanges.join(','));
     const qs = params.toString();
     return qs ? `?${qs}` : '';
   };
@@ -72,7 +72,7 @@ export default function BikeCard({ bike, compact = false, userHeight, activeFilt
     : null;
 
   return (
-    <Link href={href} className="group block bg-[var(--card-bg)] rounded-xl border border-[var(--border)] hover:border-green-400 hover:shadow-lg transition-all overflow-hidden">
+    <Link href={href} className="group block bg-[var(--card-bg)] rounded-xl border border-[var(--border)] hover:border-[var(--accent)] hover:shadow-lg transition-all overflow-hidden">
       {/* Image placeholder or realistic image */}
       <div className="aspect-[4/3] bg-gradient-to-br from-[var(--surface)] to-[var(--background)] flex items-center justify-center relative overflow-hidden">
         {bike.images && bike.images.length > 0 ? (
@@ -90,27 +90,27 @@ export default function BikeCard({ bike, compact = false, userHeight, activeFilt
           </svg>
         )}
         <div className="absolute top-3 right-3 bg-[var(--card-bg)] px-3 py-1 rounded-full shadow-md">
-          <span className="text-sm font-bold text-[var(--foreground)]">€{bike.price.toLocaleString('nl-NL')}</span>
+          <span className="text-sm font-bold text-[var(--foreground)]">${bike.price.toLocaleString('en-US')}</span>
         </div>
-        <div className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-bold text-white" style={{ backgroundColor: '#5A7A48' }}>
+        <div className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: 'var(--accent)', color: 'var(--on-bordeaux)' }}>
           {bike.scoreOverall}
         </div>
         
         {isFit && (
-          <div className="absolute bottom-3 left-3 bg-[var(--card-bg)]/90 backdrop-blur-sm px-2 py-1 rounded-lg shadow-sm border border-green-200 flex items-center gap-1.5 animate-in fade-in slide-in-from-bottom-2">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-            <span className="text-[10px] font-bold text-green-700 uppercase tracking-wider">Past jou</span>
+          <div className="absolute bottom-3 left-3 bg-[var(--card-bg)]/90 backdrop-blur-sm px-2 py-1 rounded-lg shadow-sm border border-[var(--accent)] flex items-center gap-1.5 animate-in fade-in slide-in-from-bottom-2">
+            <div className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse"></div>
+            <span className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-wider">Fits you</span>
           </div>
         )}
 
         {/* Shortlist Toggle Button */}
         <button 
           onClick={toggleShortlist}
-          title={selected ? "Verwijder uit vergelijking" : "Voeg toe aan vergelijking"}
+          title={selected ? "Remove from comparison" : "Add to comparison"}
           className={`absolute bottom-3 right-3 w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
             selected 
-              ? 'bg-[#5A7A48] text-white' 
-              : 'bg-[var(--card-bg)]/90 text-[var(--muted)] hover:text-[#5A7A48] hover:bg-white'
+              ? 'bg-[var(--accent)] text-[var(--on-bordeaux)]'
+              : 'bg-[var(--card-bg)]/90 text-[var(--muted)] hover:text-[var(--accent)] hover:bg-[var(--card-bg)]'
           }`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -125,18 +125,33 @@ export default function BikeCard({ bike, compact = false, userHeight, activeFilt
 
       <div className="p-4">
         <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">{bike.brand}</p>
-        <h3 className="text-base font-bold text-[var(--foreground)] mt-0.5 group-hover:text-green-700 transition-colors">{bike.model}</h3>
+        <h3 className="text-base font-bold text-[var(--foreground)] mt-0.5 group-hover:text-[var(--accent)] transition-colors">{bike.model}</h3>
 
         {!compact && (
           <>
             <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-[var(--muted)]">
               <span>{motorTypeLabels[bike.motorType]}</span>
-              <span>{bike.batteryCapacity} Ah</span>
-              <span>~{bike.rangePractical} km</span>
-              <span>{bike.weight} kg</span>
+              <span>~{bike.rangePractical} mi</span>
+              <span>{bike.weight} lbs</span>
+              {bike.maxSpeedMph && <span>{bike.maxSpeedMph} mph</span>}
             </div>
             <div className="flex flex-wrap gap-1.5 mt-3">
-              {bike.suitableFor.slice(0, 3).map(use => (
+              {bike.bikeClass && (
+                <span className="text-xs px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: 'var(--accent)', color: 'var(--on-bordeaux)' }}>
+                  {bike.bikeClass.replace('-', ' ').replace('class ', 'C')}
+                </span>
+              )}
+              {bike.hasThrottle && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--gold-soft)] text-[var(--foreground)] border border-[var(--gold)]" style={{ borderColor: 'var(--gold)' }}>
+                  Throttle
+                </span>
+              )}
+              {bike.hasSuspension && bike.hasSuspension !== 'none' && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--surface)] text-[var(--muted)] border border-[var(--border)]">
+                  {bike.hasSuspension === 'full' ? 'Full susp.' : 'Front susp.'}
+                </span>
+              )}
+              {bike.suitableFor.slice(0, 2).map(use => (
                 <span key={use} className="text-xs px-2 py-0.5 rounded-full bg-[var(--surface)] text-[var(--accent)] border border-[var(--border)]">
                   {usageLabels[use]}
                 </span>
@@ -148,14 +163,14 @@ export default function BikeCard({ bike, compact = false, userHeight, activeFilt
               <div className="mt-4 pt-3 border-t border-[var(--border)] grid grid-cols-2 gap-2 text-[10px]">
                 {bike.minRiderHeight && (
                   <div className="flex flex-col">
-                    <span className="text-[var(--muted)] opacity-70 uppercase font-bold">Lengte</span>
-                    <span className="text-[var(--foreground)] font-medium">{bike.minRiderHeight} - {bike.maxRiderHeight} cm</span>
+                    <span className="text-[var(--muted)] opacity-70 uppercase font-bold">Rider height</span>
+                    <span className="text-[var(--foreground)] font-medium">{bike.minRiderHeight}&quot; - {bike.maxRiderHeight}&quot;</span>
                   </div>
                 )}
                 {bike.dimensions?.standoverHeight && (
                   <div className="flex flex-col">
                     <span className="text-[var(--muted)] opacity-70 uppercase font-bold">Standover</span>
-                    <span className="text-[var(--foreground)] font-medium">{bike.dimensions.standoverHeight} cm</span>
+                    <span className="text-[var(--foreground)] font-medium">{bike.dimensions.standoverHeight}&quot;</span>
                   </div>
                 )}
               </div>

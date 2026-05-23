@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "harkuhh-dev",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "C:\\Users\\Dylan\\OneDrive\\Documenten\\Affiliate marketing\\harkuhh\\node_modules\\next\\dist\\bin\\next",
+        "dev",
+        "C:\\Users\\Dylan\\OneDrive\\Documenten\\Affiliate marketing\\harkuhh",
+        "-p",
+        "3000"
+      ],
+      "port": 3000
+    }
+  ]
+}

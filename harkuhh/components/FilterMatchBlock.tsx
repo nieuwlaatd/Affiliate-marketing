@@ -4,35 +4,33 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { EBike } from '@/lib/types';
 
-const motorLabels: Record<string, string> = { 'midden': 'Middenmotor', 'naaf-voor': 'Voornaafmotor', 'naaf-achter': 'Achternaafmotor' };
-const doelLabels: Record<string, string> = { 'woon-werk': 'Woon-werk', 'recreatief': 'Recreatief', 'sportief': 'Sportief', 'transport': 'Transport', 'off-road': 'Off-road' };
-const omgevingLabels: Record<string, string> = { 'stad': 'Stad & Verhard', 'heuvelachtig': 'Heuvels & Bergen', 'onverhard': 'Off-road' };
-const frameLabels: Record<string, string> = { 'laag-instap': 'Lage instap', 'hoog-instap': 'Hoge instap', 'sportief': 'Sportief' };
+const motorLabels: Record<string, string> = { 'mid-drive': 'Mid-drive', 'front-hub': 'Front hub', 'rear-hub': 'Rear hub' };
+const purposeLabels: Record<string, string> = { 'commuting': 'Getting to work', 'recreation': 'Weekend rides', 'sport': 'Fitness & speed', 'cargo': 'Hauling & family' };
+const terrainLabels: Record<string, string> = { 'flat': 'City streets', 'hilly': 'Hills & climbs', 'mixed': 'Trails & gravel' };
+const frameLabels: Record<string, string> = { 'step-through': 'Step-through', 'step-over': 'Step-over', 'sport': 'Sport' };
 
 interface MatchResult {
   label: string;
-  wens: string;
+  want: string;
   matches: boolean;
   detail: string;
 }
 
 export default function FilterMatchBlock({ bike }: { bike: EBike }) {
   const searchParams = useSearchParams();
-  
-  // Extract filter criteria from URL params
+
   const budget = searchParams.get('budget');
-  const doel = searchParams.get('doel');
-  const omgeving = searchParams.get('omgeving');
-  const lengte = searchParams.get('lengte');
+  const purpose = searchParams.get('purpose');
+  const terrain = searchParams.get('terrain');
+  const height = searchParams.get('height');
   const frame = searchParams.get('frame');
-  const bereik = searchParams.get('bereik');
-  const opvouwbaar = searchParams.get('opvouwbaar');
-  const accuAfneembaar = searchParams.get('accuAfneembaar');
-  const maxGewicht = searchParams.get('maxGewicht');
+  const range = searchParams.get('range');
+  const foldable = searchParams.get('foldable');
+  const removableBattery = searchParams.get('removableBattery');
+  const maxWeight = searchParams.get('maxWeight');
   const motor = searchParams.get('motor');
 
-  // If no filters are set, don't render anything
-  const hasFilters = budget || doel || omgeving || lengte || frame || bereik || opvouwbaar || accuAfneembaar || maxGewicht || motor;
+  const hasFilters = budget || purpose || terrain || height || frame || range || foldable || removableBattery || maxWeight || motor;
   if (!hasFilters) return null;
 
   const results: MatchResult[] = [];
@@ -42,96 +40,96 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
     const max = Number(budget);
     results.push({
       label: '💰',
-      wens: `Budget tot €${max.toLocaleString('nl-NL')}`,
+      want: `Budget up to $${max.toLocaleString('en-US')}`,
       matches: bike.price <= max,
-      detail: bike.price <= max 
-        ? `€${bike.price.toLocaleString('nl-NL')} — past binnen je budget`
-        : `€${bike.price.toLocaleString('nl-NL')} — €${(bike.price - max).toLocaleString('nl-NL')} boven je budget`,
+      detail: bike.price <= max
+        ? `$${bike.price.toLocaleString('en-US')} — within your budget`
+        : `$${bike.price.toLocaleString('en-US')} — $${(bike.price - max).toLocaleString('en-US')} over your budget`,
     });
   }
 
   // Usage check
-  if (doel) {
-    const doelen = doel.split(',');
-    const bikeDoelen = bike.suitableFor;
-    const matchedDoelen = doelen.filter(d => bikeDoelen.includes(d as EBike['suitableFor'][number]));
+  if (purpose) {
+    const purposes = purpose.split(',');
+    const bikePurposes = bike.suitableFor;
+    const matched = purposes.filter(d => bikePurposes.includes(d as EBike['suitableFor'][number]));
     results.push({
       label: '🚴',
-      wens: `Geschikt voor ${doelen.map(d => doelLabels[d] || d).join(', ')}`,
-      matches: matchedDoelen.length > 0,
-      detail: matchedDoelen.length > 0 
-        ? `Geschikt voor ${matchedDoelen.map(d => doelLabels[d] || d).join(', ')}`
-        : `Niet specifiek geschikt voor ${doelen.map(d => doelLabels[d] || d).join(', ')}`,
+      want: `Good for ${purposes.map(d => purposeLabels[d] || d).join(', ')}`,
+      matches: matched.length > 0,
+      detail: matched.length > 0
+        ? `Suited for ${matched.map(d => purposeLabels[d] || d).join(', ')}`
+        : `Not specifically built for ${purposes.map(d => purposeLabels[d] || d).join(', ')}`,
     });
   }
 
-  // Environment check
-  if (omgeving) {
+  // Terrain check
+  if (terrain) {
     let matches = true;
     let detail = '';
-    if (omgeving === 'heuvelachtig') {
+    if (terrain === 'hilly') {
       matches = bike.torque >= 50;
-      detail = matches 
-        ? `${bike.torque} Nm koppel — genoeg voor heuvels`
-        : `${bike.torque} Nm koppel — mogelijk te weinig voor heuvels (50+ Nm aanbevolen)`;
-    } else if (omgeving === 'onverhard') {
-      matches = bike.suitableFor.includes('off-road') || bike.suitableFor.includes('sportief');
-      detail = matches ? 'Geschikt voor onverhard terrein' : 'Niet specifiek ontworpen voor off-road';
+      detail = matches
+        ? `${bike.torque} Nm torque — plenty for hills`
+        : `${bike.torque} Nm torque — may be low for hills (50+ Nm recommended)`;
+    } else if (terrain === 'mixed') {
+      matches = bike.suitableFor.includes('off-road') || bike.suitableFor.includes('sport');
+      detail = matches ? 'Good for mixed terrain and trails' : 'Not specifically designed for off-road';
     } else {
-      detail = 'Geschikt voor stadgebruik';
+      detail = 'Good for flat city riding';
     }
     results.push({
       label: '🗺️',
-      wens: `Omgeving: ${omgevingLabels[omgeving] || omgeving}`,
+      want: `Terrain: ${terrainLabels[terrain] || terrain}`,
       matches,
       detail,
     });
   }
 
   // Height ranges check
-  const lengteRanges = searchParams.get('lengteRanges');
-  if (lengteRanges) {
-    const ranges = lengteRanges.split(',');
+  const heightRanges = searchParams.get('heightRanges');
+  if (heightRanges) {
+    const ranges = heightRanges.split(',');
     const bikeMin = bike.minRiderHeight || 0;
     const bikeMax = bike.maxRiderHeight || 999;
-    
-    const matches = ranges.some(range => {
+
+    const matches = ranges.some(r => {
       let min = 0;
       let max = 999;
-      if (range.startsWith('<')) max = parseInt(range.substring(1));
-      else if (range.endsWith('+')) min = parseInt(range.substring(0, range.length - 1));
+      if (r.startsWith('<')) max = parseInt(r.substring(1));
+      else if (r.endsWith('+')) min = parseInt(r.substring(0, r.length - 1));
       else {
-        const parts = range.split('-');
+        const parts = r.split('-');
         min = parseInt(parts[0]);
         max = parseInt(parts[1]);
       }
       return bikeMin <= max && bikeMax >= min;
     });
-    
+
     results.push({
       label: '📏',
-      wens: `Lengte: ${ranges.join(', ')} cm`,
+      want: `Rider height: ${ranges.join(', ')} in`,
       matches,
-      detail: matches 
-        ? `Geschikt voor ${bikeMin}–${bikeMax} cm — past bij jouw selectie`
-        : `Geschikt voor ${bikeMin}–${bikeMax} cm — wijkt af van jouw selectie`,
+      detail: matches
+        ? `Fits riders ${bikeMin}–${bikeMax}" — matches your selection`
+        : `Fits riders ${bikeMin}–${bikeMax}" — differs from your selection`,
     });
   }
 
-  // Height check (specific)
-  if (lengte) {
-    const h = Number(lengte);
+  // Specific height check
+  if (height) {
+    const h = Number(height);
     const hasRange = bike.minRiderHeight && bike.maxRiderHeight;
     const matches = hasRange ? (h >= bike.minRiderHeight! && h <= bike.maxRiderHeight!) : true;
     results.push({
       label: '📏',
-      wens: `Jouw lengte: ${h} cm`,
+      want: `Your height: ${h}"`,
       matches,
-      detail: hasRange 
-        ? (matches 
-          ? `Aanbevolen voor ${bike.minRiderHeight}–${bike.maxRiderHeight} cm — past perfect`
-          : `Aanbevolen voor ${bike.minRiderHeight}–${bike.maxRiderHeight} cm — mogelijk niet ideaal`)
-        : 'Geen specifieke lengte-aanbeveling beschikbaar',
+      detail: hasRange
+        ? (matches
+          ? `Recommended for ${bike.minRiderHeight}–${bike.maxRiderHeight}" — perfect fit`
+          : `Recommended for ${bike.minRiderHeight}–${bike.maxRiderHeight}" — may not be ideal`)
+        : 'No specific height recommendation available',
     });
   }
 
@@ -141,25 +139,25 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
     const matches = frames.includes(bike.frameType);
     results.push({
       label: '🖼️',
-      wens: `Frametype: ${frames.map(f => frameLabels[f] || f).join(', ')}`,
+      want: `Frame type: ${frames.map(f => frameLabels[f] || f).join(', ')}`,
       matches,
       detail: matches
-        ? `Dit is een ${frameLabels[bike.frameType]} frame`
-        : `Dit is een ${frameLabels[bike.frameType]} frame (je zocht ${frames.map(f => frameLabels[f] || f).join(', ')})`,
+        ? `This is a ${frameLabels[bike.frameType]} frame`
+        : `This is a ${frameLabels[bike.frameType]} frame (you wanted ${frames.map(f => frameLabels[f] || f).join(', ')})`,
     });
   }
 
   // Range check
-  if (bereik) {
-    const min = Number(bereik);
+  if (range) {
+    const min = Number(range);
     const matches = bike.rangePractical >= min;
     results.push({
       label: '🔋',
-      wens: `Minimaal ${min} km bereik`,
+      want: `At least ${min} mi range`,
       matches,
       detail: matches
-        ? `~${bike.rangePractical} km praktijkbereik — voldoende`
-        : `~${bike.rangePractical} km praktijkbereik — ${min - bike.rangePractical} km tekort`,
+        ? `~${bike.rangePractical} mi real-world range — sufficient`
+        : `~${bike.rangePractical} mi real-world range — ${min - bike.rangePractical} mi short`,
     });
   }
 
@@ -169,50 +167,50 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
     const matches = motors.includes(bike.motorType);
     results.push({
       label: '⚙️',
-      wens: `Motortype: ${motors.map(m => motorLabels[m] || m).join(', ')}`,
+      want: `Motor type: ${motors.map(m => motorLabels[m] || m).join(', ')}`,
       matches,
-      detail: matches 
-        ? `${motorLabels[bike.motorType]} — zoals gewenst`
-        : `${motorLabels[bike.motorType]} (je zocht ${motors.map(m => motorLabels[m] || m).join(', ')})`,
+      detail: matches
+        ? `${motorLabels[bike.motorType]} — as desired`
+        : `${motorLabels[bike.motorType]} (you wanted ${motors.map(m => motorLabels[m] || m).join(', ')})`,
     });
   }
 
   // Foldable check
-  if (opvouwbaar === '1') {
+  if (foldable === '1') {
     const isFoldable = bike.dimensions?.foldedSize && bike.dimensions.foldedSize !== 'Yes';
     results.push({
       label: '📐',
-      wens: 'Opvouwbaar',
+      want: 'Foldable',
       matches: !!isFoldable,
       detail: isFoldable
-        ? `Opvouwbaar tot ${bike.dimensions!.foldedSize}`
-        : 'Deze fiets is niet opvouwbaar',
+        ? `Folds down to ${bike.dimensions!.foldedSize}`
+        : 'This bike does not fold',
     });
   }
 
   // Battery removable check
-  if (accuAfneembaar === '1') {
+  if (removableBattery === '1') {
     results.push({
       label: '🔌',
-      wens: 'Afneembare accu',
+      want: 'Removable battery',
       matches: bike.batteryRemovable,
       detail: bike.batteryRemovable
-        ? 'Accu is afneembaar voor apart opladen'
-        : 'Accu is niet afneembaar',
+        ? 'Battery is removable for separate charging'
+        : 'Battery is not removable',
     });
   }
 
   // Weight check
-  if (maxGewicht) {
-    const max = Number(maxGewicht);
+  if (maxWeight) {
+    const max = Number(maxWeight);
     const matches = bike.weight <= max;
     results.push({
       label: '⚖️',
-      wens: `Max ${max} kg fietsgewicht`,
+      want: `Max ${max} lbs bike weight`,
       matches,
       detail: matches
-        ? `${bike.weight} kg — licht genoeg`
-        : `${bike.weight} kg — ${(bike.weight - max).toFixed(0)} kg te zwaar`,
+        ? `${bike.weight} lbs — light enough`
+        : `${bike.weight} lbs — ${(bike.weight - max).toFixed(0)} lbs too heavy`,
     });
   }
 
@@ -221,41 +219,40 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
   const matchPct = Math.round((matchCount / totalCount) * 100);
   const allMatch = matchCount === totalCount;
 
-  // Build return-to-overview link with same filters
   const overviewUrl = `/e-bikes/overzicht?${searchParams.toString()}`;
 
   return (
-    <div className={`rounded-xl border-2 p-6 mb-8 ${allMatch 
-      ? 'bg-green-50 border-green-300 dark:bg-green-950/20 dark:border-green-800' 
+    <div className={`rounded-xl border-2 p-6 mb-8 ${allMatch
+      ? 'border-[var(--accent)] bg-[var(--accent-soft)]'
       : 'bg-amber-50 border-amber-200 dark:bg-amber-950/20 dark:border-amber-900'}`
     }>
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold text-white ${allMatch ? 'bg-[#5A7A48]' : 'bg-amber-500'}`}>
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold text-white ${allMatch ? 'bg-[var(--accent)]' : 'bg-amber-500'}`}>
             {matchCount}/{totalCount}
           </div>
           <div>
             <h2 className="text-lg font-bold text-[var(--foreground)]">
-              {allMatch ? 'Past perfect bij jouw wensen!' : 'Past bij jouw wensen'}
+              {allMatch ? 'A perfect match for you!' : 'Matches your needs'}
             </h2>
             <p className="text-sm text-[var(--muted)]">
-              Op basis van jouw geselecteerde filters
+              Based on your selected filters
             </p>
           </div>
         </div>
-        <Link 
+        <Link
           href={overviewUrl}
           className="text-xs font-bold px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--card-bg)] text-[var(--muted)] hover:bg-[var(--surface)] transition-colors"
         >
-          ← Terug naar overzicht
+          ← Back to overview
         </Link>
       </div>
 
       {/* Progress bar */}
       <div className="w-full bg-[var(--surface)] rounded-full h-2 mb-5">
-        <div 
-          className={`h-2 rounded-full transition-all duration-500 ${allMatch ? 'bg-[#5A7A48]' : 'bg-amber-500'}`}
+        <div
+          className={`h-2 rounded-full transition-all duration-500 ${allMatch ? 'bg-[var(--accent)]' : 'bg-amber-500'}`}
           style={{ width: `${matchPct}%` }}
         />
       </div>
@@ -263,18 +260,18 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
       {/* Results grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {results.map((r, i) => (
-          <div 
-            key={i} 
+          <div
+            key={i}
             className={`flex items-start gap-3 px-4 py-3 rounded-lg border ${
-              r.matches 
-                ? 'bg-[var(--card-bg)] border-green-200 dark:border-green-800' 
+              r.matches
+                ? 'bg-[var(--card-bg)] border-[var(--accent)]'
                 : 'bg-[var(--card-bg)] border-red-100 dark:border-red-900'
             }`}
           >
             <span className="text-lg mt-0.5">{r.matches ? '✅' : '❌'}</span>
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-[var(--foreground)]">{r.wens}</p>
-              <p className={`text-xs mt-0.5 ${r.matches ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>{r.detail}</p>
+              <p className="text-sm font-semibold text-[var(--foreground)]">{r.want}</p>
+              <p className={`text-xs mt-0.5 ${r.matches ? 'text-[var(--accent)]' : 'text-red-500 dark:text-red-400'}`}>{r.detail}</p>
             </div>
           </div>
         ))}

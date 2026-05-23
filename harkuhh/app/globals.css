@@ -2,67 +2,99 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ============================================
-   HARKUHH DESIGN SYSTEM - Tailwind v4 Theme
+   HARKUHH DESIGN SYSTEM — Bordeaux / Gold
+   Color: Committed→Drenched (brand) / Restrained (product)
+   All OKLCH. Neutrals tinted toward bordeaux hue (~14deg).
    ============================================ */
 
 @theme inline {
-  /* Brand Colors */
-  --color-harkuhh-green: #5A7A48;
-  --color-harkuhh-dark-green: #3D5C30;
-  --color-harkuhh-light-green: #6B8C5A;
-  --color-harkuhh-soft-green: #A8BF94;
-  --color-harkuhh-sage: #7A8270;
+  --color-bordeaux: oklch(0.31 0.115 14);
+  --color-bordeaux-deep: oklch(0.23 0.095 12);
+  --color-bordeaux-raised: oklch(0.36 0.110 15);
+  --color-ink: oklch(0.19 0.030 14);
+  --color-paper: oklch(0.975 0.006 60);
+  --color-card: oklch(0.992 0.004 60);
+  --color-gold: oklch(0.78 0.115 80);
 
-  --color-offwhite: #F2EFE6;
-  --color-cream: #FAF8F2;
-  --color-surface: #E8E4D8;
-  --color-warm-grey: #D8D3C4;
-  --color-ink: #1C1E18;
+  --color-background: oklch(0.975 0.006 60);
+  --color-foreground: oklch(0.19 0.030 14);
+  --color-accent: oklch(0.31 0.115 14);
+  --color-accent-hover: oklch(0.23 0.095 12);
+  --color-muted: oklch(0.47 0.030 14);
+  --color-border: oklch(0.88 0.012 30);
 
-  /* Semantic Colors */
-  --color-background: #F2EFE6;
-  --color-foreground: #1C1E18;
-  --color-card: #FAF8F2;
-  --color-accent: #5A7A48;
-  --color-accent-hover: #3D5C30;
-  --color-muted: #7A8270;
-  --color-border: #D8D3C4;
-
-  /* Typography */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 
-  /* Shadows */
-  --shadow-soft: 0 2px 12px rgba(28, 30, 24, 0.06);
-  --shadow-card: 0 4px 16px rgba(28, 30, 24, 0.08);
+  --shadow-soft: 0 2px 14px oklch(0.23 0.095 12 / 0.07);
+  --shadow-card: 0 6px 22px oklch(0.23 0.095 12 / 0.10);
 
-  /* Border Radius */
-  --radius-card: 12px;
+  --radius-card: 14px;
   --radius-button: 9999px;
-  --radius-input: 8px;
+  --radius-input: 9px;
 }
 
-/* Light mode (default) */
+/* Light mode (product surfaces: calm, paper) */
 :root {
-  --background: #F2EFE6;
-  --foreground: #1C1E18;
-  --card-bg: #FAF8F2;
-  --accent: #5A7A48;
-  --accent-hover: #3D5C30;
-  --muted: #7A8270;
-  --border: #D8D3C4;
-  --surface: #E8E4D8;
+  --background: oklch(0.975 0.006 60);
+  --foreground: oklch(0.19 0.030 14);
+  --card-bg: oklch(0.992 0.004 60);
+  --surface: oklch(0.945 0.008 50);
+  --muted: oklch(0.47 0.030 14);
+  --border: oklch(0.88 0.012 30);
+
+  /* Brand primary = bordeaux */
+  --accent: oklch(0.31 0.115 14);
+  --accent-hover: oklch(0.23 0.095 12);
+  --accent-soft: oklch(0.31 0.115 14 / 0.10);
+
+  /* Bordeaux family */
+  --bordeaux: oklch(0.31 0.115 14);
+  --bordeaux-deep: oklch(0.23 0.095 12);
+  --bordeaux-raised: oklch(0.36 0.110 15);
+  --on-bordeaux: oklch(0.975 0.010 70);
+  --muted-on-bordeaux: oklch(0.80 0.030 40);
+  --border-on-bordeaux: oklch(0.46 0.055 14);
+
+  /* CTA: gold pill on bordeaux, bordeaux fill on light */
+  --gold: oklch(0.78 0.115 80);
+  --gold-hover: oklch(0.72 0.115 74);
+  --gold-soft: oklch(0.78 0.115 80 / 0.16);
+  --cta: oklch(0.31 0.115 14);
+  --cta-ink: oklch(0.975 0.010 70);
+
+  /* States */
+  --positive: oklch(0.62 0.12 150);
+  --negative: oklch(0.55 0.17 25);
 }
 
-/* Dark mode */
+/* Dark mode (product surfaces, bordeaux-tinted night) */
 .dark {
-  --background: #111310;
-  --foreground: #EDE9DF;
-  --card-bg: #1A1D18;
-  --accent: #6B8C5A;
-  --accent-hover: #7FA06B;
-  --muted: #9A9E92;
-  --border: #2A2D26;
-  --surface: #1E211B;
+  --background: oklch(0.17 0.028 14);
+  --foreground: oklch(0.95 0.010 70);
+  --card-bg: oklch(0.22 0.040 14);
+  --surface: oklch(0.25 0.045 14);
+  --muted: oklch(0.74 0.028 40);
+  --border: oklch(0.34 0.050 14);
+
+  --accent: oklch(0.55 0.135 16);
+  --accent-hover: oklch(0.62 0.140 18);
+  --accent-soft: oklch(0.55 0.135 16 / 0.20);
+
+  --bordeaux: oklch(0.31 0.115 14);
+  --bordeaux-deep: oklch(0.20 0.085 12);
+  --bordeaux-raised: oklch(0.36 0.110 15);
+  --on-bordeaux: oklch(0.975 0.010 70);
+  --muted-on-bordeaux: oklch(0.80 0.030 40);
+  --border-on-bordeaux: oklch(0.46 0.055 14);
+
+  --gold: oklch(0.80 0.120 82);
+  --gold-hover: oklch(0.86 0.115 84);
+  --gold-soft: oklch(0.80 0.120 82 / 0.22);
+  --cta: oklch(0.80 0.120 82);
+  --cta-ink: oklch(0.18 0.030 14);
+
+  --positive: oklch(0.70 0.13 150);
+  --negative: oklch(0.66 0.17 25);
 }
 
 body {
@@ -71,25 +103,35 @@ body {
   font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
 
-/* Smooth transitions for dark mode */
 * {
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--background); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ── Funnel motion ───────────────────────────── */
+@keyframes hk-slide-in-right {
+  from { opacity: 0; transform: translate3d(40px, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
 }
-::-webkit-scrollbar-track {
-  background: var(--background);
+@keyframes hk-rise {
+  from { opacity: 0; transform: translate3d(0, 16px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
 }
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
+.hk-slide-in {
+  animation: hk-slide-in-right 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: var(--muted);
+.hk-rise {
+  animation: hk-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+@media (prefers-reduced-motion: reduce) {
+  .hk-slide-in, .hk-rise { animation: none; }
+  * { transition: none !important; }
+}
+
 /* Custom slider (range) */
 .harkuhh-slider {
   -webkit-appearance: none;
@@ -101,36 +143,32 @@ body {
   outline: none;
   margin: 12px 0;
 }
-
 .harkuhh-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 18px;
   height: 18px;
   background: var(--accent);
-  border: 2px solid white;
+  border: 2px solid var(--card-bg);
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px oklch(0.23 0.095 12 / 0.25);
   transition: transform 0.1s ease-in-out, background-color 0.2s ease;
 }
-
 .harkuhh-slider::-webkit-slider-thumb:hover {
   transform: scale(1.1);
   background: var(--accent-hover);
 }
-
 .harkuhh-slider::-moz-range-thumb {
   width: 18px;
   height: 18px;
   background: var(--accent);
-  border: 2px solid white;
+  border: 2px solid var(--card-bg);
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px oklch(0.23 0.095 12 / 0.25);
   transition: transform 0.1s ease-in-out, background-color 0.2s ease;
 }
-
 .harkuhh-slider::-moz-range-thumb:hover {
   transform: scale(1.1);
   background: var(--accent-hover);
@@ -152,7 +190,6 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
 .harkuhh-checkbox::before {
   content: "";
   width: 10px;
@@ -161,24 +198,16 @@ body {
   transform: scale(0);
   transform-origin: bottom left;
   transition: 120ms transform ease-in-out;
-  background-color: white;
+  background-color: var(--cta-ink);
 }
-
 .harkuhh-checkbox:checked {
   background-color: var(--accent);
   border-color: var(--accent);
 }
-
-.harkuhh-checkbox:checked::before {
-  transform: scale(1);
-}
-
-.harkuhh-checkbox:hover {
-  border-color: var(--accent);
-}
-
+.harkuhh-checkbox:checked::before { transform: scale(1); }
+.harkuhh-checkbox:hover { border-color: var(--accent); }
 .harkuhh-checkbox:focus {
-  outline: 2px solid var(--accent-hover);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -187,41 +216,50 @@ body {
   appearance: none;
   background-color: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 9px;
   padding: 8px 36px 8px 16px;
   font-size: 14px;
   color: var(--foreground);
   cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%235A7A48' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%237c2238' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 16px;
   transition: all 0.2s ease;
 }
-
-.harkuhh-select:hover {
-  border-color: var(--accent);
-}
-
+.harkuhh-select:hover { border-color: var(--accent); }
 .harkuhh-select:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(90, 122, 72, 0.15);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 /* Custom Input */
 .harkuhh-input {
   background-color: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 9px;
   padding: 10px 16px;
   font-size: 14px;
   color: var(--foreground);
   transition: all 0.2s ease;
 }
-
 .harkuhh-input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(90, 122, 72, 0.15);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
+
+/* Leaflet tooltip overrides */
+.store-tooltip {
+  background: var(--foreground) !important;
+  color: var(--background) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 6px 10px !important;
+  font-family: var(--font-sans) !important;
+  font-size: 12px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+}
+.store-tooltip .leaflet-tooltip-arrow { display: none; }
+.leaflet-container { background: var(--background) !important; }

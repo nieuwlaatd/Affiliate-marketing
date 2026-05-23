@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:goaffpro.com)",
+      "WebFetch(domain:api.goaffpro.com)",
+      "WebSearch",
+      "WebFetch(domain:apidoc.goaffpro.com)",
+      "WebFetch(domain:docs.goaffpro.com)",
+      "WebFetch(domain:storeleads.app)",
+      "WebFetch(domain:blog.goaffpro.com)"
+    ]
+  }
+}

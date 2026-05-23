@@ -57,7 +57,22 @@ export interface DealCheck {
   error_message: string | null;
 }
 
-// ---- E-bike types (FietsenHarkuhh) ----
+// ---- E-bike types (US market) ----
+
+export type UsageType = 'commuting' | 'recreation' | 'sport' | 'cargo' | 'off-road';
+export type FrameType = 'step-through' | 'step-over' | 'sport';
+export type MotorType = 'mid-drive' | 'front-hub' | 'rear-hub';
+export type PriceCategory = 'budget' | 'mid-range' | 'premium';
+export type BikeClass = 'class-1' | 'class-2' | 'class-3';
+export type GearType = 'derailleur' | 'internal-hub' | 'cvt' | 'single-speed';
+export type SuspensionType = 'none' | 'front' | 'full';
+export type AffiliateNetwork =
+  | 'shareasale'
+  | 'impact'
+  | 'avantlink'
+  | 'rakuten'
+  | 'goaffpro'
+  | 'direct';
 
 export interface EBike {
   id: string;
@@ -65,48 +80,64 @@ export interface EBike {
   brand: string;
   model: string;
   year: number;
-  price: number;
-  priceCategory: 'budget' | 'midden' | 'premium';
+  price: number; // USD
+  priceCategory: PriceCategory;
   images: string[];
 
-  motorType: 'midden' | 'naaf-voor' | 'naaf-achter';
+  motorType: MotorType;
   motorBrand: string;
-  torque: number;
+  torque: number; // Nm
   supportLevels: number;
 
-  batteryCapacity: number;
-  rangeManufacturer: number;
-  rangePractical: number;
-  chargeTime: number;
+  batteryCapacity: number; // Ah
+  rangeManufacturer: number; // miles (claimed)
+  rangePractical: number; // miles (realistic)
+  chargeTime: number; // hours
   batteryRemovable: boolean;
 
-  frameType: 'laag-instap' | 'hoog-instap' | 'sportief';
+  frameType: FrameType;
   frameMaterial: string;
-  wheelSize: number;
-  weight: number;
-  maxWeight: number;
+  wheelSize: number; // inches
+  weight: number; // lbs
+  maxWeight: number; // lbs (max payload)
 
-  gearType: 'derailleur' | 'naaf' | 'cvt';
+  gearType: GearType;
   gearCount: number;
   gearBrand: string;
 
-  suitableFor: ('woon-werk' | 'recreatief' | 'sportief' | 'transport' | 'off-road')[];
+  suitableFor: UsageType[];
 
   scoreOverall: number;
-  scorePriceQuality: number;
-  scoreComfort: number;
+  scoreValue: number;
   scoreRange: number;
+  scorePower: number;
+  scoreComfort: number;
+  scoreBuildQuality: number;
+  scoreVersatility: number;
 
   affiliateUrl: string;
   testRideUrl: string;
 
+  // US-specific fields
+  bikeClass?: BikeClass;
+  hasThrottle?: boolean;
+  hasSuspension?: SuspensionType;
+  maxSpeedMph?: number;
+  affiliateNetwork?: AffiliateNetwork;
+  affiliateProgramId?: string;
+  commissionPct?: number;
+  cookieDays?: number;
+  brandCountry?: string;
+  shipsToUs?: boolean;
+  warrantyYears?: number;
+
   description: string;
   highlights: string[];
   availableFrameSizes?: number[];
-  minRiderHeight?: number;
-  maxRiderHeight?: number;
+  minRiderHeight?: number; // inches
+  maxRiderHeight?: number; // inches
   dimensions?: {
-    standoverHeight?: number;
+    standoverHeight?: number; // inches
     reach?: number;
     totalLength?: number;
     saddleHeightRange?: [number, number];
@@ -116,17 +147,7 @@ export interface EBike {
   fullSpecs?: Record<string, string>;
 }
 
-export type KennisNiveau = 'beginner' | 'gemiddeld' | 'expert';
-export type GebruiksDoel = 'woon-werk' | 'recreatief' | 'sportief' | 'transport' | 'off-road';
-
-export interface KeuzeHulpState {
-  stap: number;
-  kennisNiveau: KennisNiveau | null;
-  gebruiksDoel: GebruiksDoel[];
-  budget: [number, number];
-  frameVoorkeur: 'laag-instap' | 'hoog-instap' | 'geen-voorkeur' | null;
-  woonWerkAfstand: number | null;
-}
+export type Terrain = 'flat' | 'hilly' | 'mixed';
 
 export interface FilterState {
   priceRange: [number, number];
@@ -134,13 +155,18 @@ export interface FilterState {
   motorTypes: string[];
   frameTypes: string[];
   suitableFor: string[];
-  minRange: number;
+  minRange: number; // miles
   sortBy: 'price-asc' | 'price-desc' | 'score' | 'range' | 'newest';
-  afstandPerRit?: number;
-  omgeving?: 'stad' | 'heuvelachtig' | 'onverhard';
-  lichaamslengte?: number;
+  distancePerRide?: number; // miles
+  terrain?: Terrain;
+  riderHeight?: number; // inches
   heightRanges: string[];
   foldable?: boolean;
   removableBattery?: boolean;
-  maxBikeWeight?: number;
+  maxBikeWeight?: number; // lbs
+  bikeClasses?: string[];
+  hasThrottle?: boolean;
+  suspensionTypes?: string[];
+  minTopSpeed?: number; // mph
+  wheelSizes?: number[];
 }

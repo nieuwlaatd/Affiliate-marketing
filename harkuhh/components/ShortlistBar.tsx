@@ -10,7 +10,7 @@ export default function ShortlistBar() {
   const pathname = usePathname();
 
   // Hide if shortlist is empty or if we are already on the compare page
-  if (shortlist.length === 0 || pathname === '/e-bikes/vergelijk') {
+  if (shortlist.length === 0 || pathname === '/compare') {
     return null;
   }
 
@@ -45,24 +45,24 @@ export default function ShortlistBar() {
         <div className="flex items-center gap-3 shrink-0">
           <div className="hidden sm:block text-right">
             <div className="flex items-center gap-2 justify-end">
-              <button 
+              <button
                 onClick={clearShortlist}
                 className="text-[10px] text-red-600 hover:underline uppercase font-bold tracking-tight"
               >
-                Wissen
+                Clear
               </button>
               <p className="text-xs font-bold text-[var(--foreground)]">
-                {shortlist.length} {shortlist.length === 1 ? 'fiets' : 'fietsen'}
+                {shortlist.length} {shortlist.length === 1 ? 'bike' : 'bikes'}
               </p>
             </div>
-            <p className="text-[10px] text-[var(--muted)]">Vergelijk voor de beste keuze</p>
+            <p className="text-[10px] text-[var(--muted)]">Compare for the best choice</p>
           </div>
-          <Link 
-            href="/e-bikes/vergelijk" 
-            className="px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-all shadow-lg hover:shadow-xl active:scale-95"
-            style={{ backgroundColor: '#5A7A48' }}
+          <Link
+            href="/compare"
+            className="px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg hover:shadow-xl active:scale-95"
+            style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}
           >
-            Vergelijk {shortlist.length >= 2 ? '' : '(min. 2)'}
+            Compare {shortlist.length >= 2 ? '' : '(min. 2)'}
           </Link>
         </div>
       </div>

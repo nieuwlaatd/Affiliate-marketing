@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="400" height="100">
+  <!-- Minimal bike icon -->
+  <g fill="none" stroke="#1a1a1a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- rear wheel -->
+    <circle cx="32" cy="64" r="15" />
+    <!-- front wheel -->
+    <circle cx="76" cy="64" r="15" />
+    <!-- bottom bracket (pedals) -->
+    <circle cx="48" cy="66" r="2.5" />
+    <!-- chain stay: bottom bracket to rear axle -->
+    <line x1="48" y1="66" x2="32" y2="64" />
+    <!-- seat tube: bottom bracket up to seat -->
+    <line x1="48" y1="66" x2="44" y2="42" />
+    <!-- down tube: bottom bracket to head tube -->
+    <line x1="48" y1="66" x2="68" y2="44" />
+    <!-- top tube: seat to head tube -->
+    <line x1="44" y1="42" x2="68" y2="44" />
+    <!-- seat stay: seat area to rear axle -->
+    <line x1="44" y1="42" x2="32" y2="64" />
+    <!-- fork: head tube down to front axle -->
+    <line x1="68" y1="44" x2="76" y2="64" />
+    <!-- handlebar -->
+    <path d="M66 40 L68 44 L72 40" />
+    <!-- seat -->
+    <line x1="40" y1="41" x2="47" y2="41" />
+  </g>
+
+  <!-- Brand text -->
+  <g fill="#1a1a1a">
+    <text x="108" y="52" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="-0.5">best</text>
+    <text x="152" y="52" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="18" font-weight="300" letter-spacing="-0.5">bike</text>
+    <text x="191" y="52" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="-0.5">for</text>
+    <text x="219" y="52" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="18" font-weight="300" letter-spacing="-0.5">me</text>
+  </g>
+
+  <!-- Tagline -->
+  <text x="108" y="70" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="7" font-weight="400" fill="#888" letter-spacing="3">FIND YOUR PERFECT RIDE</text>
+</svg>

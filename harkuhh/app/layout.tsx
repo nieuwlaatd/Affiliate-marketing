@@ -11,10 +11,29 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Harkuhh — Harkuhh je korting",
+  metadataBase: new URL("https://harkuhh.vercel.app"),
+  title: {
+    default: "Harkuhh — Find Your Perfect E-Bike",
+    template: "%s | Harkuhh",
+  },
   description:
-    "Alle werkende kortingscodes en deals op één rustige plek. Harkuhh je korting voordat je afrekent.",
-  keywords: ["kortingscode", "korting", "deals", "coupon", "harkuhh", "besparen"],
+    "Data-driven e-bike reviews, comparisons and the best deals. Use the E-Bike Finder to match the electric bike that fits your budget, terrain and riding style.",
+  keywords: [
+    "electric bike",
+    "ebike",
+    "e-bike finder",
+    "best ebikes",
+    "ebike comparison",
+    "ebike reviews",
+    "ebike deals",
+  ],
+  openGraph: {
+    title: "Harkuhh — Find Your Perfect E-Bike",
+    description:
+      "Use the E-Bike Finder to match the electric bike that fits your budget, terrain and riding style.",
+    type: "website",
+    locale: "en_US",
+  },
 };
 
 export default function RootLayout({
@@ -23,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="nl" className={`${inter.variable} h-full`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} h-full`} suppressHydrationWarning>
       <head>
         <script src="/theme.js" async />
       </head>

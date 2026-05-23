@@ -2,26 +2,40 @@
 
 import { FilterState } from '@/lib/types';
 
-// ── Oriëntatie-opties ──────────────────────────────────────
+// ── Filter options ─────────────────────────────────────────
 
-const doelOptions = [
-  { value: 'woon-werk', label: 'Woon-werk', icon: '🚴' },
-  { value: 'recreatief', label: 'Recreatief', icon: '🌳' },
-  { value: 'sportief', label: 'Sportief', icon: '⚡' },
-  { value: 'transport', label: 'Transport', icon: '📦' },
-  { value: 'off-road', label: 'Off-road', icon: '🏔️' },
+// Options match HomeFunnel quiz exactly (same labels, same order)
+
+const terrainOptions = [
+  { value: 'flat', label: 'City streets' },
+  { value: 'hilly', label: 'Hills & climbs' },
+  { value: 'mixed', label: 'Trails & gravel' },
 ];
 
-const omgevingOptions = [
-  { value: 'stad', label: 'Stad & Verhard', icon: '🏙️' },
-  { value: 'heuvelachtig', label: 'Heuvels & Bergen', icon: '⛰️' },
-  { value: 'onverhard', label: 'Onverhard / Off-road', icon: '🌲' },
+const purposeOptions = [
+  { value: 'commuting', label: 'Getting to work' },
+  { value: 'recreation', label: 'Weekend rides' },
+  { value: 'sport', label: 'Fitness & speed' },
+  { value: 'cargo', label: 'Hauling & family' },
+];
+
+const distanceOptions = [
+  { value: 5, label: 'Under 5 mi' },
+  { value: 15, label: '5–15 mi' },
+  { value: 30, label: '15–30 mi' },
+  { value: 50, label: '30+ mi' },
 ];
 
 const frameOptions = [
-  { value: 'laag-instap', label: 'Lage instap' },
-  { value: 'sportief', label: 'Sportief' },
-  { value: 'hoog-instap', label: 'Hoge instap' },
+  { value: 'step-through', label: 'Step-through' },
+  { value: 'step-over', label: 'Step-over' },
+  { value: 'sport', label: 'Sport' },
+];
+
+const bikeClassOptions = [
+  { value: 'class-1', label: 'Class 1', hint: 'Pedal-assist only, 20 mph' },
+  { value: 'class-2', label: 'Class 2', hint: 'Throttle + assist, 20 mph' },
+  { value: 'class-3', label: 'Class 3', hint: 'Pedal-assist only, 28 mph' },
 ];
 
 // ── Component ──────────────────────────────────────────────
@@ -33,48 +47,48 @@ interface KeuzehulpBarProps {
 
 export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarProps) {
 
-  /* ── helpers ─────────────────────────────────────── */
-
-  const toggleArray = (key: 'suitableFor' | 'frameTypes', value: string) => {
-    const current = filters[key];
+  const toggleArray = (key: 'suitableFor' | 'frameTypes' | 'bikeClasses', value: string) => {
+    const current = (filters[key] as string[]) || [];
     const updated = current.includes(value)
       ? current.filter((v) => v !== value)
       : [...current, value];
     onFiltersChange({ ...filters, [key]: updated });
   };
 
-  const handleOmgeving = (val: 'stad' | 'heuvelachtig' | 'onverhard') => {
-    onFiltersChange({ ...filters, omgeving: val === filters.omgeving ? undefined : val });
+  const handleTerrain = (val: 'flat' | 'hilly' | 'mixed') => {
+    onFiltersChange({ ...filters, terrain: val === filters.terrain ? undefined : val });
   };
 
-  /* ── actieve-filter teller ───────────────────────── */
+  const handleDistance = (miles: number) => {
+    onFiltersChange({ ...filters, distancePerRide: filters.distancePerRide === miles ? undefined : miles });
+  };
 
   const totalActive =
     filters.suitableFor.length +
     filters.frameTypes.length +
-    (filters.omgeving ? 1 : 0) +
-    (filters.lichaamslengte ? 1 : 0);
+    (filters.bikeClasses?.length || 0) +
+    (filters.terrain ? 1 : 0) +
+    (filters.riderHeight ? 1 : 0) +
+    (filters.distancePerRide ? 1 : 0);
 
   const resetKeuzehulp = () => {
     onFiltersChange({
       ...filters,
       suitableFor: [],
       frameTypes: [],
-      omgeving: undefined,
-      lichaamslengte: undefined,
+      bikeClasses: [],
+      terrain: undefined,
+      riderHeight: undefined,
+      distancePerRide: undefined,
     });
   };
-
-  /* ── shared chip style ───────────────────────────── */
 
   const chipClass = (active: boolean) =>
     `flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 border ${
       active
-        ? 'bg-[#5A7A48] text-white border-[#5A7A48] shadow-sm'
+        ? 'bg-[var(--accent)] text-[var(--on-bordeaux)] border-[var(--accent)] shadow-sm'
         : 'bg-[var(--card-bg)] text-[var(--foreground)] border-[var(--border)] hover:border-gray-300 hover:bg-[var(--surface)]'
     }`;
-
-  /* ── render ──────────────────────────────────────── */
 
   return (
     <div className="bg-[var(--card-bg)] rounded-2xl border border-[var(--border)] shadow-sm p-5 sm:p-6 mb-8 mt-4">
@@ -83,12 +97,12 @@ export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarP
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
         <div>
           <h2 className="text-lg font-bold text-[var(--foreground)] flex items-center gap-2">
-            <svg className="w-5 h-5 text-[#5A7A48]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 text-[var(--accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
-            Vind jouw perfecte e-bike
+            Find your perfect e-bike
           </h2>
-          <p className="text-[var(--muted)] text-sm mt-1">Beantwoord een paar vragen en wij filteren het aanbod voor je.</p>
+          <p className="text-[var(--muted)] text-sm mt-1">Answer a few questions and we&apos;ll filter the lineup for you.</p>
         </div>
 
         {totalActive > 0 && (
@@ -104,69 +118,83 @@ export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarP
         )}
       </div>
 
-      {/* Grid: 4 oriënterende vragen */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-5">
+      {/* Grid: 6 orienting questions */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
 
-        {/* 1. Waarvoor */}
+        {/* 1. Where will you ride? (HomeFunnel step 1) */}
         <div className="bg-[var(--surface)] p-4 rounded-xl">
-          <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3">Waarvoor gebruik je hem?</h3>
+          <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3">Where will you ride?</h3>
           <div className="flex flex-wrap gap-2">
-            {doelOptions.map((opt) => (
+            {terrainOptions.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => handleTerrain(opt.value as 'flat' | 'hilly' | 'mixed')}
+                className={chipClass(filters.terrain === opt.value)}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 2. What's it mostly for? (HomeFunnel step 2) */}
+        <div className="bg-[var(--surface)] p-4 rounded-xl">
+          <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3">What&apos;s it mostly for?</h3>
+          <div className="flex flex-wrap gap-2">
+            {purposeOptions.map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => toggleArray('suitableFor', opt.value)}
                 className={chipClass(filters.suitableFor.includes(opt.value))}
               >
-                <span className={filters.suitableFor.includes(opt.value) ? 'opacity-100' : 'opacity-80'}>{opt.icon}</span>
                 {opt.label}
               </button>
             ))}
           </div>
         </div>
 
-        {/* 2. Omgeving */}
+        {/* 3. How far do you typically ride? (HomeFunnel step 4) */}
         <div className="bg-[var(--surface)] p-4 rounded-xl">
-          <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3">Waar rijd je het meest?</h3>
+          <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3">How far do you typically ride?</h3>
           <div className="flex flex-wrap gap-2">
-            {omgevingOptions.map((opt) => (
+            {distanceOptions.map((opt) => (
               <button
                 key={opt.value}
-                onClick={() => handleOmgeving(opt.value as 'stad' | 'heuvelachtig' | 'onverhard')}
-                className={chipClass(filters.omgeving === opt.value)}
+                onClick={() => handleDistance(opt.value)}
+                className={chipClass(filters.distancePerRide === opt.value)}
               >
-                <span className={filters.omgeving === opt.value ? 'opacity-100' : 'opacity-80'}>{opt.icon}</span>
                 {opt.label}
               </button>
             ))}
           </div>
         </div>
 
-        {/* 3. Lichaamslengte */}
+        {/* 4. How tall are you? (HomeFunnel step 5) */}
         <div className="bg-[var(--surface)] p-4 rounded-xl">
           <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3 flex justify-between items-center">
-            Hoe lang ben je?
-            <span className="text-xs font-normal text-[var(--muted)] bg-[var(--card-bg)] px-2 py-0.5 rounded border border-[var(--border)]">Maatadvies</span>
+            How tall are you?
+            <span className="text-xs font-normal text-[var(--muted)] bg-[var(--card-bg)] px-2 py-0.5 rounded border border-[var(--border)]">Fit advice</span>
           </h3>
           <div className="relative">
             <input
               type="number"
-              placeholder="bijv. 175"
+              placeholder="e.g. 69"
               className="w-full harkuhh-input font-medium pr-12"
-              value={filters.lichaamslengte || ''}
+              value={filters.riderHeight || ''}
               onChange={(e) => {
                 const val = e.target.value ? Number(e.target.value) : undefined;
-                onFiltersChange({ ...filters, lichaamslengte: val });
+                onFiltersChange({ ...filters, riderHeight: val });
               }}
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted)] opacity-50 font-bold text-sm pointer-events-none">
-              cm
+              in
             </span>
           </div>
         </div>
 
-        {/* 4. Frametype */}
+        {/* 5. Frame type (HomeFunnel step 6) */}
         <div className="bg-[var(--surface)] p-4 rounded-xl">
-          <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3">Voorkeur frametype</h3>
+          <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3">Frame type preference</h3>
           <div className="flex flex-wrap gap-2">
             {frameOptions.map((opt) => (
               <button
@@ -178,6 +206,26 @@ export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarP
               </button>
             ))}
           </div>
+        </div>
+
+        {/* 6. What class do you need? (HomeFunnel step 6) */}
+        <div className="bg-[var(--surface)] p-4 rounded-xl">
+          <h3 className="text-sm font-semibold text-[var(--foreground)] mb-3">What class do you need?</h3>
+          <div className="flex flex-wrap gap-2">
+            {bikeClassOptions.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => toggleArray('bikeClasses', opt.value)}
+                className={chipClass((filters.bikeClasses || []).includes(opt.value))}
+                title={opt.hint}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          <p className="text-[10px] text-[var(--muted)] mt-2 opacity-70">
+            Class determines max speed &amp; throttle availability
+          </p>
         </div>
 
       </div>
