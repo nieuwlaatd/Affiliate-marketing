@@ -125,7 +125,7 @@ export default async function VsPage({ params }: { params: Promise<{ slug: strin
             <div />
             {[a, b].map((bike) => (
               <a key={bike.slug} href={bike.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored"
-                className="px-4 py-2.5 text-sm font-bold rounded-lg text-center" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
+                className="cta-primary px-4 py-2.5 text-sm font-bold rounded-lg text-center" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
                 Check price →
               </a>
             ))}
@@ -145,7 +145,7 @@ export default async function VsPage({ params }: { params: Promise<{ slug: strin
               your budget, terrain and feature priorities. Take the quiz for a personalized pick.</>
             )}
           </p>
-          <Link href="/" className="inline-flex mt-5 px-6 py-3 font-bold rounded-lg" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
+          <Link href="/" className="cta-primary inline-flex mt-5 px-6 py-3 font-bold rounded-lg" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
             Find My E-Bike →
           </Link>
         </div>

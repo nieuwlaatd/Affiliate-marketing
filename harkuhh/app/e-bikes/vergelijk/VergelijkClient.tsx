@@ -276,7 +276,7 @@ export default function VergelijkClient({ initialBikes }: { initialBikes: EBike[
               <div></div>
               {selectedBikes.map(bike => (
                 <div key={bike.slug} className="flex flex-col gap-2">
-                  <a href={bike.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored" className="px-4 py-2 text-sm font-bold rounded-lg text-center" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
+                  <a href={bike.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored" className="cta-primary px-4 py-2 text-sm font-bold rounded-lg text-center" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
                     Check price
                   </a>
                   <Link href={`/e-bikes/${bike.brand.toLowerCase().replace(/\s+/g, '-')}/${bike.slug}`} className="px-4 py-2 border text-sm font-medium rounded-lg text-center bg-[var(--card-bg)] hover:bg-[var(--surface)] transition-colors" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>

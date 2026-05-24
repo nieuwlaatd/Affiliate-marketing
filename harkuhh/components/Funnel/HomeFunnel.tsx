@@ -102,6 +102,7 @@ export default function HomeFunnel() {
   const [budget, setBudget] = useState<(typeof BUDGETS)[number] | null>(null);
   const [distance, setDistance] = useState<(typeof DISTANCES)[number] | null>(null);
   const [height, setHeight] = useState<string>('');
+  const [heightUnit, setHeightUnit] = useState<'in' | 'cm'>('in');
   const [frame, setFrame] = useState<(typeof FRAMES)[number] | null>(null);
   const [bikeClass, setBikeClass] = useState<(typeof CLASSES)[number] | null>(null);
   const [pending, setPending] = useState<string | null>(null);
@@ -121,7 +122,10 @@ export default function HomeFunnel() {
     if (purpose) p.set('purpose', purpose.id);
     if (budget) p.set('budget', String(budget.max));
     if (distance) p.set('distance', String(distance.miles));
-    if (height) p.set('height', height);
+    if (height) {
+      const inches = heightUnit === 'cm' ? String(Math.round(Number(height) / 2.54)) : height;
+      p.set('height', inches);
+    }
     if (frame && frame.id !== 'no-preference') p.set('frame', frame.id);
     if (bikeClass && bikeClass.id !== 'no-preference') p.set('class', bikeClass.id);
     router.push(`/e-bikes/overzicht?${p.toString()}`);
@@ -189,7 +193,7 @@ export default function HomeFunnel() {
               purpose && { k: 'Use', v: purpose.label, at: 1 },
               budget && { k: 'Budget', v: budget.label, at: 2 },
               distance && { k: 'Distance', v: distance.label, at: 3 },
-              height && { k: 'Height', v: `${height}"`, at: 4 },
+              height && { k: 'Height', v: heightUnit === 'cm' ? `${height} cm` : `${height}"`, at: 4 },
               frame && { k: 'Frame', v: frame.label, at: 5 },
               bikeClass && { k: 'Class', v: bikeClass.label, at: 5 },
             ]
@@ -251,7 +255,7 @@ export default function HomeFunnel() {
                               setTerrain(t);
                               advance(1, `t:${t.id}`);
                             }}
-                            className="group flex w-full items-center gap-4 rounded-2xl px-5 py-4 text-left transition-all duration-200"
+                            className="quiz-option group flex w-full items-center gap-4 rounded-2xl px-5 py-4 text-left"
                             style={{
                               backgroundColor: active ? 'var(--gold)' : 'var(--bordeaux)',
                               color: active ? 'var(--cta-ink)' : 'var(--on-bordeaux)',
@@ -293,7 +297,7 @@ export default function HomeFunnel() {
                               setPurpose(o);
                               advance(2, `p:${o.id}`);
                             }}
-                            className="flex w-full items-center justify-between rounded-2xl px-5 py-4 text-left transition-all duration-200"
+                            className="quiz-option flex w-full items-center justify-between rounded-2xl px-5 py-4 text-left"
                             style={{
                               backgroundColor: active ? 'var(--gold)' : 'var(--bordeaux)',
                               color: active ? 'var(--cta-ink)' : 'var(--on-bordeaux)',
@@ -317,7 +321,7 @@ export default function HomeFunnel() {
                               setBudget(o);
                               advance(3, `b:${o.id}`);
                             }}
-                            className="flex w-full items-center justify-between rounded-2xl px-5 py-4 text-left transition-all duration-200"
+                            className="quiz-option flex w-full items-center justify-between rounded-2xl px-5 py-4 text-left"
                             style={{
                               backgroundColor: active ? 'var(--gold)' : 'var(--bordeaux)',
                               color: active ? 'var(--cta-ink)' : 'var(--on-bordeaux)',
@@ -341,7 +345,7 @@ export default function HomeFunnel() {
                               setDistance(o);
                               advance(4, `d:${o.id}`);
                             }}
-                            className="flex w-full items-center justify-between rounded-2xl px-5 py-4 text-left transition-all duration-200"
+                            className="quiz-option flex w-full items-center justify-between rounded-2xl px-5 py-4 text-left"
                             style={{
                               backgroundColor: active ? 'var(--gold)' : 'var(--bordeaux)',
                               color: active ? 'var(--cta-ink)' : 'var(--on-bordeaux)',
@@ -360,10 +364,32 @@ export default function HomeFunnel() {
                         <p className="text-sm" style={{ color: 'var(--muted-on-bordeaux)' }}>
                           We&apos;ll recommend bikes that fit your body.
                         </p>
+                        <div className="flex rounded-2xl overflow-hidden mb-1" style={{ border: '2px solid var(--border-on-bordeaux)' }}>
+                          {(['in', 'cm'] as const).map((u) => (
+                            <button
+                              key={u}
+                              onClick={() => {
+                                if (u === heightUnit) return;
+                                if (height) {
+                                  const val = Number(height);
+                                  setHeight(String(Math.round(u === 'cm' ? val * 2.54 : val / 2.54)));
+                                }
+                                setHeightUnit(u);
+                              }}
+                              className="flex-1 py-2 text-sm font-bold transition-colors"
+                              style={{
+                                backgroundColor: heightUnit === u ? 'var(--gold)' : 'var(--bordeaux)',
+                                color: heightUnit === u ? 'var(--cta-ink)' : 'var(--muted-on-bordeaux)',
+                              }}
+                            >
+                              {u === 'in' ? 'Inches' : 'Centimeters'}
+                            </button>
+                          ))}
+                        </div>
                         <div className="relative">
                           <input
                             type="number"
-                            placeholder="e.g. 69"
+                            placeholder={heightUnit === 'in' ? 'e.g. 69' : 'e.g. 175'}
                             value={height}
                             onChange={(e) => setHeight(e.target.value)}
                             className="w-full rounded-2xl px-5 py-4 text-lg font-bold outline-none transition-all"
@@ -379,13 +405,17 @@ export default function HomeFunnel() {
                             className="absolute right-5 top-1/2 -translate-y-1/2 text-sm font-bold pointer-events-none"
                             style={{ color: 'var(--muted-on-bordeaux)' }}
                           >
-                            inches
+                            {heightUnit === 'in' ? 'inches' : 'cm'}
                           </span>
                         </div>
                         <button
-                          onClick={() => { if (height) advance(5, `h:${height}`); }}
+                          onClick={() => {
+                            if (!height) return;
+                            const inches = heightUnit === 'cm' ? Math.round(Number(height) / 2.54) : height;
+                            advance(5, `h:${inches}`);
+                          }}
                           disabled={!height}
-                          className="w-full rounded-2xl px-5 py-4 text-center font-bold transition-all disabled:opacity-30"
+                          className="cta-primary w-full rounded-2xl px-5 py-4 text-center font-bold disabled:opacity-30"
                           style={{ backgroundColor: 'var(--gold)', color: 'var(--cta-ink)' }}
                         >
                           Continue
@@ -411,7 +441,7 @@ export default function HomeFunnel() {
                                     setPending(`f:${o.id}`);
                                     setTimeout(() => setPending(null), 300);
                                   }}
-                                  className="flex w-full items-center justify-between rounded-2xl px-5 py-4 text-left transition-all duration-200"
+                                  className="quiz-option flex w-full items-center justify-between rounded-2xl px-5 py-4 text-left"
                                   style={{
                                     backgroundColor: active ? 'var(--gold)' : 'var(--bordeaux)',
                                     color: active ? 'var(--cta-ink)' : 'var(--on-bordeaux)',
@@ -437,7 +467,7 @@ export default function HomeFunnel() {
                                     setBikeClass(o);
                                     advance(6, `c:${o.id}`);
                                   }}
-                                  className="flex w-full items-center justify-between rounded-2xl px-5 py-4 text-left transition-all duration-200"
+                                  className="quiz-option flex w-full items-center justify-between rounded-2xl px-5 py-4 text-left"
                                   style={{
                                     backgroundColor: active ? 'var(--gold)' : 'var(--bordeaux)',
                                     color: active ? 'var(--cta-ink)' : 'var(--on-bordeaux)',
@@ -487,7 +517,7 @@ export default function HomeFunnel() {
                     <p className="mt-2 text-sm" style={{ color: 'var(--muted-on-bordeaux)' }}>
                       {[
                         distance && `${distance.label} rides`,
-                        height && `${height}" tall`,
+                        height && (heightUnit === 'cm' ? `${height} cm tall` : `${height}" tall`),
                         frame && frame.id !== 'no-preference' && frame.label,
                         bikeClass && bikeClass.id !== 'no-preference' && bikeClass.label,
                       ].filter(Boolean).join(' · ')}
@@ -499,7 +529,7 @@ export default function HomeFunnel() {
                   </p>
                   <button
                     onClick={go}
-                    className="mt-8 inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-bold transition-transform hover:-translate-y-0.5"
+                    className="cta-primary mt-8 inline-flex items-center gap-2 rounded-full px-8 py-4 text-base font-bold"
                     style={{ backgroundColor: 'var(--gold)', color: 'var(--cta-ink)' }}
                   >
                     See your matches

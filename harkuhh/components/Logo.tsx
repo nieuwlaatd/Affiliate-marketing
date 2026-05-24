@@ -1,7 +1,7 @@
 export default function Logo({ className = '' }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 260 100"
+      viewBox="0 0 270 100"
       className={className}
       fill="none"
       aria-label="BestBikeForMe logo"
@@ -25,9 +25,9 @@ export default function Logo({ className = '' }: { className?: string }) {
       {/* Brand text */}
       <g fill="currentColor">
         <text x="108" y="52" fontFamily="'Inter', 'Helvetica Neue', Arial, sans-serif" fontSize="18" fontWeight="700" letterSpacing="-0.5">best</text>
-        <text x="152" y="52" fontFamily="'Inter', 'Helvetica Neue', Arial, sans-serif" fontSize="18" fontWeight="300" letterSpacing="-0.5">bike</text>
-        <text x="191" y="52" fontFamily="'Inter', 'Helvetica Neue', Arial, sans-serif" fontSize="18" fontWeight="700" letterSpacing="-0.5">for</text>
-        <text x="219" y="52" fontFamily="'Inter', 'Helvetica Neue', Arial, sans-serif" fontSize="18" fontWeight="300" letterSpacing="-0.5">me</text>
+        <text x="148" y="52" fontFamily="'Inter', 'Helvetica Neue', Arial, sans-serif" fontSize="18" fontWeight="700" letterSpacing="-0.5">bike</text>
+        <text x="189" y="52" fontFamily="'Inter', 'Helvetica Neue', Arial, sans-serif" fontSize="18" fontWeight="700" letterSpacing="-0.5">for</text>
+        <text x="217" y="52" fontFamily="'Inter', 'Helvetica Neue', Arial, sans-serif" fontSize="18" fontWeight="700" letterSpacing="-0.5">me</text>
       </g>
 
       {/* Tagline */}

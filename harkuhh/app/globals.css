@@ -127,8 +127,30 @@ body {
 .hk-rise {
   animation: hk-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+/* ── Quiz option hover ──────────────────────── */
+.quiz-option {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+.quiz-option:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+/* ── CTA lift on hover ──────────────────────── */
+.cta-primary {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.cta-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px oklch(0.23 0.095 12 / 0.25);
+}
+.dark .cta-primary:hover {
+  box-shadow: 0 4px 12px oklch(0 0 0 / 0.4);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hk-slide-in, .hk-rise { animation: none; }
+  .cta-primary:hover, .quiz-option:hover { transform: none; box-shadow: none; filter: none; }
   * { transition: none !important; }
 }
 

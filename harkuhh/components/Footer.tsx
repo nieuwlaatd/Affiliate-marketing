@@ -37,7 +37,7 @@ export default function Footer() {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <Logo className="h-9 w-auto text-[var(--foreground)]" />
+            <Logo className="h-12 w-auto text-[var(--foreground)]" />
             <p className="mt-2 text-sm text-[var(--muted)]">
               Unbiased, data-driven e-bike reviews and comparison tools to help you find the right electric bike.
             </p>
@@ -86,7 +86,7 @@ export default function Footer() {
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="h-10 rounded-lg bg-[var(--accent)] px-4 text-sm font-medium text-white transition-colors hover:bg-[var(--accent-hover)] disabled:opacity-50"
+                className="cta-primary h-10 rounded-lg bg-[var(--accent)] px-4 text-sm font-medium text-white disabled:opacity-50"
               >
                 {status === "loading" ? "..." : "Subscribe"}
               </button>

@@ -58,7 +58,7 @@ export default function ShortlistBar() {
           </div>
           <Link
             href="/e-bikes/vergelijk"
-            className="px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg hover:shadow-xl active:scale-95"
+            className="cta-primary px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg active:scale-95"
             style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}
           >
             Compare {shortlist.length >= 2 ? '' : '(min. 2)'}

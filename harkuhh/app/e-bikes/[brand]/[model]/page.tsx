@@ -155,7 +155,7 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 mt-8">
-              <a href={bike.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored" className="px-6 py-3 font-bold rounded-lg text-center transition-colors" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
+              <a href={bike.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored" className="cta-primary px-6 py-3 font-bold rounded-lg text-center" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
                 Check best price →
               </a>
               <a href={bike.testRideUrl} target="_blank" rel="noopener noreferrer sponsored" className="px-6 py-3 border-2 font-bold rounded-lg text-center transition-colors bg-[var(--card-bg)]" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>

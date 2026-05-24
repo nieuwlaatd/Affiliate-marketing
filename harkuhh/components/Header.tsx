@@ -19,7 +19,7 @@ export default function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         {/* Wordmark */}
         <Link href="/" aria-label="BestBikeForMe home">
-          <Logo className="h-10 w-auto text-[var(--foreground)]" />
+          <Logo className="h-12 w-auto text-[var(--foreground)]" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -40,7 +40,7 @@ export default function Header() {
           <ThemeToggle />
           <Link
             href="/"
-            className="hidden h-9 items-center rounded-full px-5 text-sm font-bold transition-transform hover:-translate-y-0.5 sm:flex"
+            className="cta-primary hidden h-9 items-center rounded-full px-5 text-sm font-bold sm:flex"
             style={{ backgroundColor: "var(--cta)", color: "var(--cta-ink)" }}
           >
             Find My E-Bike

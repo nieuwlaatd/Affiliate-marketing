@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { FilterState } from '@/lib/types';
 
 // ── Filter options ─────────────────────────────────────────
@@ -46,6 +47,8 @@ interface KeuzehulpBarProps {
 }
 
 export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarProps) {
+  const [heightUnit, setHeightUnit] = useState<'in' | 'cm'>('in');
+  const [heightDisplay, setHeightDisplay] = useState<string>(filters.riderHeight ? String(filters.riderHeight) : '');
 
   const toggleArray = (key: 'suitableFor' | 'frameTypes' | 'bikeClasses', value: string) => {
     const current = (filters[key] as string[]) || [];
@@ -175,19 +178,45 @@ export default function KeuzehulpBar({ filters, onFiltersChange }: KeuzehulpBarP
             How tall are you?
             <span className="text-xs font-normal text-[var(--muted)] bg-[var(--card-bg)] px-2 py-0.5 rounded border border-[var(--border)]">Fit advice</span>
           </h3>
+          <div className="flex rounded-lg overflow-hidden border border-[var(--border)] mb-2">
+            {(['in', 'cm'] as const).map((u) => (
+              <button
+                key={u}
+                onClick={() => {
+                  if (u === heightUnit) return;
+                  if (heightDisplay) {
+                    const val = Number(heightDisplay);
+                    const converted = u === 'cm' ? Math.round(val * 2.54) : Math.round(val / 2.54);
+                    setHeightDisplay(String(converted));
+                    onFiltersChange({ ...filters, riderHeight: u === 'cm' ? Math.round(converted / 2.54) : converted });
+                  }
+                  setHeightUnit(u);
+                }}
+                className="flex-1 py-1.5 text-xs font-bold transition-colors"
+                style={{
+                  backgroundColor: heightUnit === u ? 'var(--accent)' : 'var(--card-bg)',
+                  color: heightUnit === u ? 'var(--on-bordeaux)' : 'var(--muted)',
+                }}
+              >
+                {u === 'in' ? 'Inches' : 'cm'}
+              </button>
+            ))}
+          </div>
           <div className="relative">
             <input
               type="number"
-              placeholder="e.g. 69"
+              placeholder={heightUnit === 'in' ? 'e.g. 69' : 'e.g. 175'}
               className="w-full harkuhh-input font-medium pr-12"
-              value={filters.riderHeight || ''}
+              value={heightDisplay}
               onChange={(e) => {
+                setHeightDisplay(e.target.value);
                 const val = e.target.value ? Number(e.target.value) : undefined;
-                onFiltersChange({ ...filters, riderHeight: val });
+                const inches = val && heightUnit === 'cm' ? Math.round(val / 2.54) : val;
+                onFiltersChange({ ...filters, riderHeight: inches });
               }}
             />
             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted)] opacity-50 font-bold text-sm pointer-events-none">
-              in
+              {heightUnit}
             </span>
           </div>
         </div>
