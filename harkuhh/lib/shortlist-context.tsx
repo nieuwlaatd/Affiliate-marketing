@@ -11,6 +11,7 @@ interface ShortlistBike {
 
 interface ShortlistContextType {
   shortlist: ShortlistBike[];
+  isReady: boolean;
   addToShortlist: (bike: ShortlistBike) => void;
   removeFromShortlist: (slug: string) => void;
   isInShortlist: (slug: string) => boolean;
@@ -58,7 +59,7 @@ export function ShortlistProvider({ children }: { children: React.ReactNode }) {
   const clearShortlist = () => setShortlist([]);
 
   return (
-    <ShortlistContext.Provider value={{ shortlist, addToShortlist, removeFromShortlist, isInShortlist, clearShortlist }}>
+    <ShortlistContext.Provider value={{ shortlist, isReady: isInitialized, addToShortlist, removeFromShortlist, isInShortlist, clearShortlist }}>
       {children}
     </ShortlistContext.Provider>
   );

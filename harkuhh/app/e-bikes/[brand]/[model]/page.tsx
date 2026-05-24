@@ -24,8 +24,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ brand: string; model: string }> }): Promise<Metadata> {
   const { model } = await params;
   const bike = await getBikeBySlug(model);
-  if (!bike) return { title: 'E-Bike not found — Harkuhh' };
-  const title = `${bike.brand} ${bike.model} Review ${bike.year} — Specs, Price & Where to Buy`;
+  if (!bike) return { title: 'E-Bike not found' };
+  const title = `${bike.brand} ${bike.model} Review ${bike.year} | Specs, Price & Where to Buy`;
   const description = `Is the ${bike.brand} ${bike.model} worth $${bike.price.toLocaleString('en-US')}? Compare specs, read our analysis and find the best price.`;
   return {
     title,
@@ -52,6 +52,9 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
 
   const similar = await getSimilarBikes(bike, 3);
 
+  const brandSlug = bike.brand.toLowerCase().replace(/\s+/g, '-');
+  const siteUrl = 'https://www.bestbikeforme.com';
+
   const productSchema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -66,14 +69,30 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
       availability: 'https://schema.org/InStock',
       url: bike.affiliateUrl,
     },
-    aggregateRating: bike.scoreOverall
-      ? { '@type': 'AggregateRating', ratingValue: (bike.scoreOverall / 2).toFixed(1), bestRating: '5', ratingCount: 1 }
-      : undefined,
+    review: {
+      '@type': 'Review',
+      author: { '@type': 'Organization', name: 'Best Bike For Me' },
+      reviewRating: bike.scoreOverall
+        ? { '@type': 'Rating', ratingValue: (bike.scoreOverall / 2).toFixed(1), bestRating: '5' }
+        : undefined,
+      reviewBody: bike.description,
+    },
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'All E-Bikes', item: `${siteUrl}/e-bikes/overzicht` },
+      { '@type': 'ListItem', position: 2, name: bike.brand, item: `${siteUrl}/e-bikes/overzicht?brand=${bike.brand}` },
+      { '@type': 'ListItem', position: 3, name: bike.model },
+    ],
   };
 
   return (
     <div className="w-full bg-[var(--background)] min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="text-sm text-[var(--muted)] mb-6">
@@ -90,7 +109,7 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
             {bike.images && bike.images.length > 0 ? (
               <Image
                 src={bike.images[0]}
-                alt={`${bike.brand} ${bike.model}`}
+                alt={`${bike.brand} ${bike.model} electric bike`}
                 fill
                 className="object-contain p-4"
                 sizes="(max-width: 1024px) 100vw, 50vw"

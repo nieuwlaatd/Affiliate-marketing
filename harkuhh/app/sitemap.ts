@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getAllBikes } from '@/lib/ebike-data';
 
-const SITE_URL = 'https://harkuhh.vercel.app';
+const SITE_URL = 'https://www.bestbikeforme.com';
 
 const BEST_CATEGORIES = [
   'ebikes-under-1000',
@@ -29,7 +29,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/`, lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: `${SITE_URL}/e-bikes`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${SITE_URL}/e-bikes/overzicht`, lastModified: now, changeFrequency: 'daily', priority: 0.8 },
-    { url: `${SITE_URL}/compare`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${SITE_URL}/e-bikes/vergelijk`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${SITE_URL}/stores`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
   ];
 
   const bestRoutes: MetadataRoute.Sitemap = BEST_CATEGORIES.map((c) => ({

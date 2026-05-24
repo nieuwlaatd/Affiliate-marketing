@@ -43,8 +43,8 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
       want: `Budget up to $${max.toLocaleString('en-US')}`,
       matches: bike.price <= max,
       detail: bike.price <= max
-        ? `$${bike.price.toLocaleString('en-US')} — within your budget`
-        : `$${bike.price.toLocaleString('en-US')} — $${(bike.price - max).toLocaleString('en-US')} over your budget`,
+        ? `$${bike.price.toLocaleString('en-US')}, within your budget`
+        : `$${bike.price.toLocaleString('en-US')}, $${(bike.price - max).toLocaleString('en-US')} over your budget`,
     });
   }
 
@@ -70,8 +70,8 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
     if (terrain === 'hilly') {
       matches = bike.torque >= 50;
       detail = matches
-        ? `${bike.torque} Nm torque — plenty for hills`
-        : `${bike.torque} Nm torque — may be low for hills (50+ Nm recommended)`;
+        ? `${bike.torque} Nm torque, plenty for hills`
+        : `${bike.torque} Nm torque, may be low for hills (50+ Nm recommended)`;
     } else if (terrain === 'mixed') {
       matches = bike.suitableFor.includes('off-road') || bike.suitableFor.includes('sport');
       detail = matches ? 'Good for mixed terrain and trails' : 'Not specifically designed for off-road';
@@ -111,8 +111,8 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
       want: `Rider height: ${ranges.join(', ')} in`,
       matches,
       detail: matches
-        ? `Fits riders ${bikeMin}–${bikeMax}" — matches your selection`
-        : `Fits riders ${bikeMin}–${bikeMax}" — differs from your selection`,
+        ? `Fits riders ${bikeMin}–${bikeMax}", matches your selection`
+        : `Fits riders ${bikeMin}–${bikeMax}", differs from your selection`,
     });
   }
 
@@ -127,8 +127,8 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
       matches,
       detail: hasRange
         ? (matches
-          ? `Recommended for ${bike.minRiderHeight}–${bike.maxRiderHeight}" — perfect fit`
-          : `Recommended for ${bike.minRiderHeight}–${bike.maxRiderHeight}" — may not be ideal`)
+          ? `Recommended for ${bike.minRiderHeight}–${bike.maxRiderHeight}", perfect fit`
+          : `Recommended for ${bike.minRiderHeight}–${bike.maxRiderHeight}", may not be ideal`)
         : 'No specific height recommendation available',
     });
   }
@@ -156,8 +156,8 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
       want: `At least ${min} mi range`,
       matches,
       detail: matches
-        ? `~${bike.rangePractical} mi real-world range — sufficient`
-        : `~${bike.rangePractical} mi real-world range — ${min - bike.rangePractical} mi short`,
+        ? `~${bike.rangePractical} mi real-world range, sufficient`
+        : `~${bike.rangePractical} mi real-world range, ${min - bike.rangePractical} mi short`,
     });
   }
 
@@ -170,7 +170,7 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
       want: `Motor type: ${motors.map(m => motorLabels[m] || m).join(', ')}`,
       matches,
       detail: matches
-        ? `${motorLabels[bike.motorType]} — as desired`
+        ? `${motorLabels[bike.motorType]}, as desired`
         : `${motorLabels[bike.motorType]} (you wanted ${motors.map(m => motorLabels[m] || m).join(', ')})`,
     });
   }
@@ -209,8 +209,8 @@ export default function FilterMatchBlock({ bike }: { bike: EBike }) {
       want: `Max ${max} lbs bike weight`,
       matches,
       detail: matches
-        ? `${bike.weight} lbs — light enough`
-        : `${bike.weight} lbs — ${(bike.weight - max).toFixed(0)} lbs too heavy`,
+        ? `${bike.weight} lbs, light enough`
+        : `${bike.weight} lbs, ${(bike.weight - max).toFixed(0)} lbs too heavy`,
     });
   }
 

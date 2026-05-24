@@ -9,8 +9,7 @@ export default function ShortlistBar() {
   const { shortlist, removeFromShortlist, clearShortlist } = useShortlist();
   const pathname = usePathname();
 
-  // Hide if shortlist is empty or if we are already on the compare page
-  if (shortlist.length === 0 || pathname === '/compare') {
+  if (shortlist.length === 0 || pathname === '/compare' || pathname === '/e-bikes/vergelijk') {
     return null;
   }
 
@@ -58,7 +57,7 @@ export default function ShortlistBar() {
             <p className="text-[10px] text-[var(--muted)]">Compare for the best choice</p>
           </div>
           <Link
-            href="/compare"
+            href="/e-bikes/vergelijk"
             className="px-5 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg hover:shadow-xl active:scale-95"
             style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}
           >

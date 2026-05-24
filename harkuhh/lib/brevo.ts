@@ -1,6 +1,6 @@
 const BREVO_API_URL = "https://api.brevo.com/v3";
 
-const SITE_URL = "https://harkuhh.vercel.app";
+const SITE_URL = "https://www.bestbikeforme.com";
 
 interface SendEmailParams {
   to: { email: string; name?: string }[];
@@ -22,7 +22,7 @@ export async function sendEmail({ to, subject, htmlContent }: SendEmailParams) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      sender: { name: "Harkuhh", email: "noreply@harkuhh.nl" },
+      sender: { name: "Best Bike For Me", email: "noreply@harkuhh.nl" },
       to,
       subject,
       htmlContent,
@@ -94,22 +94,22 @@ export function quizResultsEmailHtml(name: string | null, bikes: QuizResultBike[
     <h1 style="color: #1C1E18; font-size: 20px; margin: 0 0 12px;">Your personalized top ${bikes.length} e-bikes</h1>
     <p style="color: #7A8270; font-size: 14px; line-height: 1.6;">
       ${greeting} based on your answers, these are the electric bikes that fit you best.
-      Prices and availability can change — check the latest before you buy.
+      Prices and availability can change, so check the latest before you buy.
     </p>
     ${cards}
     <a href="${SITE_URL}/compare" style="display: inline-block; margin-top: 16px; padding: 12px 24px; background-color: #C8A24B; color: #2A1418; border-radius: 9999px; text-decoration: none; font-size: 14px; font-weight: 500;">
       Compare these side by side
     </a>
   `;
-  return shell(inner, `You received this email because you took the E-Bike Finder quiz on Harkuhh. ${PREFS_FOOTER}`);
+  return shell(inner, `You received this email because you took the E-Bike Finder quiz on Best Bike For Me. ${PREFS_FOOTER}`);
 }
 
 export function welcomeEmailHtml(displayName: string): string {
   const inner = `
-    <h1 style="color: #1C1E18; font-size: 20px; margin: 0 0 12px;">Welcome to Harkuhh, ${displayName}!</h1>
+    <h1 style="color: #1C1E18; font-size: 20px; margin: 0 0 12px;">Welcome to Best Bike For Me, ${displayName}!</h1>
     <p style="color: #7A8270; font-size: 14px; line-height: 1.6;">
-      Thanks for signing up. Harkuhh helps you find the right electric bike with data-driven
-      comparisons and the best deals — all in one calm place.
+      Thanks for signing up. Best Bike For Me helps you find the right electric bike with data-driven
+      comparisons and the best deals, all in one place.
     </p>
     <p style="color: #7A8270; font-size: 14px; line-height: 1.6;">Here's how to get started:</p>
     <ul style="color: #7A8270; font-size: 14px; line-height: 1.8;">
@@ -117,9 +117,9 @@ export function welcomeEmailHtml(displayName: string): string {
       <li>Save your favorite bikes to compare them side by side</li>
       <li>Get notified when prices drop</li>
     </ul>
-    <a href="${SITE_URL}/quiz" style="display: inline-block; margin-top: 16px; padding: 12px 24px; background-color: #C8A24B; color: #2A1418; border-radius: 9999px; text-decoration: none; font-size: 14px; font-weight: 500;">
+    <a href="${SITE_URL}" style="display: inline-block; margin-top: 16px; padding: 12px 24px; background-color: #C8A24B; color: #2A1418; border-radius: 9999px; text-decoration: none; font-size: 14px; font-weight: 500;">
       Find My E-Bike
     </a>
   `;
-  return shell(inner, "You received this email because you created an account at Harkuhh.");
+  return shell(inner, "You received this email because you created an account at Best Bike For Me.");
 }

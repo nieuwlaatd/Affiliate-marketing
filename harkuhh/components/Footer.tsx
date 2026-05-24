@@ -34,22 +34,37 @@ export default function Footer() {
   return (
     <footer className="border-t border-[var(--border)] bg-[var(--surface)]">
       <div className="mx-auto max-w-6xl px-4 py-12">
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
             <Logo className="h-9 w-auto text-[var(--foreground)]" />
             <p className="mt-2 text-sm text-[var(--muted)]">
-              Find your perfect e-bike. Data-driven reviews, comparisons & the best deals — all in one calm place.
+              Unbiased, data-driven e-bike reviews and comparison tools to help you find the right electric bike.
             </p>
           </div>
 
-          {/* Links */}
+          {/* Tools */}
           <div>
-            <h3 className="text-sm font-semibold text-[var(--foreground)]">Navigation</h3>
+            <h3 className="text-sm font-semibold text-[var(--foreground)]">Tools</h3>
             <nav className="mt-3 flex flex-col gap-2">
-              <Link href="/" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Find My E-Bike</Link>
-              <Link href="/e-bikes" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">All E-Bikes</Link>
-              <Link href="/compare" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Compare</Link>
+              <Link href="/" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">E-Bike Finder Quiz</Link>
+              <Link href="/e-bikes/overzicht" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">All E-Bikes</Link>
+              <Link href="/e-bikes/vergelijk" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Compare E-Bikes</Link>
+              <Link href="/stores" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Find a Dealer</Link>
+            </nav>
+          </div>
+
+          {/* Best E-Bikes */}
+          <div>
+            <h3 className="text-sm font-semibold text-[var(--foreground)]">Best E-Bikes</h3>
+            <nav className="mt-3 flex flex-col gap-2">
+              <Link href="/best/commuter-ebikes" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Best Commuter E-Bikes</Link>
+              <Link href="/best/ebikes-under-1000" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Best Under $1,000</Link>
+              <Link href="/best/ebikes-under-1500" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Best Under $1,500</Link>
+              <Link href="/best/folding-ebikes" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Best Folding E-Bikes</Link>
+              <Link href="/best/cargo-ebikes" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Best Cargo E-Bikes</Link>
+              <Link href="/best/class-3-ebikes" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Best Class 3 E-Bikes</Link>
+              <Link href="/best/ebikes-for-seniors" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Best for Seniors</Link>
             </nav>
           </div>
 
@@ -87,11 +102,11 @@ export default function Footer() {
 
         <div className="mt-8 border-t border-[var(--border)] pt-6 text-center text-xs text-[var(--muted)]">
           <p>
-            <strong>Affiliate disclosure:</strong> Harkuhh is reader-supported. When you buy through links on
+            <strong>Affiliate disclosure:</strong> Best Bike For Me is reader-supported. When you buy through links on
             our site, we may earn an affiliate commission at no extra cost to you. This never affects our
             rankings or recommendations.
           </p>
-          <p className="mt-2">&copy; {new Date().getFullYear()} Harkuhh. All rights reserved.</p>
+          <p className="mt-2">&copy; {new Date().getFullYear()} Best Bike For Me. All rights reserved.</p>
         </div>
       </div>
     </footer>

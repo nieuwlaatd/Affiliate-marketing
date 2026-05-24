@@ -28,7 +28,7 @@ const CATEGORIES: CategoryDef[] = [
       'You don’t need to spend a fortune to get a capable electric bike. These are the best e-bikes under $1,000 right now, ranked by our value, range and build-quality scores. Every pick is judged on real-world range rather than optimistic manufacturer claims.',
     filter: (b) => b.price <= 1000,
     faqs: [
-      { q: 'Are e-bikes under $1,000 any good?', a: 'Yes — several budget brands now offer solid 500W+ motors, removable batteries and real-world ranges of 25–40 miles. The trade-offs are usually weight, basic components and shorter warranties.' },
+      { q: 'Are e-bikes under $1,000 any good?', a: 'Yes, several budget brands now offer solid 500W+ motors, removable batteries and real-world ranges of 25–40 miles. The trade-offs are usually weight, basic components and shorter warranties.' },
       { q: 'What range can I expect from a cheap e-bike?', a: 'Most sub-$1,000 e-bikes deliver 25–45 miles of realistic range on lower assist levels. We list practical range, not the inflated manufacturer figure.' },
     ],
   },
@@ -50,7 +50,7 @@ const CATEGORIES: CategoryDef[] = [
     h1: `Best Commuter E-Bikes in ${YEAR}`,
     metaDescription: `The best commuter electric bikes in ${YEAR}: efficient, comfortable and reliable picks for the daily ride to work.`,
     intro:
-      'A great commuter e-bike is fast enough to keep up with traffic, comfortable over potholes and reliable in all weather. These picks score highest for commuting on our model — weighing range, comfort and build quality.',
+      'A great commuter e-bike is fast enough to keep up with traffic, comfortable over potholes and reliable in all weather. These picks score highest for commuting, weighing range, comfort and build quality.',
     filter: (b) => b.suitableFor.includes('commuting'),
     faqs: [
       { q: 'What class e-bike is best for commuting?', a: 'Class 3 (28 mph pedal-assist) is ideal for longer or faster commutes where it’s legal, while Class 1/2 are great for shorter, relaxed trips and shared paths.' },
@@ -74,7 +74,7 @@ const CATEGORIES: CategoryDef[] = [
     h1: `Best Cargo E-Bikes in ${YEAR}`,
     metaDescription: `The best cargo electric bikes in ${YEAR} for hauling kids and groceries. Stable, powerful, family-ready picks.`,
     intro:
-      'Cargo e-bikes replace a second car for many families. These models score highest for hauling — weighing payload, torque, stability and braking.',
+      'Cargo e-bikes replace a second car for many families. These models score highest for hauling, weighing payload, torque, stability and braking.',
     filter: (b) => b.suitableFor.includes('cargo'),
     faqs: [
       { q: 'How much can a cargo e-bike carry?', a: 'Most cargo e-bikes handle 300–450 lbs of total payload including the rider. Always check the rated max payload, which we list on every bike page.' },
@@ -84,7 +84,7 @@ const CATEGORIES: CategoryDef[] = [
     slug: 'class-3-ebikes',
     title: `Best Class 3 E-Bikes (28 mph) (${YEAR})`,
     h1: `Best Class 3 E-Bikes in ${YEAR}`,
-    metaDescription: `The best Class 3 electric bikes in ${YEAR} — 28 mph pedal-assist speed pedelecs for fast commutes.`,
+    metaDescription: `The best Class 3 electric bikes in ${YEAR}. 28 mph pedal-assist speed pedelecs for fast commutes.`,
     intro:
       'Class 3 e-bikes assist up to 28 mph, making them the fastest legal option for commuters in most US states. These are the top-scoring Class 3 models.',
     filter: (b) => b.bikeClass === 'class-3',
@@ -113,7 +113,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
   const { category } = await params;
   const def = CATEGORIES.find((c) => c.slug === category);
-  if (!def) return { title: 'Category not found | Harkuhh' };
+  if (!def) return { title: 'Category not found' };
   return {
     title: def.title,
     description: def.metaDescription,
@@ -170,7 +170,7 @@ export default async function BestCategoryPage({ params }: { params: Promise<{ c
         <div className="mt-6 p-4 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] text-sm text-[var(--muted)] max-w-3xl">
           <strong className="text-[var(--foreground)]">How we rank:</strong> every bike is scored on value,
           real-world range, power, comfort, build quality and versatility. We earn an affiliate commission if
-          you buy through our links — it never changes the ranking.
+          you buy through our links, but it never changes the ranking.
         </div>
 
         {bikes.length > 0 ? (
@@ -182,7 +182,7 @@ export default async function BestCategoryPage({ params }: { params: Promise<{ c
             </div>
           </ShortlistProvider>
         ) : (
-          <p className="text-[var(--muted)] mt-10">No bikes in this category yet — check back soon.</p>
+          <p className="text-[var(--muted)] mt-10">No bikes in this category yet. Check back soon.</p>
         )}
 
         {/* FAQ */}
@@ -202,7 +202,7 @@ export default async function BestCategoryPage({ params }: { params: Promise<{ c
         <div className="mt-16 text-center rounded-2xl p-10" style={{ backgroundColor: 'var(--bordeaux)' }}>
           <h2 className="text-2xl font-bold mb-3" style={{ color: 'var(--on-bordeaux)' }}>Not sure which one is right for you?</h2>
           <p className="mb-6" style={{ color: 'var(--muted-on-bordeaux)' }}>Take the 60-second quiz for a personalized top 3.</p>
-          <Link href="/quiz" className="inline-flex px-7 py-3 font-bold rounded-lg" style={{ backgroundColor: 'var(--gold)', color: 'var(--cta-ink)' }}>
+          <Link href="/" className="inline-flex px-7 py-3 font-bold rounded-lg" style={{ backgroundColor: 'var(--gold)', color: 'var(--cta-ink)' }}>
             Find My E-Bike →
           </Link>
         </div>

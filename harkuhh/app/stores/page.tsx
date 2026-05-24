@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import StoreMap from '@/components/StoreMap';
 
 export const metadata: Metadata = {
-  title: 'E-Bike Stores Near You — Find a Dealer',
+  title: 'E-Bike Stores Near You | Find a Dealer',
   description:
     'Find e-bike dealers and test-ride locations worldwide. Browse our interactive map to locate sales, service, rentals and test rides near you.',
   alternates: { canonical: '/stores' },

@@ -78,7 +78,7 @@ export default function BikeCard({ bike, compact = false, userHeight, activeFilt
         {bike.images && bike.images.length > 0 ? (
           <Image 
             src={bike.images[0]} 
-            alt={`${bike.brand} ${bike.model}`} 
+            alt={`${bike.brand} ${bike.model} electric bike`}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

@@ -156,9 +156,13 @@ export default function OverzichtClient({
   rideLabel?: string | null;
 }) {
   const allBrands = getAllBrands(initialBikes);
+  const priceMin = Math.min(...initialBikes.map(b => b.price));
+  const priceMax = Math.max(...initialBikes.map(b => b.price));
+  const priceFloor = Math.floor(priceMin / 100) * 100;
+  const priceCeil = Math.ceil(priceMax / 100) * 100;
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
-    priceRange: [500, 5000],
+    priceRange: [priceFloor, priceCeil],
     brands: [],
     motorTypes: [],
     frameTypes: [],
@@ -208,7 +212,7 @@ export default function OverzichtClient({
     (filters.distancePerRide ? 1 : 0) +
     (filters.terrain ? 1 : 0) +
     (filters.riderHeight ? 1 : 0) +
-    (filters.priceRange[1] < 5000 ? 1 : 0) +
+    (filters.priceRange[0] > priceFloor || filters.priceRange[1] < priceCeil ? 1 : 0) +
     (filters.heightRanges.length > 0 ? 1 : 0) +
     (filters.foldable ? 1 : 0) +
     (filters.removableBattery ? 1 : 0) +
@@ -217,7 +221,7 @@ export default function OverzichtClient({
     (filters.minTopSpeed ? 1 : 0);
 
   const resetFilters = () => setFilters({
-    priceRange: [500, 5000], brands: [], motorTypes: [], frameTypes: [], suitableFor: [], minRange: 0, sortBy: filters.sortBy,
+    priceRange: [priceFloor, priceCeil], brands: [], motorTypes: [], frameTypes: [], suitableFor: [], minRange: 0, sortBy: filters.sortBy,
     distancePerRide: undefined, terrain: undefined, riderHeight: undefined, heightRanges: [],
     foldable: undefined, removableBattery: undefined, maxBikeWeight: undefined,
     bikeClasses: [], hasThrottle: undefined, suspensionTypes: [], minTopSpeed: undefined, wheelSizes: [],
@@ -233,8 +237,11 @@ export default function OverzichtClient({
   // Build active filter chips for display
   const activeChips: { label: string; remove: () => void }[] = [];
 
-  if (filters.priceRange[1] < 5000) {
-    activeChips.push({ label: `< $${filters.priceRange[1].toLocaleString('en-US')}`, remove: () => setFilters(p => ({ ...p, priceRange: [500, 5000] })) });
+  if (filters.priceRange[0] > priceFloor || filters.priceRange[1] < priceCeil) {
+    const label = filters.priceRange[0] > priceFloor
+      ? `$${filters.priceRange[0].toLocaleString('en-US')} – $${filters.priceRange[1].toLocaleString('en-US')}`
+      : `< $${filters.priceRange[1].toLocaleString('en-US')}`;
+    activeChips.push({ label, remove: () => setFilters(p => ({ ...p, priceRange: [priceFloor, priceCeil] })) });
   }
   filters.brands.forEach(b => {
     activeChips.push({ label: b, remove: () => toggleArrayFilter('brands', b) });
@@ -359,7 +366,7 @@ export default function OverzichtClient({
             )}
             <p className="text-[var(--muted)] mt-1">
               {filteredBikes.length} of {initialBikes.length} models
-              {rideLabel ? ' — fine-tune with filters below' : ''}
+              {rideLabel ? '. Fine-tune with filters below' : ''}
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -416,12 +423,12 @@ export default function OverzichtClient({
               {/* Sidebar filters ranked by customer impact: */}
 
               {/* ── Price ── */}
-              <FilterSection title="Price" count={filters.priceRange[1] < 5000 ? 1 : 0} defaultOpen>
-                <input type="range" min={500} max={5000} step={100} value={filters.priceRange[1]}
-                  onChange={(e) => setFilters(prev => ({ ...prev, priceRange: [500, Number(e.target.value)] }))}
+              <FilterSection title="Price" count={filters.priceRange[0] > priceFloor || filters.priceRange[1] < priceCeil ? 1 : 0} defaultOpen>
+                <input type="range" min={priceFloor} max={priceCeil} step={100} value={filters.priceRange[1]}
+                  onChange={(e) => setFilters(prev => ({ ...prev, priceRange: [priceFloor, Number(e.target.value)] }))}
                   className="harkuhh-slider" />
                 <div className="flex justify-between text-xs font-semibold text-[var(--muted)] mt-1">
-                  <span>$500</span>
+                  <span>${priceFloor.toLocaleString('en-US')}</span>
                   <span>Up to ${filters.priceRange[1].toLocaleString('en-US')}</span>
                 </div>
               </FilterSection>

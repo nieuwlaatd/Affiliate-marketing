@@ -37,12 +37,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const parts = slug.split('-vs-');
-  if (parts.length !== 2) return { title: 'Comparison not found | Harkuhh' };
+  if (parts.length !== 2) return { title: 'Comparison not found' };
   const allBikes = await getAllBikes();
   const a = findSide(allBikes, parts[0]);
   const b = findSide(allBikes, parts[1]);
-  if (!a || !b) return { title: 'Comparison not found | Harkuhh' };
-  const title = `${a.brand} ${a.model} vs ${b.brand} ${b.model} — Which Should You Buy?`;
+  if (!a || !b) return { title: 'Comparison not found' };
+  const title = `${a.brand} ${a.model} vs ${b.brand} ${b.model}: Which Should You Buy?`;
   const description = `${a.brand} vs ${b.brand}: side-by-side specs, scores and price. We pick a winner in each category to help you decide.`;
   return {
     title,
@@ -139,13 +139,13 @@ export default async function VsPage({ params }: { params: Promise<{ slug: strin
             {scoreWinner ? (
               <>On our scoring model the <strong className="text-[var(--foreground)]">{scoreWinner.brand} {scoreWinner.model}</strong> comes out ahead overall
               ({scoreWinner.scoreOverall} vs {(scoreWinner === a ? b : a).scoreOverall}). That said, the right
-              choice depends on your priorities — use the quiz below for a recommendation tailored to you.</>
+              choice depends on your priorities. Use the quiz below for a recommendation tailored to you.</>
             ) : (
-              <>It’s remarkably close — both score {a.scoreOverall} overall. The right choice comes down to
+              <>It’s remarkably close: both score {a.scoreOverall} overall. The right choice comes down to
               your budget, terrain and feature priorities. Take the quiz for a personalized pick.</>
             )}
           </p>
-          <Link href="/quiz" className="inline-flex mt-5 px-6 py-3 font-bold rounded-lg" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
+          <Link href="/" className="inline-flex mt-5 px-6 py-3 font-bold rounded-lg" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
             Find My E-Bike →
           </Link>
         </div>

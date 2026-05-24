@@ -11,28 +11,38 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://harkuhh.vercel.app"),
+  metadataBase: new URL("https://www.bestbikeforme.com"),
   title: {
-    default: "Harkuhh — Find Your Perfect E-Bike",
-    template: "%s | Harkuhh",
+    default: "Best Bike For Me | Find the Right E-Bike for Your Ride",
+    template: "%s | Best Bike For Me",
   },
   description:
-    "Data-driven e-bike reviews, comparisons and the best deals. Use the E-Bike Finder to match the electric bike that fits your budget, terrain and riding style.",
+    "Compare 88+ electric bikes with unbiased, data-driven reviews. Answer a few questions about your terrain, riding style and budget to get a ranked lineup of e-bikes that actually fit.",
   keywords: [
-    "electric bike",
-    "ebike",
+    "best electric bike",
     "e-bike finder",
-    "best ebikes",
-    "ebike comparison",
-    "ebike reviews",
-    "ebike deals",
+    "electric bike comparison",
+    "e-bike reviews",
+    "best ebike for commuting",
+    "electric bike quiz",
+    "compare e-bikes side by side",
+    "best ebike under 1500",
+    "class 3 ebike",
+    "folding electric bike",
   ],
   openGraph: {
-    title: "Harkuhh — Find Your Perfect E-Bike",
+    siteName: "Best Bike For Me",
+    title: "Best Bike For Me | Find the Right E-Bike for Your Ride",
     description:
-      "Use the E-Bike Finder to match the electric bike that fits your budget, terrain and riding style.",
+      "Compare 88+ electric bikes with unbiased reviews. Take our quiz to find the e-bike that fits your terrain, style and budget.",
     type: "website",
     locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Best Bike For Me | Find the Right E-Bike for Your Ride",
+    description:
+      "Compare 88+ electric bikes with unbiased reviews. Take our quiz to find the e-bike that fits your terrain, style and budget.",
   },
 };
 
@@ -45,6 +55,16 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} h-full`} suppressHydrationWarning>
       <head>
         <script src="/theme.js" async />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Best Bike For Me",
+            url: "https://www.bestbikeforme.com",
+            description: "Unbiased, data-driven e-bike reviews and comparison tools to help riders find the right electric bike.",
+          })}}
+        />
       </head>
       <body className="flex min-h-full flex-col antialiased">
         <Header />
