@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getAllBikes } from '@/lib/ebike-data';
 import { getAllSlugs } from '@/lib/blog-data';
+import { getAllStateSlugs } from '@/lib/state-data';
 
 const SITE_URL = 'https://www.bestbikeforme.com';
 
@@ -74,5 +75,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...bestRoutes, ...vsRoutes, ...blogRoutes, ...bikeRoutes];
+  const stateRoutes: MetadataRoute.Sitemap = getAllStateSlugs().map((slug) => ({
+    url: `${SITE_URL}/best-ebikes/${slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...bestRoutes, ...vsRoutes, ...blogRoutes, ...stateRoutes, ...bikeRoutes];
 }

@@ -336,6 +336,264 @@ Catching problems early is always cheaper than fixing them late.
 Regular maintenance keeps your ride safe and your e-bike's resale value high. A well-maintained battery can last 500 to 1,000+ charge cycles, which means potentially 5+ years of riding.
 `,
   },
+  {
+    slug: 'best-ebikes-for-heavy-riders',
+    title: 'Best E-Bikes for Heavy Riders: What to Look for at 250 lbs and Above',
+    description: 'Most e-bikes max out at 275 lbs. Here is how to find one that handles 300+ lbs safely, with real payload data and our top picks.',
+    category: 'Buying Advice',
+    publishedAt: '2026-05-29',
+    readingTime: 9,
+    coverAlt: 'Sturdy electric bike with reinforced frame on a city street',
+    relatedSlugs: ['how-to-choose-an-electric-bike', 'ebike-battery-range-guide'],
+    content: `
+Most e-bike spec sheets list a "max payload" of 250 to 275 lbs, including the rider. If you weigh more than that, your options shrink fast, and picking the wrong bike can mean bent rims, snapped spokes, and voided warranties.
+
+This guide focuses on what actually matters when you need a bike that can handle 300 lbs or more.
+
+## Why weight capacity matters (more than you think)
+
+The listed max payload is not just a suggestion. It affects:
+
+- **Frame integrity.** Frames are stress-tested to specific weight limits. Exceeding them risks cracking, especially at weld joints.
+- **Wheel durability.** Spokes and rims take the hardest hit from extra weight. Bikes built for heavier riders use thicker spokes and stronger rims.
+- **Braking distance.** More weight means longer stopping distances. Hydraulic disc brakes with large rotors (180mm+) become a safety requirement, not a luxury.
+- **Range.** Every extra 20 lbs of rider weight reduces range by roughly 5 to 8%. A bike rated for 60 miles with a 150 lb rider might deliver 40 to 45 miles with a 280 lb rider.
+
+## What to look for
+
+| Feature | Why it matters for heavier riders |
+|---|---|
+| Payload capacity | Look for 330+ lbs rated. 400 lbs is ideal. |
+| Wheel size | 26" fat tires (4"+) distribute weight better and absorb bumps |
+| Spoke count | 36-spoke wheels are stronger than 32-spoke |
+| Brakes | Hydraulic disc with 180mm+ rotors. Non-negotiable. |
+| Frame material | Steel or thick-gauge aluminum. Carbon is too fragile at higher loads. |
+| Motor | 750W rear hub or mid-drive with 60+ Nm torque for hill climbing |
+| Battery | 14+ Ah (672+ Wh) to compensate for increased energy consumption |
+
+## Frame types for larger riders
+
+**Step-through frames** make mounting and dismounting easier, which matters more at higher body weights. The trade-off is slightly less frame rigidity compared to step-over designs.
+
+**Fat-tire bikes** (4" tires or wider) are popular with heavier riders because the wider contact patch provides more stability and the tires act as suspension, absorbing bumps that would be jarring on standard tires.
+
+## Range expectations
+
+Be realistic about range. Manufacturer claims assume a 150-165 lb rider. At 280+ lbs, expect to get 55 to 65% of the advertised range. Our [battery range guide](/blog/ebike-battery-range-guide) goes deeper on this, but the short version: get the biggest battery you can afford.
+
+## A note on warranty
+
+Some brands void the warranty if you exceed the stated weight limit. Others are more flexible. Before buying, email the brand and ask specifically about their weight policy. Get it in writing.
+
+## Our recommendation
+
+Prioritize payload capacity and braking power above everything else. A bike that handles your weight safely and stops confidently is worth more than one with flashy specs that was not built for you.
+
+Browse our [all e-bikes overview](/e-bikes/overzicht) and filter by weight capacity, or take the [Find My E-Bike quiz](/e-bikes/quiz) where we factor in your body weight to match you with capable bikes. You can also check our picks for [best e-bikes under $1,500](/best/ebikes-under-1500), many of which have 300+ lb payloads.
+`,
+  },
+  {
+    slug: 'best-ebikes-for-hills',
+    title: 'Best E-Bikes for Hills: How to Pick a Bike That Actually Climbs',
+    description: 'Not all e-bike motors handle hills equally. Here is what torque, motor type, and gearing mean for real hill climbing performance.',
+    category: 'Buying Advice',
+    publishedAt: '2026-05-29',
+    readingTime: 8,
+    coverAlt: 'Electric bike climbing a steep residential hill',
+    relatedSlugs: ['how-to-choose-an-electric-bike', 'ebike-classes-explained'],
+    content: `
+A 500W e-bike can cruise on flat ground all day. Put it on a 10% grade, and suddenly you are pedaling hard while the motor struggles. Hills expose the biggest differences between e-bikes.
+
+Here is what separates a bike that climbs from one that stalls.
+
+## Torque is more important than wattage
+
+Wattage tells you how much power the motor can sustain. Torque tells you how much force it puts into the wheel at low speeds. On a steep hill at 5 mph, torque is what keeps you moving.
+
+| Torque (Nm) | Hill capability |
+|---|---|
+| 30-40 Nm | Gentle inclines only. Will struggle on anything over 5% grade. |
+| 50-65 Nm | Handles moderate hills (5-10% grade) with pedaling effort. |
+| 65-85 Nm | Climbs steep hills (10-15%+) comfortably. The sweet spot for hilly commutes. |
+| 85+ Nm | Mountain-grade climbing. Handles anything you can ride. |
+
+## Mid-drive vs. hub motor on hills
+
+**Mid-drive motors** (Bosch, Bafang, Shimano) are better for hills because they work through your gears. Shifting to a lower gear multiplies the motor's torque at the wheel. This is the same reason a car shifts down on a steep road.
+
+**Hub motors** push the wheel directly and cannot use your gears. A 750W hub motor can still climb moderate hills, but it works harder, runs hotter, and drains the battery faster than a mid-drive doing the same climb.
+
+**The verdict:** If you live in a hilly area and ride hills daily, a mid-drive is worth the extra cost. If you hit an occasional hill on otherwise flat terrain, a hub motor handles it fine.
+
+## Gearing matters too
+
+Even with a mid-drive motor, you need the right gears. A 7-speed drivetrain with a limited gear range will force the motor to work harder on steep grades.
+
+Look for:
+- **8 to 10 speed** cassette with a wide range (11-42T or wider)
+- **Low gear ratio** below 1.0 for steep climbing
+- **Derailleur gears** over internal hub gears for hill climbing (wider range, more ratios)
+
+## Battery drain on hills
+
+Climbing drains batteries 3 to 5 times faster than flat riding. A bike that delivers 50 miles on flat ground might give you 20 miles on a hilly route with the same assist level.
+
+Tips to conserve battery on hills:
+1. Use a lower assist level on flat sections between hills
+2. Shift to a lower gear before the hill steepens (do not wait until you are struggling)
+3. Maintain a steady cadence of 60-70 RPM rather than mashing hard
+
+## What about throttle on hills?
+
+Throttle (Class 2) can get you started from a stop on a hill, which is genuinely useful. But sustained hill climbing on throttle alone drains the battery extremely fast and can overheat hub motors. Use pedal-assist for climbing and save the throttle for short bursts.
+
+## Our picks
+
+Check our [best commuter e-bikes](/best/commuter-ebikes) for bikes tested on hilly routes, or [browse all e-bikes](/e-bikes/overzicht) and sort by torque. The [Find My E-Bike quiz](/e-bikes/quiz) asks about your terrain and recommends bikes with enough climbing power for your specific routes.
+`,
+  },
+  {
+    slug: 'are-ebikes-worth-it',
+    title: 'Are E-Bikes Worth It? A Realistic Cost Breakdown for 2026',
+    description: 'E-bikes cost $800 to $3,000+. Here is an honest look at what you get, what you save, and when an e-bike pays for itself.',
+    category: 'Guides',
+    publishedAt: '2026-05-29',
+    readingTime: 10,
+    coverAlt: 'Person commuting on an electric bike past parked cars',
+    relatedSlugs: ['how-to-choose-an-electric-bike', 'best-ebikes-for-commuting-2026'],
+    content: `
+A decent e-bike costs somewhere between $800 and $3,000. That is real money. So is it actually worth it, or is it an expensive toy that collects dust in the garage?
+
+The answer depends entirely on whether it replaces something.
+
+## The cost of driving vs. e-biking
+
+The average American spends about $12,000 per year on car ownership (AAA data), including the payment, insurance, fuel, maintenance, and parking. Even if you only replace some car trips with an e-bike, the savings add up fast.
+
+| Expense | Car (annual) | E-bike (annual) |
+|---|---|---|
+| Purchase/payment | $5,000-$8,000 | $150-$500 (amortized over 3-5 years) |
+| Insurance | $1,500-$2,500 | $0 (most states) |
+| Fuel/electricity | $1,500-$3,000 | $15-$30 |
+| Maintenance | $800-$1,500 | $100-$300 |
+| Parking | $500-$3,000 | $0 |
+| **Total** | **$9,300-$18,000** | **$265-$830** |
+
+Replacing even half your car trips with an e-bike can save $3,000 to $5,000 per year.
+
+## When an e-bike pays for itself
+
+If you buy a $1,500 e-bike and it replaces:
+- **A second car:** it pays for itself in 2 to 3 months
+- **Daily commute parking:** 3 to 6 months
+- **Gas for a 10-mile round trip:** 6 to 12 months
+- **Uber/Lyft rides:** depends on frequency, but often under a year
+
+If you are buying it purely for recreation with no car trips replaced, it does not "pay for itself" in a financial sense. But neither does a gym membership, and an e-bike is more fun.
+
+## What you actually get for your money
+
+### Under $1,000
+Solid entry-level bikes with rear hub motors, 25-40 mile practical range, and basic components. Good enough for flat commutes under 10 miles. Trade-offs: heavier, mechanical disc brakes, basic displays.
+
+### $1,000 to $1,500
+The value sweet spot. Better batteries (40-60 mile range), hydraulic brakes, integrated lights, and more refined ride quality. Handles hills adequately. This is where most commuters should start.
+
+### $1,500 to $2,500
+Mid-drive motors, longer range, premium components. Better hill climbing, more natural pedaling feel, and components that last longer. Worth it if you ride daily or tackle serious terrain.
+
+### $2,500+
+Premium everything. Name-brand motors (Bosch, Shimano), carbon or lightweight frames, top-tier drivetrains. Diminishing returns for most riders unless you need the absolute best.
+
+## The hidden benefits people do not talk about
+
+**Consistency.** A car commute varies by 20-30 minutes depending on traffic. An e-bike commute is the same time every day.
+
+**Health.** You are still pedaling, even with assist. Studies show e-bike commuters get moderate cardiovascular exercise on every ride.
+
+**Parking.** You never circle the block. You lock up and walk in.
+
+**Mental health.** Riding outside beats sitting in traffic. This one is hard to quantify but real.
+
+## When an e-bike is NOT worth it
+
+Be honest with yourself about these scenarios:
+- Your commute is over 20 miles one way and you cannot charge at work
+- You live somewhere with severe winter weather and have no alternative transportation for 3-4 months
+- You need to carry passengers or large cargo regularly (unless you get a cargo e-bike)
+- Your route has no bike lanes and involves high-speed roads with no shoulder
+
+## Bottom line
+
+An e-bike is worth it if it replaces car trips. The more trips it replaces, the faster it pays for itself. Even at the recreation-only level, it is a better value than most fitness equipment because you will actually use it.
+
+Not sure where to start? Our [Find My E-Bike quiz](/e-bikes/quiz) matches you with bikes based on your budget, commute, and terrain. Or browse our [best e-bikes under $1,000](/best/ebikes-under-1000) for affordable starting points.
+`,
+  },
+  {
+    slug: 'how-fast-do-ebikes-go',
+    title: 'How Fast Do E-Bikes Go? Speed Limits, Classes, and What to Expect',
+    description: 'E-bikes go 20 to 28 mph depending on class. Here is what determines your top speed and what the legal limits mean in practice.',
+    category: 'Guides',
+    publishedAt: '2026-05-29',
+    readingTime: 6,
+    coverAlt: 'Speedometer display on an electric bike handlebar',
+    relatedSlugs: ['ebike-classes-explained', 'best-ebikes-for-commuting-2026'],
+    content: `
+"How fast does it go?" is the first question everyone asks about an e-bike. The short answer: 20 to 28 mph with motor assistance, depending on the class. But there is more to it than that.
+
+## E-bike speed by class
+
+| Class | Motor-assisted top speed | Throttle | Typical use |
+|---|---|---|---|
+| Class 1 | 20 mph | No | Recreation, bike paths, general riding |
+| Class 2 | 20 mph | Yes | Casual commuting, stop-and-go city riding |
+| Class 3 | 28 mph | No (usually) | Fast commuting, keeping up with traffic |
+
+These are the speeds at which the motor stops assisting. You can pedal faster than these limits under your own power, and the motor will not fight you. It just will not help.
+
+## 20 mph vs. 28 mph: does it matter?
+
+On paper, 8 mph does not sound like much. In practice, it makes a significant difference for commuting.
+
+A 10-mile commute at 20 mph takes 30 minutes. The same commute at 28 mph takes about 21 minutes. Over a week, that is nearly an hour saved. Over a year, it adds up to multiple days.
+
+The trade-off: Class 3 bikes are restricted from many bike paths and multi-use trails. If your commute uses these paths, a Class 1 or 2 might be more practical despite the lower speed. See our [e-bike classes explained](/blog/ebike-classes-explained) guide for the full breakdown.
+
+## What determines your actual speed?
+
+The motor's cutoff speed is the ceiling, but several factors determine how fast you actually ride:
+
+**Assist level.** Eco mode might cap you at 12-15 mph to conserve battery. Full power gets you closer to the legal limit.
+
+**Terrain.** Going uphill at full assist, you might only manage 10-12 mph. Downhill, gravity does the work and you can exceed the motor-assist limit.
+
+**Wind.** A strong headwind can reduce your effective speed by 3-5 mph even at full assist. This is where higher-wattage motors show their advantage.
+
+**Rider effort.** E-bikes assist your pedaling. The harder you pedal, the faster you go (up to the assist limit). If you barely pedal, you will be slower than the maximum.
+
+**Tire type.** Fat tires (4"+) create more rolling resistance and typically result in slightly lower speeds than standard tires. The comfort trade-off is usually worth it.
+
+## Can you make an e-bike go faster?
+
+Technically, yes. Some riders "de-restrict" their e-bikes by modifying the controller software. This is:
+- **Illegal** on public roads in most states
+- **Dangerous** because the brakes, frame, and tires were designed for the rated speed
+- **Warranty-voiding** with virtually every manufacturer
+
+The legal speed limits exist for a reason. At 28 mph on a bicycle, you have far less protection than in a car. Wear a helmet, especially on Class 3 bikes.
+
+## Which speed is right for you?
+
+If you commute on roads and want to keep up with traffic: **Class 3 (28 mph)**
+
+If you ride bike paths or want a throttle for starting from stops: **Class 2 (20 mph)**
+
+If you want the fewest legal restrictions and a natural ride feel: **Class 1 (20 mph)**
+
+Not sure? The [Find My E-Bike quiz](/e-bikes/quiz) factors in your commute distance and riding style to recommend the right class. Or [compare all e-bikes](/e-bikes/overzicht) side by side and filter by class.
+`,
+  },
 ];
 
 export function getAllPosts(): BlogPost[] {

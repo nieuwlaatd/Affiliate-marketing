@@ -51,6 +51,7 @@ export default function Footer() {
               <Link href="/e-bikes/overzicht" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">All E-Bikes</Link>
               <Link href="/e-bikes/vergelijk" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Compare E-Bikes</Link>
               <Link href="/stores" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Find a Dealer</Link>
+              <Link href="/best-ebikes" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">E-Bikes by State</Link>
             </nav>
           </div>
 
