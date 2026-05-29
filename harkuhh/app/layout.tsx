@@ -56,6 +56,10 @@ export default function RootLayout({
       <head>
         <script src="/theme.js" async />
         <script
+          type="text/javascript"
+          src="http://classic.avantlink.com/affiliate_app_confirm.php?mode=js&authResponse=5b23d2d53cdcedb17ed011938908d903b3fb25a5"
+        />
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify({
             "@context": "https://schema.org",
