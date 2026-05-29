@@ -116,9 +116,15 @@ export default function Footer() {
           <p>
             <strong>Affiliate disclosure:</strong> Best Bike For Me is reader-supported. When you buy through links on
             our site, we may earn an affiliate commission at no extra cost to you. This never affects our
-            rankings or recommendations.
+            rankings or recommendations. <Link href="/affiliate-disclosure" className="underline hover:text-[var(--foreground)]">Learn more</Link>.
           </p>
-          <p className="mt-2">&copy; {new Date().getFullYear()} Best Bike For Me. All rights reserved.</p>
+          <nav className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1">
+            <Link href="/privacy" className="hover:text-[var(--foreground)]">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-[var(--foreground)]">Terms of Service</Link>
+            <Link href="/affiliate-disclosure" className="hover:text-[var(--foreground)]">Affiliate Disclosure</Link>
+            <Link href="/disclaimer" className="hover:text-[var(--foreground)]">Disclaimer</Link>
+          </nav>
+          <p className="mt-3">&copy; {new Date().getFullYear()} Best Bike For Me. All rights reserved.</p>
         </div>
       </div>
     </footer>
