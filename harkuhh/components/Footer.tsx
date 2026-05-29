@@ -34,7 +34,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-[var(--border)] bg-[var(--surface)]">
       <div className="mx-auto max-w-6xl px-4 py-12">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div>
             <Logo className="h-12 w-auto text-[var(--foreground)]" />
@@ -47,10 +47,22 @@ export default function Footer() {
           <div>
             <h3 className="text-sm font-semibold text-[var(--foreground)]">Tools</h3>
             <nav className="mt-3 flex flex-col gap-2">
-              <Link href="/" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">E-Bike Finder Quiz</Link>
+              <Link href="/e-bikes/quiz" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">E-Bike Finder Quiz</Link>
               <Link href="/e-bikes/overzicht" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">All E-Bikes</Link>
               <Link href="/e-bikes/vergelijk" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Compare E-Bikes</Link>
               <Link href="/stores" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Find a Dealer</Link>
+            </nav>
+          </div>
+
+          {/* Blog */}
+          <div>
+            <h3 className="text-sm font-semibold text-[var(--foreground)]">Learn</h3>
+            <nav className="mt-3 flex flex-col gap-2">
+              <Link href="/blog" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">All Articles</Link>
+              <Link href="/blog/how-to-choose-an-electric-bike" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Buyer&apos;s Guide</Link>
+              <Link href="/blog/ebike-classes-explained" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">E-Bike Classes Explained</Link>
+              <Link href="/blog/ebike-battery-range-guide" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Battery &amp; Range Guide</Link>
+              <Link href="/blog/ebike-maintenance-tips" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Maintenance Tips</Link>
             </nav>
           </div>
 

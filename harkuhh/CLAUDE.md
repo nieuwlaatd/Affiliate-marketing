@@ -10,3 +10,4 @@
 
 - `/add-brand` — Onboard a new e-bike brand: scrape all bikes from their website into Supabase, scrape dealer locations into store-data.ts, and configure affiliate tracking. Usage: `/add-brand [brand name] [website URL] [optional affiliate code]`
 - `/sync-brands` — Read `affiliate-partners.xlsx`, find all rows with Status="New", and automatically scrape bikes + stores + configure affiliate tracking for each. Updates the Excel file with results.
+- `/add-blog` — Write and publish a new blog post. Usage: `/add-blog [topic or keyword]`. Researches SEO angle, writes human-sounding content (no em-dashes, no AI filler), adds to blog-data.ts, and verifies the build.

@@ -285,3 +285,46 @@ body {
 }
 .store-tooltip .leaflet-tooltip-arrow { display: none; }
 .leaflet-container { background: var(--background) !important; }
+
+/* ── Blog prose ───────────────────────────────── */
+.prose-bbfm {
+  color: var(--foreground);
+  line-height: 1.75;
+  font-size: 1rem;
+}
+.prose-bbfm h1 { font-size: 1.875rem; font-weight: 800; margin: 2rem 0 0.75rem; color: var(--foreground); }
+.prose-bbfm h2 { font-size: 1.5rem; font-weight: 700; margin: 2rem 0 0.75rem; color: var(--foreground); }
+.prose-bbfm h3 { font-size: 1.25rem; font-weight: 700; margin: 1.5rem 0 0.5rem; color: var(--foreground); }
+.prose-bbfm p  { margin: 0 0 1.25rem; color: var(--muted); }
+.prose-bbfm strong { color: var(--foreground); font-weight: 600; }
+.prose-bbfm a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+.prose-bbfm a:hover { color: var(--accent-hover); }
+.prose-bbfm ul, .prose-bbfm ol { margin: 0 0 1.25rem; padding-left: 1.5rem; color: var(--muted); }
+.prose-bbfm li { margin-bottom: 0.4rem; }
+.prose-bbfm ol { list-style: decimal; }
+.prose-bbfm ul { list-style: disc; }
+.prose-bbfm table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+}
+.prose-bbfm thead th {
+  text-align: left;
+  font-weight: 700;
+  color: var(--foreground);
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--border);
+  background: var(--surface);
+}
+.prose-bbfm tbody td {
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+.prose-bbfm tbody tr:last-child td { border-bottom: none; }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HomeFunnel from "@/components/Funnel/HomeFunnel";
+import { getAllPosts } from "@/lib/blog-data";
 
 export const metadata: Metadata = {
   title: "Best Bike For Me | Find the Right E-Bike for Your Ride",
@@ -57,6 +58,28 @@ export default function HomePage() {
                 className="px-4 py-2 text-sm font-medium rounded-full border border-[var(--border)] text-[var(--foreground)] hover:border-[var(--accent)] hover:bg-[var(--surface)] transition-colors"
               >
                 {cat.label}
+              </Link>
+            ))}
+          </div>
+
+          <h2 className="text-2xl font-bold text-[var(--foreground)] mb-6 text-center">
+            From the blog
+          </h2>
+          <div className="grid md:grid-cols-3 gap-4 mb-16">
+            {getAllPosts().slice(0, 3).map(post => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="group p-5 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] transition-shadow hover:shadow-md"
+              >
+                <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: 'var(--accent)' }}>
+                  {post.category}
+                </span>
+                <h3 className="mt-1 font-bold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors leading-snug">
+                  {post.title}
+                </h3>
+                <p className="mt-2 text-sm text-[var(--muted)] line-clamp-2">{post.description}</p>
+                <p className="mt-2 text-xs text-[var(--muted)]">{post.readingTime} min read</p>
               </Link>
             ))}
           </div>

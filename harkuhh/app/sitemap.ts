@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getAllBikes } from '@/lib/ebike-data';
+import { getAllSlugs } from '@/lib/blog-data';
 
 const SITE_URL = 'https://www.bestbikeforme.com';
 
@@ -31,6 +32,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/e-bikes/overzicht`, lastModified: now, changeFrequency: 'daily', priority: 0.8 },
     { url: `${SITE_URL}/e-bikes/vergelijk`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${SITE_URL}/stores`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${SITE_URL}/e-bikes/quiz`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
   ];
 
   const bestRoutes: MetadataRoute.Sitemap = BEST_CATEGORIES.map((c) => ({
@@ -60,5 +63,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // DB unavailable at build time — static routes still ship
   }
 
-  return [...staticRoutes, ...bestRoutes, ...vsRoutes, ...bikeRoutes];
+  const blogRoutes: MetadataRoute.Sitemap = getAllSlugs().map((slug) => ({
+    url: `${SITE_URL}/blog/${slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...bestRoutes, ...vsRoutes, ...blogRoutes, ...bikeRoutes];
 }

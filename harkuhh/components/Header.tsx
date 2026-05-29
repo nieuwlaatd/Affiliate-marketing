@@ -8,6 +8,7 @@ import Logo from "./Logo";
 const NAV = [
   { href: "/e-bikes", label: "All E-Bikes" },
   { href: "/compare", label: "Compare" },
+  { href: "/blog", label: "Blog" },
   { href: "/stores", label: "Stores" },
 ];
 
@@ -39,7 +40,7 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <ThemeToggle />
           <Link
-            href="/"
+            href="/e-bikes/quiz"
             className="cta-primary hidden h-9 items-center rounded-full px-5 text-sm font-bold sm:flex"
             style={{ backgroundColor: "var(--cta)", color: "var(--cta-ink)" }}
           >
@@ -63,7 +64,7 @@ export default function Header() {
       {menuOpen && (
         <div className="border-t border-[var(--border)] bg-[var(--background)] px-4 py-4 md:hidden">
           <nav className="flex flex-col gap-3">
-            <Link href="/" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-[var(--accent)]">
+            <Link href="/e-bikes/quiz" onClick={() => setMenuOpen(false)} className="text-sm font-bold text-[var(--accent)]">
               Find My E-Bike
             </Link>
             {NAV.map((item) => (

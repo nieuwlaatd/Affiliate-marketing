@@ -145,7 +145,7 @@ export default async function VsPage({ params }: { params: Promise<{ slug: strin
               your budget, terrain and feature priorities. Take the quiz for a personalized pick.</>
             )}
           </p>
-          <Link href="/" className="cta-primary inline-flex mt-5 px-6 py-3 font-bold rounded-lg" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
+          <Link href="/e-bikes/quiz" className="cta-primary inline-flex mt-5 px-6 py-3 font-bold rounded-lg" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
             Find My E-Bike →
           </Link>
         </div>
