@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import './load-env';
 import { createClient } from '@supabase/supabase-js';
 import * as cheerio from 'cheerio';
 import * as fs from 'fs';
