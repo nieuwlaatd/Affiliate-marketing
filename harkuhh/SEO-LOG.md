@@ -156,3 +156,59 @@ cards / detail / best-of pages. (2) Expand `/best/folding-ebikes` (pos 21.3 in G
 low impression but already near page 1 -- a thin page could tip over with enrichment).
 (3) P1.1 -- deepen individual bike detail pages (Engwe P275 SE at pos 23.8 is the
 closest to a real click opportunity in the catalog).
+
+---
+
+## 2026-06-27 — Commuter + under-$1000 buyer's guides + P1.6 score links
+
+**GSC snapshot (28d):** 3 clicks, 526 impressions, CTR 0.6% (same window -- no new
+data yet; GSC has a ~3-day lag and the site is only weeks old). No striking-distance
+queries in the tool output, but page-level data shows several catalog bike pages
+creeping toward page 1:
+- `/e-bikes/duotts/duotts-duotts-c29-k`: pos 14.8 (90-day)
+- `/e-bikes/samebike/samebike-rs-a01-men`: pos 16.9, 25% CTR
+- `/e-bikes/walfisk/walfisk-26-fat-tire-bafang...`: pos 8.1 -- already on page 1!
+- `/best/folding-ebikes`: pos 21.3 -- BLOCKED: 0 bikes match the folding filter.
+  No bike in Supabase or the JSON has frame_type=folding or suitable_for=folding.
+  Added as P2.6 in ROADMAP (catalog gap, high priority).
+
+**Decision:** Skip folding (no catalog bikes). Focus on two demand clusters named
+in ROADMAP P0.4 that are now addressable: commuter and under-$1000.
+
+**Actions taken:**
+
+1. **/best/commuter-ebikes expanded** (1 FAQ -> 3 buyer's guide sections + 6 FAQs,
+   ~900 words added, lastUpdated 2026-06-27):
+   - Sections: "What makes a great commuter e-bike" (range reality-check, weight,
+     fenders/racks); "Class 1 vs 2 vs 3 for commuting" (when to use each); "How far
+     can you realistically commute?" (range math, weather/load factors).
+   - FAQs target: "are e-bikes good for commuting", "how far can you commute",
+     "what class e-bike for commuting", "what to look for", "license", "cost in 2026".
+   - 15 bikes qualify for this category from the catalog (strong list).
+
+2. **/best/ebikes-under-1000 expanded** (2 FAQs -> 3 buyer's guide sections + 6 FAQs,
+   ~700 words added, lastUpdated 2026-06-27):
+   - Sections: "What can you really get for under $1,000?" (honest expectations);
+     "Step-through vs step-over under $1,000"; "What to watch for when buying a
+     budget e-bike" (battery quality, removability, return policy).
+   - FAQs target: "are e-bikes under $1,000 any good", "best e-bike under $1,000
+     2026", "are budget e-bikes safe", "how long does battery last", "do I need license".
+
+3. **P1.6 -- Score links to /how-we-test (done):**
+   - Detail page: "How we score ->" link added next to the Scores section heading.
+   - Best-of pages: "See our full methodology." link woven into the existing
+     "How we rank" disclosure box on every best-of page.
+   - BikeCard not linked (nested <a> invalid HTML; covered by detail page).
+
+**Verified:** tsc clean. No type errors.
+
+**Expected impact:** Commuter and under-$1000 are two of the top demand clusters
+for new e-bike buyers; the buyer's guides increase on-page relevance for long-tail
+commuter queries. Score links increase internal links to /how-we-test, reinforcing
+E-E-A-T signals. The folding catalog gap is now documented.
+
+**Next candidates:** (1) ROADMAP P2.6 -- add folding e-bikes to catalog (e.g.
+Engwe EP-2 Pro, DYU D3F) so /best/folding-ebikes becomes a real page. (2) P1.1 --
+deepen DUOTTS C29-K detail page (pos 14.8, closest to page 1 in catalog). (3) Watch
+Walfisk WF26 at pos 8.1 (already page 1!) -- strengthen the detail page to push
+CTR up from 9%.

@@ -172,7 +172,12 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
 
         {/* Scores */}
         <div className="bg-[var(--card-bg)] rounded-xl border border-[var(--border)] p-6 mb-8">
-          <h2 className="text-xl font-bold text-[var(--foreground)] mb-6">Scores</h2>
+          <div className="flex items-baseline justify-between mb-6">
+            <h2 className="text-xl font-bold text-[var(--foreground)]">Scores</h2>
+            <Link href="/how-we-test" className="text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-colors">
+              How we score →
+            </Link>
+          </div>
           <div className="space-y-4 max-w-lg">
             <ScoreBar score={bike.scoreOverall} label="Overall score" />
             <ScoreBar score={bike.scoreValue} label="Value" />

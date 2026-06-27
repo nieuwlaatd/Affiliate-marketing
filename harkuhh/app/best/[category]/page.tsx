@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import BikeCard from '@/components/BikeCard';
@@ -27,13 +27,43 @@ const CATEGORIES: CategoryDef[] = [
     slug: 'ebikes-under-1000',
     title: `Best E-Bikes Under $1,000 (${YEAR})`,
     h1: `Best E-Bikes Under $1,000 in ${YEAR}`,
-    metaDescription: `The best electric bikes under $1,000 in ${YEAR}, ranked by value, range and build quality. Honest, data-driven picks.`,
+    metaDescription: `The best electric bikes under $1,000 in ${YEAR}, ranked by value, range and build quality. Honest, data-driven picks for every rider type.`,
     intro:
-      'You don’t need to spend a fortune to get a capable electric bike. These are the best e-bikes under $1,000 right now, ranked by our value, range and build-quality scores. Every pick is judged on real-world range rather than optimistic manufacturer claims.',
+      'You don\'t need to spend a fortune to get a capable electric bike. These are the best e-bikes under $1,000 right now, ranked by our value, range and build-quality scores. Every pick is judged on real-world range rather than optimistic manufacturer claims.',
     filter: (b) => b.price <= 1000,
+    lastUpdated: '2026-06-27',
+    sections: [
+      {
+        h2: 'What can you really get for under $1,000?',
+        body: [
+          'Budget e-bikes have improved dramatically. At the $700 to $1,000 price point you can now find 500W to 750W motors, removable batteries and real-world ranges of 25 to 45 miles. These are not toys: they cover daily commutes, grocery runs and weekend recreation without apology.',
+          'The honest trade-offs at this price are component longevity (cheaper derailleurs and brakes wear faster), build finishing (rougher welds, basic paint) and warranty coverage (often one year parts, limited support). If you plan to ride daily in all weather, budget $50 to $100 for a maintenance fund in year one.',
+          'Every bike ranked below has cleared our floor standards: a properly rated battery from a known cell supplier, at least 25 miles of real-world range on assist level 3, and a published max-payload rating. We exclude bikes that fail those basics regardless of price.',
+        ],
+      },
+      {
+        h2: 'Step-through vs step-over under $1,000',
+        body: [
+          'At this price you will find both frame styles, and the right one depends on how you mount the bike and what you wear. Step-through frames let you swing a leg forward or backward without lifting it high, which matters for riders with limited flexibility, frequent stop-and-go city riding, or anyone who commutes in work clothes. Step-over (diamond frame) bikes are slightly stiffer and lighter for the same tubing, and they tend to look more traditional.',
+          'Neither is faster or more capable at the sub-$1,000 price point. Pick the one that feels natural to you when you stop at a red light.',
+        ],
+      },
+      {
+        h2: 'What to watch for when buying a budget e-bike',
+        body: [
+          'Battery quality is the single biggest variable at the sub-$1,000 price point. A genuine 48V 10Ah pack from name-brand cells (LG, Samsung, Panasonic) will last 500 to 800 full charge cycles. An unbranded pack may degrade much sooner. We check manufacturer disclosures and cross-reference community reports before scoring any battery.',
+          'Check whether the battery is removable. A removable pack means you can charge it indoors, which extends cell life in cold climates and makes charging easier in an apartment. Several bikes at this price point lock the battery to the frame, which is a meaningful convenience trade-off.',
+          'Finally, read the return policy before you click buy. E-bikes are heavy and ship freight, so a 30-day no-questions-asked window with free return shipping is rare but worth seeking out. Most budget brands offer a limited return window, so inspect your bike promptly on arrival.',
+        ],
+      },
+    ],
     faqs: [
-      { q: 'Are e-bikes under $1,000 any good?', a: 'Yes, several budget brands now offer solid 500W+ motors, removable batteries and real-world ranges of 25–40 miles. The trade-offs are usually weight, basic components and shorter warranties.' },
-      { q: 'What range can I expect from a cheap e-bike?', a: 'Most sub-$1,000 e-bikes deliver 25–45 miles of realistic range on lower assist levels. We list practical range, not the inflated manufacturer figure.' },
+      { q: 'Are e-bikes under $1,000 any good?', a: 'Yes, several budget brands now offer solid 500W to 750W motors, removable batteries and real-world ranges of 25 to 45 miles. The trade-offs are usually weight, basic components and shorter warranties compared to mid-range bikes.' },
+      { q: 'What range can I expect from a cheap e-bike?', a: 'Most sub-$1,000 e-bikes deliver 25 to 45 miles of realistic range on lower assist levels. We list practical range, not the inflated manufacturer figure, and the difference can be 30 to 50 percent.' },
+      { q: 'What is the best e-bike for under $1,000?', a: `Our top-ranked pick under $1,000 in ${YEAR} balances motor power, real-world range and battery quality at the lowest price we can honestly recommend. See the ranked list above for our current top picks.` },
+      { q: 'Are budget e-bikes safe?', a: 'Yes, as long as you buy from a brand with UL or CE certification on the battery and charger. The bikes ranked here all pass that bar. Avoid no-name marketplace listings with no certifications listed.' },
+      { q: 'How long does a cheap e-bike battery last?', a: 'A quality sub-$1,000 battery lasts 500 to 800 full charge cycles, which is roughly three to five years of regular use. Storing the battery at 40 to 80 percent charge and avoiding extreme temperatures significantly extends lifespan.' },
+      { q: 'Do I need a license for a budget e-bike?', a: 'In most US states, Class 1 and Class 2 e-bikes (up to 20 mph) require no license, registration or insurance. Always check your state and city rules, especially for throttle-equipped Class 2 bikes on shared paths.' },
     ],
   },
   {
@@ -50,14 +80,45 @@ const CATEGORIES: CategoryDef[] = [
   },
   {
     slug: 'commuter-ebikes',
-    title: `Best Commuter E-Bikes (${YEAR})`,
+    title: `Best Commuter E-Bikes (${YEAR}): Top Picks for the Daily Ride`,
     h1: `Best Commuter E-Bikes in ${YEAR}`,
-    metaDescription: `The best commuter electric bikes in ${YEAR}: efficient, comfortable and reliable picks for the daily ride to work.`,
+    metaDescription: `The best commuter electric bikes in ${YEAR}: efficient, comfortable and reliable picks for the daily ride to work. Ranked by range, comfort and all-weather reliability.`,
     intro:
-      'A great commuter e-bike is fast enough to keep up with traffic, comfortable over potholes and reliable in all weather. These picks score highest for commuting, weighing range, comfort and build quality.',
+      'A great commuter e-bike is fast enough to keep up with traffic, comfortable over potholes and reliable rain or shine. These picks score highest for commuting use, with extra weight on range, comfort, real-world reliability and how easy the bike is to lock and maintain day-to-day.',
     filter: (b) => b.suitableFor.includes('commuting'),
+    lastUpdated: '2026-06-27',
+    sections: [
+      {
+        h2: 'What makes a great commuter e-bike',
+        body: [
+          'Commuter e-bikes live a harder life than weekend recreational bikes: daily use, varying weather, locking outside and frequent stopping and starting. The specs that matter most for commuting are range, weight and the availability of fenders, racks and lights either built-in or compatible with the frame.',
+          'Range is the most misunderstood commuter spec. Manufacturers quote range at low assist on flat ground in warm weather. Your real-world commuting range -- moderate assist, loaded with a bag, stopping at lights -- is typically 40 to 60 percent lower. We list practical range on every bike page so you can size up whether the battery covers your route with margin to spare. A good rule of thumb: if your commute is 15 miles each way, look for at least 40 miles of practical range so you are never anxious about charging at the office.',
+          'Weight matters for commuters who carry the bike into buildings, up stairs or onto transit. A 45 to 55 lb e-bike is manageable for most riders; anything above 70 lbs gets tiring fast on stairs. Step-through frames also lower the bar for mount and dismount in stop-heavy city riding.',
+        ],
+      },
+      {
+        h2: 'Class 1 vs Class 2 vs Class 3 for commuting',
+        body: [
+          'Class 1 e-bikes (pedal-assist only, max 20 mph) are the most widely legal option -- allowed on almost all bike paths and lanes across the US. They are a great fit for short to medium commutes where path access matters more than top speed.',
+          'Class 2 e-bikes add a throttle that lets you move without pedaling, up to 20 mph. The throttle is genuinely useful for city commuting: you can ease away from lights without clipping in, navigate tricky spots without full effort and arrive less sweaty. Access rules are the same as Class 1 in most jurisdictions, though a handful of states and cities restrict throttle use on shared paths.',
+          'Class 3 e-bikes assist up to 28 mph and are the fastest legal option for most commuters. The higher speed makes longer commutes practical -- a 10-mile commute takes about 25 minutes at 25 mph versus 40+ at 15 mph. The trade-off: Class 3 bikes are typically banned from multi-use paths and required to have a speedometer in some states. If your whole commute is on road or protected bike lanes, Class 3 is usually the smarter choice for anything over six miles.',
+        ],
+      },
+      {
+        h2: 'How far can you realistically commute on an e-bike?',
+        body: [
+          'Most commuters ride between 5 and 20 miles each way. E-bikes with 30 to 50 miles of practical range comfortably cover a 10 to 15 mile one-way commute with a single charge, assuming you can charge at home or at the office. For commutes over 20 miles each way, look for bikes with 50+ miles of practical range, or a removable battery you can top up during the day.',
+          'Terrain and cargo load have a real impact on range. A 10 lb backpack and a few moderate hills can cut practical range by 20 percent compared to a flat, lightly loaded ride. In cold weather (below 40 degrees F) battery capacity drops a further 10 to 20 percent. Build that buffer into your route planning.',
+        ],
+      },
+    ],
     faqs: [
-      { q: 'What class e-bike is best for commuting?', a: 'Class 3 (28 mph pedal-assist) is ideal for longer or faster commutes where it’s legal, while Class 1/2 are great for shorter, relaxed trips and shared paths.' },
+      { q: 'What class e-bike is best for commuting?', a: 'Class 3 (28 mph pedal-assist) is the fastest legal option and makes longer commutes practical, but it is restricted from some shared paths. Class 2 (throttle + 20 mph) is the most versatile city option. Class 1 is the most universally path-legal choice for shorter commutes.' },
+      { q: 'How far can you commute on an e-bike?', a: 'Most e-bikes cover 5 to 25 miles each way on a single charge. A bike with 40 to 50 miles of practical range comfortably handles a 15-mile one-way commute. We list practical range on every bike page -- not the inflated manufacturer figure.' },
+      { q: 'Are e-bikes good for commuting?', a: 'Yes. An e-bike typically cuts commute time by 20 to 40 percent versus a traditional bike, arrives without the sweat of heavy pedaling on hills, and costs a fraction of car ownership per mile. For commutes under 20 miles each way, an e-bike is often the fastest door-to-door option in urban areas.' },
+      { q: 'What should I look for in a commuter e-bike?', a: 'Prioritize: (1) enough practical range to cover your route with 20 percent margin, (2) a removable battery if you need to charge at your desk, (3) mounting points for fenders and a rear rack, (4) weight under 65 lbs if you carry the bike indoors, and (5) hydraulic disc brakes for confident stopping in wet weather.' },
+      { q: 'Do I need a license to commute on an e-bike?', a: 'In most US states, Class 1, 2 and 3 e-bikes do not require a license, registration or insurance. Local rules vary -- check your state, and check whether your city restricts Class 3 bikes from certain paths.' },
+      { q: `How much does a good commuter e-bike cost in ${YEAR}?`, a: 'A reliable commuter e-bike costs between $800 and $2,000. At $800 to $1,200 you get a solid motor, 30 to 45 miles of practical range and basic components. At $1,200 to $2,000 you get better brakes, longer range, integrated lighting and finer finishing. Above $2,000 you pay for brand reputation, premium components and longer warranties.' },
     ],
   },
   {
@@ -117,7 +178,7 @@ const CATEGORIES: CategoryDef[] = [
     faqs: [
       { q: 'How much can a cargo e-bike carry?', a: 'Most cargo and high-payload utility e-bikes handle 330 to 450 lbs of total payload including the rider. Dedicated longtails are at the top of that range. Always check the rated max payload, which we list on every bike page.' },
       { q: 'What is the best cargo e-bike in ' + YEAR + '?', a: 'Our current top pick balances a high payload rating, strong hill torque and a stable, well-braked frame at a fair price. The ranked list above updates as we test new models, so the bike at the top is our best overall cargo pick right now.' },
-      { q: 'Can a cargo e-bike carry two kids?', a: 'Yes. Most longtail cargo bikes are rated for two child seats on the rear deck, and many utility bikes with a 400 lb payload can do the same with the right rack and seats. Check the payload rating against your kids’ combined weight plus your own.' },
+      { q: 'Can a cargo e-bike carry two kids?', a: 'Yes. Most longtail cargo bikes are rated for two child seats on the rear deck, and many utility bikes with a 400 lb payload can do the same with the right rack and seats. Check the payload rating against your kids\' combined weight plus your own.' },
       { q: 'Are cargo e-bikes worth it?', a: 'For families who do regular short trips, a cargo e-bike often replaces a second car and pays for itself in fuel, parking and maintenance within a couple of years. If you mostly ride solo for fitness, a lighter commuter or recreation e-bike is a better fit.' },
       { q: 'What is the difference between a cargo bike and a cargo e-bike?', a: 'A cargo e-bike adds a motor and battery to the cargo frame, which is what makes hauling heavy loads and climbing hills practical. An unpowered cargo bike is far harder to ride loaded, especially uphill or into wind.' },
       { q: 'How much range does a loaded cargo e-bike get?', a: 'Carrying cargo and climbing hills drains the battery faster, so expect 20 to 40 miles of real-world range when loaded, depending on assist level and terrain. We list practical range, not the inflated manufacturer figure, and a second battery roughly doubles it.' },
@@ -219,8 +280,9 @@ export default async function BestCategoryPage({ params }: { params: Promise<{ c
 
         <div className="mt-6 p-4 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] text-sm text-[var(--muted)] max-w-3xl">
           <strong className="text-[var(--foreground)]">How we rank:</strong> every bike is scored on value,
-          real-world range, power, comfort, build quality and versatility. We earn an affiliate commission if
-          you buy through our links, but it never changes the ranking.
+          real-world range, power, comfort, build quality and versatility.{' '}
+          <Link href="/how-we-test" className="underline hover:text-[var(--foreground)] transition-colors">See our full methodology.</Link>{' '}
+          We earn an affiliate commission if you buy through our links, but it never changes the ranking.
         </div>
 
         {bikes.length > 0 ? (

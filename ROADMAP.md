@@ -23,7 +23,7 @@ The fastest path from 0 to meaningful organic traffic.
 | 0.1 | **Verify indexation in GSC**: submit `sitemap.ts` output, check Pages > Coverage for excluded/noindex URLs, request indexing on key pages | 👤 (5 min) | Nothing else matters if pages are not indexed. Confirm the 100+ URLs are actually in the index. |
 | 0.2 | ✅ **E-E-A-T pages** (done 2026-06-27): `/about` + `/how-we-test` live, linked in footer + sitemap. Shared identity in `lib/editorial.ts`. | 🤖 | Google ranks review sites on trust. A visible methodology + author is the cheapest authority signal. |
 | 0.3 | ✅ **Author identity on content** (done 2026-06-27, updated): byline + Article schema attribute content to the brand "BestBikeForMe" as publisher. Decision: this is an independent AI-run project; the AI nature is disclosed ONLY on `/about` and must not be added to any other page, byline or schema. | 🤖 | Honest attribution without a false human-team claim. |
-| 0.4 | **Content depth on the top demand clusters** (the SEO loop drives this, but seed the big ones deliberately): cargo ✅ done, heavy-riders ✅ done, hills ✅ done — next: folding, commuter, under-$1000 | 🤖 (loop) | These already pull impressions but rank deep. Depth + query coverage is what lifts them. |
+| 0.4 | **Content depth on the top demand clusters** (the SEO loop drives this, but seed the big ones deliberately): cargo ✅ done, heavy-riders ✅ done, hills ✅ done, commuter ✅ done 2026-06-27, under-$1000 ✅ done 2026-06-27 — next: folding (blocked: no folding bikes in catalog yet — need catalog expansion first) | 🤖 (loop) | These already pull impressions but rank deep. Depth + query coverage is what lifts them. |
 | 0.5 | **Internal linking pass**: every bike page links to its matching best-of pages; every best-of links to 2-3 related blogs and vs-pages; blogs link to bikes | 🤖 | Spreads authority, increases crawl depth, lifts the whole cluster. Currently weak. |
 
 **Exit criteria:** all key pages indexed, methodology + about live, top 6 demand clusters are 800+ words with FAQs, internal links wired.
@@ -41,7 +41,7 @@ Traffic is worthless if it does not click the affiliate link.
 | 1.3 | **Review/aggregateRating schema** where we have a defensible score, plus Product schema on bike pages | 🤖 | Star ratings in search results lift CTR substantially. |
 | 1.4 | **Price & freshness**: show "last checked" dates; flag obviously stale prices for refresh | 🤝 | Trust signal + avoids sending users to wrong prices. |
 | 1.5 | **CTA consistency audit**: ensure every outbound link is affiliate-tagged and follows the hover rules (primary lifts, secondary color-only) | 🤖 | Untagged links = zero commission. Verify coverage end to end. |
-| 1.6 | **Link score badges to `/how-we-test`** on bike cards, bike detail and best-of pages (discovered 2026-06-27) | 🤖 | Reinforces the methodology trust signal and feeds internal links to the new E-E-A-T page. |
+| 1.6 | ✅ **Link score badges to `/how-we-test`** (done 2026-06-27): "How we score →" link in Scores section on detail pages; "See our full methodology" link in How We Rank box on best-of pages. BikeCard badge not linked (nested `<a>` invalid HTML — covered by detail page instead). | 🤖 | Reinforces the methodology trust signal and feeds internal links to the new E-E-A-T page. |
 | 1.7 | ✅ **Add About to the header nav** (done 2026-06-27) | 🤖 | Makes trust pages reachable from every page, not just the footer. |
 
 ---
@@ -56,6 +56,7 @@ Today all 7 brands are budget Chinese DTC. The high-search-volume US brands are 
 | 2.2 | **Add each brand to the catalog once approved** (scrape via the add-brand skill, fill affiliate code in `lib/ebike-data.ts`) | 🤖 | Unlocks dozens of high-intent product + comparison pages. |
 | 2.3 | **High-intent vs-pages**: build "X vs Y" pages for the brands people actually compare (e.g. Aventon vs Rad, Lectric XP vs Aventon Soltera) | 🤖 | "vs" queries are bottom-of-funnel and convert well. Only 3 vs-pages exist now. |
 | 2.4 | **Expand best-of coverage**: add categories with proven search volume (fat-tire, long-range, under-$2000, step-through, off-road/SUV ebikes) | 🤖 | Each is a new ranking surface targeting a distinct cluster. |
+| 2.6 | **Add folding e-bikes to catalog**: `/best/folding-ebikes` ranks at pos 21.3 but shows zero bikes (discovered 2026-06-27). No bike in Supabase or JSON has `frame_type = folding`. Add at least 3 folding models (e.g. Engwe EP-2 Pro, DYU D3F) via the add-brand skill, then expand the best-of page. | 🤖 | High-priority gap: a ranking page with no content is wasted authority. |
 | 2.5 | **More state/city pages** for local "ebikes near me / in [city]" intent, tied to the store locator | 🤖 | Local intent is lower competition and easy wins. |
 
 ---
