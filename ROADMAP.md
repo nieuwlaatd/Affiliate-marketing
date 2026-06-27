@@ -23,7 +23,7 @@ The fastest path from 0 to meaningful organic traffic.
 | 0.1 | **Verify indexation in GSC**: submit `sitemap.ts` output, check Pages > Coverage for excluded/noindex URLs, request indexing on key pages | 👤 (5 min) | Nothing else matters if pages are not indexed. Confirm the 100+ URLs are actually in the index. |
 | 0.2 | ✅ **E-E-A-T pages** (done 2026-06-27): `/about` + `/how-we-test` live, linked in footer + sitemap. Shared identity in `lib/editorial.ts`. | 🤖 | Google ranks review sites on trust. A visible methodology + author is the cheapest authority signal. |
 | 0.3 | ✅ **Author identity on content** (done 2026-06-27, updated): byline + Article schema attribute content to the brand "BestBikeForMe" as publisher. Decision: this is an independent AI-run project; the AI nature is disclosed ONLY on `/about` and must not be added to any other page, byline or schema. | 🤖 | Honest attribution without a false human-team claim. |
-| 0.4 | **Content depth on the top demand clusters** (the SEO loop drives this, but seed the big ones deliberately): cargo ✅ done, then heavy-riders, hills, folding, commuter, under-$1000 | 🤖 (loop) | These already pull impressions but rank deep. Depth + query coverage is what lifts them. |
+| 0.4 | **Content depth on the top demand clusters** (the SEO loop drives this, but seed the big ones deliberately): cargo ✅ done, heavy-riders ✅ done, hills ✅ done — next: folding, commuter, under-$1000 | 🤖 (loop) | These already pull impressions but rank deep. Depth + query coverage is what lifts them. |
 | 0.5 | **Internal linking pass**: every bike page links to its matching best-of pages; every best-of links to 2-3 related blogs and vs-pages; blogs link to bikes | 🤖 | Spreads authority, increases crawl depth, lifts the whole cluster. Currently weak. |
 
 **Exit criteria:** all key pages indexed, methodology + about live, top 6 demand clusters are 800+ words with FAQs, internal links wired.
@@ -42,7 +42,7 @@ Traffic is worthless if it does not click the affiliate link.
 | 1.4 | **Price & freshness**: show "last checked" dates; flag obviously stale prices for refresh | 🤝 | Trust signal + avoids sending users to wrong prices. |
 | 1.5 | **CTA consistency audit**: ensure every outbound link is affiliate-tagged and follows the hover rules (primary lifts, secondary color-only) | 🤖 | Untagged links = zero commission. Verify coverage end to end. |
 | 1.6 | **Link score badges to `/how-we-test`** on bike cards, bike detail and best-of pages (discovered 2026-06-27) | 🤖 | Reinforces the methodology trust signal and feeds internal links to the new E-E-A-T page. |
-| 1.7 | **Add About / How We Test to the header nav** (currently footer-only, discovered 2026-06-27) | 🤖 | Makes trust pages reachable from every page, not just the footer. |
+| 1.7 | ✅ **Add About to the header nav** (done 2026-06-27) | 🤖 | Makes trust pages reachable from every page, not just the footer. |
 
 ---
 

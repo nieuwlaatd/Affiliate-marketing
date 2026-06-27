@@ -104,3 +104,55 @@ removed sitewide; blog byline = "By BestBikeForMe".
 
 **Constraint for future runs:** when adding pages or content, do NOT mention the
 AI nature anywhere except /about. Attribute content to the brand.
+
+---
+
+## 2026-06-27 — Heavy-riders + hills content depth + header nav (P0.4 + P1.7)
+
+**GSC snapshot (28d, ending 2026-06-24):** unchanged from previous run: 3 clicks,
+526 impressions, CTR 0.6%. No striking-distance queries yet. Site is still new;
+rankings take weeks to move after content changes. GSC script confirmed working.
+
+**Top demand signals this run:**
+- `/blog/best-ebikes-for-heavy-riders`: 117 impr, pos 47.4 -- top non-cargo impression
+  page and the one query that already converted (1 click, "electric bike for heavy riders").
+- `/blog/best-ebikes-for-hills`: 81 impr, pos 44.2 -- second highest non-cargo cluster.
+- Both were explicitly flagged as "next candidates" in the previous log entry.
+
+**Actions taken:**
+
+1. **`/blog/best-ebikes-for-heavy-riders` expanded** (~600 words -> ~1,350 words):
+   - Added a "top picks" section with 5 specific bikes from our catalog (Eunorau FLASH
+     LITE ST, G30, FAT-AWD 3.0, DUOTTS S26 AWD, Walfisk ET-7 Ultra) with links to
+     their detail pages and affiliate context.
+   - Added a payload-by-weight-range table showing realistic range expectations.
+   - Added 6 FAQ entries targeting exact query variants: "electric bike for heavy riders",
+     "e-bike 300 lbs", "fat tire e-bike for heavy riders", etc.
+   - Set `updatedAt: '2026-06-27'` for freshness signal.
+
+2. **`/blog/best-ebikes-for-hills` expanded** (~650 words -> ~1,400 words):
+   - Expanded torque table to 5 tiers (added 90-130 Nm and 130+ Nm rows).
+   - Added "Our top picks" section: Eunorau Defender-S (mid-drive, 160 Nm), DUOTTS
+     S26 AWD (dual motor, value), Eunorau FLASH (220 Nm single hub), Eunorau FAT-AWD
+     3.0 (AWD fat tire), Walfisk WF750 UrbanX (budget).
+   - Added 6 FAQs targeting "are electric bikes good for hills", "what torque for hills",
+     "do e-bikes slow down on hills", "battery on hills", etc.
+   - Set `updatedAt: '2026-06-27'` for freshness signal.
+
+3. **Header nav (P1.7):** Added "About" link to the `NAV` array in `Header.tsx`.
+   The About page (and its link to How We Test) is now reachable from every page's
+   top navigation, not just the footer. Mobile menu inherits the same array.
+
+**Verified:** tsc clean. No type errors introduced.
+
+**Expected impact:** Both blog posts should gain relevance signals for their target
+clusters as the richer content indexes. Specific bike links create internal links
+to detail pages that are themselves approaching striking distance (Eunorau, Walfisk,
+DUOTTS detail pages showing pos 15-24 in GSC). Header About link increases internal
+linking to the E-E-A-T page, reinforcing trust signals.
+
+**Next candidates:** (1) Roadmap P1.6 -- link score badges to `/how-we-test` on bike
+cards / detail / best-of pages. (2) Expand `/best/folding-ebikes` (pos 21.3 in GSC,
+low impression but already near page 1 -- a thin page could tip over with enrichment).
+(3) P1.1 -- deepen individual bike detail pages (Engwe P275 SE at pos 23.8 is the
+closest to a real click opportunity in the catalog).

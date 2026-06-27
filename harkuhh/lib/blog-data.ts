@@ -342,13 +342,14 @@ Regular maintenance keeps your ride safe and your e-bike's resale value high. A 
     description: 'Most e-bikes max out at 275 lbs. Here is how to find one that handles 300+ lbs safely, with real payload data and our top picks.',
     category: 'Buying Advice',
     publishedAt: '2026-05-29',
-    readingTime: 9,
+    updatedAt: '2026-06-27',
+    readingTime: 12,
     coverAlt: 'Sturdy electric bike with reinforced frame on a city street',
     relatedSlugs: ['how-to-choose-an-electric-bike', 'ebike-battery-range-guide'],
     content: `
 Most e-bike spec sheets list a "max payload" of 250 to 275 lbs, including the rider. If you weigh more than that, your options shrink fast, and picking the wrong bike can mean bent rims, snapped spokes, and voided warranties.
 
-This guide focuses on what actually matters when you need a bike that can handle 300 lbs or more.
+This guide covers what actually matters when you need an electric bike for heavy riders, with specific picks from our tested catalog that genuinely handle 300 lbs or more.
 
 ## Why weight capacity matters (more than you think)
 
@@ -363,33 +364,90 @@ The listed max payload is not just a suggestion. It affects:
 
 | Feature | Why it matters for heavier riders |
 |---|---|
-| Payload capacity | Look for 330+ lbs rated. 400 lbs is ideal. |
+| Payload capacity | Look for 330+ lbs rated. 400+ lbs is ideal. |
 | Wheel size | 26" fat tires (4"+) distribute weight better and absorb bumps |
 | Spoke count | 36-spoke wheels are stronger than 32-spoke |
 | Brakes | Hydraulic disc with 180mm+ rotors. Non-negotiable. |
-| Frame material | Steel or thick-gauge aluminum. Carbon is too fragile at higher loads. |
-| Motor | 750W rear hub or mid-drive with 60+ Nm torque for hill climbing |
+| Frame material | Steel or thick-gauge aluminum. Avoid carbon at high loads. |
+| Motor | 750W rear hub or mid-drive with 65+ Nm torque for hill climbing |
 | Battery | 14+ Ah (672+ Wh) to compensate for increased energy consumption |
+
+## Our top picks for heavy riders
+
+### Best overall: Eunorau FLASH LITE ST
+
+The [Eunorau FLASH LITE ST](/e-bikes/eunorau/eunorau-flash-lite-st) is the standout choice if you need an e-bike rated for heavy riders. It carries a verified **440 lb payload capacity** -- among the highest in any non-cargo e-bike. A 750W rear hub motor delivers 92 Nm of torque, enough for flat-to-moderate hills. The step-over frame keeps a low standover height, which matters when you need easy mounting at higher body weights. Price: around $1,899.
+
+### Best high-capacity cargo option: Eunorau G30
+
+At a **440 lb capacity**, the [Eunorau G30](/e-bikes/eunorau/eunorau-g30-cargo) matches the FLASH LITE ST on payload but adds a cargo rear rack that can itself carry over 100 lbs of gear. If you need to haul groceries, work equipment, or a child seat on top of your own body weight, this is the practical answer. Price: around $1,699.
+
+### Best for AWD stability: Eunorau FAT-AWD 3.0
+
+The [Eunorau FAT-AWD 3.0](/e-bikes/eunorau/eunorau-fat-awd-3-0) carries 375 lbs and runs front and rear hub motors for all-wheel-drive traction. Dual 110 Nm motors (combined 220 Nm) give this bike serious hill-climbing ability even under load. The 4" fat tires distribute rider weight across a larger contact patch, reducing stress on rims and improving stability. Price: around $1,799.
+
+### Best budget option: DUOTTS S26 AWD
+
+If you want a 330 lb capacity bike under $1,400, the [DUOTTS S26 AWD](/e-bikes/duotts/duotts-s26) delivers. Dual hub motors produce 110 Nm of combined torque, which is exceptional at this price point. The AWD traction also helps heavier riders start smoothly on hills where a single rear wheel might spin. Price: around $1,299.
+
+### Best for power and range: Walfisk ET-7 Ultra
+
+The [Walfisk ET-7 Ultra](/e-bikes/walfisk/walfisk-walfisk-electric-bike-et-7-3000w-brushless-motor-60v45ah-big-battery-bla) has a 330 lb capacity and the largest battery in our heavy-rider picks: a 60V 45Ah pack (2,700 Wh). For heavier riders who lose 30-40% of rated range due to extra body weight, a bigger battery is the direct solution. A 130 Nm motor means it also climbs hills confidently. Price: around $2,300.
 
 ## Frame types for larger riders
 
-**Step-through frames** make mounting and dismounting easier, which matters more at higher body weights. The trade-off is slightly less frame rigidity compared to step-over designs.
+**Step-through frames** make mounting and dismounting easier, which matters more at higher body weights. The trade-off is slightly less frame rigidity compared to step-over designs. If you have any knee or hip issues, step-through is strongly recommended.
 
-**Fat-tire bikes** (4" tires or wider) are popular with heavier riders because the wider contact patch provides more stability and the tires act as suspension, absorbing bumps that would be jarring on standard tires.
+**Fat-tire bikes** (4" tires or wider) are the most popular choice for heavier riders. The wider contact patch provides more stability, and the tires act as suspension, absorbing road bumps that standard tires transmit directly to the frame and rider.
 
-## Range expectations
+## Range expectations at higher weights
 
-Be realistic about range. Manufacturer claims assume a 150-165 lb rider. At 280+ lbs, expect to get 55 to 65% of the advertised range. Our [battery range guide](/blog/ebike-battery-range-guide) goes deeper on this, but the short version: get the biggest battery you can afford.
+Be realistic about range. Manufacturer claims assume a 150-165 lb rider in eco mode on flat terrain. Here is a rough guide to real-world range adjustments:
+
+| Rider weight | Expected range vs. manufacturer claim |
+|---|---|
+| Under 175 lbs | 70-80% of advertised |
+| 175-225 lbs | 60-70% |
+| 225-275 lbs | 55-65% |
+| 275+ lbs | 45-60% |
+
+The solution is simple: choose a bike with a larger battery. Our [battery range guide](/blog/ebike-battery-range-guide) explains the math in detail, but the rule of thumb is to get at least 672 Wh (48V 14Ah or equivalent) and ideally 800+ Wh if you exceed 250 lbs.
 
 ## A note on warranty
 
-Some brands void the warranty if you exceed the stated weight limit. Others are more flexible. Before buying, email the brand and ask specifically about their weight policy. Get it in writing.
+Some brands void the warranty if you exceed the stated weight limit. Others are more flexible. Before buying, email the brand and ask specifically about their weight policy. Get the answer in writing. All five bikes listed above are explicitly rated for their stated capacities by the manufacturer.
+
+## Frequently asked questions
+
+**What is a good weight limit for an e-bike if I weigh 300 lbs?**
+
+You want a bike rated for at least 330 lbs to have a meaningful safety margin. A 10% buffer above your body weight is the minimum; 20-30% is better. Add gear and cargo to your estimate. The Eunorau FLASH LITE ST and G30 (both 440 lb capacity) provide the most headroom.
+
+**Can I ride an e-bike rated for 275 lbs if I weigh 280 lbs?**
+
+Technically the bike may still function, but you are exceeding the design spec. Over time, this stresses welds, bends rims, and can void your warranty. At 280 lbs it is worth the small price premium to buy a 330+ lb rated bike.
+
+**Do heavier riders need a more powerful motor?**
+
+For flat terrain, a standard 500W-750W motor is fine. For hills, you want 65+ Nm of torque. Extra weight dramatically increases the energy needed to climb, so underpowered motors overheat faster and drain the battery quicker. The DUOTTS S26 AWD and Eunorau FAT-AWD models address this with dual motors.
+
+**Are fat-tire e-bikes better for heavy riders?**
+
+Generally yes. The wider tire (4"+) distributes your weight over a larger contact patch, which reduces stress on the rim and improves stability, especially on uneven surfaces. The tire also provides some suspension effect, which is noticeable at higher body weights.
+
+**What is the maximum weight an e-bike can hold?**
+
+Standard e-bikes cap out around 300-330 lbs. Heavy-duty models like the Eunorau FLASH LITE ST and G30 reach 440 lbs. Cargo e-bikes designed for commercial use can go higher. If you need capacity above 440 lbs, look at three-wheeled cargo e-trikes, which distribute load across more contact points.
+
+**Does being heavy significantly affect e-bike range?**
+
+Yes. Expect to lose roughly 5-8% of range per 20 lbs over the baseline test weight (usually 155 lbs). At 280 lbs -- 125 lbs over baseline -- that is approximately 30-40% less range than advertised. Choose a bike with the largest battery you can afford, and plan routes accordingly.
 
 ## Our recommendation
 
-Prioritize payload capacity and braking power above everything else. A bike that handles your weight safely and stops confidently is worth more than one with flashy specs that was not built for you.
+Prioritize payload capacity and braking power above everything else. A bike that handles your weight safely and stops confidently is worth more than one with flashy specs that was not designed for heavier riders.
 
-Browse our [all e-bikes overview](/e-bikes/overzicht) and filter by weight capacity, or take the [Find My E-Bike quiz](/e-bikes/quiz) where we factor in your body weight to match you with capable bikes. You can also check our picks for [best e-bikes under $1,500](/best/ebikes-under-1500), many of which have 300+ lb payloads.
+Browse our [all e-bikes overview](/e-bikes/overzicht) and filter by weight capacity, or take the [Find My E-Bike quiz](/e-bikes/quiz) where we factor in your body weight to match you with capable bikes. You can also check our picks for [best e-bikes under $1,500](/best/ebikes-under-1500), several of which carry 330 lb payloads.
 `,
   },
   {
@@ -398,58 +456,113 @@ Browse our [all e-bikes overview](/e-bikes/overzicht) and filter by weight capac
     description: 'Not all e-bike motors handle hills equally. Here is what torque, motor type, and gearing mean for real hill climbing performance.',
     category: 'Buying Advice',
     publishedAt: '2026-05-29',
-    readingTime: 8,
+    updatedAt: '2026-06-27',
+    readingTime: 11,
     coverAlt: 'Electric bike climbing a steep residential hill',
     relatedSlugs: ['how-to-choose-an-electric-bike', 'ebike-classes-explained'],
     content: `
 A 500W e-bike can cruise on flat ground all day. Put it on a 10% grade, and suddenly you are pedaling hard while the motor struggles. Hills expose the biggest differences between e-bikes.
 
-Here is what separates a bike that climbs from one that stalls.
+Here is what separates a bike that climbs from one that stalls -- and the specific models in our catalog that handle real hills without overheating or dying halfway up.
 
 ## Torque is more important than wattage
 
-Wattage tells you how much power the motor can sustain. Torque tells you how much force it puts into the wheel at low speeds. On a steep hill at 5 mph, torque is what keeps you moving.
+Wattage tells you how much power the motor can sustain continuously. Torque tells you how much force it applies to the wheel at low speeds. On a steep hill at 4-6 mph, torque is what keeps you moving -- not peak wattage.
 
 | Torque (Nm) | Hill capability |
 |---|---|
-| 30-40 Nm | Gentle inclines only. Will struggle on anything over 5% grade. |
-| 50-65 Nm | Handles moderate hills (5-10% grade) with pedaling effort. |
-| 65-85 Nm | Climbs steep hills (10-15%+) comfortably. The sweet spot for hilly commutes. |
-| 85+ Nm | Mountain-grade climbing. Handles anything you can ride. |
+| 30-40 Nm | Gentle inclines (under 5% grade) only. Will bog down on real hills. |
+| 50-65 Nm | Handles moderate hills (5-10% grade) with active pedaling. |
+| 65-90 Nm | Climbs steep hills (10-15%+) comfortably. The sweet spot for hilly commutes. |
+| 90-130 Nm | Mountain-grade climbing with minimal effort. Handles 20%+ grades. |
+| 130+ Nm | Extreme terrain. Dual-motor or specialty builds. More than most riders need. |
 
 ## Mid-drive vs. hub motor on hills
 
-**Mid-drive motors** (Bosch, Bafang, Shimano) are better for hills because they work through your gears. Shifting to a lower gear multiplies the motor's torque at the wheel. This is the same reason a car shifts down on a steep road.
+**Mid-drive motors** (Bafang, Shimano, Bosch) sit at the cranks and drive the chain. They work through your gears, so downshifting multiplies their torque at the wheel -- the same physics that lets a car climb in first gear. A 65 Nm mid-drive in the right gear can outclimb a 100 Nm hub motor.
 
-**Hub motors** push the wheel directly and cannot use your gears. A 750W hub motor can still climb moderate hills, but it works harder, runs hotter, and drains the battery faster than a mid-drive doing the same climb.
+**Hub motors** push the rear wheel directly and cannot use your gears. A 750W rear hub motor can still handle moderate hills (up to 8-10%), but under a heavy rider on a 15% grade it runs hot and drains the battery fast.
 
-**The verdict:** If you live in a hilly area and ride hills daily, a mid-drive is worth the extra cost. If you hit an occasional hill on otherwise flat terrain, a hub motor handles it fine.
+**The verdict:** For daily riding on hilly terrain, a mid-drive motor is worth the extra cost. If hills are occasional and not severe (under 10% grade), a high-torque hub motor works fine at a lower price.
 
 ## Gearing matters too
 
-Even with a mid-drive motor, you need the right gears. A 7-speed drivetrain with a limited gear range will force the motor to work harder on steep grades.
+Even with a mid-drive motor, the wrong gearing hurts. A 7-speed drivetrain with a narrow cassette forces the motor to work harder than a wide-range 8-10 speed setup.
 
 Look for:
-- **8 to 10 speed** cassette with a wide range (11-42T or wider)
-- **Low gear ratio** below 1.0 for steep climbing
-- **Derailleur gears** over internal hub gears for hill climbing (wider range, more ratios)
+- **8 to 10 speed** cassette with at least 11-42T range for steep climbs
+- **Derailleur gears** over internal hub gears (wider gear range, more ratios for climbing)
+- **Shift before the hill steepens** -- waiting until you are struggling is too late for a smooth shift
+
+## Our top picks for hilly terrain
+
+### Best mid-drive for serious hills: Eunorau Defender-S
+
+The [Eunorau Defender-S](/e-bikes/eunorau/eunorau-defender-s-fat-hs) is the strongest hill climber in our catalog for everyday riders. Its Bafang mid-drive produces 160 Nm of torque and drives through a full gear set, which means it handles sustained 15-20% grades that would overheat lesser motors. Fat tires also help with traction on loose or wet climbs. Best if you tackle serious hills daily. Price: around $2,999.
+
+### Best dual-motor value: DUOTTS S26 AWD
+
+The [DUOTTS S26 AWD](/e-bikes/duotts/duotts-s26) combines two hub motors for 110 Nm of combined torque and all-wheel drive at just $1,299. The front motor prevents wheel spin on loose climbs; the rear motor provides the main drive force. For moderate-to-steep hills (8-12% grade) in an urban or suburban setting, this is the most cost-effective option in our tested lineup.
+
+### Best for power and range on hills: Eunorau FLASH
+
+At 220 Nm from a single rear hub, the [Eunorau FLASH](/e-bikes/eunorau/eunorau-flash-2) is the most powerful single-motor bike in our catalog. That raw torque makes it less dependent on gear selection for hill climbing, which matters if you are not used to shifting aggressively. A 48V battery provides enough capacity for extended hill-heavy routes. Price: around $2,499.
+
+### Best AWD fat-tire hill climber: Eunorau FAT-AWD 3.0
+
+The [Eunorau FAT-AWD 3.0](/e-bikes/eunorau/eunorau-fat-awd-3-0) runs dual hub motors producing 110 Nm each (220 Nm combined) with 4" fat tires for traction. This matters on steep hills with loose gravel or wet surfaces where a narrower tire with a single rear motor would spin out. The AWD system also distributes the climbing load across two motors, reducing heat buildup on long climbs. Price: around $1,799.
+
+### Best budget hill climber: Walfisk WF750 UrbanX
+
+If you want to stay under $1,500 and still handle moderate hills (up to 10% grade), the [Walfisk WF750 UrbanX](/e-bikes/walfisk/walfisk-walfisk-wf750-urbanx-fat-tire-electric-bike-48v-750w-25ah-battery-up-to-) delivers 80 Nm from a 750W motor, paired with a 25Ah battery that handles the extra drain from hill riding. Not a technical climber, but capable for typical suburban terrain. Price: around $1,499.
 
 ## Battery drain on hills
 
-Climbing drains batteries 3 to 5 times faster than flat riding. A bike that delivers 50 miles on flat ground might give you 20 miles on a hilly route with the same assist level.
+Climbing drains batteries 3 to 5 times faster than flat riding. A bike that gives 50 miles on flat terrain might deliver only 20-25 miles on a hilly route at the same assist level.
 
-Tips to conserve battery on hills:
-1. Use a lower assist level on flat sections between hills
-2. Shift to a lower gear before the hill steepens (do not wait until you are struggling)
-3. Maintain a steady cadence of 60-70 RPM rather than mashing hard
+Battery strategy for hilly routes:
+1. Use eco or medium assist on flat sections to bank energy for climbs
+2. Downshift before the hill -- do not wait until you feel the bike struggling
+3. Maintain 60-70 RPM cadence rather than slow, heavy pedal strokes
+4. If you have a range display, treat 25% battery as the point to turn back on an out-and-back route
+
+For any hilly route longer than 10 miles, choose a bike with at least 14 Ah (672 Wh). Our [battery range guide](/blog/ebike-battery-range-guide) covers the math in more detail.
 
 ## What about throttle on hills?
 
-Throttle (Class 2) can get you started from a stop on a hill, which is genuinely useful. But sustained hill climbing on throttle alone drains the battery extremely fast and can overheat hub motors. Use pedal-assist for climbing and save the throttle for short bursts.
+A throttle (Class 2) is useful for starting from a dead stop on a hill, which avoids the awkward balancing act of trying to pedal while stationary. But sustained hill climbing on throttle alone is hard on hub motors -- they are designed for pedal-assist loads, not full motor output on slow steep grades. Use pedal-assist as the primary mode and use the throttle for short bursts from stops.
 
-## Our picks
+## Frequently asked questions
 
-Check our [best commuter e-bikes](/best/commuter-ebikes) for bikes tested on hilly routes, or [browse all e-bikes](/e-bikes/overzicht) and sort by torque. The [Find My E-Bike quiz](/e-bikes/quiz) asks about your terrain and recommends bikes with enough climbing power for your specific routes.
+**Are electric bikes good for hills?**
+
+Yes -- with the right motor. A mid-drive or high-torque hub motor handles hills that would be exhausting or impossible on a regular bike. The key is matching the motor's torque rating to the steepness of your local terrain. For anything steeper than 10%, look for 65+ Nm (hub) or a mid-drive motor.
+
+**What torque do I need for steep hills?**
+
+For hills up to 8%: 50-65 Nm is enough with active pedaling. For 10-15% grades: 65-90 Nm is the practical minimum. For 15%+ or if you carry extra weight: 90 Nm+ or a mid-drive. The Eunorau Defender-S (160 Nm mid-drive) handles virtually anything you can legally ride.
+
+**Will an e-bike help me go uphill?**
+
+Yes, significantly. Even a basic 40 Nm motor on a 5% grade can make a climb that took 150% of your normal effort feel like flat ground. On steeper hills, the motor carries most of the load. The difference between a bike with good hill torque and a marginal one is the difference between arriving at the top still able to breathe and arriving having burned through the battery.
+
+**Do e-bikes slow down on hills?**
+
+They slow down less than a regular bike, but yes -- against a steep grade all bikes slow down. The assisted top speed on a climb depends on the motor's torque output versus the grade, rider weight, and assist level. A 750W hub motor on a 15% grade might sustain 8-10 mph; a 160 Nm mid-drive maintains 12-15 mph on the same climb.
+
+**How long does the battery last when riding hills?**
+
+Roughly 40-60% less range compared to flat terrain, depending on grade steepness, rider weight, and assist level. A bike that delivers 40 miles flat may deliver 18-25 miles on a genuinely hilly route. Plan accordingly and choose the largest battery you can afford if your regular routes include significant climbing.
+
+**Is a front or rear motor better for hills?**
+
+Rear hub motors are better for hills than front hub motors. The weight shift on a climb naturally loads the rear wheel, giving it more traction. A front hub motor on a steep climb risks the front wheel spinning. Mid-drive (at the cranks) is better still because it uses your gears.
+
+## Our recommendation
+
+For everyday hill riding, the [DUOTTS S26 AWD](/e-bikes/duotts/duotts-s26) delivers the best value -- dual motors, genuine climbing power, under $1,300. For serious hills or mountain terrain, the [Eunorau Defender-S](/e-bikes/eunorau/eunorau-defender-s-fat-hs) mid-drive is the strongest performer in our catalog.
+
+Browse [all e-bikes sorted by torque](/e-bikes/overzicht) to compare climbing power directly, or take the [Find My E-Bike quiz](/e-bikes/quiz) -- it factors in your terrain type and recommends bikes with the right motor for your routes.
 `,
   },
   {
