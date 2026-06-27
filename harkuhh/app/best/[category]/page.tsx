@@ -14,6 +14,10 @@ interface CategoryDef {
   metaDescription: string;
   filter: (b: EBike) => boolean;
   faqs: { q: string; a: string }[];
+  /** Optional buyer's-guide body, rendered between the bike grid and the FAQ. */
+  sections?: { h2: string; body: string[] }[];
+  /** ISO date of the last meaningful content update (freshness signal). */
+  lastUpdated?: string;
 }
 
 const YEAR = 2026;
@@ -70,14 +74,54 @@ const CATEGORIES: CategoryDef[] = [
   },
   {
     slug: 'cargo-ebikes',
-    title: `Best Cargo E-Bikes (${YEAR})`,
+    title: `Best Cargo E-Bikes (${YEAR}): Top Picks for Hauling Kids & Gear`,
     h1: `Best Cargo E-Bikes in ${YEAR}`,
-    metaDescription: `The best cargo electric bikes in ${YEAR} for hauling kids and groceries. Stable, powerful, family-ready picks.`,
+    metaDescription: `The best cargo e-bikes of ${YEAR} for hauling kids, groceries and gear. Ranked by payload, torque, stability and value, with real-world range and honest scoring.`,
     intro:
-      'Cargo e-bikes replace a second car for many families. These models score highest for hauling, weighing payload, torque, stability and braking.',
-    filter: (b) => b.suitableFor.includes('cargo'),
+      'A good cargo e-bike can replace a second car for school runs, grocery hauls and weekend errands. We ranked the best cargo and utility electric bikes for ' +
+      YEAR +
+      ' on the four things that actually matter when you load one up: rated payload, motor torque on hills, frame stability and braking. Every pick is scored on real-world range, not the optimistic manufacturer number.',
+    // A practical cargo bike is defined by what it can haul, not just a label.
+    // Include anything tagged cargo, plus high-payload, high-torque utility bikes.
+    filter: (b) =>
+      b.suitableFor.includes('cargo') ||
+      ((b.maxWeight ?? 0) >= 350 && (b.torque ?? 0) >= 80),
+    lastUpdated: '2026-06-27',
+    sections: [
+      {
+        h2: 'What makes a good cargo e-bike',
+        body: [
+          'Cargo e-bikes are built to carry weight, so the spec sheet matters more here than on any other type of e-bike. The single most important number is rated payload: the total the bike can safely carry including you, your passengers and the cargo. We only list bikes with a published payload rating, and we show it on every bike page so you can match it to your real load.',
+          'Torque is the second number to watch. Pulling 80 to 150 pounds of kids and groceries up a hill needs muscle, and torque (measured in newton-metres) is what delivers it from a standstill. Look for at least 80 Nm if you have any hills on your route, and 100 Nm or more if you ride loaded in hilly terrain every day.',
+          'Finally, stability and stopping power. A long wheelbase, fat tires and a low center of gravity keep a loaded bike planted, while hydraulic disc brakes give you the confidence to stop a heavy bike in the wet. Every bike below clears that bar.',
+        ],
+      },
+      {
+        h2: 'Longtail vs front-loader vs utility frames',
+        body: [
+          'Longtail cargo bikes stretch the rear rack so you can fit two child seats or a big cargo bag behind the rider. They handle much like a normal bike, which makes them the easiest type for new cargo riders, and they are the most popular family choice.',
+          'Front-loaders (also called bakfiets or box bikes) put a cargo box between the rider and the front wheel. They carry the most volume and keep kids in view, but they are heavier, pricier and take practice to steer. ',
+          'Utility and fat-tire bikes with a high payload rating are the value option. They do not have a dedicated cargo box, but with a sturdy rear rack and panniers they handle grocery runs and commutes with a passenger comfortably, at roughly half the price of a dedicated longtail.',
+        ],
+      },
+      {
+        h2: 'How much does a cargo e-bike cost?',
+        body: [
+          'Dedicated family longtails from established brands typically run $1,800 to $5,000. Front-loaders sit at the top of that range and beyond. The good news for ' +
+            YEAR +
+            ' is that capable high-payload utility e-bikes now start under $1,500, so you no longer need a five-figure budget to ditch the car for the school run.',
+          'When you compare prices, factor in accessories. Child seats, running boards, a second battery and panniers can add $300 to $800, so a cheaper bike that bundles a rack and fenders can be the better overall deal.',
+        ],
+      },
+    ],
     faqs: [
-      { q: 'How much can a cargo e-bike carry?', a: 'Most cargo e-bikes handle 300–450 lbs of total payload including the rider. Always check the rated max payload, which we list on every bike page.' },
+      { q: 'How much can a cargo e-bike carry?', a: 'Most cargo and high-payload utility e-bikes handle 330 to 450 lbs of total payload including the rider. Dedicated longtails are at the top of that range. Always check the rated max payload, which we list on every bike page.' },
+      { q: 'What is the best cargo e-bike in ' + YEAR + '?', a: 'Our current top pick balances a high payload rating, strong hill torque and a stable, well-braked frame at a fair price. The ranked list above updates as we test new models, so the bike at the top is our best overall cargo pick right now.' },
+      { q: 'Can a cargo e-bike carry two kids?', a: 'Yes. Most longtail cargo bikes are rated for two child seats on the rear deck, and many utility bikes with a 400 lb payload can do the same with the right rack and seats. Check the payload rating against your kids’ combined weight plus your own.' },
+      { q: 'Are cargo e-bikes worth it?', a: 'For families who do regular short trips, a cargo e-bike often replaces a second car and pays for itself in fuel, parking and maintenance within a couple of years. If you mostly ride solo for fitness, a lighter commuter or recreation e-bike is a better fit.' },
+      { q: 'What is the difference between a cargo bike and a cargo e-bike?', a: 'A cargo e-bike adds a motor and battery to the cargo frame, which is what makes hauling heavy loads and climbing hills practical. An unpowered cargo bike is far harder to ride loaded, especially uphill or into wind.' },
+      { q: 'How much range does a loaded cargo e-bike get?', a: 'Carrying cargo and climbing hills drains the battery faster, so expect 20 to 40 miles of real-world range when loaded, depending on assist level and terrain. We list practical range, not the inflated manufacturer figure, and a second battery roughly doubles it.' },
+      { q: 'Do I need a license to ride a cargo e-bike?', a: 'In most US states, Class 1, 2 and 3 e-bikes do not require a license, registration or insurance. Local rules vary, so check your state and city regulations, especially for Class 3 bikes on shared paths.' },
     ],
   },
   {
@@ -165,6 +209,12 @@ export default async function BestCategoryPage({ params }: { params: Promise<{ c
         </nav>
 
         <h1 className="text-3xl sm:text-4xl font-bold text-[var(--foreground)]">{def.h1}</h1>
+        {def.lastUpdated && (
+          <p className="text-xs text-[var(--muted)] mt-2">
+            Last updated{' '}
+            {new Date(def.lastUpdated).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+          </p>
+        )}
         <p className="text-[var(--muted)] text-lg mt-3 max-w-3xl leading-relaxed">{def.intro}</p>
 
         <div className="mt-6 p-4 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] text-sm text-[var(--muted)] max-w-3xl">
@@ -183,6 +233,22 @@ export default async function BestCategoryPage({ params }: { params: Promise<{ c
           </ShortlistProvider>
         ) : (
           <p className="text-[var(--muted)] mt-10">No bikes in this category yet. Check back soon.</p>
+        )}
+
+        {/* Buyer's guide */}
+        {def.sections && def.sections.length > 0 && (
+          <div className="mt-16 max-w-3xl">
+            {def.sections.map((s) => (
+              <section key={s.h2} className="mb-10">
+                <h2 className="text-2xl font-bold text-[var(--foreground)] mb-4">{s.h2}</h2>
+                <div className="space-y-4">
+                  {s.body.map((p, i) => (
+                    <p key={i} className="text-[var(--muted)] leading-relaxed">{p}</p>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
         )}
 
         {/* FAQ */}
