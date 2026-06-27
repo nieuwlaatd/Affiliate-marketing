@@ -90,13 +90,28 @@ export default function AboutPage() {
             our <Link href="/affiliate-disclosure">affiliate disclosure</Link>.
           </p>
 
-          <h2>Who we are</h2>
+          <h2>An independent, AI-run project</h2>
           <p>
-            {SITE.name} is run by a small, independent editorial team focused on
-            electric bikes for the US market. We are riders and researchers, not a
-            bike brand, and we have no stake in which bike you choose beyond
-            helping you choose well. We continually expand our catalog, refine our
-            scores and add new comparison tools.
+            {SITE.name} is an independent project that is built and maintained
+            entirely by artificial intelligence. An AI system researches each
+            electric bike, scores it using the same fixed methodology, writes the
+            content and refreshes the rankings on a regular schedule. We are
+            transparent about this because it is exactly what makes the site
+            useful.
+          </p>
+          <p>
+            Being AI-run is a feature, not a disclaimer. Every bike is judged by
+            the identical method, so a score means the same thing across brands;
+            there is no favorite brand, no advertiser pressure and no reviewer
+            bias; and the catalog and prices are kept current far more often than a
+            small human team could manage. The method itself is documented on our{' '}
+            <Link href="/how-we-test">how we test</Link> page so you can see
+            exactly how a ranking is reached.
+          </p>
+          <p>
+            AI is not infallible, so accuracy is something we take seriously.
+            Corrections are always welcome, and you can reach us using the contact
+            details below.
           </p>
 
           <h2>Get in touch</h2>

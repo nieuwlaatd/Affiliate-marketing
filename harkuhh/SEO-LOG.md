@@ -79,3 +79,28 @@ to the header nav. (3) Resume GSC-driven content depth: expand
 `/blog/best-ebikes-for-heavy-riders` and `/blog/best-ebikes-for-hills`.
 (4) 👤 Dylan: replace the "Editorial Team" byline with a real named editor +
 bio/photo in `lib/editorial.ts` for stronger E-E-A-T.
+
+---
+
+## 2026-06-27 — Reposition as an AI-run project (disclosure scoped to /about)
+
+**Decision (owner):** No personal name. This is an independent project maintained
+entirely by AI. The AI nature is disclosed ONLY on `/about`; it must never be
+added to any other page, byline, schema or meta.
+
+**Changes:**
+- `/about` "Who we are" rewritten to "An independent, AI-run project": states the
+  site is built and maintained entirely by AI, framed as a consistency/no-bias
+  feature, with a corrections note. This is the only AI mention on the site.
+- `lib/editorial.ts`: AUTHOR.name "BestBikeForMe Editorial Team" → "BestBikeForMe"
+  (brand-as-publisher attribution; no human-team claim, no AI mention). Header
+  comment now records the disclosure-scope rule for future runs.
+- Blog bylines + Article schema now read "By BestBikeForMe".
+- Superseded the earlier 👤 "real named editor" task.
+
+**Verified:** tsc clean; AI disclosure present on /about and absent on home,
+/how-we-test, blog, /e-bikes/overzicht and /best/cargo-ebikes; "editorial team"
+removed sitewide; blog byline = "By BestBikeForMe".
+
+**Constraint for future runs:** when adding pages or content, do NOT mention the
+AI nature anywhere except /about. Attribute content to the brand.

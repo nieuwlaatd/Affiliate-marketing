@@ -1,10 +1,12 @@
 /**
  * Central editorial identity, reused across the About page, the How We Test
  * page, article bylines and Article/Organization schema. Keeping this in one
- * place makes the site's E-E-A-T signals consistent.
+ * place makes the site's attribution consistent.
  *
- * NOTE FOR DYLAN: replacing AUTHOR.name with a real named editor and adding a
- * short real bio + photo is a meaningful E-E-A-T upgrade. See ROADMAP.md (P0.3).
+ * This is an independent, AI-maintained project. That fact is disclosed only on
+ * the /about page; everywhere else content is attributed to the brand as
+ * publisher (AUTHOR.name below), with no human-team claim and no AI mention.
+ * Do not add the AI disclosure to other pages, bylines or schema.
  */
 
 export const SITE = {
@@ -15,9 +17,9 @@ export const SITE = {
 } as const;
 
 export const AUTHOR = {
-  name: 'BestBikeForMe Editorial Team',
+  name: 'BestBikeForMe',
   url: '/about',
-  bio: 'The BestBikeForMe editorial team analyzes e-bike specifications, owner feedback and real-world range data to rank electric bikes independently. We are reader-supported and never accept payment for a higher ranking.',
+  bio: 'BestBikeForMe analyzes e-bike specifications, owner feedback and real-world range data to rank electric bikes independently. We are reader-supported and never accept payment for a higher ranking.',
 } as const;
 
 /** The six scoring axes shown on bike pages, plus how each is judged. */
