@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getAllSlugs, getPostBySlug, getRelatedPosts } from '@/lib/blog-data';
 import { markdownToHtml } from '@/lib/markdown';
+import { AUTHOR, SITE } from '@/lib/editorial';
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -49,11 +50,15 @@ export default async function BlogPostPage({
     description: post.description,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
-    author: { '@type': 'Organization', name: 'Best Bike For Me' },
+    author: {
+      '@type': 'Organization',
+      name: AUTHOR.name,
+      url: `${SITE.url}${AUTHOR.url}`,
+    },
     publisher: {
       '@type': 'Organization',
-      name: 'Best Bike For Me',
-      url: 'https://www.bestbikeforme.com',
+      name: SITE.name,
+      url: SITE.url,
     },
     mainEntityOfPage: `https://www.bestbikeforme.com/blog/${post.slug}`,
   };
@@ -100,7 +105,14 @@ export default async function BlogPostPage({
             {post.description}
           </p>
 
-          <div className="mt-4 flex items-center gap-4 text-sm text-[var(--muted)]">
+          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--muted)]">
+            <span>
+              By{' '}
+              <Link href={AUTHOR.url} className="font-medium text-[var(--foreground)] hover:text-[var(--accent)]">
+                {AUTHOR.name}
+              </Link>
+            </span>
+            <span aria-hidden>·</span>
             <time dateTime={post.publishedAt}>
               {new Date(post.publishedAt).toLocaleDateString('en-US', {
                 month: 'long',

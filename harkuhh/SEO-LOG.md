@@ -48,3 +48,34 @@ capture the long-tail "best cargo ebike YEAR/bikes/bicycle" variants.
 `/blog/best-ebikes-for-hills` (both 80-120 impr, pos ~44-47). Consider applying
 the same `sections` enrichment to `/best/folding-ebikes` (folding queries seen
 in data). Re-check GSC for any queries that have moved into striking distance.
+
+---
+
+## 2026-06-27 — E-E-A-T foundation (ROADMAP P0.2 + P0.3)
+
+**Driver:** Roadmap, not a new GSC signal. The site is new and ranks deep
+everywhere; trust/authority pages are a prerequisite for Google to rank a review
+site. Built the cheapest, highest-leverage E-E-A-T signals.
+
+**Changes shipped:**
+- New `/about` page (mission, independence, how we make money, contact) with
+  Organization schema.
+- New `/how-we-test` page documenting the six-axis scoring method, real-world
+  range stance, data sources and editorial independence.
+- Shared editorial identity in `lib/editorial.ts` (SITE, AUTHOR, SCORING_AXES)
+  so bylines and schema stay consistent.
+- Blog posts now show an author byline linking to `/about`; Article schema
+  `author` updated to a named entity with a URL (was bare Organization).
+- Both pages added to `sitemap.ts` and linked from the footer (Learn column +
+  bottom nav).
+
+**Verified:** tsc clean; `/about` and `/how-we-test` return 200 with correct
+headings and no stray characters; blog byline + schema author confirmed in HTML;
+no console errors.
+
+**Next candidates:** (1) Roadmap P1.6 — link score badges to `/how-we-test` on
+bike cards / detail / best-of pages. (2) Roadmap P1.7 — add About + How We Test
+to the header nav. (3) Resume GSC-driven content depth: expand
+`/blog/best-ebikes-for-heavy-riders` and `/blog/best-ebikes-for-hills`.
+(4) 👤 Dylan: replace the "Editorial Team" byline with a real named editor +
+bio/photo in `lib/editorial.ts` for stronger E-E-A-T.

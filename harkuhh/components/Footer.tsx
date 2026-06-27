@@ -64,6 +64,8 @@ export default function Footer() {
               <Link href="/blog/ebike-classes-explained" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">E-Bike Classes Explained</Link>
               <Link href="/blog/ebike-battery-range-guide" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Battery &amp; Range Guide</Link>
               <Link href="/blog/ebike-maintenance-tips" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">Maintenance Tips</Link>
+              <Link href="/how-we-test" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">How We Test</Link>
+              <Link href="/about" className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]">About Us</Link>
             </nav>
           </div>
 
@@ -120,6 +122,8 @@ export default function Footer() {
             rankings or recommendations. <Link href="/affiliate-disclosure" className="underline hover:text-[var(--foreground)]">Learn more</Link>.
           </p>
           <nav className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1">
+            <Link href="/about" className="hover:text-[var(--foreground)]">About</Link>
+            <Link href="/how-we-test" className="hover:text-[var(--foreground)]">How We Test</Link>
             <Link href="/privacy" className="hover:text-[var(--foreground)]">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-[var(--foreground)]">Terms of Service</Link>
             <Link href="/affiliate-disclosure" className="hover:text-[var(--foreground)]">Affiliate Disclosure</Link>
