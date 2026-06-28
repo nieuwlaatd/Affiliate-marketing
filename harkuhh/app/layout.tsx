@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Analytics } from "@vercel/analytics/next";
+import { PostHogProvider } from "./providers";
 // import Script removed to use raw script for React 19 resource management
 
 const inter = Inter({
@@ -72,10 +73,12 @@ export default function RootLayout({
         />
       </head>
       <body className="flex min-h-full flex-col antialiased">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <Analytics />
+        <PostHogProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <Analytics />
+        </PostHogProvider>
       </body>
     </html>
   );
