@@ -15,8 +15,13 @@ import { useEffect } from "react";
  */
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    // Only track in production, so local dev / localhost visits never pollute
+    // the analytics data.
+    if (process.env.NODE_ENV !== "production") return;
     const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
     if (!key || posthog.__loaded) return;
+    // Only track production traffic; skip local/dev so analytics stay clean.
+    if (process.env.NODE_ENV !== "production") return;
     posthog.init(key, {
       api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://eu.i.posthog.com",
       // Auto-captures pageviews on App Router client-side navigations.
