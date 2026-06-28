@@ -352,3 +352,81 @@ off-road/SUV) now that ENGWE bikes have correct tags. (3) P1.3 -- AggregateRatin
 schema on detail pages (Review schema exists but no aggregate; adding it enables
 star ratings in SERPs). (4) Watch for ENGWE commuter/recreation pages to gain
 impressions in the next GSC window (2-3 week lag).
+
+---
+
+## 2026-06-28 -- Fat-tire + long-range best-of pages (P2.4)
+
+**GSC snapshot (28d, ending ~2026-06-25):** 3 clicks, 546 impressions, CTR 0.5%.
+No change in totals. No striking-distance queries (pos 5-20) in the query-level
+tool output. Page-level signals from the 90d window:
+- `/e-bikes/samebike/samebike-rs-a01-men`: pos 16.9, 25% CTR, 2 clicks (best performer)
+- `/e-bikes/walfisk/walfisk-walfisk-26-fat-tire-bafan`: pos 8.0, page 1
+- `/e-bikes/duotts/duotts-duotts-c29-k`: pos 14.8, 5 impr, 0 clicks -- striking distance
+- `/best/folding-ebikes`: pos 18.8 -- content expanded previous run
+- `/best/cargo-ebikes`: 205 impr, pos 72 -- high demand, weak rank (thin cluster)
+
+**Decision:** Advance ROADMAP P2.4. The ENGWE Dutch field fix last run unlocked 22+
+ENGWE bikes across filters. Fat-tire and long-range are two high-demand clusters
+that now have strong catalog coverage. Both also align with the site's existing
+bike portfolio (30+ fat-tire bikes, strong ENGWE/Eunorau/DUOTTS long-range coverage).
+
+**Action 1 -- `/best/fat-tire-ebikes` (new page, live):**
+Filter: bikes where description or highlights contain "fat" (fat tire / fat-tire).
+Covers 30+ bikes from ENGWE, DUOTTS, Eunorau, SAMEBIKE, VTUVIA, Walfisk, DYU.
+Content:
+- 3 buyer's guide sections (~900 words total):
+  (1) What is a fat tire e-bike and who should buy one (beach, snow, heavy riders,
+  rough pavement — wide tire at low PSI explained)
+  (2) How fat tires affect range, speed and handling (~10-15% range penalty vs road
+  tires, handling trade-offs, weight impact)
+  (3) 20-inch vs 26-inch fat tire wheels: portability vs stability trade-offs
+- 7 FAQs targeting: "are fat tire e-bikes good for beginners", "how far can they go",
+  "can they ride on the beach / sand", "good in snow", "harder to pedal",
+  "how much do they weigh", "3-inch vs 4-inch fat tires"
+- lastUpdated: 2026-06-28. Added to sitemap.ts.
+
+**Action 2 -- `/best/long-range-ebikes` (new page, live):**
+Filter: `rangePractical >= 55` (practical range in the database).
+Note: several ENGWE bikes have range_practical stored in km rather than miles
+(e.g. LE20 at 255, P275 Pro at 195) -- these appear at top of the list but are
+data quality issues inherited from previous catalog work; fixing them is a
+separate P0 cleanup task added to ROADMAP.
+Content:
+- 3 buyer's guide sections (~900 words total):
+  (1) What "long range" actually means (manufacturer vs practical range gap;
+  defining 50+ mi practical as the true long-range bar)
+  (2) What drives range: battery Wh, motor type (mid-drive vs hub efficiency
+  gap on hills), rider weight and assist level impact
+  (3) Long-range vs standard e-bikes: weight and cost trade-offs; who actually
+  benefits from 60+ mi range
+- 7 FAQs targeting: "how far can a long-range e-bike go", "what battery size
+  for 50 miles", "does motor type affect range", "rider weight and range",
+  "second battery to extend range", "how long to charge", "worth the extra cost"
+- lastUpdated: 2026-06-28. Added to sitemap.ts.
+
+**Verified:** tsc --noEmit clean, zero errors. Both pages return HTTP 200 in dev
+server. No console errors. Bike cards, buyer's guide sections, FAQ accordion and
+quiz CTA all render correctly on both pages.
+
+**Expected impact:**
+- `/best/fat-tire-ebikes` targets "best fat tire e-bikes", "fat tire electric bike",
+  "best fat tire ebike 2026" -- queries the existing Walfisk WF26 (pos 8, page 1)
+  likely already attracts. The category page gives Google a hub page to cluster
+  all fat-tire queries around, which should improve overall visibility for the cluster.
+- `/best/long-range-ebikes` targets "best long range e-bikes", "long range electric
+  bike", "e-bike 50 miles range" -- a distinct demand cluster with buyers who have
+  specific needs (rural routes, heavy riders, long commutes). This is a
+  conversion-oriented cluster with motivated buyers.
+- Both pages added to sitemap, so they'll be crawled on the next sitemap fetch.
+
+**ROADMAP data quality issue flagged (new P0 task):**
+Several ENGWE bikes have `range_practical` values stored in km (not miles) in
+Supabase. This causes misleading display on the long-range page (e.g. ENGWE LE20
+showing "~255 mi"). Added as a P0 cleanup task to ROADMAP.
+
+**Next candidates:** (1) Fix ENGWE range_practical km-as-miles data in Supabase
+(new P0 task). (2) P2.4 remaining -- add under-$2000, step-through, off-road/SUV
+best-of categories. (3) P0.5 -- systematic internal linking audit (blogs linking
+to bikes; best-of pages linking to related blogs). (4) P1.3 -- AggregateRating
+schema on detail pages to enable star ratings in SERPs.

@@ -13,6 +13,8 @@ const BEST_CATEGORIES = [
   'cargo-ebikes',
   'class-3-ebikes',
   'ebikes-for-seniors',
+  'fat-tire-ebikes',
+  'long-range-ebikes',
 ];
 
 const VS_MATCHUPS = [

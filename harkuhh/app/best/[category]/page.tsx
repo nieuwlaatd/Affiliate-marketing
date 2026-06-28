@@ -242,6 +242,98 @@ const CATEGORIES: CategoryDef[] = [
       { q: 'What type of e-bike is best for seniors?', a: 'A step-through frame with a low standover height, a comfortable upright riding position and a throttle (Class 2) for extra confidence on hills and from a stop.' },
     ],
   },
+  {
+    slug: 'fat-tire-ebikes',
+    title: `Best Fat Tire E-Bikes (${YEAR}): Top Picks for All-Terrain Riding`,
+    h1: `Best Fat Tire E-Bikes in ${YEAR}`,
+    metaDescription: `The best fat tire electric bikes of ${YEAR}, ranked by off-road capability, motor power, range and value. Honest picks for beach, trails, snow and city riding.`,
+    intro:
+      'Fat tire e-bikes replace the standard 1.75 to 2.5-inch road tire with a wide 3 to 4-inch knobbed tire that grips loose sand, packed snow, gravel, mud and roots without needing a full-suspension mountain bike. These picks score highest across our off-road, range and build-quality axes, covering everything from folding commuters to dual-motor AWD trail rigs.',
+    filter: (b) =>
+      b.description.toLowerCase().includes('fat') ||
+      b.highlights.some((h) => h.toLowerCase().includes('fat')),
+    lastUpdated: '2026-06-28',
+    sections: [
+      {
+        h2: 'What is a fat tire e-bike and who should buy one',
+        body: [
+          'A fat tire e-bike runs a tire between 3 and 4.5 inches wide, inflated to a low 6 to 15 PSI. At that pressure the tire deforms around obstacles instead of bouncing off them, giving you traction on surfaces that would defeat a narrow road or trail tire: soft beach sand, packed winter snow, wet roots, loose gravel and broken pavement. You get this without a rear shock, which keeps the bike simpler, lighter and more affordable than a full-suspension trail bike.',
+          'The biggest beneficiaries are riders who face unpredictable surfaces. Beach-town commuters, riders in the Midwest or Northeast where snowy and slushy winters are the norm, and anyone whose route mixes paved streets with unpaved trail or gravel path all find that a fat tire dramatically expands where they can confidently ride. Fat tires are also gentler on rough urban pavement, which is why many city commuters choose them for comfort even when they never go near a trail.',
+          'Heavier riders (200 lbs and up) also benefit: the larger contact patch distributes weight more evenly, reducing the chance of pinch flats and improving cornering stability under load. If you have hills in your route and the bike has a motor of 750W or more, fat tires and elevation are a fine combination.',
+        ],
+      },
+      {
+        h2: 'How fat tires affect range, speed and handling',
+        body: [
+          'The main trade-off with fat tires is rolling resistance. A 4-inch tire at 10 PSI creates more friction against the road surface than a 2-inch tire at 40 PSI, and that friction uses battery capacity. On a flat paved road, a fat tire e-bike typically delivers 10 to 15 percent less range than an equivalent road-tire bike with the same motor and battery. On loose or soft surfaces, the rolling resistance gap shrinks because the fat tire floats while the narrow tire sinks and fights.',
+          'Handling is different, not worse. Fat tires steer more slowly and feel more planted, which new riders often find reassuring. The lower air pressure absorbs bumps that would transmit directly through a rigid fork on a narrow-tire bike, so rough roads feel smoother. Top speed is the same as any other e-bike in the same class; the motor and class determine the speed ceiling, not the tire.',
+          'Weight is the third factor. A 26-inch fat tire adds roughly 1.5 to 2.5 lbs over a comparable road tire. A complete fat-tire e-bike typically weighs 55 to 80 lbs, which is heavier than a narrow-tire commuter but similar to most cargo e-bikes. If you need to carry the bike up stairs, look for folding fat-tire models with built-in carry handles, which keep the weight manageable for building access.',
+        ],
+      },
+      {
+        h2: '20-inch vs 26-inch fat tires: which wheel size is right for you',
+        body: [
+          'Twenty-inch fat tire bikes fold more compactly, stand lower to the ground and are easier to mount and dismount, especially on 20x4-inch wheels. They are the dominant choice for folding fat-tire e-bikes, city commuters who store the bike indoors, and lighter riders who prioritize portability. The shorter wheelbase turns more quickly in traffic. The trade-off is a slightly more nervous, busier ride feel at higher speeds compared to a longer wheelbase bike, and slightly less momentum conservation on undulating terrain.',
+          'Twenty-six-inch fat tire bikes use a longer wheelbase that tracks straighter at speed, holds momentum better on rolling terrain, and feels more stable when loaded with cargo or ridden by a heavier rider. They are the standard choice for trail and off-road use, and they are what most dual-motor AWD fat-tire bikes use. The larger wheel also rolls over obstacles more smoothly because the contact point hits them at a shallower angle.',
+          'Both wheel sizes are available with 3-inch, 3.5-inch and 4-inch tires. If you are primarily riding on pavement and light gravel, a 3-inch tire gives most of the comfort benefit with less rolling resistance. If you are regularly on sand, snow or technical trail, a 4-inch tire delivers noticeably more traction. The 3-to-4 inch range is where you get the most practical balance for mixed riding.',
+        ],
+      },
+    ],
+    faqs: [
+      { q: 'Are fat tire e-bikes good for beginners?', a: `Yes. The wide tires are more forgiving of minor steering errors, gravel crossings and cracked pavement than narrow tires, which makes fat tire e-bikes a confidence-building choice for new riders. The throttle on most Class 2 fat-tire models also means you never have to pedal hard from a stop.` },
+      { q: 'How far can a fat tire e-bike go on one charge?', a: 'Most 750W fat tire e-bikes with a 14 to 20 Ah battery deliver 35 to 55 miles of real-world range on a mix of assist levels. High-capacity models with 20 Ah or larger batteries can exceed 60 miles on flat ground. Fat tires add about 10 to 15 percent more rolling resistance than road tires on pavement, which reduces range compared to a narrow-tire bike with the same motor and battery.' },
+      { q: 'Can a fat tire e-bike ride on the beach?', a: 'Yes, on packed or firm sand. Soft, deep sand is harder even for a fat tire: you need very low pressure (6 to 8 PSI), a powerful motor (750W or more) and momentum. A 4-inch tire handles beach riding far better than a 3-inch tire. Look for bikes with at least 750W nominal power and a throttle if beach riding is a regular use case for you.' },
+      { q: 'Are fat tire e-bikes good in snow?', a: 'Yes. Fat tires at low pressure grip compacted snow similarly to how they grip sand, by floating rather than digging. For winter riding, a 4-inch tire at 8 to 12 PSI works well on packed snow; consider adding studded tires for icy conditions. Most fat-tire motors are powerful enough to push through the additional drag of deep snow.' },
+      { q: 'Do fat tires make an e-bike harder to pedal?', a: 'Slightly. The extra rolling resistance means more effort at the same assist level compared to a road bike. In practice, most fat-tire e-bike riders use a slightly higher assist level to compensate, which costs a small amount of range. For most e-bike riders who use mid to high assist most of the time, the difference is not noticeable day to day.' },
+      { q: 'How much do fat tire e-bikes weigh?', a: 'Most fat tire e-bikes weigh between 55 and 80 lbs. A 20-inch folding fat-tire model typically weighs 55 to 65 lbs. A 26-inch dual-motor AWD fat-tire bike can reach 70 to 80 lbs. The fat tires themselves add about 3 to 5 lbs over narrow tires, with the rest of the weight coming from the motor, battery and frame.' },
+      { q: `What is the difference between 3-inch and 4-inch fat tires?`, a: 'A 3-inch tire gives most of the comfort and stability benefit of a fat tire with slightly less rolling resistance, making it better for mixed road and light trail use. A 4-inch tire delivers maximum traction on soft surfaces like sand, snow and mud, but adds more rolling resistance on pavement. For all-terrain riding, 4 inches is the better choice; for mostly-road with occasional trail, 3 to 3.5 inches is a good compromise.' },
+    ],
+  },
+  {
+    slug: 'long-range-ebikes',
+    title: `Best Long-Range E-Bikes (${YEAR}): Top Picks for 50+ Miles`,
+    h1: `Best Long-Range E-Bikes in ${YEAR}`,
+    metaDescription: `The best long-range electric bikes of ${YEAR} with 50 or more miles of real-world range. Battery size, motor efficiency and honest range estimates for every pick.`,
+    intro:
+      'Most e-bikes claim 40 to 80 miles of range but deliver 25 to 45 miles in real-world conditions. These long-range picks genuinely go further, with large batteries, efficient motors and practical ranges we verify against real-world use data. Ranked by overall score with extra weight on real-world range.',
+    filter: (b) => b.rangePractical >= 55,
+    lastUpdated: '2026-06-28',
+    sections: [
+      {
+        h2: 'What "long range" actually means for an e-bike',
+        body: [
+          'E-bike range claims are the most inflated figures in the industry. Manufacturers test at the lowest assist level, on flat ground, with a 155 lb rider, in warm weather, at a slow speed. Real-world riding means higher assist levels, headwinds, hills, a full-sized rider with a bag and temperature fluctuations. The result is that a bike claiming 80 miles typically delivers 35 to 50 miles under everyday use conditions.',
+          'We define long range as bikes that deliver at least 50 miles of practical range at moderate assist. That threshold separates bikes where most riders can expect to charge once a day or less (covering a 20 to 25 mile round-trip commute with comfortable margin) from bikes that require mid-day top-ups or careful assist management. For touring or rural routes where charging points are sparse, look for bikes that deliver 60 to 80 miles practically.',
+          'The bikes on this page have been verified to exceed the 50-mile practical threshold based on battery capacity, motor efficiency and community range data. We flag manufacturer claims separately so you can see the gap and set realistic expectations before you buy.',
+        ],
+      },
+      {
+        h2: 'What drives e-bike range: battery, motor, rider and terrain',
+        body: [
+          'Battery capacity is the primary variable. Battery energy is measured in watt-hours (Wh): volts multiplied by amp-hours. A 48V 20Ah battery holds 960 Wh. A typical 750W hub-motor e-bike consumes 15 to 25 Wh per mile at moderate assist, so that 960 Wh battery delivers 38 to 64 miles in real-world use. To reliably achieve 60 miles of practical range, you generally need at least a 48V 20Ah (960 Wh) or 52V 17Ah (884 Wh) pack.',
+          'Motor type affects efficiency on hills and varied terrain. Mid-drive motors sense your pedaling effort and apply power more precisely, which can deliver 10 to 20 percent better range on rolling or hilly terrain compared to a hub motor at the same battery size. Hub motors (rear and front) are simpler and cheaper, and their range disadvantage shrinks on flat ground. For long-range flat commuting, a quality hub motor is fine; for hilly terrain where you want every mile of range, a mid-drive is the better choice.',
+          'Rider weight and assist level have the largest impact on daily range. A 180 lb rider on level 3 assist typically uses 18 to 22 Wh per mile; a 250 lb rider on the same setting uses 22 to 30 Wh per mile. Reducing from assist level 3 to level 2 on flat sections and reserving level 4 or 5 for hills is the single most effective range-extension technique, often adding 20 to 30 percent of usable range without changing the bike.',
+        ],
+      },
+      {
+        h2: 'Long-range e-bikes vs standard e-bikes: the trade-offs',
+        body: [
+          'A large battery adds weight: a 20 Ah pack weighs roughly 8 to 11 lbs more than a 10 Ah pack. On top of that, long-range bikes often use heavier frames to handle the battery weight. The result is that a genuine 60-mile-range e-bike typically weighs 65 to 85 lbs, which is meaningful if you need to carry it up stairs or onto transit.',
+          'Long-range bikes also cost more. A 20 Ah battery adds $200 to $500 to the component cost versus a 10 Ah pack, and this flows through to retail price. Most genuine long-range e-bikes start at $1,000 and commonly run $1,500 to $2,500. Budget long-range options (under $1,200) typically achieve their range by using a lower-voltage 36V system with a very large Ah rating, which gives a bigger number but sometimes sacrifices hill-climbing torque.',
+          'For most urban commuters with routes under 15 miles each way, a standard 40 to 50 mile practical range bike is sufficient. Long-range bikes pay off for riders with 20 to 30 mile one-way commutes, rural routes where charging mid-day is not practical, heavy riders who experience higher-than-average consumption, or touring riders who want multi-day capability without daily charging.',
+        ],
+      },
+    ],
+    faqs: [
+      { q: 'How far can a long-range e-bike realistically go?', a: 'The bikes on this page deliver 50 to 80 miles of real-world range at moderate assist on relatively flat terrain. Hilly routes and high assist levels reduce this by 20 to 40 percent. We list practical range for every bike, which is our estimate of real-world performance at assist level 3 with a typical rider load, not the inflated manufacturer claim.' },
+      { q: `What battery size do I need for 50 miles of range?`, a: 'You generally need at least a 48V 17Ah (816 Wh) or 52V 15Ah (780 Wh) battery to reliably achieve 50 miles at moderate assist. A 48V 20Ah (960 Wh) pack gives you more margin. Smaller 10 to 13 Ah packs can approach 50 miles only on flat ground at low assist, which is not realistic for everyday riding.' },
+      { q: 'Does motor type affect e-bike range?', a: 'Yes, meaningfully on hilly terrain. Mid-drive motors are 10 to 20 percent more efficient on hills because they use your gears to apply power at the optimal RPM. Hub motors work at a fixed RPM regardless of grade, so they waste more energy climbing. On flat ground, the efficiency gap shrinks to 5 to 10 percent. For flat city commuting, a hub motor is fine; for hilly routes, a mid-drive extends range noticeably.' },
+      { q: 'How does rider weight affect e-bike range?', a: 'A heavier rider uses more energy to move the same distance, especially uphill. A 250 lb rider typically sees 25 to 35 percent less range than a 155 lb rider on the same bike in the same conditions. If you are over 220 lbs, look for bikes with larger batteries (20 Ah or more) and higher torque motors (80 Nm or more) to compensate for the additional draw.' },
+      { q: 'Can I add a second battery to extend range?', a: 'Some long-range e-bikes support a second battery that doubles or nearly doubles range. This is more common in premium and cargo-oriented models. Check whether the frame has a mount point and whether the controller supports dual-battery input before buying. A purpose-designed dual-battery system is safer and more effective than aftermarket adapters.' },
+      { q: 'How long does it take to charge a long-range e-bike battery?', a: 'A 48V 20Ah (960 Wh) battery takes 5 to 8 hours to charge from near-empty with a standard 2A to 3A charger. Fast chargers (5A to 6A) cut this to 3 to 4 hours. Most e-bikes ship with a standard charger; upgrading to a faster charger is usually possible and worthwhile if you want to top up mid-day.' },
+      { q: 'Are long-range e-bikes worth the extra cost?', a: `For commuters with routes under 15 miles each way, a standard e-bike is usually sufficient and the extra battery cost is not justified. For commutes of 20 miles or more each way, rural riders without mid-day charging access, or heavy riders who experience above-average consumption, the range premium pays off in peace-of-mind and charging flexibility. The sweet spot for most buyers is a 50 to 65 mile practical range bike in the $1,200 to $1,800 range.` },
+    ],
+  },
 ];
 
 export function generateStaticParams() {
