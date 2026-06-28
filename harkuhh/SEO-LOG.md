@@ -268,3 +268,87 @@ the search intent, which should push it into the top 10.
 pages. (2) P1.1 -- deepen the Engwe P275 SE detail page (pos 21.2, 19 impr) and
 DUOTTS C29-K (pos 15.8) to push them toward page 1. (3) P0.5 -- internal linking
 pass (still undone, high authority value).
+
+---
+
+## 2026-06-28 -- ENGWE data fix (P0.6) + detail page template enrichment (P1.1)
+
+**GSC snapshot (28d, ending ~2026-06-25):** 3 clicks, 546 impressions, CTR 0.5%.
+Total impressions up 20 from previous window (526 → 546). No meaningful rank
+movements yet -- content changes from earlier runs are still being indexed.
+Key page signals (90d window for more stability):
+- `/e-bikes/samebike/samebike-rs-a01-men`: pos 16.9, 8 impr, 25% CTR, 2 clicks (best performer)
+- `/e-bikes/walfisk/walfisk-walfisk-26-fat-tire-bafan`: pos 8.0, 15 impr, 6.7% CTR, 1 click
+- `/e-bikes/duotts/duotts-duotts-c29-k`: pos 14.8, 5 impr, 0 clicks -- striking distance, no CTR
+- `/e-bikes/engwe/engwe-p275-se`: pos 21.2, 19 impr -- near page 1
+- `/best/folding-ebikes`: pos 18.8, 4 impr -- content expanded last run
+- `/e-bikes`: pos 5.6, 14 impr, 0 clicks (redirect to /e-bikes/overzicht)
+No queries in strict striking-distance (pos 5-20) in 28d window.
+
+**Action 1 -- P0.6: ENGWE Dutch field values fixed in Supabase (live immediately)**
+All 22 ENGWE bikes had Dutch `suitable_for` and `frame_type` values:
+- suitable_for: `woon-werk`→`commuting`, `recreatief`→`recreation`,
+  `transport`→`commuting`, `sportief`→`sport`, `off-road` unchanged.
+  Used CASE + DISTINCT in a single SQL UPDATE to handle deduplication
+  (bikes with both `woon-werk` + `transport` correctly merged to one `commuting`).
+- frame_type: `laag-instap`→`step-through`, `hoog-instap`→`step-over`,
+  `sportief`→`sport`.
+Verified: `SELECT COUNT(*) ... WHERE remaining_dutch` = 0. ENGWE bikes now appear
+on commuter, recreation, off-road, and sport category pages. The commuter-ebikes
+page gains ~22 new Engwe listings; recreation likewise. This significantly
+increases the depth and selection on the two highest-traffic best-of pages.
+
+**Action 2 -- P1.1: Detail page template enrichment (88 bike pages upgraded)**
+Three improvements to `app/e-bikes/[brand]/[model]/page.tsx`:
+
+1. **Meta description** now leads with specific specs:
+   Previously: "Is the X worth $Y? Compare specs, read our analysis and find the best price."
+   Now: "X review: Z mi real-world range, N Nm motor, $Y. Score: S/10. Full specs and where to buy."
+   This surfaces the numbers a buyer is actually searching for, improving CTR for
+   brand-model review queries (the exact type ranking at pos 14-21 in GSC).
+
+2. **FAQPage schema** added (4 questions per bike, dynamically generated):
+   - "Is the [brand] [model] worth it?" -- answer includes score + description
+   - "How far can the [brand] [model] go?" -- real-world vs claimed range
+   - "What class is the [brand] [model]?" -- class label + throttle status
+   - "How heavy is the [brand] [model]?" -- weight + max payload
+   FAQ schema triggers Google's People Also Ask boxes for review queries, which
+   appear above the main results and significantly boost CTR.
+
+3. **"Who is this bike for?" section** (new JSX block after the Specifications table):
+   - "Best for" column: suitableFor tags, heavy-rider callout (if maxWeight >= 300),
+     long-range callout (if rangePractical >= 50), budget callout (if price <= 1000).
+   - "Consider alternatives if you..." column (if any apply): heavy bike warning
+     (weight > 55 lbs), hills warning (rear-hub + torque < 80 Nm), build quality
+     caveat (scoreOverall < 7), no-throttle warning.
+   Column hidden if no skip-if items apply (clean for premium bikes).
+
+4. **Category links** (new section before Similar bikes): dynamic links to the
+   relevant best-of page(s) based on suitableFor + bikeClass + price tier.
+   Covers: commuter-ebikes, cargo-ebikes, class-3-ebikes, under-$1000, under-$1500.
+   Creates internal links from every detail page into the best-of cluster --
+   partially addressing ROADMAP P0.5 (internal linking).
+
+**Verified:** tsc --noEmit clean, zero type errors.
+
+**Expected impact:**
+- ENGWE fix: commuter + recreation best-of pages now surface 22 more bikes
+  immediately, increasing listing depth. ENGWE detail pages gain relevant
+  category page internal links pointing back to them (via the suitableFor-based
+  links added to the detail page template).
+- Detail page meta: CTR improvement for high-intent "[brand] [model] review"
+  queries that are already ranking at pos 14-22. The C29-K (pos 14.8, 0 clicks)
+  and P275 SE (pos 21.2) are the most likely to benefit first.
+- FAQPage schema: eligible for PAA boxes, which show above the fold even for
+  rankings at pos 10-20. This is the fastest path to first-page visibility for
+  these brand-specific queries.
+- Category links: internal authority flows from detail pages to best-of pages,
+  helping the cargo, commuter, and class-3 category pages rank better.
+
+**Next candidates:** (1) P0.5 -- systematic internal linking audit (blogs linking
+to bikes, best-of pages linking to related blogs/vs-pages -- still largely undone).
+(2) P2.4 -- add more best-of categories (fat-tire, long-range, step-through,
+off-road/SUV) now that ENGWE bikes have correct tags. (3) P1.3 -- AggregateRating
+schema on detail pages (Review schema exists but no aggregate; adding it enables
+star ratings in SERPs). (4) Watch for ENGWE commuter/recreation pages to gain
+impressions in the next GSC window (2-3 week lag).

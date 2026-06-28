@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ brand: st
   const bike = await getBikeBySlug(model);
   if (!bike) return { title: 'E-Bike not found' };
   const title = `${bike.brand} ${bike.model} Review ${bike.year} | Specs, Price & Where to Buy`;
-  const description = `Is the ${bike.brand} ${bike.model} worth $${bike.price.toLocaleString('en-US')}? Compare specs, read our analysis and find the best price.`;
+  const description = `${bike.brand} ${bike.model} review: ${bike.rangePractical} mi real-world range, ${bike.torque} Nm motor, $${bike.price.toLocaleString('en-US')}. Score: ${bike.scoreOverall}/10. Full specs and where to buy.`;
   return {
     title,
     description,
@@ -89,10 +89,65 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
     ],
   };
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: `Is the ${bike.brand} ${bike.model} worth it?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `The ${bike.brand} ${bike.model} earns a ${bike.scoreOverall}/10 overall score. ${bike.description} Priced at $${bike.price.toLocaleString('en-US')}, it ${bike.scoreValue >= 7 ? 'offers solid value for the money' : 'sits in the mid-range value tier'}.`,
+        },
+      },
+      {
+        '@type': 'Question',
+        name: `How far can the ${bike.brand} ${bike.model} go on one charge?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `The manufacturer claims up to ${bike.rangeManufacturer} miles, but real-world range is around ${bike.rangePractical} miles under typical conditions (mixed terrain, moderate assist level, average rider weight).`,
+        },
+      },
+      {
+        '@type': 'Question',
+        name: `What class is the ${bike.brand} ${bike.model}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: bike.bikeClass
+            ? `The ${bike.brand} ${bike.model} is a ${classLabels[bike.bikeClass]}. ${bike.hasThrottle ? 'It includes a throttle for motor-only power without pedaling.' : 'It is pedal-assist only with no throttle.'}`
+            : `The ${bike.brand} ${bike.model} is rated for up to ${bike.maxSpeedMph ?? 20} mph.`,
+        },
+      },
+      {
+        '@type': 'Question',
+        name: `How heavy is the ${bike.brand} ${bike.model}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `The ${bike.brand} ${bike.model} weighs ${bike.weight} lbs and supports a maximum payload of ${bike.maxWeight} lbs, including rider and cargo.`,
+        },
+      },
+    ],
+  };
+
+  const categoryLinks: { href: string; label: string }[] = [];
+  if (bike.suitableFor.includes('commuting')) categoryLinks.push({ href: '/best/commuter-ebikes', label: 'Best commuter e-bikes' });
+  if (bike.suitableFor.includes('cargo')) categoryLinks.push({ href: '/best/cargo-ebikes', label: 'Best cargo e-bikes' });
+  if (bike.bikeClass === 'class-3') categoryLinks.push({ href: '/best/class-3-ebikes', label: 'Best Class 3 e-bikes' });
+  if (bike.price <= 1000) categoryLinks.push({ href: '/best/ebikes-under-1000', label: 'Best e-bikes under $1,000' });
+  else if (bike.price <= 1500) categoryLinks.push({ href: '/best/ebikes-under-1500', label: 'Best e-bikes under $1,500' });
+
+  const skipIfItems: string[] = [];
+  if (bike.weight > 55) skipIfItems.push(`Need to lift the bike frequently — at ${bike.weight} lbs it is heavy`);
+  if (bike.motorType !== 'mid-drive' && bike.torque < 80) skipIfItems.push('Ride steep hills regularly (a mid-drive motor handles climbs better)');
+  if (bike.scoreOverall < 7) skipIfItems.push('Want premium components across every spec');
+  if (!bike.hasThrottle) skipIfItems.push('Want throttle-only riding without pedaling');
+
   return (
     <div className="w-full bg-[var(--background)] min-h-screen">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="text-sm text-[var(--muted)] mb-6">
@@ -238,6 +293,55 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
           </div>
         </div>
 
+        {/* Who is this bike for? */}
+        <div className="bg-[var(--card-bg)] rounded-xl border border-[var(--border)] p-6 mb-8">
+          <h2 className="text-xl font-bold text-[var(--foreground)] mb-6">Who is this bike for?</h2>
+          <div className="grid sm:grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-sm font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--accent)' }}>Best for</h3>
+              <ul className="space-y-2">
+                {bike.suitableFor.map(use => (
+                  <li key={use} className="flex items-start gap-2 text-sm text-[var(--foreground)]">
+                    <span style={{ color: 'var(--accent)' }}>✓</span>
+                    {usageLabels[use]} riders
+                  </li>
+                ))}
+                {bike.maxWeight >= 300 && (
+                  <li className="flex items-start gap-2 text-sm text-[var(--foreground)]">
+                    <span style={{ color: 'var(--accent)' }}>✓</span>
+                    Heavier riders (supports up to {bike.maxWeight} lbs)
+                  </li>
+                )}
+                {bike.rangePractical >= 50 && (
+                  <li className="flex items-start gap-2 text-sm text-[var(--foreground)]">
+                    <span style={{ color: 'var(--accent)' }}>✓</span>
+                    Long-distance rides (~{bike.rangePractical} mi real-world range)
+                  </li>
+                )}
+                {bike.price <= 1000 && (
+                  <li className="flex items-start gap-2 text-sm text-[var(--foreground)]">
+                    <span style={{ color: 'var(--accent)' }}>✓</span>
+                    Budget-conscious buyers
+                  </li>
+                )}
+              </ul>
+            </div>
+            {skipIfItems.length > 0 && (
+              <div>
+                <h3 className="text-sm font-bold uppercase tracking-wide mb-3 text-[var(--muted)]">Consider alternatives if you...</h3>
+                <ul className="space-y-2">
+                  {skipIfItems.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-[var(--muted)]">
+                      <span className="mt-0.5">○</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* All Specs (Dynamic) */}
         {bike.fullSpecs && Object.keys(bike.fullSpecs).length > 0 && (
           <div className="bg-[var(--card-bg)] rounded-xl border border-[var(--border)] p-6 mb-8">
@@ -261,6 +365,20 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
             Open comparison
           </Link>
         </div>
+
+        {/* Category links */}
+        {categoryLinks.length > 0 && (
+          <div className="mb-12">
+            <h2 className="text-xl font-bold text-[var(--foreground)] mb-4">See more in this category</h2>
+            <div className="flex flex-wrap gap-3">
+              {categoryLinks.map(l => (
+                <Link key={l.href} href={l.href} className="px-4 py-2 rounded-lg border text-sm font-medium transition-colors hover:bg-[var(--surface)]" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
+                  {l.label} →
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Similar bikes */}
         {similar.length > 0 && (
