@@ -123,14 +123,47 @@ const CATEGORIES: CategoryDef[] = [
   },
   {
     slug: 'folding-ebikes',
-    title: `Best Folding E-Bikes (${YEAR})`,
+    title: `Best Folding E-Bikes (${YEAR}): Top Picks for Apartments & Commutes`,
     h1: `Best Folding E-Bikes in ${YEAR}`,
-    metaDescription: `The best folding electric bikes in ${YEAR} for apartments, RVs and mixed commutes. Compact, capable picks.`,
+    metaDescription: `The best folding electric bikes in ${YEAR} for apartments, mixed commutes, RVs and travel. Compact, capable picks ranked by portability, ride quality and value.`,
     intro:
-      'Folding e-bikes are perfect for apartments, RVs, boats and multi-modal commutes. These are the best folding models, ranked on portability, ride quality and value.',
+      'A folding e-bike solves a problem no regular e-bike can: you can carry it into an office, stow it under a train seat, slide it into a car trunk or tuck it in a closet the size of a suitcase. These are the best folding electric bikes right now, ranked by portability, motor capability and real-world ride quality.',
     filter: (b) => !!b.dimensions?.foldedSize,
+    lastUpdated: '2026-06-28',
+    sections: [
+      {
+        h2: 'Who should buy a folding e-bike',
+        body: [
+          'Folding e-bikes make the most sense when storage or transport is your main constraint. If you live in an apartment without a bike room, a folding e-bike comes indoors with you -- no worrying about theft or rain. If you commute by train or bus and want to cover the last mile on a bike, a folder goes under the seat or in the baggage rack where a full-size e-bike never would.',
+          'RV travelers and van lifers love folders for the same reason: two or three fit in the storage bay where a single full-size e-bike would barely squeeze. Boat owners use them as tenders. Anyone who travels frequently and wants to bring their bike on the road without a roof rack or cargo van will find a folding e-bike changes what a trip looks like.',
+          'The trade-off is that folding bikes are typically heavier than a similarly sized rigid bike, because the hinge mechanism adds material and requires a beefier frame to stay rigid under load. If storage and transport are not constraints for you, a rigid e-bike will usually give you more range and performance per dollar.',
+        ],
+      },
+      {
+        h2: 'What to look for in a folding e-bike',
+        body: [
+          'Folded weight and folded dimensions are the two numbers that determine whether a folder actually solves your problem. A bike that folds to 40 x 27 x 28 inches fits in a standard car trunk; one that only folds to 60 x 27 x 40 inches often does not. Check the folded dimensions, not just the claim that the bike "folds." Similarly, weight matters more in a folder: lugging a 70 lb folding bike up stairs or onto a train defeats the purpose.',
+          'The hinge quality is the most important build attribute to evaluate. A solid hinge keeps the bike stiff and silent when riding; a flimsy one introduces flex and creak that makes the bike feel unsafe. Look for thick aluminum frames with a secure latch mechanism -- a hinge that requires two hands to close but stays closed confidently under load is preferable to one that opens with one tap but rattles when you pedal.',
+          'Wheel size determines how the bike handles on the road. Folding bikes most commonly use 20-inch wheels, which give a smaller folded footprint but produce a slightly more nervous ride at high speed compared to a 26-inch wheel. Fat 20-inch tires (4 inches wide) compensate with more stability and traction, at the cost of a heavier, wider package. For multi-modal commuting in the city, 20-inch standard or fat-tire wheels are the most practical choice.',
+          'For motor power, 500W to 750W is the sweet spot for US riders who want throttle-up capability and can handle moderate hills. A 250W motor is enough for flat city riding with pedal assist, but feels sluggish if you ever face a 5 to 8 percent grade. Look for at least 500W nominal if you have any hills on your route.',
+        ],
+      },
+      {
+        h2: 'How far can a folding e-bike go?',
+        body: [
+          'Folding e-bikes typically carry smaller batteries than full-size models because the frame has less room. Most use 10 to 15 Ah packs, which deliver 20 to 40 miles of realistic range. Fat-tire folding bikes with 13 to 17.5 Ah batteries can reach 30 to 50 miles. We list practical range on every bike page, which is typically 30 to 50 percent lower than the manufacturer claim, because manufacturers test at low assist on flat ground.',
+          'For most use cases -- apartment to office or train station, last-mile transit, RV campsite exploration -- this range is plenty. Where it can fall short is long rides or loaded commutes on hills. If you need 30-plus miles every day on hilly terrain, a full-size e-bike with a 17 to 25 Ah battery will serve you better. If you are covering 8 to 15 miles per trip with the option to charge at each end, a folding e-bike hits the sweet spot.',
+        ],
+      },
+    ],
     faqs: [
-      { q: 'Are folding e-bikes worth it?', a: 'If storage or transport is a constraint, yes. Modern folders ride surprisingly well and store in a closet or car trunk. Expect slightly heavier frames for the folding mechanism.' },
+      { q: 'Are folding e-bikes worth it?', a: 'Yes, if storage or portability is a real constraint. For apartment dwellers, multi-modal commuters (bike plus train), RV owners and frequent travelers, a folding e-bike opens up options a regular e-bike cannot. If you have a dedicated place to store a bike and do not need to carry it, a regular e-bike usually offers more range and performance per dollar.' },
+      { q: `What is the best folding e-bike in ${YEAR}?`, a: `Our top-ranked folding e-bikes in ${YEAR} balance a secure, stiff hinge mechanism with a capable motor (500W or more), a practical battery (at least 30 miles of realistic range) and a folded size that actually fits in a car trunk or under a train seat. See the ranked list above for our current picks.` },
+      { q: 'How small do folding e-bikes get when folded?', a: 'Most 20-inch folding e-bikes fold to roughly 35 to 45 inches long, 20 to 27 inches wide and 25 to 32 inches tall. Compact mini-folders with 14-inch wheels can fold smaller. The folded dimensions are listed on each bike page and matter more than the brand claim that the bike "folds compact."' },
+      { q: 'How much do folding e-bikes weigh?', a: 'Most folding e-bikes weigh between 45 and 75 lbs. The folding hinge and reinforced frame add weight compared to a similarly sized rigid bike. If you need to carry the bike up stairs regularly, look for models under 55 lbs and check whether the bike has a carrying handle built in.' },
+      { q: 'Can I take a folding e-bike on public transit?', a: 'Most transit agencies allow folding bikes on trains and buses, though rules vary. In general, folded bikes must fit in the luggage area or overhead rack and cannot block the aisle. Check your specific transit agency\'s policy before buying -- most published policies define "folding bike" by size rather than by the presence of an electric motor.' },
+      { q: 'Are folding e-bikes as fast as regular e-bikes?', a: 'Yes. Most folding e-bikes are Class 2 (throttle-assisted to 20 mph) or Class 3 (pedal-assisted to 28 mph), the same classes as full-size e-bikes. The top speed comes from the motor and bike class, not the frame style. Fat-tire models with a 750W motor will keep up with any Class 3 rider on flat ground.' },
+      { q: 'Can a folding e-bike handle hills?', a: 'Yes, provided the motor is powerful enough. A 500W to 750W motor with 70 to 90 Nm of torque will handle 5 to 10 percent grades comfortably. Under-powered 250W motors struggle on steeper hills, especially when the rider is heavier. Check the torque spec and the practical range -- steep terrain will cut your real-world range by 20 to 35 percent.' },
     ],
   },
   {

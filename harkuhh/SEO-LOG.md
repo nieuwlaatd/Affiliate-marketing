@@ -212,3 +212,59 @@ Engwe EP-2 Pro, DYU D3F) so /best/folding-ebikes becomes a real page. (2) P1.1 -
 deepen DUOTTS C29-K detail page (pos 14.8, closest to page 1 in catalog). (3) Watch
 Walfisk WF26 at pos 8.1 (already page 1!) -- strengthen the detail page to push
 CTR up from 9%.
+
+---
+
+## 2026-06-28 -- Folding e-bikes content expansion + ENGWE data discovery
+
+**GSC snapshot (28d, ending ~2026-06-25):** 3 clicks, 546 impressions, CTR 0.5%.
+No change from previous window (expected lag). Key page signals:
+- `/best/folding-ebikes`: pos 18.8, 4 impressions, 0 clicks -- NEAR page 1, thin content.
+- `/e-bikes/engwe/engwe-p275-se`: pos 21.2, 19 impressions, 5.3% CTR, 1 click.
+- `/e-bikes/samebike/samebike-rs-a01-men`: pos 8.2, 5 impr, 20% CTR, 1 click (page 1).
+- `/e-bikes/duotts/duotts-duotts-c29-k`: pos 15.8, 4 impr, 0 clicks.
+- `/blog/best-ebikes-for-heavy-riders`: 120 impr, pos 46.7, 0.8% CTR.
+No queries in strict striking distance (pos 5-20) yet.
+
+**Key discovery -- Engwe folding bikes ARE in catalog:**
+Previous run's "P2.6: 0 bikes match folding filter" was wrong. The
+`/best/folding-ebikes` filter checks `!!b.dimensions?.foldedSize`, NOT
+`frame_type` or `suitable_for`. Querying Supabase revealed 11 Engwe bikes with
+`dimensions.foldedSize` set (e.g. EP-2 Pro: "99*55*76 cm", Engine Pro 2.0:
+"104*55*84 cm", etc.). The page was already showing bikes; it was just thin on
+content, explaining why it ranks at pos 18.8 with near-zero engagement.
+
+**Second discovery -- ENGWE Supabase data uses Dutch field values:**
+All ~40+ ENGWE bikes in Supabase have Dutch `suitable_for` values (`woon-werk`,
+`recreatief`, `transport`, `off-road`, `sportief`) and Dutch `frame_type` values
+(`laag-instap`, `sportief`). This means Engwe bikes are invisible to the commuter,
+recreation, cargo and other English-filter category pages. They only appear on the
+folding page (dimension-based filter) and the direct detail pages. This is a major
+data gap -- fixing it (P0.6 in ROADMAP) would unlock Engwe across all category pages.
+
+**Action taken -- /best/folding-ebikes expanded:**
+Added 3-section buyer's guide (~900 words) + expanded from 1 FAQ to 7 FAQs.
+Sections cover: (1) who should buy a folding e-bike (apartments, multi-modal
+commuters, RV/van travelers); (2) what to look for (folded dimensions, hinge
+quality, wheel size, motor power); (3) how far can they go (range reality-check,
+practical vs manufacturer figures). FAQs target: "are folding e-bikes worth it",
+"best folding e-bike 2026", "how small do folding e-bikes get", "how heavy",
+"can I take on transit", "are they as fast", "can they handle hills".
+Also updated `lastUpdated` to 2026-06-28 for freshness signal.
+
+**ROADMAP updates:**
+- P2.6 updated: corrected the "0 bikes" misunderstanding; page has bikes, needed
+  content depth (now done).
+- P0.6 added: fix Dutch suitable_for/frame_type values across ENGWE Supabase rows
+  (high-leverage data cleanup that unlocks Engwe on all category pages).
+
+**Expected impact:** `/best/folding-ebikes` at pos 18.8 is the closest thing to a
+striking-distance page on the site. Adding substantive content increases on-page
+relevance for folding e-bike queries and signals to Google that the page answers
+the search intent, which should push it into the top 10.
+
+**Next candidates:** (1) P0.6 -- fix Dutch Supabase values for ENGWE bikes
+(translate suitable_for, frame_type) to unlock them on commuter/recreation/etc.
+pages. (2) P1.1 -- deepen the Engwe P275 SE detail page (pos 21.2, 19 impr) and
+DUOTTS C29-K (pos 15.8) to push them toward page 1. (3) P0.5 -- internal linking
+pass (still undone, high authority value).
