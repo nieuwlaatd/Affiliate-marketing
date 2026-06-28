@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState, useCallback } from 'react';
+import { trackQuizCompleted } from '@/lib/analytics';
 
 type TerrainId = 'city' | 'hills' | 'trails' | 'beach' | 'mixed';
 type PurposeId = 'commuting' | 'recreation' | 'sport' | 'cargo';
@@ -128,6 +129,14 @@ export default function HomeFunnel() {
     }
     if (frame && frame.id !== 'no-preference') p.set('frame', frame.id);
     if (bikeClass && bikeClass.id !== 'no-preference') p.set('class', bikeClass.id);
+    trackQuizCompleted({
+      terrain: terrain?.id,
+      purpose: purpose?.id,
+      budget: budget?.max,
+      distance: distance?.miles,
+      frame: frame?.id,
+      bike_class: bikeClass?.id,
+    });
     router.push(`/e-bikes/overzicht?${p.toString()}`);
   };
 

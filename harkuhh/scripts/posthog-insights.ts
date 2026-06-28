@@ -84,7 +84,7 @@ async function main() {
   }
   const since = `now() - INTERVAL ${days} DAY`;
 
-  const [totals, topPages, referrers, entry] = await Promise.all([
+  const [totals, topPages, referrers, entry, events, topAffiliate] = await Promise.all([
     hogql<{ views: number; visitors: number }>(
       `SELECT count() AS views, uniq(person_id) AS visitors FROM events WHERE event = '$pageview' AND timestamp > ${since}`
     ),
@@ -103,10 +103,21 @@ async function main() {
        FROM events WHERE event = '$pageview' AND timestamp > ${since}
        GROUP BY path ORDER BY sessions DESC LIMIT 15`
     ),
+    hogql<{ event: string; n: number }>(
+      `SELECT event, count() AS n FROM events
+       WHERE event IN ('affiliate_link_clicked', 'quiz_completed', 'bike_added_to_comparison')
+         AND timestamp > ${since}
+       GROUP BY event ORDER BY n DESC`
+    ),
+    hogql<{ brand: string; model: string; clicks: number }>(
+      `SELECT properties.brand AS brand, properties.model AS model, count() AS clicks
+       FROM events WHERE event = 'affiliate_link_clicked' AND timestamp > ${since}
+       GROUP BY brand, model ORDER BY clicks DESC LIMIT 15`
+    ),
   ]);
 
   if (asJson) {
-    console.log(JSON.stringify({ days, totals: totals.results[0], topPages: topPages.results, referrers: referrers.results, entry: entry.results }, null, 2));
+    console.log(JSON.stringify({ days, totals: totals.results[0], topPages: topPages.results, referrers: referrers.results, entry: entry.results, events: events.results, topAffiliate: topAffiliate.results }, null, 2));
     return;
   }
 
@@ -141,6 +152,26 @@ async function main() {
     ['Path', 'Sessions']
   ));
   console.log('');
+
+  console.log('=== CONVERSION EVENTS (the 3 key funnel actions) ===');
+  if (events.results.length === 0) {
+    console.log('No conversion events yet (affiliate_link_clicked, quiz_completed, bike_added_to_comparison).');
+  } else {
+    console.log(table(
+      events.results.map((r) => [String(r.event), String(r.n)]),
+      ['Event', 'Count']
+    ));
+  }
+  console.log('');
+
+  if (topAffiliate.results.length > 0) {
+    console.log('=== TOP BIKES BY AFFILIATE CLICKS (revenue intent) ===');
+    console.log(table(
+      topAffiliate.results.map((r) => [`${r.brand ?? ''} ${r.model ?? ''}`.trim().slice(0, 45), String(r.clicks)]),
+      ['Bike', 'Clicks']
+    ));
+    console.log('');
+  }
 }
 
 main().catch((err) => {

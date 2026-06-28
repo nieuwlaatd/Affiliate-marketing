@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useShortlist } from '@/lib/shortlist-context';
+import { trackBikeAddedToComparison } from '@/lib/analytics';
 import { EBike, FilterState } from '@/lib/types';
 
 interface BikeCardProps {
@@ -43,6 +44,7 @@ export default function BikeCard({ bike, compact = false, userHeight, activeFilt
         model: bike.model,
         image: bike.images?.[0]
       });
+      trackBikeAddedToComparison({ brand: bike.brand, model: bike.model, slug: bike.slug });
     }
   };
   

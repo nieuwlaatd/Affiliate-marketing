@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import BikeCard from '@/components/BikeCard';
 import FilterMatchBlock from '@/components/FilterMatchBlock';
+import AffiliateLink from '@/components/AffiliateLink';
 import { getAllBikes, getBikeBySlug, getSimilarBikes } from '@/lib/ebike-data';
 
 const motorLabels: Record<string, string> = { 'mid-drive': 'Mid-drive', 'front-hub': 'Front hub', 'rear-hub': 'Rear hub' };
@@ -224,12 +225,12 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
 
             {available ? (
               <div className="flex flex-col sm:flex-row gap-3 mt-8">
-                <a href={bike.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored" className="cta-primary px-6 py-3 font-bold rounded-lg text-center" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
+                <AffiliateLink href={bike.affiliateUrl} brand={bike.brand} model={bike.model} slug={bike.slug} price={bike.price} network={bike.affiliateNetwork} cta="check_price" className="cta-primary px-6 py-3 font-bold rounded-lg text-center" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
                   Check best price →
-                </a>
-                <a href={bike.testRideUrl} target="_blank" rel="noopener noreferrer sponsored" className="px-6 py-3 border-2 font-bold rounded-lg text-center transition-colors bg-[var(--card-bg)]" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
+                </AffiliateLink>
+                <AffiliateLink href={bike.testRideUrl ?? bike.affiliateUrl} brand={bike.brand} model={bike.model} slug={bike.slug} price={bike.price} network={bike.affiliateNetwork} cta="official_site" className="px-6 py-3 border-2 font-bold rounded-lg text-center transition-colors bg-[var(--card-bg)]" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
                   Visit official site
-                </a>
+                </AffiliateLink>
               </div>
             ) : (
               <div className="flex flex-col sm:flex-row gap-3 mt-8">
