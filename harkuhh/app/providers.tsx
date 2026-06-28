@@ -22,7 +22,8 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
       // Auto-captures pageviews on App Router client-side navigations.
       capture_pageview: "history_change",
       capture_pageleave: true,
-      defaults: "2025-05-24",
+      person_profiles: "identified_only",
+      defaults: "2026-05-30",
     });
   }, []);
 
