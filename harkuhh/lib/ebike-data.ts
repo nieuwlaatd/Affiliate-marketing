@@ -221,6 +221,7 @@ export function mapRowToEBike(row: Record<string, unknown>): EBike {
     cookieDays: row.cookie_days as number,
     brandCountry: row.brand_country as string,
     shipsToUs: (row.ships_to_us as boolean) ?? true,
+    available: (row.available as boolean) ?? true,
     warrantyYears: row.warranty_years as number,
     description: row.description as string,
     highlights: (row.highlights as string[]) || [],
@@ -266,7 +267,7 @@ export async function getBikeBySlug(slug: string): Promise<EBike | undefined> {
 export async function getSimilarBikes(bike: EBike, count: number = 3): Promise<EBike[]> {
   const allBikes = await getAllBikes();
   return allBikes
-    .filter((b) => b.id !== bike.id)
+    .filter((b) => b.id !== bike.id && b.available !== false)
     .map((b) => {
       let similarity = 0;
       if (b.brand === bike.brand) similarity += 2;

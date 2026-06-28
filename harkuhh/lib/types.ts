@@ -129,6 +129,10 @@ export interface EBike {
   cookieDays?: number;
   brandCountry?: string;
   shipsToUs?: boolean;
+  /** False when the vendor no longer sells this bike (DB column `available`).
+   *  Kept separate from is_active so the page stays publicly visible (RLS
+   *  filters is_active=true) while showing a "no longer available" notice. */
+  available?: boolean;
   warrantyYears?: number;
 
   description: string;

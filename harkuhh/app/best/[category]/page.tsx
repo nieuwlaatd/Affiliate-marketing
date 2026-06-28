@@ -267,6 +267,7 @@ export default async function BestCategoryPage({ params }: { params: Promise<{ c
 
   const allBikes = await getAllBikes();
   const bikes = allBikes
+    .filter((b) => b.available !== false)
     .filter(def.filter)
     .sort((a, b) => b.scoreOverall - a.scoreOverall)
     .slice(0, 12);

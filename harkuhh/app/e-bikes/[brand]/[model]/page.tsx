@@ -50,6 +50,10 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
   const bike = await getBikeBySlug(model);
   if (!bike) notFound();
 
+  // When the vendor stops selling a bike the weekly catalog sync sets
+  // is_active=false. We keep the page live (SEO history) but mark it unavailable.
+  const available = bike.available !== false;
+
   const similar = await getSimilarBikes(bike, 3);
 
   const brandSlug = bike.brand.toLowerCase().replace(/\s+/g, '-');
@@ -66,7 +70,7 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
       '@type': 'Offer',
       priceCurrency: 'USD',
       price: bike.price,
-      availability: 'https://schema.org/InStock',
+      availability: available ? 'https://schema.org/InStock' : 'https://schema.org/Discontinued',
       url: bike.affiliateUrl,
     },
     review: {
@@ -180,6 +184,15 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
 
           {/* Info */}
           <div>
+            {!available && (
+              <div className="mb-4 rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3">
+                <p className="text-sm font-bold text-amber-700 dark:text-amber-400">No longer available</p>
+                <p className="text-sm text-[var(--muted)] mt-1">
+                  {bike.brand} has discontinued the {bike.model}, so it can no longer be bought from the manufacturer.
+                  We keep this page for reference. See our similar picks below for current alternatives.
+                </p>
+              </div>
+            )}
             <p className="text-sm font-medium text-[var(--muted)] uppercase tracking-wide">{bike.brand}</p>
             <h1 className="text-3xl font-bold text-[var(--foreground)] mt-1">{bike.model}</h1>
             <p className="text-sm text-[var(--muted)] mt-1">Model year {bike.year}</p>
@@ -209,14 +222,25 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 mt-8">
-              <a href={bike.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored" className="cta-primary px-6 py-3 font-bold rounded-lg text-center" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
-                Check best price →
-              </a>
-              <a href={bike.testRideUrl} target="_blank" rel="noopener noreferrer sponsored" className="px-6 py-3 border-2 font-bold rounded-lg text-center transition-colors bg-[var(--card-bg)]" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
-                Visit official site
-              </a>
-            </div>
+            {available ? (
+              <div className="flex flex-col sm:flex-row gap-3 mt-8">
+                <a href={bike.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored" className="cta-primary px-6 py-3 font-bold rounded-lg text-center" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
+                  Check best price →
+                </a>
+                <a href={bike.testRideUrl} target="_blank" rel="noopener noreferrer sponsored" className="px-6 py-3 border-2 font-bold rounded-lg text-center transition-colors bg-[var(--card-bg)]" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
+                  Visit official site
+                </a>
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row gap-3 mt-8">
+                <span aria-disabled="true" className="px-6 py-3 font-bold rounded-lg text-center bg-[var(--surface)] text-[var(--muted)] border border-[var(--border)] cursor-not-allowed">
+                  No longer available
+                </span>
+                <Link href={`/e-bikes/overzicht?brand=${bike.brand}`} className="cta-primary px-6 py-3 font-bold rounded-lg text-center" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
+                  See available {bike.brand} e-bikes →
+                </Link>
+              </div>
+            )}
           </div>
         </div>
 
