@@ -1,3 +1,107 @@
+## 2026-06-30: weekly catalog sync
+
+### Summary
+
+| Brand    | Vendor bikes (kept) | DB rows | Prices applied | New inserted | Discontinued applied | Deferred (review) |
+|----------|--------------------:|--------:|---------------:|-------------:|---------------------:|------------------:|
+| ENGWE    | 25                  | 26      | 0              | 0            | 0                    | 12 price + 8 new + 9 disc |
+| Eunorau  | 24                  | 26      | 1              | 0            | 0                    | 2 price + 1 new + 3 disc |
+| Walfiske | 6                   | 3       | 1              | 0            | 0                    | 1 price + 3 new |
+| DUOTTS   | 17                  | 11      | 0              | 0            | 0                    | 6 new (Ship-to-UK / pre-owned) |
+| SAMEBIKE | 20                  | 22      | 0              | 0            | 0                    | 3 disc (false-positive matcher) |
+| DYU      | 10                  | 10      | 0              | 0            | 0                    | (clean - no real changes) |
+| VTUVIA   | 20                  | 11      | 0              | 0            | 0                    | 10 new (color variants of SX20/SF20H) |
+
+### Applied changes (2 total)
+
+- **Eunorau R1+** (`eunorau-r1-plus`): $4999.00 -> $4499.00 (-$500.00). Last week's run had it as "possibly discontinued"; vendor relisted and dropped price. Clean slug match.
+- **Walfiske WF26** (`walfisk-walfisk-26-fat-tire-bafang-750w-...`): $1199.00 -> $999.00 (-$200.00). Clean slug match, real vendor price drop.
+
+### ENGWE - all deferred (vendor generation update)
+
+Vendor catalog underwent a major model-line update. DB still holds older model versions while vendor sells new generations. Owner judgment needed before applying:
+
+- **L20**: DB has base "L20" at $1099; vendor lists "L20" at $1399 and "L20 2.0" at $699 and "L20 3.0" at $1399. Three SKUs share the L20 root. Don't overwrite DB price without picking which SKU the DB row should now represent.
+- **M20**: DB has base "M20" at $1099; vendor lists "M20" at $1399, "M20 2.0" at $1499, "M20 3.0" at $1499. Same issue.
+- **EP-2**: DB has "EP-2 Pro" and "EP-2 Boost"; vendor lists "EP-2 Pro" at $1399 and "EP-2 3.0" at $999 and a battery-pack accessory at $1599. Matcher noise.
+- **Engine Pro 2.0**: DB $1399; vendor "Engine Pro 2.0" at $1699. Could be a real $300 increase but want to verify before applying.
+- **LE20**: DB $1449; vendor $1699. Real increase candidate but Wartung last week's price uncertainty (price_usd was NULL).
+- **E26**: DB $1499; vendor $1699 ($200 increase candidate).
+- **T14**: DB $599; vendor $650 ($51 increase candidate).
+- **X20/X24/X26**: DB has them as one combined row; vendor now lists X20 ($1599), X24 ($1799), X26 ($1499) as separate products plus an "X26/24/X20" combined listing at $1599. Owner can split or keep combined.
+- **EASE 2 PRO**: DB $999; vendor lists "Ease 1" ($799), "Ease 2 Pro" ($999), "Ease 3" ($899). DB matches vendor exactly on Ease 2 Pro - no change needed.
+
+**New ENGWE candidates not in DB** (8 - need owner sign-off before insert):
+- Ease 1 ($799), Ease 3 ($899) - new entries in the Ease family
+- M20 2.0 ($1499) - new M20 generation
+- X20 ($1599), X26 ($1499) - listed separately from the X20/X24/X26 combined row
+- "M20 (Battery Pack)" ($1999) - accessory, skip
+- "EP-2 Pro (Battery Pack)" ($1599) - accessory, skip
+- "X26/24/X20" combined ($1599) - duplicates the existing combined row, skip
+
+**Likely discontinued** (still left active in DB to preserve SEO until owner reviews):
+- Engine X ($1299), L20 Boost ($1149), M1 ($1099), N1 Air ($1249), N1 Pro ($1599), P20 ($999), P275 Pro ($1099), P275 SE ($899), P275 ST ($1199). Confirmed absent across all ENGWE products.json pages. Detail pages will continue to show "available" until owner OKs marking `available = false`.
+
+### Eunorau
+
+**Applied** (1): R1+ price drop (see above).
+
+**Deferred** (2 price + 1 new + 3 disc):
+- **FLASH 2.0** (`eunorau-flash-2`): DB $2099 (set last week), vendor today $2499. Possible vendor revert of last week's drop, or last week's update was wrong. Owner to decide.
+- **R1**: DB $3749, vendor $3750 ($1 delta - rounding, skip).
+- **R1 Compact** (new): vendor lists at $3749. Possibly a renamed R1 or a new variant. Owner to confirm before insert.
+- **DEFENDER, Defender-S, META275** flagged "discontinued" by matcher: false positives. Vendor still has DEFENDER ($1599), META275 1.0 ($1399), META275 2.0 ($1699). My scraper filter dropped DEFENDER because the handle has no digit; not a real disappearance.
+
+### Walfiske
+
+**Applied** (1): WF26 price drop (see above).
+
+**Deferred** (1 price + 3 new):
+- **ET-7 Ultra** (`walfisk-...-et-7-...-bla`): DB $2299.99, vendor now lists at $2499.99 for the matched SKU. Vendor has 3 separate ET-7 listings ($2299.99 x2, $2499.99 x1) - the $2499.99 may be the new "black warrior" variant. Owner to decide whether the DB row tracks the lower-priced base SKU.
+- New vendor listings: 2 additional ET-7 SKUs + VIPERA 20" Retro at $1399.99. Could be new SKUs or duplicates of existing.
+
+### DUOTTS
+
+No applied changes.
+
+**Deferred** (6 new candidates, all rejectable):
+- "Certified Pre-Owned E-Bikes" ($999): placeholder collection product, skip.
+- "DUOTTS S26/F26/N26 Electric Bike Ship to UK" (3 listings): UK-market variants, do not list on US site.
+- "S26" ($1349), "F26" ($1399), "N26" ($1399): vendor added bare-slug duplicates alongside existing "duotts-s26", "duotts-f26", "duotts-n26" listings - same products, just second URL. Skip (would create duplicate DB rows).
+
+### SAMEBIKE
+
+No applied changes.
+
+**Deferred** (3 "discontinued" false positives):
+- 20LVXD30-II, LOTDM200-II, YINYU14 flagged "discontinued" by matcher: false positives. Vendor still has 20LVXD30-II ($699) and LOTDM200-II ($899). YINYU14 not found in vendor catalog this run but was present last week - leave active pending one more cycle confirmation.
+
+Matcher-swap noise (CY20 <-> CY20 Pro, RS-A01 MEN <-> RS-A01 Plus) was identified and skipped - DB values verified correct.
+
+### DYU
+
+No changes. All 10 DB rows match the vendor catalog 1:1 at identical prices. Three "discontinued" flags (A5, C9, T1) were matcher false positives due to 2-character model codes being too short for the token rule - they're all in the vendor catalog at the same prices as the DB.
+
+### VTUVIA
+
+No changes.
+
+**Deferred** (10 new candidates - mostly color/size variants):
+- SX20 Red, White, Blue, "Folding": all $1599 - same product as DB `vtuvia-sx20`, just different colors/configs. Skip (DB stores one row per model, not per color).
+- SF20H Red, Green, White, "Utility": all $1399 - same product as DB `vtuvia-sf20h`, color/variant duplicates. Skip.
+- CMB 10-Speed ($2149) and CMB 8-Speed ($1899): vendor now lists 8-speed and 10-speed as separate products. DB `vtuvia-cmb` at $1899 matches the 8-Speed. Owner to decide whether to add the 10-speed as a separate listing (still pending from last week's log).
+
+### Notes
+
+- Two confident price drops applied via Supabase MCP (live immediately).
+- Scraper used a Python re-implementation of the Shopify products.json approach (the project's `scripts/scrape-us-ebikes.ts` BRANDS array only covers 3 of the 7 active brands; previous run used the same approach).
+- Matcher uses slug + normalized model-token overlap. Known false-positive patterns: 2-char model codes, generation suffixes (X vs X 2.0 vs X 3.0), color variants, accessory listings that share a model code, market-specific variants (Ship to UK).
+- Conservative posture: when in doubt, the rule is "leave the DB value and note the discrepancy" rather than write a wrong price. Today only the two cleanest signals were applied.
+- ENGWE remains the highest-priority owner task: the catalog has clearly rotated to new model generations, and the DB hasn't followed yet.
+- `affiliate-partners.xlsx` updated for all 7 active brands; Last Updated = 2026-06-30.
+
+---
+
 ## 2026-06-28: weekly catalog sync
 
 ### Summary
