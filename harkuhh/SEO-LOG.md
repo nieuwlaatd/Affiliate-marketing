@@ -430,3 +430,73 @@ showing "~255 mi"). Added as a P0 cleanup task to ROADMAP.
 best-of categories. (3) P0.5 -- systematic internal linking audit (blogs linking
 to bikes; best-of pages linking to related blogs). (4) P1.3 -- AggregateRating
 schema on detail pages to enable star ratings in SERPs.
+
+---
+
+## 2026-06-29 -- ENGWE km-to-miles fix (P0.7) + AggregateRating schema (P1.3)
+
+**GSC snapshot (28d, ending ~2026-06-26):** 3 clicks, 551 impressions (+5), CTR 0.5%.
+Slow but steady impression growth as earlier content changes index. Key page signals:
+- `/best/folding-ebikes`: pos 16.4, 5 impr, 0 clicks -- moved from 18.8 to 16.4 (content
+  expansion last run is working; striking distance, but 0 CTR suggests weak title/meta)
+- `/e-bikes/duotts/duotts-duotts-c29-k`: pos 16.4, 5 impr, 0 clicks -- striking distance,
+  zero CTR (meta not compelling enough to click)
+- `/e-bikes/engwe/engwe-p275-se`: pos 21.2, 19 impr, 5.3% CTR, 1 click
+- `/e-bikes/samebike/samebike-rs-a01-men`: pos 8.2, 5 impr, 20% CTR (page 1, best performer)
+- `/best/cargo-ebikes`: 179 impr, pos 72.5, 0 clicks -- highest demand, weakest rank
+
+**PostHog snapshot (28d):** 15 pageviews, 5 unique visitors, 1 source: search.yahoo.com.
+KEY SIGNAL: 2 affiliate clicks on ENGWE N1 Pro -- first confirmed revenue intent on the site.
+The N1 Pro detail page is converting at ~100% (1 session → 2 clicks), meaning the product
+page works when people arrive. Priority: get more people there (ranking) + fix data accuracy
+(the N1 Pro's range data needs to be correct for those buyers making a $1k+ decision).
+
+**Decision:** Fix the two highest-leverage issues this run:
+1. P0.7 -- ENGWE range km-as-miles (data accuracy; directly affects the N1 Pro's
+   sibling pages and the long-range best-of page)
+2. P1.3 -- AggregateRating schema (enables star ratings in SERPs across all 88 bike
+   pages; the DUOTTS C29-K and P275 SE at pos 16-21 are most likely to benefit first)
+
+**Action 1 -- P0.7: ENGWE range_practical km-as-miles fixed in Supabase (live immediately)**
+13 ENGWE bikes had range values stored in km, displayed as impossible "miles":
+  - LE20: 255 mi→158 mi practical (340→211 manufacturer)
+  - P275 Pro, P275 ST: 195→121 mi practical (260→162 manufacturer)
+  - L20 3.0 Pro: 120→75 mi, L20/E26: 105→65 mi
+  - L20 3.0 Boost: 101→63 mi, Engine Pro 3.0 Boost: 97→60 mi, L20 Boost: 94→58 mi
+  - EP-2 Pro/3.0 Boost/Boost: 90→56 mi
+  - Engine Pro 2.0: 82→51 mi
+Applied: `UPDATE ebikes SET range_practical = ROUND(range_practical / 1.609),
+range_manufacturer = ROUND(range_manufacturer / 1.609) WHERE brand = 'ENGWE'
+AND range_practical > 80`
+Note: the 75/100 group (N1 Pro, N1 Air, P275 SE, Engine X, P20) are left unchanged
+pending manual verification -- 75 miles is borderline for larger-battery models.
+The LE20 at 158 mi practical is still high (possible dual-battery), flagged for review.
+
+**Action 2 -- P1.3: AggregateRating schema on all 88 bike detail pages**
+Added `aggregateRating` block to the Product JSON-LD schema in
+`app/e-bikes/[brand]/[model]/page.tsx`:
+  - ratingValue = (scoreOverall / 2).toFixed(1)  [10-point → 5-star scale]
+  - bestRating: '5', worstRating: '1', reviewCount: 1
+  - Applied via spread operator on productSchema (only added when scoreOverall exists)
+  - Also unified reviewRating inside the Review node to use the same ratingValue
+  - Checked: no `undefined` values leak into JSON.stringify output
+Star ratings in SERPs appear for Product pages with AggregateRating when Google
+validates the schema. The C29-K (pos 16.4, 0 CTR) and P275 SE (pos 21.2, 5.3% CTR)
+are the most likely to get their first star-rating impressions.
+
+**Verified:** tsc --noEmit clean, zero type errors.
+
+**Expected impact:**
+- ENGWE data fix: detail pages for the 13 affected bikes now show accurate range figures,
+  preventing trust-breaking "~255 mi" claims. Long-range best-of page still includes most
+  of these bikes (EP-2 series at 56 mi still qualifies at the rangePractical >= 55 threshold).
+- AggregateRating: all 88 bike pages are now eligible for Google star-rating rich results.
+  At current positions (many at 15-25), star ratings can dramatically lift CTR without
+  needing a ranking jump -- the most cost-effective CTR lever available.
+
+**Next candidates:** (1) P2.4 -- add under-$2000 best-of category (clear demand cluster,
+  no page yet). (2) P0.5 -- systematic internal linking: blogs should link to bike
+  detail pages; best-of pages should link to related blog posts. (3) Verify the 75/100
+  ENGWE group (N1 Pro, N1 Air, P275 SE, Engine X, P20) -- are those miles or km?
+  (4) Investigate why `/best/cargo-ebikes` (179 impr, pos 72) is not climbing despite
+  content expansion -- may need more specific query targeting.

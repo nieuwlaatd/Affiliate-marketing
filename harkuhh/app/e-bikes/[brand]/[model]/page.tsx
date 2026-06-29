@@ -60,6 +60,8 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
   const brandSlug = bike.brand.toLowerCase().replace(/\s+/g, '-');
   const siteUrl = 'https://www.bestbikeforme.com';
 
+  const ratingValue = bike.scoreOverall ? (bike.scoreOverall / 2).toFixed(1) : null;
+
   const productSchema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -74,12 +76,21 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
       availability: available ? 'https://schema.org/InStock' : 'https://schema.org/Discontinued',
       url: bike.affiliateUrl,
     },
+    ...(ratingValue && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue,
+        bestRating: '5',
+        worstRating: '1',
+        reviewCount: 1,
+      },
+    }),
     review: {
       '@type': 'Review',
       author: { '@type': 'Organization', name: 'Best Bike For Me' },
-      reviewRating: bike.scoreOverall
-        ? { '@type': 'Rating', ratingValue: (bike.scoreOverall / 2).toFixed(1), bestRating: '5' }
-        : undefined,
+      ...(ratingValue && {
+        reviewRating: { '@type': 'Rating', ratingValue, bestRating: '5', worstRating: '1' },
+      }),
       reviewBody: bike.description,
     },
   };
