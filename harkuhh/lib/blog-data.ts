@@ -447,7 +447,7 @@ Yes. Expect to lose roughly 5-8% of range per 20 lbs over the baseline test weig
 
 Prioritize payload capacity and braking power above everything else. A bike that handles your weight safely and stops confidently is worth more than one with flashy specs that was not designed for heavier riders.
 
-Browse our [all e-bikes overview](/e-bikes/overzicht) and filter by weight capacity, or take the [Find My E-Bike quiz](/e-bikes/quiz) where we factor in your body weight to match you with capable bikes. You can also check our picks for [best e-bikes under $1,500](/best/ebikes-under-1500), several of which carry 330 lb payloads.
+Browse our [all e-bikes overview](/e-bikes/overzicht) and filter by weight capacity, or take the [Find My E-Bike quiz](/e-bikes/quiz) where we factor in your body weight to match you with capable bikes. You can also check our picks for [best e-bikes under $1,500](/best/ebikes-under-1500), several of which carry 330 lb payloads. For riders who want the widest contact patch and most stability, see our dedicated [best fat tire e-bikes](/best/fat-tire-ebikes) list. And if range anxiety is your main concern due to higher energy consumption at heavier body weights, our [best long-range e-bikes](/best/long-range-ebikes) roundup focuses on bikes with 50+ miles of real-world range.
 `,
   },
   {
@@ -562,7 +562,7 @@ Rear hub motors are better for hills than front hub motors. The weight shift on 
 
 For everyday hill riding, the [DUOTTS S26 AWD](/e-bikes/duotts/duotts-s26) delivers the best value -- dual motors, genuine climbing power, under $1,300. For serious hills or mountain terrain, the [Eunorau Defender-S](/e-bikes/eunorau/eunorau-defender-s-fat-hs) mid-drive is the strongest performer in our catalog.
 
-Browse [all e-bikes sorted by torque](/e-bikes/overzicht) to compare climbing power directly, or take the [Find My E-Bike quiz](/e-bikes/quiz) -- it factors in your terrain type and recommends bikes with the right motor for your routes.
+Browse [all e-bikes sorted by torque](/e-bikes/overzicht) to compare climbing power directly, or take the [Find My E-Bike quiz](/e-bikes/quiz) -- it factors in your terrain type and recommends bikes with the right motor for your routes. If you also want traction on loose surfaces, our [best fat tire e-bikes](/best/fat-tire-ebikes) list covers the models that combine high torque with 4-inch tires for confident climbing on gravel, dirt and packed snow.
 `,
   },
   {

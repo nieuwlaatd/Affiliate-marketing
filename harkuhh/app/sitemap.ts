@@ -15,6 +15,7 @@ const BEST_CATEGORIES = [
   'ebikes-for-seniors',
   'fat-tire-ebikes',
   'long-range-ebikes',
+  'ebikes-under-2000',
 ];
 
 const VS_MATCHUPS = [

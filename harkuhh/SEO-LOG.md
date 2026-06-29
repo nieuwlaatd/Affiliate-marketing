@@ -500,3 +500,83 @@ are the most likely to get their first star-rating impressions.
   ENGWE group (N1 Pro, N1 Air, P275 SE, Engine X, P20) -- are those miles or km?
   (4) Investigate why `/best/cargo-ebikes` (179 impr, pos 72) is not climbing despite
   content expansion -- may need more specific query targeting.
+
+---
+
+## 2026-06-29 -- Under-$2000 best-of page (P2.4) + internal linking pass (P0.5)
+
+**GSC snapshot (28d, ending ~2026-06-26):** 3 clicks, 551 impressions, CTR 0.5%.
+Totals unchanged (same data as last run -- no new window yet). Page-level signals:
+- `/best/folding-ebikes`: pos 16.4, 5 impr, 0 clicks -- striking distance, 0 CTR (title issue)
+- `/e-bikes/duotts/duotts-duotts-c29-k`: pos 16.4, 5 impr, 0 clicks -- striking distance, 0 CTR
+- `/e-bikes/engwe/engwe-p275-se`: pos 21.2, 19 impr, 5.3% CTR, 1 click
+- `/e-bikes/samebike/samebike-rs-a01-men`: pos 8.2, 20% CTR, 1 click (page 1)
+- `/best/cargo-ebikes`: 179 impr, pos 72.5, 0 clicks -- top demand, deep rank
+- `/e-bikes/duotts/duotts-duotts-c29lite-electric-bik`: pos 21.8, 11 impr, 9.1% CTR, 1 click
+
+**PostHog snapshot (28d):** 16 pageviews, 6 visitors. ENGWE N1 Pro: 2 affiliate
+clicks again (second consecutive window). DUOTTS S26: 2 sessions. Traffic is 81%
+direct -- organic is coming but slowly. No new conversion events yet.
+
+**Decision:** Focus on two items that address both roadmap and data signals:
+1. P2.4 -- add `/best/ebikes-under-2000` (missing ranking surface, clear demand)
+2. P0.5 -- internal linking pass (best-of pages should link to blog posts + vice versa)
+
+**Action 1 -- P2.4: `/best/ebikes-under-2000` (new page, live)**
+New entry in the CATEGORIES array in `app/best/[category]/page.tsx`.
+Filter: `b.price <= 2000` (all bikes up to $2,000 including the under-$1,000 range).
+Content:
+- 3 buyer's guide sections (~850 words total):
+  (1) What the $1,000 to $2,000 range actually gets you (hydraulic brakes, 14-20Ah
+      batteries, refined motor controllers, better build finishing)
+  (2) Where the extra money goes: motors, brakes and build quality (hydraulic vs
+      mechanical disc brakes explained; mid-range motor advantages)
+  (3) How to choose by use case: commuter, cargo, fat tire or sport (payload,
+      weight, tire type guidance at this price point)
+- 7 FAQs targeting: "is $2,000 enough for a good e-bike", "best e-bike under
+  $2,000 2026", "difference between $1,000 and $2,000 e-bike", "is $1,500 better
+  than $1,000", "spend $1,500 or save for $2,500", "do more expensive e-bikes
+  have better range", "are mid-range e-bikes worth it"
+- lastUpdated: 2026-06-29. Added to sitemap.ts.
+- relatedPosts linking to "How to Choose an Electric Bike" and "Best E-Bikes for
+  Commuting 2026" guide posts.
+
+**Action 2 -- P0.5: Internal linking pass (partial)**
+Two-way linking now wired between best-of pages and blog posts:
+
+(a) Added `relatedPosts` field to `CategoryDef` interface and a "Related reading"
+    card grid section rendered between the buyer's guide and FAQ on every best-of page.
+    Populated for 7 categories:
+    - commuter-ebikes -> "Best E-Bikes for Commuting 2026", "E-Bike Classes Explained",
+      "Best E-Bikes for Hills"
+    - folding-ebikes -> "How to Choose an Electric Bike", "Best E-Bikes for Commuting 2026"
+    - cargo-ebikes -> "Best E-Bikes for Heavy Riders", "Are E-Bikes Worth It?"
+    - fat-tire-ebikes -> "Best E-Bikes for Heavy Riders", "Best E-Bikes for Hills"
+    - long-range-ebikes -> "E-Bike Battery and Range Guide", "Best E-Bikes for Hills"
+    - ebikes-under-1000 -> "How to Choose an Electric Bike", "Are E-Bikes Worth It?"
+    - ebikes-under-2000 -> "How to Choose an Electric Bike", "Best E-Bikes for Commuting 2026"
+
+(b) Updated `best-ebikes-for-heavy-riders` blog recommendation section to link
+    forward to `/best/fat-tire-ebikes` and `/best/long-range-ebikes`.
+(c) Updated `best-ebikes-for-hills` blog recommendation section to link forward
+    to `/best/fat-tire-ebikes`.
+
+**Verified:** tsc --noEmit clean, zero type errors.
+
+**Expected impact:**
+- `/best/ebikes-under-2000` targets "best e-bikes under $2,000", "best electric
+  bike under $2000 2026" and the many mid-range budget queries that are distinct
+  from the under-$1,000 cluster. It adds a new ranking surface to the site that
+  will catch traffic the under-$1k and under-$1.5k pages can't.
+- Internal linking: authority now flows in both directions between the blog and
+  best-of cluster. The heavy-riders blog (123 impr / run) now feeds link equity
+  to the fat-tire and long-range pages. The commuter, fat-tire and long-range
+  best-of pages now surface related blog content, increasing time-on-site and
+  crawl depth for Googlebot.
+
+**Next candidates:** (1) P2.4 remaining -- add step-through and off-road/SUV
+  best-of pages. (2) P1.2 -- comparison tables on best-of pages (sortable spec
+  table above card grid). (3) Investigate cargo-ebikes rank stagnation at pos 72
+  despite content -- may need to check for indexation issues or add more specific
+  query targeting. (4) Folding-ebikes title/meta optimization (pos 16.4, 0 CTR --
+  the current title may not be compelling enough versus what searchers expect).

@@ -18,6 +18,8 @@ interface CategoryDef {
   sections?: { h2: string; body: string[] }[];
   /** ISO date of the last meaningful content update (freshness signal). */
   lastUpdated?: string;
+  /** Related blog posts shown at the bottom of the page for internal linking. */
+  relatedPosts?: { title: string; slug: string }[];
 }
 
 const YEAR = 2026;
@@ -32,6 +34,10 @@ const CATEGORIES: CategoryDef[] = [
       'You don\'t need to spend a fortune to get a capable electric bike. These are the best e-bikes under $1,000 right now, ranked by our value, range and build-quality scores. Every pick is judged on real-world range rather than optimistic manufacturer claims.',
     filter: (b) => b.price <= 1000,
     lastUpdated: '2026-06-27',
+    relatedPosts: [
+      { title: 'How to Choose an Electric Bike: The Complete Buyer\'s Guide', slug: 'how-to-choose-an-electric-bike' },
+      { title: 'Are E-Bikes Worth It?', slug: 'are-ebikes-worth-it' },
+    ],
     sections: [
       {
         h2: 'What can you really get for under $1,000?',
@@ -87,6 +93,11 @@ const CATEGORIES: CategoryDef[] = [
       'A great commuter e-bike is fast enough to keep up with traffic, comfortable over potholes and reliable rain or shine. These picks score highest for commuting use, with extra weight on range, comfort, real-world reliability and how easy the bike is to lock and maintain day-to-day.',
     filter: (b) => b.suitableFor.includes('commuting'),
     lastUpdated: '2026-06-27',
+    relatedPosts: [
+      { title: 'Best E-Bikes for Commuting in 2026', slug: 'best-ebikes-for-commuting-2026' },
+      { title: 'E-Bike Classes Explained: Class 1 vs. 2 vs. 3', slug: 'ebike-classes-explained' },
+      { title: 'Best E-Bikes for Hills', slug: 'best-ebikes-for-hills' },
+    ],
     sections: [
       {
         h2: 'What makes a great commuter e-bike',
@@ -130,6 +141,10 @@ const CATEGORIES: CategoryDef[] = [
       'A folding e-bike solves a problem no regular e-bike can: you can carry it into an office, stow it under a train seat, slide it into a car trunk or tuck it in a closet the size of a suitcase. These are the best folding electric bikes right now, ranked by portability, motor capability and real-world ride quality.',
     filter: (b) => !!b.dimensions?.foldedSize,
     lastUpdated: '2026-06-28',
+    relatedPosts: [
+      { title: 'How to Choose an Electric Bike: The Complete Buyer\'s Guide', slug: 'how-to-choose-an-electric-bike' },
+      { title: 'Best E-Bikes for Commuting in 2026', slug: 'best-ebikes-for-commuting-2026' },
+    ],
     sections: [
       {
         h2: 'Who should buy a folding e-bike',
@@ -181,6 +196,10 @@ const CATEGORIES: CategoryDef[] = [
       b.suitableFor.includes('cargo') ||
       ((b.maxWeight ?? 0) >= 350 && (b.torque ?? 0) >= 80),
     lastUpdated: '2026-06-27',
+    relatedPosts: [
+      { title: 'Best E-Bikes for Heavy Riders', slug: 'best-ebikes-for-heavy-riders' },
+      { title: 'Are E-Bikes Worth It?', slug: 'are-ebikes-worth-it' },
+    ],
     sections: [
       {
         h2: 'What makes a good cargo e-bike',
@@ -253,6 +272,10 @@ const CATEGORIES: CategoryDef[] = [
       b.description.toLowerCase().includes('fat') ||
       b.highlights.some((h) => h.toLowerCase().includes('fat')),
     lastUpdated: '2026-06-28',
+    relatedPosts: [
+      { title: 'Best E-Bikes for Heavy Riders', slug: 'best-ebikes-for-heavy-riders' },
+      { title: 'Best E-Bikes for Hills', slug: 'best-ebikes-for-hills' },
+    ],
     sections: [
       {
         h2: 'What is a fat tire e-bike and who should buy one',
@@ -298,6 +321,10 @@ const CATEGORIES: CategoryDef[] = [
       'Most e-bikes claim 40 to 80 miles of range but deliver 25 to 45 miles in real-world conditions. These long-range picks genuinely go further, with large batteries, efficient motors and practical ranges we verify against real-world use data. Ranked by overall score with extra weight on real-world range.',
     filter: (b) => b.rangePractical >= 55,
     lastUpdated: '2026-06-28',
+    relatedPosts: [
+      { title: 'E-Bike Battery and Range Guide', slug: 'ebike-battery-range-guide' },
+      { title: 'Best E-Bikes for Hills', slug: 'best-ebikes-for-hills' },
+    ],
     sections: [
       {
         h2: 'What "long range" actually means for an e-bike',
@@ -332,6 +359,55 @@ const CATEGORIES: CategoryDef[] = [
       { q: 'Can I add a second battery to extend range?', a: 'Some long-range e-bikes support a second battery that doubles or nearly doubles range. This is more common in premium and cargo-oriented models. Check whether the frame has a mount point and whether the controller supports dual-battery input before buying. A purpose-designed dual-battery system is safer and more effective than aftermarket adapters.' },
       { q: 'How long does it take to charge a long-range e-bike battery?', a: 'A 48V 20Ah (960 Wh) battery takes 5 to 8 hours to charge from near-empty with a standard 2A to 3A charger. Fast chargers (5A to 6A) cut this to 3 to 4 hours. Most e-bikes ship with a standard charger; upgrading to a faster charger is usually possible and worthwhile if you want to top up mid-day.' },
       { q: 'Are long-range e-bikes worth the extra cost?', a: `For commuters with routes under 15 miles each way, a standard e-bike is usually sufficient and the extra battery cost is not justified. For commutes of 20 miles or more each way, rural riders without mid-day charging access, or heavy riders who experience above-average consumption, the range premium pays off in peace-of-mind and charging flexibility. The sweet spot for most buyers is a 50 to 65 mile practical range bike in the $1,200 to $1,800 range.` },
+    ],
+  },
+  {
+    slug: 'ebikes-under-2000',
+    title: `Best E-Bikes Under $2,000 (${YEAR})`,
+    h1: `Best E-Bikes Under $2,000 in ${YEAR}`,
+    metaDescription: `The best electric bikes under $2,000 in ${YEAR}: mid-range picks with better motors, longer range and stronger components than budget bikes. Ranked by value and real-world performance.`,
+    intro:
+      'The $1,000 to $2,000 price band is where e-bikes go from capable to genuinely excellent. Better motors, longer real-world range, hydraulic brakes and refined ride quality all start appearing in this range. These are the best e-bikes under $2,000, ranked by our overall score with real-world range figures — not manufacturer claims.',
+    filter: (b) => b.price <= 2000,
+    lastUpdated: '2026-06-29',
+    relatedPosts: [
+      { title: 'How to Choose an Electric Bike: The Complete Buyer\'s Guide', slug: 'how-to-choose-an-electric-bike' },
+      { title: 'Best E-Bikes for Commuting in 2026', slug: 'best-ebikes-for-commuting-2026' },
+    ],
+    sections: [
+      {
+        h2: 'What the $1,000 to $2,000 range actually gets you',
+        body: [
+          'Budget e-bikes under $1,000 are genuinely useful, but they make visible trade-offs: basic mechanical disc brakes, smaller batteries, heavier frames and limited warranty support. At $1,000 to $2,000 most of those trade-offs disappear. You get hydraulic disc brakes with better wet-weather modulation, batteries in the 14 to 20 Ah range that deliver 40 to 60 miles of real-world range, frames made from butted aluminum that shed weight without sacrificing strength, and customer support that actually answers the phone.',
+          'The sweet spot in this bracket is roughly $1,200 to $1,600. Below $1,200, you are getting the upper end of what budget brands offer. Above $1,600, you start paying for brand reputation and cosmetic polish more than raw capability. The bikes that score highest in our testing at this price range tend to have 750W motors producing 70 to 90 Nm of torque, 17 to 20 Ah batteries and integrated lighting that is actually useful rather than decorative.',
+          'One thing that genuinely improves in this range: real-world range figures match the bike\'s potential more closely. Budget bikes often need aggressive assist management to hit even 70% of their claimed range. Mid-range bikes with well-tuned motor controllers and larger batteries routinely deliver 80 to 90% of the claimed figure under typical riding conditions.',
+        ],
+      },
+      {
+        h2: 'Where the extra money goes: motors, brakes and build quality',
+        body: [
+          'The motor is the biggest upgrade between a $800 bike and a $1,400 bike. Entry-level motors run at a fixed efficiency curve and start to struggle on sustained hills or under heavier riders. Mid-range motors use better magnets, tighter winding tolerances and more sophisticated controllers that adjust power output in real time. The result is smoother power delivery, less heat buildup on climbs and more consistent performance across the battery\'s discharge curve.',
+          'Brakes are the most important safety component on any e-bike, and hydraulic disc brakes are where mid-range bikes pull sharply ahead. Hydraulic brakes require less hand force to generate strong stopping power, maintain consistent feel as they heat up and are self-adjusting as pads wear. For riders who commute in wet weather or ride any hills, the upgrade from mechanical to hydraulic brakes is meaningful.',
+          'Build quality at $1,200 to $2,000 also shows in details that do not show up on a spec sheet: smoother cable routing, tighter tolerances at the headset and bottom bracket, display units that are readable in sunlight, and charging ports that seat properly. These details separate bikes that feel good to own from ones that feel assembled to a price.',
+        ],
+      },
+      {
+        h2: 'How to choose: commuter, cargo, fat tire or sport',
+        body: [
+          'Under $2,000 you have genuine choices across every riding style. Commuters who cover 10 to 20 miles each way should prioritize range and weight over everything else. Look for bikes in the 48 to 55 lb range with 16 to 20 Ah batteries and rack mounting points for a panniers or top bag.',
+          'Heavier riders (over 200 lbs) will find the best payload-to-price ratio at this price point: several bikes under $2,000 carry 330 to 400 lbs, compared to the 265 lb limit common on budget bikes. If payload is a priority, check our dedicated picks for bikes with verified 330 lb plus ratings.',
+          'Fat tire bikes under $2,000 hit a very good sweet spot: 750W motors, 4-inch tires and either dual-motor or high-torque single-motor setups that handle off-road, snow and sand without the premium price of a full-suspension trail bike. If your riding mixes streets with gravel, beach access or packed dirt trails, a fat tire e-bike in this range outperforms almost anything in the under $1,000 bracket.',
+        ],
+      },
+    ],
+    faqs: [
+      { q: 'Is $2,000 enough for a good e-bike?', a: 'Yes. At $2,000 you get a genuinely excellent e-bike with hydraulic disc brakes, a 40 to 60 mile real-world range, a 750W or stronger motor and a well-built frame. Most riders find no meaningful reason to spend more unless they need a specific premium brand, dual suspension or specialty features.' },
+      { q: `What is the best e-bike under $2,000 in ${YEAR}?`, a: `Our top-ranked e-bike under $2,000 in ${YEAR} balances motor power, real-world range, braking performance and build quality at the best price. The ranked list above is sorted by our overall score, so the bike at the top is our current best pick. Use the quiz to get a personalized recommendation based on your riding style.` },
+      { q: 'What is the difference between a $1,000 and a $2,000 e-bike?', a: 'At $1,000 you typically get mechanical disc brakes, a 10 to 13 Ah battery, a 500 to 750W motor with basic torque output, and a heavier frame. At $2,000 you get hydraulic disc brakes, a 14 to 20 Ah battery (40 to 60+ miles real-world range), a more refined motor controller, a lighter frame and usually a stronger warranty. The ride quality difference is noticeable from the first hill.' },
+      { q: 'Is a $1,500 e-bike significantly better than a $1,000 one?', a: 'Usually yes, in specific areas. The biggest jump is brakes: $1,000 bikes typically use mechanical disc brakes, $1,500 bikes are more likely to have hydraulic. Battery size also jumps: a $1,500 bike often carries a 15 to 17 Ah pack versus 10 to 12 Ah at $1,000, which translates directly to 15 to 20 more miles of real-world range. Motor refinement is the subtler upgrade: smoother, more consistent power on hills and at the top of the assist range.' },
+      { q: 'Should I buy a $1,500 e-bike or save for a $2,500 one?', a: 'For most riders, the jump from $1,500 to $2,500 buys brand name recognition, cosmetics and incremental polish rather than a step-change in capability. The core specs -- motor power, range, braking -- plateau after roughly $1,800 to $2,000 in the DTC (direct-to-consumer) market. Spend more only if you need a specific brand for resale value, dealer support, or suspension that genuinely changes your off-road capability.' },
+      { q: 'Do more expensive e-bikes have better range?', a: 'Generally yes, but with diminishing returns. A $2,000 bike typically has a 16 to 20 Ah battery versus 10 to 12 Ah at $1,000, which translates to 15 to 25 more miles of practical range. Above $2,000, battery size and range do not improve dramatically -- the extra cost goes to components, suspension and brand overhead rather than more battery capacity.' },
+      { q: 'Are mid-range e-bikes worth it over budget models?', a: 'For most riders who use their bike more than twice a week, yes. The hydraulic brakes, longer range and better motor controller all make the riding experience noticeably better. If you ride occasionally on flat terrain and range is not a concern, a budget bike under $1,000 is perfectly adequate. But if you commute daily, ride in rain, tackle hills, or weigh over 200 lbs, the mid-range bracket delivers a meaningfully better bike.' },
     ],
   },
 ];
@@ -436,6 +512,25 @@ export default async function BestCategoryPage({ params }: { params: Promise<{ c
                 </div>
               </section>
             ))}
+          </div>
+        )}
+
+        {/* Related reading */}
+        {def.relatedPosts && def.relatedPosts.length > 0 && (
+          <div className="mt-16 max-w-3xl">
+            <h2 className="text-xl font-bold text-[var(--foreground)] mb-4">Related reading</h2>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {def.relatedPosts.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="group p-4 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] hover:shadow-md transition-shadow"
+                >
+                  <span className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--accent)' }}>Guide</span>
+                  <p className="mt-1 font-medium text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors leading-snug text-sm">{post.title}</p>
+                </Link>
+              ))}
+            </div>
           </div>
         )}
 
