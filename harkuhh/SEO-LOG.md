@@ -598,6 +598,76 @@ Two-way linking now wired between best-of pages and blog posts:
 
 ---
 
+## 2026-07-04 (run 2) -- ENGWE Dutch descriptions fix + AWD blog post
+
+**GSC snapshot (28d, ending 2026-07-01):** 3 clicks, 652 impressions, CTR 0.5%.
+Same window as prior run. Key page signals:
+- `/best/folding-ebikes`: pos 16.8, 6 impr, 0 clicks -- near page 1, zero CTR
+- `/e-bikes/engwe/engwe-p275-se`: pos 19.3, 23 impr, 4.3% CTR -- highest single-bike impressions
+- `/blog/best-ebikes-for-heavy-riders`: 139 impr, pos 47.1 -- top demand cluster
+- `/best/cargo-ebikes`: 151 impr, pos 74.3 -- stubbornly deep despite content
+- No queries in strict striking-distance (5-20) tool output
+
+**PostHog snapshot (28d):** 22 visitors, 61 views, 22 sessions. Avg session 31.6 min.
+64% bounce rate. Traffic sources: direct (15 visitors/26 views), Google (4 visitors/27 views
+= 6.75 pages/visitor, highly engaged organic audience). Top pages: homepage (7 visitors),
+DUOTTS S26 (5), /e-bikes/overzicht (4), ENGWE L20 (3), Eunorau Meta 275 ST-1 (3).
+Only 2 affiliate clicks in 28 days total.
+
+**Critical discovery: all 22 ENGWE bikes have Dutch descriptions in Supabase.**
+The ENGWE L20 (3 PostHog visitors), P275 SE (pos 19.3, 23 GSC impressions) and
+N1 Pro (recurring affiliate clicks) were all showing Dutch text ("De ENGWE L20 is een
+step-through fat tire e-bike met 140 km bereik...") to US visitors. This is a direct
+trust and conversion killer: buyers landing on these pages see foreign-language content.
+
+**Action 1 -- Fix all 22 ENGWE Dutch descriptions (Supabase, live immediately):**
+Translated descriptions to English for: E26, Engine Pro 2.0, Engine Pro 3.0 Boost,
+Engine X, EP-2 3.0 Boost, EP-2 Boost, EP-2 Pro, L20, L20 3.0 Boost, L20 3.0 Pro,
+L20 Boost, LE20, M1, M20, N1 Air, N1 Pro, P20, P275 Pro, P275 SE, P275 ST, T14,
+X20/X24/X26. Each description now uses US English, references range in miles (using
+the corrected range_practical values from P0.7), and highlights the key use case.
+Verified via SELECT that the descriptions updated correctly.
+
+**Action 2 -- New blog post: "AWD E-Bikes Explained: Do You Need All-Wheel Drive?"
+(slug: awd-ebikes-explained, publishedAt: 2026-07-04):**
+Targets "AWD e-bike", "dual motor e-bike", "all-wheel drive electric bike" queries.
+DUOTTS S26 is the top PostHog product page (5 visitors) and an AWD model -- this post
+feeds link equity directly to its detail page and to /best/off-road-ebikes.
+Content structure: how dual-motor AWD works, AWD vs single-motor trade-offs, when AWD
+is worth it (off-road, snow, heavy riders, steep hills), when to skip it, 3 AWD picks
+(DUOTTS S26 $1,349, Eunorau FAT-AWD 3.0 $1,699, FAT-AWD 2.0 $1,699), 5 FAQs.
+~1,300 words. relatedSlugs: best-ebikes-for-hills, best-ebikes-for-heavy-riders,
+best-ebikes-for-commuting-2026. Auto-included in sitemap via getAllSlugs().
+
+**Action 3 -- Off-road best-of page relatedPosts updated:**
+Replaced "How to Choose an Electric Bike" with the new "AWD E-Bikes Explained" post
+in the off-road page's relatedPosts. Creates two-way linking between /best/off-road-ebikes
+and the new AWD blog post.
+
+**Verified:** tsc --noEmit clean, zero type errors.
+
+**Expected impact:**
+- ENGWE descriptions: all 22 ENGWE detail pages now show English content to US visitors.
+  The L20 (getting PostHog traffic), P275 SE (pos 19.3, highest-impression bike page in
+  GSC) and N1 Pro (recurring affiliate clicks) are the most immediate beneficiaries.
+  Eliminating the Dutch text removes a major trust barrier and should improve time-on-page
+  and affiliate click rate.
+- AWD blog post: creates a new organic entry point for "AWD e-bike" and "dual motor
+  electric bike" queries. Links directly to DUOTTS S26 (top PostHog product page) and
+  the off-road best-of page, building link equity for the highest-visited product cluster.
+  The post also targets "is AWD worth it for hills" and heavy-rider overlap queries.
+- Two-way internal linking: /best/off-road-ebikes now links to the AWD post and vice versa.
+
+**Next candidates:** (1) P1.2 -- comparison tables on best-of pages (featured snippet
+opportunity; especially cargo and folding which have high impressions). (2) Investigate
+cargo-ebikes stagnation at pos 74 (151 impr, no movement for weeks -- may need query-
+specific targeting or a different content structure). (3) Check if other brands have
+Dutch or non-English descriptions in Supabase. (4) Fix ENGWE L20 3.0 Boost/Pro weight
+values (150.0 in DB -- clearly wrong; actual weight is likely 34-40 lbs). (5) State
+page expansion (P2.5) -- local intent queries, lower competition.
+
+---
+
 ## 2026-07-04 -- Off-road best-of page (P2.4) completing the best-of expansion
 
 **GSC snapshot (28d, ending 2026-07-01):** 3 clicks, 652 impressions (+101 from last window),

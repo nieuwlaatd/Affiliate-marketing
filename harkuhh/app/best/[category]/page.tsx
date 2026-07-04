@@ -422,9 +422,9 @@ const CATEGORIES: CategoryDef[] = [
     filter: (b) => b.suitableFor.includes('sport') || b.suitableFor.includes('off-road'),
     lastUpdated: '2026-07-04',
     relatedPosts: [
+      { title: 'AWD E-Bikes Explained: Do You Need All-Wheel Drive?', slug: 'awd-ebikes-explained' },
       { title: 'Best E-Bikes for Hills', slug: 'best-ebikes-for-hills' },
       { title: 'Best E-Bikes for Heavy Riders', slug: 'best-ebikes-for-heavy-riders' },
-      { title: 'How to Choose an Electric Bike: The Complete Buyer\'s Guide', slug: 'how-to-choose-an-electric-bike' },
     ],
     sections: [
       {
