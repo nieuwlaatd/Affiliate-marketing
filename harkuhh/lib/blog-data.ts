@@ -707,6 +707,93 @@ If you want the fewest legal restrictions and a natural ride feel: **Class 1 (20
 Not sure? The [Find My E-Bike quiz](/e-bikes/quiz) factors in your commute distance and riding style to recommend the right class. Or [compare all e-bikes](/e-bikes/overzicht) side by side and filter by class.
 `,
   },
+  {
+    slug: 'step-through-vs-step-over-ebike',
+    title: 'Step-Through vs. Step-Over E-Bikes: Which Frame Is Right for You?',
+    description: 'Step-through and step-over e-bikes look different but perform similarly. Here is how to pick the right frame for your riding style, body and daily routine.',
+    category: 'Guides',
+    publishedAt: '2026-06-30',
+    readingTime: 7,
+    coverAlt: 'A step-through e-bike leaning against a city building next to a step-over e-bike',
+    relatedSlugs: ['how-to-choose-an-electric-bike', 'best-ebikes-for-commuting-2026', 'ebike-classes-explained'],
+    content: `
+Choosing a frame style is one of the first decisions you make when buying an e-bike, and it is also one of the most misunderstood. Step-through frames are often labeled "women's bikes," and step-over frames are often called "men's bikes." Neither label is accurate or useful.
+
+The real question is simpler: **which frame makes it easier for you to get on and off the bike, in the conditions you actually ride?**
+
+Here is a clear breakdown of both options.
+
+## What is a step-through frame?
+
+A step-through frame has a low or absent top tube. Instead of a horizontal bar running from the head tube to the seat tube, there is a sweeping, downward curve that creates a large open space between the saddle and the handlebars.
+
+To mount, you step forward through that opening and swing onto the saddle. You do not have to lift your leg high or balance on one leg while you swing over a bar.
+
+Most step-through e-bikes have a standover height of 20 to 28 inches at the lowest point of the frame, which makes them accessible to riders with an inseam as short as 24 inches.
+
+## What is a step-over frame?
+
+A step-over frame has a top tube running more or less horizontally from the head tube to the seat tube, forming a triangle with the down tube and seat tube. To mount, you swing a leg up and over the rear of the bike.
+
+The top tube significantly stiffens the frame. A diamond frame is more torsionally rigid than a step-through for the same material and wall thickness, which is why racing bikes use this geometry. However, on a motorized e-bike traveling at 15 to 25 mph, that stiffness difference rarely affects comfort, performance or safety.
+
+## Who benefits most from a step-through
+
+**Frequent stoppers.** If you commute in a city with many traffic lights, the step-forward mount is faster and less awkward than swinging a leg over a bar at every stop. You sit on the saddle while the light changes, step off cleanly when you stop and step back on without a circus move.
+
+**Shorter riders.** A rider with a short inseam may have to balance on tiptoe on a step-over bike unless the saddle is lowered to an uncomfortable pedaling position. A step-through frame lets you set the saddle at a proper height for efficient pedaling while still reaching the ground with confidence at stops.
+
+**Older riders and anyone with hip, knee or lower-back limitations.** Swinging a leg over a high crossbar demands flexibility and balance. If either of those has decreased over time, a step-through frame removes the demand entirely.
+
+**Riders who wear restrictive clothing.** Commuting in dress pants, a skirt or a work dress? A step-through frame lets you mount without rearranging your outfit. This applies equally to men and women.
+
+**Riders returning from injury.** Post-surgery patients, riders recovering from hip replacement, and cyclists rebuilding after a knee procedure all benefit from a frame that demands less range of motion at the mount.
+
+## Who benefits most from a step-over
+
+**Off-road and trail riders.** A stiffer frame transfers pedaling power more efficiently and handles rough terrain more predictably. On technical trails, the step-over frame is the standard for good reason.
+
+**Aggressive cyclists.** If you sprint, hammer climbs or compete, the slight weight penalty and reduced rigidity of a step-through frame will eventually bother you. At pace, a diamond frame is simply more efficient.
+
+**Riders who never carry the bike.** If your bike lives in a garage and never needs to be hauled up stairs or squeezed through a narrow door, the mounting-ease advantage of a step-through is less important.
+
+## The performance gap is smaller than you think
+
+Skeptics of step-through frames often assume the missing top tube makes the bike unsafe or structurally weak. This is a myth at e-bike riding speeds.
+
+Modern step-through e-bikes compensate for the missing tube with thicker tubing, gusseted junctions at the head tube and seat tube, and different alloy grades. The result is a bike that flexes more than a diamond frame under extreme force, but remains completely stable under the forces a typical commuter or recreational rider applies.
+
+Payload ratings on step-through e-bikes are the same as their step-over counterparts from the same brand. The ENGWE L20 series, for example, carries 330 lbs on a step-through frame, the same as the company's step-over models.
+
+## Weight: the actual trade-off
+
+The one real trade-off of a step-through frame is weight. Because the frame needs more material at the joints to replace the structural contribution of the top tube, step-through bikes tend to weigh 0.5 to 2 lbs more than equivalent step-over bikes from the same brand.
+
+On a bike that already weighs 55 to 75 lbs with the motor and battery, this difference is usually irrelevant. If you are counting every ounce for a racing application, it matters. For everyday riding, it does not.
+
+## Top picks from the step-through catalog
+
+Our [best step-through e-bikes](/best/step-through-ebikes) page ranks the full catalog, but here are three strong options worth knowing about:
+
+**ENGWE L20 series (step-through):** A folding step-through with a 20-inch fat tire, 750W motor and a compact folded footprint. The step-through entry is genuinely useful here because you can mount in a parking structure or narrow hallway without swinging a leg around a box. Practical range runs 40 to 50 miles.
+
+**SAMEBIKE RS-A01 Pro:** A city-oriented step-through with upright geometry, full fenders and a rear rack included. The RS-A01 line has been one of our stronger performers in the GSC data, indicating real search interest. Range runs 35 to 45 miles in practice.
+
+**VTUVIA Zeal LT7 / XT8:** Clean urban step-through options with comfortable geometry. The Zeal XT8 adds slightly more battery capacity for longer commute coverage.
+
+## How to decide
+
+Ask yourself three questions:
+
+1. **Do you stop frequently?** If yes, favor step-through.
+2. **Do you have hip flexibility concerns, or wear clothes that restrict your leg swing?** If yes, favor step-through.
+3. **Do you ride off-road or aggressively?** If yes, favor step-over or a sport frame.
+
+If none of those filters apply clearly, try both frames at a dealer or rental shop before buying. The mounting difference is immediately obvious in person and often settles the decision on the spot.
+
+Not sure which specific bike to get? Take the [Find My E-Bike quiz](/e-bikes/quiz) to get a top-3 personalized to your commute distance, terrain and riding style in 60 seconds.
+`,
+  },
 ];
 
 export function getAllPosts(): BlogPost[] {

@@ -580,3 +580,79 @@ Two-way linking now wired between best-of pages and blog posts:
   despite content -- may need to check for indexation issues or add more specific
   query targeting. (4) Folding-ebikes title/meta optimization (pos 16.4, 0 CTR --
   the current title may not be compelling enough versus what searchers expect).
+
+---
+
+## 2026-06-30 -- Step-through best-of page + step-through blog post (P2.4, unlogged run)
+
+**Note:** This run completed but was not logged at the time. Reconstructed from code state.
+
+**Changes shipped:**
+- `/best/step-through-ebikes` (new page): 3-section buyer's guide covering who should choose
+  step-through, what to look for (frame rigidity, standover height, motor/range considerations,
+  fender/rack compatibility), and the real trade-offs vs step-over. 7 FAQs. relatedPosts linking
+  to the new `step-through-vs-step-over-ebike` blog post + commuter guide + buyer's guide.
+  lastUpdated 2026-06-30. Added to sitemap.
+- `/blog/step-through-vs-step-over-ebike` (new blog post): Head-to-head comparison of frame
+  styles, covering mounting ease, frame rigidity, weight, and use-case fit.
+
+---
+
+## 2026-07-04 -- Off-road best-of page (P2.4) completing the best-of expansion
+
+**GSC snapshot (28d, ending 2026-07-01):** 3 clicks, 652 impressions (+101 from last window),
+CTR 0.5%. Impressions are growing steadily as content from earlier runs indexes. Key signals:
+- `/blog/best-ebikes-for-heavy-riders`: 139 impr, pos 47.1 (1 click, "electric bike for heavy riders")
+  -- still the highest-demand non-homepage cluster outside of cargo
+- `/best/cargo-ebikes`: 151 impr, pos 74.3, 0 clicks -- highest demand, stubbornly deep rank
+- `/best/folding-ebikes`: pos 16.8, 0 clicks -- near page 1 but zero CTR (page 2 problem)
+- `/e-bikes/samebike/samebike-rs-a01-pro`: pos 18.3, 2 clicks, 50% CTR -- striking distance
+- `/e-bikes/samebike/samebike-rs-a01-men`: pos 8.8 (page 1, 1 click)
+- Striking-distance query tool output: empty (all ranking pages still on page 2+)
+
+**PostHog snapshot (28d):** 61 pageviews / 22 visitors (major jump from 15-16). 27 views from
+Google (dominant source, up from ~10 last window). Top product page: DUOTTS S26 (6 views,
+5 sessions) -- most-visited product page by far. ENGWE N1 Pro: 2 affiliate clicks (third
+consecutive window -- consistent revenue intent). Conversion: 2 affiliate clicks total.
+
+**Key cross-signal:** DUOTTS S26 is the most-visited product page in PostHog. It has
+`suitable_for: off-road + sport` and `torque: 110 Nm`. The new off-road best-of page will
+feature it prominently (high-torque AWD filter match), giving it an additional organic entry
+point beyond the direct product page.
+
+**Decision:** Complete P2.4 with the off-road/all-terrain best-of page. P2.4 is now fully done
+with this run (step-through was added 2026-06-30 in an unlogged run).
+
+**Action -- `/best/off-road-ebikes` (new page, live):**
+Filter: `b.suitableFor.includes('sport') || b.suitableFor.includes('off-road')`
+Covers 30+ bikes: ENGWE (N1 Pro, Engine Pro 3.0 Boost, L20 3.0 Pro, EP-2 series, X/M/E series),
+DUOTTS (S26 AWD, F26 Lite, E26, F20), Eunorau (Defender-S mid-drive 160 Nm, FAT-AWD), VTUVIA, DYU.
+Content:
+- 3 buyer's guide sections (~1,000 words):
+  (1) Who needs an off-road e-bike (gravel riders, rural routes, beach/sand, winter riding --
+      with honest "overkill if pure pavement" caveat)
+  (2) Specs that matter: torque (65 Nm light vs 90+ Nm demanding), tire width (3 vs 4 inch),
+      motor type (hub vs mid-drive for sustained climbs)
+  (3) AWD dual-motor vs single-motor (when the upgrade pays off, real trade-offs on weight/range)
+- 7 FAQs targeting: "best off-road e-bike", "can e-bikes go off-road", "how much torque for
+  off-road", "are fat tire e-bikes good for trails", "AWD vs single drive", "how heavy",
+  "can off-road e-bikes handle hills"
+- relatedPosts linking to best-ebikes-for-hills, best-ebikes-for-heavy-riders, buyer's guide
+- lastUpdated 2026-07-04. Added to sitemap.
+
+**Verified:** tsc --noEmit clean, zero type errors.
+
+**Expected impact:**
+- `/best/off-road-ebikes` creates a new ranking surface for "best off-road e-bike",
+  "all-terrain electric bike", "fat tire off-road ebike 2026" queries -- a distinct demand
+  cluster not addressed by any existing page. The AWD section specifically targets "AWD e-bike"
+  and "dual motor electric bike" queries that map to the DUOTTS S26 (PostHog's top product page).
+- ROADMAP P2.4 is now fully complete: fat-tire, long-range, under-$2000, step-through, off-road
+  all live with buyer's guides, FAQs and internal links.
+
+**Next candidates:** (1) P1.2 -- comparison tables on best-of pages (sortable spec table above
+  card grid -- featured snippet opportunity). (2) Investigate cargo-ebikes rank stagnation
+  (151 impr, pos 74.3 -- possibly competing with its own category filter on the listing page).
+  (3) New blog post targeting "AWD e-bike" or "dual motor e-bike" queries to feed link equity
+  to the new off-road page + DUOTTS S26 detail page. (4) State page expansion (P2.5) -- local
+  intent queries, lower competition.

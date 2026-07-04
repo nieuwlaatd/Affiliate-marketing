@@ -362,6 +362,108 @@ const CATEGORIES: CategoryDef[] = [
     ],
   },
   {
+    slug: 'step-through-ebikes',
+    title: `Best Step-Through E-Bikes (${YEAR}): Easy-Mount Picks for Every Rider`,
+    h1: `Best Step-Through E-Bikes in ${YEAR}`,
+    metaDescription: `The best step-through electric bikes in ${YEAR}: low-entry frames that are easy to mount and unmount for commuters, seniors and riders who want comfort over everything. Honest, data-driven picks.`,
+    intro:
+      'A step-through e-bike removes the top tube, letting you step forward onto the bike without swinging a leg over a high crossbar. The result is easier mounting and dismounting at red lights, less strain on hips and knees, and a more confident feel for riders returning to cycling or dealing with limited mobility. These picks are ranked by overall score with extra weight on comfort and everyday usability.',
+    filter: (b) => b.frameType === 'step-through',
+    lastUpdated: '2026-06-30',
+    relatedPosts: [
+      { title: 'Step-Through vs. Step-Over E-Bikes: Which Frame Is Right for You?', slug: 'step-through-vs-step-over-ebike' },
+      { title: 'Best E-Bikes for Commuting in 2026', slug: 'best-ebikes-for-commuting-2026' },
+      { title: 'How to Choose an Electric Bike: The Complete Buyer\'s Guide', slug: 'how-to-choose-an-electric-bike' },
+    ],
+    sections: [
+      {
+        h2: 'Who should choose a step-through e-bike',
+        body: [
+          'Step-through frames were originally designed for riders in skirts or dresses who could not swing a leg over a diamond frame. Today their appeal is much broader. Urban commuters who stop frequently at traffic lights find the step-forward mount faster and less awkward, especially in work clothes. Riders over 50 appreciate the lower hip demand, particularly if their flexibility has decreased over time. Cyclists returning from injury or surgery also benefit from not having to balance on one leg while mounting.',
+          'The low entry is also genuinely useful for shorter riders who would otherwise have to tiptoe on a step-over bike. A step-through frame allows the saddle to sit at a proper pedaling height without leaving the rider stranded at stops with no foot flat on the ground.',
+          'Where step-through frames are a poorer fit: aggressive off-road riding or situations where you need a very stiff, light frame. Removing the top tube does reduce torsional rigidity somewhat, though on a motorized bike traveling at e-bike speeds this rarely matters. For trail riding, sport riding or competitive use, a step-over or sport frame will outperform. For commuting, city riding, recreation and mixed-use, a step-through is nearly always the more comfortable and practical choice.',
+        ],
+      },
+      {
+        h2: 'What to look for in a step-through e-bike',
+        body: [
+          'Frame rigidity is the first thing to check. Some budget step-through frames flex noticeably when climbing or sprinting, which transmits vibration through the handlebars and bottom bracket. Look for frames made from butted aluminum alloy (not single-butted or Hi-Ten steel), and check community reviews for any comments about frame flex or creaking at the headset.',
+          'Standover height determines how easily you actually get on and off. The standover height is the vertical distance from the ground to the top of the lowest frame tube at the midpoint of the bike. Most step-through e-bikes have a standover of 20 to 28 inches, making them accessible to riders with an inseam as low as 24 inches. We list the standover height and recommended rider height range on each bike page.',
+          'Motor and range considerations are the same as any other e-bike. For city commuting, a 500W to 750W rear-hub motor with a 10 to 15 Ah battery covers 25 to 45 miles of practical range, enough for a 10 to 15 mile one-way commute with comfortable margin. If your route has significant hills, look for at least 70 Nm of torque -- step-through bikes are popular with riders who prioritize comfort, but hills do not know or care about your frame style.',
+          'Check for fender and rack compatibility. A commuter who buys a step-through e-bike for the daily ride to work almost always wants to add fenders for rain and a rear rack for a bag or panniers. Most step-through bikes include both, but some sport-oriented step-throughs omit them. Verify before buying if this matters to you.',
+        ],
+      },
+      {
+        h2: 'Step-through vs step-over e-bikes: the real trade-offs',
+        body: [
+          'The most important difference is mounting ease, not performance. Step-through bikes are easier to get on and off, especially for shorter riders, older riders or anyone in restrictive clothing. Step-over bikes (classic diamond frame) are marginally stiffer and lighter for the same material and tubing, but on a motorized e-bike traveling at 15 to 20 mph the difference is not noticeable in everyday riding.',
+          'Weight is slightly higher on step-through frames because the frame needs more material at the head tube and seat tube junction to compensate for the missing top tube. In practice this difference is 0.5 to 1.5 lbs, which is negligible when the whole bike weighs 50 to 70 lbs.',
+          'Style and perception also matter. Step-through bikes have a more traditional, approachable look that some riders prefer. Step-over bikes signal a sportier intent. Neither is objectively better -- pick the one that matches how you plan to ride and how the bike will fit into your daily life.',
+        ],
+      },
+    ],
+    faqs: [
+      { q: 'What is a step-through e-bike?', a: 'A step-through e-bike has a low or absent top tube, so you step forward onto the bike rather than swinging a leg over a high crossbar. This makes mounting and dismounting easier, especially at frequent stops, for riders with limited hip flexibility, or in clothing that restricts leg swing.' },
+      { q: 'Are step-through e-bikes less sturdy than step-over bikes?', a: 'No, not in practical use. Step-through frames are slightly less torsionally rigid than diamond frames, but on a motorized e-bike traveling at 15 to 20 mph this difference has no real-world impact on performance or safety. Step-through bikes from reputable brands are fully rated for the same payloads as their step-over counterparts.' },
+      { q: `What is the best step-through e-bike in ${YEAR}?`, a: `Our top-ranked step-through picks in ${YEAR} balance frame quality, motor power, real-world range and mounting ease. See the ranked list above for current top picks. Use our quiz for a personalized recommendation based on your height, route and budget.` },
+      { q: 'Are step-through e-bikes only for women?', a: 'No. Step-through frames were historically associated with women\'s bikes, but they are genuinely practical for any rider who values easier mounting and dismounting. Many male commuters, older riders and shorter riders choose step-through bikes for the comfort benefit, regardless of gender.' },
+      { q: 'What is the standover height on a step-through e-bike?', a: 'Most step-through e-bikes have a standover height of 20 to 28 inches at the lowest frame tube, making them accessible to riders with an inseam as low as 24 to 26 inches. The standover height is listed on each bike page, along with the minimum and maximum recommended rider height.' },
+      { q: 'Can I ride a step-through e-bike on hills?', a: 'Yes. The frame style has no effect on climbing ability -- that comes from the motor, battery and torque. For hilly commutes, look for at least 70 Nm of torque and a 500W or larger motor, regardless of frame style. Most step-through e-bikes use the same motors and batteries as their step-over counterparts.' },
+      { q: 'Are step-through e-bikes good for seniors?', a: 'Yes, especially for older riders who find it harder to swing a leg over a high top tube, or who have hip, knee or back limitations. The low-entry frame reduces the balance demand at stops and the mounting effort from a full stand. Pair a step-through frame with a Class 2 throttle and upright geometry for the most comfortable and confidence-inspiring senior setup.' },
+    ],
+  },
+  {
+    slug: 'off-road-ebikes',
+    title: `Best Off-Road E-Bikes (${YEAR}): All-Terrain Picks for Trails, Gravel & Sand`,
+    h1: `Best Off-Road E-Bikes in ${YEAR}`,
+    metaDescription: `The best off-road electric bikes of ${YEAR} for trails, gravel, sand and mixed terrain. Ranked by torque, traction and real-world toughness. Honest picks with actual range figures.`,
+    intro:
+      'Off-road e-bikes go where pavement ends: gravel fire roads, packed dirt trails, beach access paths, and the rough rural routes that destroy a standard commuter bike in one season. These picks are ranked by overall score with extra weight on motor torque, tire width and build durability — the three specs that actually determine whether a bike handles the terrain you throw at it.',
+    filter: (b) => b.suitableFor.includes('sport') || b.suitableFor.includes('off-road'),
+    lastUpdated: '2026-07-04',
+    relatedPosts: [
+      { title: 'Best E-Bikes for Hills', slug: 'best-ebikes-for-hills' },
+      { title: 'Best E-Bikes for Heavy Riders', slug: 'best-ebikes-for-heavy-riders' },
+      { title: 'How to Choose an Electric Bike: The Complete Buyer\'s Guide', slug: 'how-to-choose-an-electric-bike' },
+    ],
+    sections: [
+      {
+        h2: 'Who needs an off-road e-bike',
+        body: [
+          'Off-road e-bikes are the right choice when your riding consistently leaves paved surfaces. Riders who commute on gravel paths, access rural properties on unpaved roads, or explore trails at state and county parks need a bike built for that abuse. A standard commuter e-bike with 1.75-inch road tires at 50 PSI will struggle on loose gravel, bog down on soft dirt and transmit every rock and root straight through the handlebars.',
+          'Fat-tire off-road e-bikes solve this with 3 to 4-inch tires run at low pressure (6 to 15 PSI), which float over loose surfaces, absorb impacts passively and give a stable contact patch on camber and corners. Combined with a powerful motor (750W or more) and substantial torque (70 Nm minimum, 90 to 110 Nm for demanding terrain), an off-road e-bike handles the kind of riding that would leave a road bike stranded.',
+          'Beach riders benefit from the same tire properties: soft sand at 8 PSI works similarly to snow and loose dirt, requiring a motor powerful enough to maintain momentum. Riders who live in areas with harsh winters and use their bike year-round also land in this category, since the fat tire handles snow and ice far better than any narrow tire at reasonable PSI.',
+          'Where off-road e-bikes are overkill: pure paved commuting. The fat tires add 10 to 15 percent more rolling resistance on asphalt, and the heavier frames (typically 60 to 80 lbs) are harder to carry up stairs. If 90 percent of your riding is smooth pavement, a lighter commuter bike will be faster, easier to handle and more efficient. The off-road bikes here are for riders whose terrain genuinely demands it.',
+        ],
+      },
+      {
+        h2: 'The specs that matter: torque, tire width and motor type',
+        body: [
+          'Torque is the most important number on an off-road e-bike spec sheet. Torque (measured in newton-metres) determines whether the bike can pull itself and the rider up a 15 to 25 percent grade on loose gravel, through deep sand or over rooted trail. For light off-road use (gravel, packed dirt), 65 to 80 Nm is sufficient. For demanding terrain, steep climbs or heavy riders, look for 90 Nm or more. Dual-motor AWD bikes add the front motor\'s torque to the rear motor\'s, which can deliver 110 to 130 Nm of combined output and dramatically different capability on technical climbs.',
+          'Tire width determines grip and float. A 3-inch tire at 12 PSI is the entry point for real off-road capability; a 4-inch tire at 8 to 10 PSI is the standard for serious all-terrain use. The wider contact patch distributes weight over a larger area on soft surfaces, which is what prevents the tire from digging in and stalling. For dedicated beach or sand riding, 4 inches is the practical minimum; for gravel and mixed trail, 3 to 3.5 inches handles most conditions well.',
+          'Motor type matters for sustained climbs. Hub motors run at a fixed RPM regardless of grade, which means they work harder and generate more heat when climbing in a high gear. Mid-drive motors route power through the bike\'s gears, letting you drop to a lower gear on steep ascents and maintain motor efficiency. For riders who tackle long, sustained climbs, a mid-drive is the more capable and durable choice. For most off-road riders whose climbs are short and varied, a powerful 750W or 1,000W rear-hub motor with strong torque output handles the terrain without the added cost and drivetrain complexity of a mid-drive.',
+        ],
+      },
+      {
+        h2: 'AWD dual-motor vs single-motor: when does the upgrade pay off',
+        body: [
+          'Dual-motor AWD e-bikes put a motor in both the front and rear wheel. In theory, this doubles traction and provides independent wheel spin under hard acceleration. In practice, AWD e-bikes deliver a noticeably different experience in specific conditions: soft, slippery or steep terrain where a single rear wheel would spin and lose traction. If you ride wet grass, soft sand, steep loose dirt or snow where the rear wheel regularly slips, AWD changes what the bike can do.',
+          'On packed gravel and maintained trails, the single-motor bikes in this list perform almost identically to their AWD counterparts because a single rear-drive wheel has enough traction on a firm surface with a fat tire. The AWD upgrade makes a real difference in the 15 to 20 percent of conditions where traction is genuinely marginal.',
+          'The trade-offs are real: AWD bikes are heavier (the second motor adds 6 to 10 lbs), more expensive (typically $200 to $400 over the single-motor equivalent), and use more battery per mile because two motors are running. On a flat, firm trail, an AWD bike will have noticeably shorter range than an equivalent single-motor bike. For riders who regularly encounter the specific conditions where AWD shines, it is a meaningful upgrade. For everyone else, a single powerful rear-hub motor with a wide tire is the better bang for the money.',
+        ],
+      },
+    ],
+    faqs: [
+      { q: 'What is the best off-road e-bike?', a: `Our top-ranked off-road picks in ${YEAR} balance high torque (80 Nm or more), wide fat tires (3 to 4 inches) and a powerful 750W or stronger motor at the best price. See the ranked list above for current top picks, sorted by our overall score with extra weight on terrain performance.` },
+      { q: 'Can e-bikes go off-road?', a: 'Yes, provided the bike is designed for it. Fat-tire e-bikes with 3 to 4-inch tires, high torque motors (70 Nm or more) and a sturdy frame handle gravel, dirt trails, sand and packed snow confidently. A standard commuter e-bike with narrow tires is not suited to off-road riding and will struggle on anything other than smooth packed surfaces.' },
+      { q: 'How much torque do I need for off-road riding?', a: 'For light off-road use (gravel paths, packed dirt), 65 to 75 Nm is sufficient. For demanding terrain, steep grades or if you are over 200 lbs, look for 80 to 90 Nm or more. Dual-motor AWD bikes combine front and rear torque to deliver 110 Nm and above, which is the most capable option for genuinely technical terrain.' },
+      { q: 'Are fat tire e-bikes good for trails?', a: 'Yes, especially for natural surface trails, fire roads and gravel. The wide tires at low pressure absorb roots, rocks and rough surfaces that would stop a narrow tire. For technical mountain bike singletracks with tight switchbacks and drops, a full-suspension trail-specific e-MTB is the better tool. For most off-road riding the bikes on this page encounter, fat tires and a powerful hub motor are the practical, affordable solution.' },
+      { q: 'What is the difference between AWD and single-drive off-road e-bikes?', a: 'AWD bikes run motors in both wheels, delivering more traction on slippery, steep or loose surfaces where a single rear wheel would spin. Single-drive bikes with a strong rear-hub motor and fat tires match AWD performance on most firm off-road surfaces. AWD is worth the extra weight and cost if you regularly ride soft sand, steep loose dirt or wet grass. For most off-road users, a quality single-motor bike is the better value.' },
+      { q: 'How heavy are off-road e-bikes?', a: 'Most off-road fat-tire e-bikes weigh between 60 and 80 lbs. The heavier frame, large battery and fat tires all add weight over a commuter bike. AWD models with two motors typically weigh 70 to 85 lbs. If you need to carry the bike regularly, look for lighter 20-inch wheel fat-tire models in the 55 to 65 lb range, which are more manageable.' },
+      { q: 'Can off-road e-bikes handle hills?', a: 'Yes, better than almost any other e-bike type. High torque motors (80 to 110 Nm), combined with wide tires that maintain traction on steep loose slopes, make off-road e-bikes the strongest climbers in the catalog. Mid-drive models like the Eunorau Defender-S (160 Nm) are in a different league for sustained technical climbs.' },
+    ],
+  },
+  {
     slug: 'ebikes-under-2000',
     title: `Best E-Bikes Under $2,000 (${YEAR})`,
     h1: `Best E-Bikes Under $2,000 in ${YEAR}`,
