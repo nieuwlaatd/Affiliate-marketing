@@ -874,3 +874,78 @@ table and the SERP meta description.
   runs -- worth checking Search Console directly (Dylan) for whether the connected property is
   still syncing, since real-world impressions should be moving even at this early stage. (3)
   State page expansion (P2.5) -- local intent queries, lower competition, still untouched.
+
+---
+
+## 2026-07-05 (run 3) -- ENGWE weight-unit bug (kg stored as lbs) on the two highest-signal bike pages (P0.9)
+
+**GSC snapshot (28d, ending 2026-07-02):** identical totals to both earlier runs today (2
+clicks, 655 impressions, CTR 0.3% -- GSC data has not refreshed today). Page-level detail worth
+noting: `/e-bikes/engwe/engwe-p275-se` is the highest-impression individual bike page on the
+site (22 impr, pos 19.9, 4.5% CTR, 1 click) and `/e-bikes/duotts/duotts-e29` appeared as a new
+page with a click (1 click, 3 impr, pos 21.3, 33% CTR). `best cargo ebike` cluster remains
+stuck deep (28+ impr on that exact query alone, pos ~55-78, 0 clicks) -- consistent with the
+"competitive difficulty, not a technical bug" conclusion from earlier runs.
+
+**PostHog snapshot (28d):** 63 pageviews / 22 visitors (same window, no new data). ENGWE N1
+Pro: 2 affiliate clicks -- fifth consecutive run showing this exact bike as the only converting
+product. DUOTTS S26 remains the most-visited product page (6 views / 5 visitors).
+
+**Investigation: with GSC frozen for a third run in a row, picked the roadmap's own repeated
+"next candidate" that had been queued and skipped since 2026-06-28 -- P1.1 "deepen the ENGWE
+P275 SE / DUOTTS C29-K detail pages" -- and started by pulling their live Supabase rows to see
+what "deepen" should actually mean for these two specific bikes.**
+
+**Discovery:** ENGWE N1 Pro's row has `weight=19.0`, `weight_lbs=NULL`. Its own description
+text says "At 19 kg, it balances capability..." -- so the raw `weight` column is kilograms, but
+`mapRowToEBike()` (`lib/ebike-data.ts:199`) reads `Number(row.weight_lbs ?? row.weight)` with no
+unit conversion. With `weight_lbs` null, the app displayed 19 as if it were already pounds. The
+N1 Pro's real weight is ~42 lbs; the site showed "19 lbs" (lighter than an average adult
+bicycle, for a mid-drive city e-bike -- an obviously implausible number to anyone who noticed).
+The P275 SE had the identical bug (22 kg shown as "22 lbs"; real weight ~48.5 lbs). Checked the
+whole ENGWE brand: 19 of 22 bikes had this exact pattern (`weight_lbs IS NULL`, `weight` holding
+a plausible kg figure, several descriptions explicitly stating the kg number in text). `max_weight`
+showed the same kg-into-an-unconverted-lbs-field pattern (e.g. T14 "100 lbs" payload for a
+folding mini e-bike -- 100 kg / 220 lbs is the plausible reading, and matches sibling bikes'
+already-lbs payload values of 265-441 once converted).
+
+**Action -- fixed 19 of 22 ENGWE bikes (Supabase, live immediately):**
+`UPDATE ebikes SET weight_lbs = ROUND(weight * 2.20462, 1), max_weight = ROUND(max_weight *
+2.20462) WHERE brand='ENGWE' AND slug IN (...)` for E26, Engine Pro 2.0, Engine Pro 3.0 Boost,
+Engine X, EP-2 3.0 Boost, EP-2 Boost, EP-2 Pro, L20, L20 Boost, M1, M20, N1 Air, N1 Pro, P20,
+P275 Pro, P275 SE, P275 ST, T14, X20/X24/X26. Sample results: N1 Pro 19→41.9 lbs (payload
+120→265 lbs), P275 SE 22→48.5 lbs (payload 120→265 lbs), L20 34→75 lbs (payload 120→265 lbs).
+Left 3 ENGWE bikes untouched (flagged in ROADMAP P0.9 instead of guessing): L20 3.0 Boost and
+L20 3.0 Pro both have `weight=150` which equals their own `max_weight=150` -- the same
+copy-paste bug fixed on the Eunorau META bikes in the prior run, not a clean kg value, so a
+blanket ×2.20462 conversion would be wrong. LE20 has `weight=200` exceeding its own
+`max_weight=180`, which is impossible under any single unit interpretation and needs a real
+source. Also discovered but NOT fixed this run (flagged for next run): 4 more ENGWE bikes with
+bare one-line spec-fragment descriptions instead of editorial copy -- EASE 2 PRO and Y600 (both
+already have correct-looking weight data) plus L16 and Y400 (`weight=0`/`weight_lbs=0`/
+`max_weight=0`, the separate placeholder-zero bug this sweep has been fixing all along).
+
+**Verified:** re-queried Supabase to confirm all 19 rows updated correctly (spot-checked the
+RETURNING output). Started the dev server and loaded both `/e-bikes/engwe/engwe-n1-pro` and
+`/e-bikes/engwe/engwe-p275-se` live: confirmed the Specifications table now renders "41.9 lbs"
+/ "265 lbs" payload on N1 Pro and "48.5 lbs" / "265 lbs" payload on P275 SE (previously 19/120
+and 22/120). `tsc --noEmit` clean (no code changed -- data-only fix).
+
+**Expected impact:** removes a brand-wide, visibly-implausible weight figure from 19 ENGWE
+detail pages, concentrated on the two bikes with the strongest existing signal on the site:
+P275 SE (highest GSC bike-page impressions, 22/run) and N1 Pro (the only bike with repeat
+confirmed affiliate clicks, 5 consecutive runs). A buyer checking whether a "city e-bike" really
+weighs 19-22 lbs (implausible on its face) and bailing before clicking through is a plausible
+explanation for some of the gap between P275 SE's 22 impressions and its low click count. Also
+fixes the FAQ schema's dynamically-generated "How heavy is the [bike]?" answer, which
+interpolates `weight`/`maxWeight` directly and was stating the wrong number in a structured-data
+field Google may surface directly in search results.
+
+**Next candidates:** (1) ROADMAP P0.9 -- fix the 3 remaining broken-weight ENGWE bikes (L20 3.0
+  Boost, L20 3.0 Pro, LE20) by sourcing real weights from manufacturer/retailer listings rather
+  than converting a corrupted value. (2) Write real editorial descriptions + fix `max_weight=0`
+  for the 4 newly found ENGWE stub-description bikes (EASE 2 PRO, Y600, L16, Y400). (3) Resume
+  the original P0.9 list of ~19 Eunorau/SAMEBIKE/VTUVIA/DYU bikes with placeholder descriptions.
+  (4) GSC totals have now been frozen at 655 impressions across three consecutive runs today --
+  worth Dylan checking Search Console directly for a sync issue. (5) State page expansion
+  (P2.5), still untouched.
