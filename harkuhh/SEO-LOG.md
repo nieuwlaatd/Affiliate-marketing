@@ -813,3 +813,64 @@ preview snapshot on `/best/cargo-ebikes`.
   page expansion (P2.5) -- local intent queries, lower competition. (4) samebike-rs-a01-pro/men
   are the only pages with real GSC clicks this run (pos 16 and pos 9.1) -- worth a closer look
   at whether their detail-page content can be strengthened further to defend/improve position.
+
+---
+
+## 2026-07-05 (run 2) -- Continuing the P0.9 data quality sweep + a new weight copy-paste bug class
+
+**GSC snapshot (28d, ending 2026-07-02):** identical totals to the prior run this same day (2
+clicks, 655 impressions, CTR 0.3%, cargo-ebikes still 141 impr / pos 74.3, heavy-riders blog post
+still 137 impr / pos 47.4). GSC data had not refreshed since the last pull -- no new signal to
+act on here, so this run leaned on the roadmap's own queued next-candidate instead.
+
+**PostHog snapshot (28d):** 63 pageviews / 22 visitors (up slightly from 61/22). Top pages
+unchanged (homepage, /e-bikes/overzicht, DUOTTS S26). 2 affiliate clicks total, both ENGWE N1
+Pro (fourth consecutive run showing this bike converting -- consistently the strongest
+revenue-intent signal in PostHog).
+
+**Action -- ROADMAP P0.9 continued, next batch of verified fixes (Supabase):**
+While auditing the remaining flagged bikes, found a second distinct bug pattern beyond simple
+`0` placeholders: four Eunorau META bikes had `weight`/`weight_lbs` set equal to `max_weight`
+(a straight copy-paste of the payload figure into the weight field), and one FLASH bike had
+`weight_lbs` set to `1000` -- clearly copied from its "1000W" motor spec rather than an actual
+weight. Both are the same class of bug as the FAT-AWD 2.0 "weight=375" bug fixed in run 1, just
+not caught by a simple "torque=0" filter since these had nonzero (wrong) values. Verified real
+weights via manufacturer pages (eunorau-ebike.com) and retailer listings, then fixed:
+- `eunorau-meta-20-1`: weight_lbs 286 -> 63.4 (was a copy of max_weight=286)
+- `eunorau-meta-24-1`: weight_lbs 286 -> 61.7 (same bug)
+- `eunorau-meta-26-1`: weight_lbs 286 -> 68.4 (same bug)
+- `eunorau-meta275-2`: weight_lbs 286 -> 60 (same bug)
+- `eunorau-flash-2`: weight_lbs 1000 -> 85 (copied from "1000W" motor spec); also filled
+  max_weight 0 -> 440 (was blank despite the bike having a real 440 lb payload rating)
+- `eunorau-e-fat-mn`: weight 0 -> 55, torque 0 -> 80, max_weight 0 -> 330 (all three were blank)
+- `vtuvia-giraffe-step-thru-city-commuter-electric-bike`: weight 0 -> 60, torque 0 -> 65,
+  max_weight 0 -> 300
+- `samebike-crest-fat-tire-mountain-e-bike`: torque 0 -> 85 (verified). Weight left as-is --
+  not published on the manufacturer's site or any retailer listing found; fabricating one would
+  repeat the mistake this sweep exists to fix.
+All 7 fully-fixed bikes also got new editorial descriptions (were previously either a bare
+spec-fragment sentence or the wrong-weight copy that read fine but stated a false number).
+Sourced from eunorau-ebike.com and vtuviaebike.com manufacturer spec pages plus retailer
+listings (motorizedbicyclehq.com, offgridlux.com, bikeberry.com) to cross-check each figure
+before writing it.
+
+**Verified:** re-queried Supabase to confirm all 8 updates landed correctly. Spot-checked
+`/e-bikes/eunorau/eunorau-meta-24-1` in the dev preview -- Weight now shows "61.7 lbs" and Max
+payload "286 lbs" as two distinct, correct numbers (previously both cells would have shown
+"286"). No code changes this run (data-only), so `tsc --noEmit` was not re-run.
+
+**Expected impact:** removes another class of visibly-false spec data (a "286 lb" 20-24-26-inch
+city commuter bike, a "1000 lb" e-bike) from detail pages and their meta descriptions across 8
+bikes. Same trust rationale as run 1: these numbers are user-facing in both the on-page spec
+table and the SERP meta description.
+
+**Next candidates:** (1) ROADMAP P0.9 -- roughly 19 bikes remain (Eunorau DEFENDER,
+  DEFENDER-S, FAT-HD 1.0/2.0, FAT-HS, FLASH AWD 1.0, FLASH LITE 2.0, META275 ST 1.0, META275
+  1.0, S1, SPECTER-S, SPECTER-ST, URUS; SAMEBIKE RS-A08-II, STORM, CREST-weight; VTUVIA FMB,
+  REINDEER 1.0; DYU C2/C5/C6). Worth specifically re-checking whether any other Eunorau bikes
+  have the weight-equals-max_weight or weight-equals-wattage copy-paste bug even where torque
+  is nonzero -- this run only caught it while triaging the zero-value list, not via a targeted
+  query. (2) GSC data has now shown the identical 655-impression snapshot across two consecutive
+  runs -- worth checking Search Console directly (Dylan) for whether the connected property is
+  still syncing, since real-world impressions should be moving even at this early stage. (3)
+  State page expansion (P2.5) -- local intent queries, lower competition, still untouched.
