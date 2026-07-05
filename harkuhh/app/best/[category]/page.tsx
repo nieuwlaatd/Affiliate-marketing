@@ -2,6 +2,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import BikeCard from '@/components/BikeCard';
+import SpecComparisonTable from '@/components/SpecComparisonTable';
 import { ShortlistProvider } from '@/lib/shortlist-context';
 import { getAllBikes } from '@/lib/ebike-data';
 import { EBike } from '@/lib/types';
@@ -591,6 +592,8 @@ export default async function BestCategoryPage({ params }: { params: Promise<{ c
 
         {bikes.length > 0 ? (
           <ShortlistProvider>
+            <h2 className="text-xl font-bold text-[var(--foreground)] mt-10">Quick comparison</h2>
+            <SpecComparisonTable bikes={bikes.slice(0, 8)} />
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 mt-10">
               {bikes.map((bike) => (
                 <BikeCard key={bike.id} bike={bike} />

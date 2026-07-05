@@ -726,3 +726,90 @@ Content:
   (3) New blog post targeting "AWD e-bike" or "dual motor e-bike" queries to feed link equity
   to the new off-road page + DUOTTS S26 detail page. (4) State page expansion (P2.5) -- local
   intent queries, lower competition.
+
+---
+
+## 2026-07-05 -- Cargo-page data quality fixes + comparison tables (P0.9, P1.2)
+
+**GSC snapshot (28d, ending 2026-07-02):** 2 clicks, 655 impressions, CTR 0.3%. Key signals:
+- `/` (homepage): 3 clicks, 3 impr, pos 1.0 -- branded query, 100% CTR
+- `/e-bikes/samebike/samebike-rs-a01-pro`: 2 clicks, 6 impr, pos 16.0, 33% CTR -- converting
+- `/e-bikes/samebike/samebike-rs-a01-men`: 1 click, 9 impr, pos 9.1 -- page-1 rank
+- `/blog/best-ebikes-for-heavy-riders`: 137 impr, pos 47.4, 1 click -- still the top demand cluster
+- `/best/cargo-ebikes`: 141 impr, pos 74.3, 0 clicks -- still the highest-impression best-of page,
+  no ranking movement despite the buyer's guide added 2026-06-27
+- No queries in strict striking-distance (5-20) output this run
+
+**PostHog snapshot (28d):** 61 pageviews, 22 visitors (same window as last run -- data lag).
+Top pages unchanged: homepage, DUOTTS S26, /e-bikes/overzicht. 2 affiliate clicks total, both
+on ENGWE N1 Pro (third consecutive run showing this bike converting).
+
+**Investigation: why does cargo-ebikes stay stuck at pos 74 despite content?**
+Checked the actual product data behind the page's filter (`suitableFor.includes('cargo') ||
+(maxWeight>=350 && torque>=80)`). 11 bikes qualify, which is not thin -- but 3 of them had
+real data bugs that would visibly break trust for anyone who clicked through:
+- Eunorau FAT-AWD 2.0: `weight_lbs` was `375` -- someone had copy-pasted the payload/max-weight
+  value into the weight field. The bike does not weigh 375 lbs.
+- Eunorau MAX-CARGO 2.0 (the literal flagship "cargo" model): `torque=0`, `weight=0`,
+  `max_weight=0`. All three specs the page's own buyer's guide says matter most for a cargo
+  bike were blank on the one bike named "MAX-CARGO."
+- Eunorau G30-CARGO: `torque=0`, `weight=0` (payload was already correct at 440 lbs).
+- Also found SAMEBIKE M20-III (appears on this page via the torque/weight filter) at
+  `weight_lbs=127.8`, implausible for any e-bike in this catalog.
+A `torque=0` or `weight=0` bug is not cosmetic here: `generateMetadata` on the bike detail
+page interpolates `torque` directly into the meta description ("X Nm motor"), so these bikes
+were shipping a literal "0 Nm motor" line to Google and to anyone who saw the page in search
+results. Conclusion: cargo-ebikes' stagnant rank is very likely mostly a competitive-difficulty
+problem (a brand-new domain competing for one of the most commercial e-bike queries against
+established authority sites), not a technical bug -- but the data bugs found are real, verified,
+and worth fixing regardless of their effect on rank.
+
+**Action 1 -- Fix verified data bugs (Supabase, live immediately), sourced from manufacturer/
+retailer listings (electricbikereview.com, eunorau-ebike.com, bikeberry.com, energyebikes.com):**
+- `eunorau-fat-awd-2`: weight/weight_lbs 375 -> 79.4 (matches the FAT-AWD 3.0's already-correct
+  79.4, same platform). Rewrote description (was a bare spec fragment) to proper editorial copy.
+- `eunorau-max-cargo`: weight/weight_lbs 0 -> 85, torque 0 -> 70, max_weight 0 -> 440. New
+  editorial description covering payload, torque and the step-through frame.
+- `eunorau-g30-cargo`: weight/weight_lbs 0 -> 78, torque 0 -> 65. New editorial description.
+- `samebike-m20-iii`: weight/weight_lbs 127.8 -> 75 (verified: 34 kg = ~75 lbs per SAMEBIKE's
+  own spec sheet). Description was already fine, left untouched.
+- `eunorau-flash-lite-st`: description was a bare 66-character spec fragment despite having
+  correct torque/weight data; rewrote to editorial copy for consistency (this bike also
+  appears on the cargo-ebikes page via the torque/weight filter).
+Did NOT touch DYU C2/C5/C6 (also flagged thin/zero-value) -- their torque is not published by
+the manufacturer anywhere findable, and weight sources conflicted between listings for the
+same model. Fabricating a plausible-looking number would be worse than leaving it blank.
+Logged the full remaining list in ROADMAP P0.9 for a future run to work through carefully,
+one verified model at a time.
+
+**Action 2 -- P1.2: Comparison tables on best-of pages (`app/best/[category]/page.tsx`):**
+New `components/SpecComparisonTable.tsx`, a server-rendered table (rank, bike, price, range,
+torque, payload, score) inserted as a "Quick comparison" section above the card grid on every
+`/best/[category]` page, showing the top 8 bikes by score. Static/SSR (no client JS, no
+sortable-header complexity) so it is crawlable as-is and is a plain featured-snippet candidate
+for "best cargo e-bike" / "best fat tire e-bike" style queries. Verified via preview: renders
+correctly on `/best/cargo-ebikes` with real data (no stale "0 Nm" cells for the bikes fixed in
+Action 1), degrades gracefully on categories with fewer matches, no console errors, `tsc
+--noEmit` clean.
+
+**Verified:** tsc --noEmit clean, zero type errors. Manually inspected rendered table via
+preview snapshot on `/best/cargo-ebikes`.
+
+**Expected impact:**
+- The 5 data fixes remove visibly broken specs ("0 Nm motor" in meta descriptions, a 375 lb
+  or 127.8 lb bike weight) from the highest-impression best-of page on the site (141 impr) and
+  from SERPs directly (meta description is user-facing in search results).
+- The comparison table gives every best-of page (7 categories) a structured, scannable summary
+  that is a stronger featured-snippet candidate than a card grid, and keeps the "how do these
+  bikes actually compare" question answered without leaving the page.
+- Catalog count in ROADMAP corrected from stale "88" to the current 109 (grew via prior
+  catalog-sync runs without the roadmap being updated).
+
+**Next candidates:** (1) ROADMAP P0.9 -- work through the remaining ~30 bikes with thin
+  descriptions / zero torque-weight (mostly Eunorau META/FAT-HD/SPECTER/FLASH/R1 lines, a few
+  SAMEBIKE and VTUVIA models), one verified model at a time. (2) DYU C2/C5/C6 need a torque
+  spec that isn't publicly documented -- consider omitting the torque line entirely from their
+  detail-page copy rather than showing 0, or contacting DYU support for the number. (3) State
+  page expansion (P2.5) -- local intent queries, lower competition. (4) samebike-rs-a01-pro/men
+  are the only pages with real GSC clicks this run (pos 16 and pos 9.1) -- worth a closer look
+  at whether their detail-page content can be strengthened further to defend/improve position.
