@@ -949,3 +949,82 @@ field Google may surface directly in search results.
   (4) GSC totals have now been frozen at 655 impressions across three consecutive runs today --
   worth Dylan checking Search Console directly for a sync issue. (5) State page expansion
   (P2.5), still untouched.
+
+---
+
+## 2026-07-06 (run 4) -- GSC data unfroze; deepened the site's two best-ranking bike pages (SAMEBIKE RS-A01 MEN/Pro/Plus) + a sitewide spelling fix (P1.1, P0.10)
+
+**GSC snapshot (28d, ending 2026-07-03):** finally moved after being frozen at 655 impressions
+for three consecutive runs -- now 681 impressions / 2 clicks / 0.3% CTR. New page-level detail:
+`/e-bikes/samebike/samebike-rs-a01-men` is now the best-positioned individual page on the whole
+site at **pos 9.1** (9 impr, 1 click, 11.1% CTR), and `/e-bikes/samebike/samebike-rs-a01-pro` at
+pos 16 (6 impr, 2 clicks, 33.3% CTR). Also new: `/e-bikes/eunorau/eunorau-meta-24-1` picked up
+its first click (5 impr, pos 23.2) and `/e-bikes/duotts/duotts-e29` got a click too (3 impr, pos
+21.3, 33% CTR). `best cargo ebike` cluster (`/best/cargo-ebikes`) remains the single biggest
+impression source (139 impr, pos 74.3, 0 clicks) but stays stuck deep -- a competitive-difficulty
+problem, not a technical one, consistent with every prior run's read on this cluster.
+
+**PostHog snapshot (28d):** 63 pageviews / 22 visitors (unchanged window). ENGWE N1 Pro still
+the only bike with confirmed affiliate clicks (2, sixth consecutive run). DUOTTS S26 remains the
+most-visited product page (6 views / 5 visitors).
+
+**Decision:** with GSC finally showing fresh movement, followed the task's own priority order --
+striking-distance pages (pos 5-20) are the fastest wins, and `/e-bikes/samebike/samebike-rs-a01-men`
+(pos 9.1) and `/e-bikes/samebike/samebike-rs-a01-pro` (pos 16) are literally the two best-placed
+individual pages on the entire site, already converting clicks. Pulled their Supabase rows to see
+what "strengthen the page" should mean for these two specifically, and included the third variant
+(RS-A01 Plus) for consistency since all three share the same weak content pattern.
+
+**Action 1 -- deepened the RS-A01 family's editorial content (Supabase):**
+All three variants (`samebike-rs-a01-pro`, `samebike-rs-a01-men`, `samebike-rs-a01-plus`) had
+near-identical, generic one-sentence descriptions that did not differentiate the three bikes from
+each other (e.g. Pro: "A comfortable step-through city e-bike with strong 55Nm torque..."; MEN:
+"The step-over variant of the popular RS-A01, built for riders who prefer a traditional frame
+geometry..."). Fetched the manufacturer's own product pages (samebike.com) for real specs and
+wrote three distinct, accurate, multi-sentence descriptions plus refreshed `highlights` arrays:
+- Pro: step-through, 26" wheels, 250W/55+Nm motor, front+seatpost suspension, positioned as the
+  "easy step-through mount" of the family.
+- MEN: step-over, 27.5" wheels (see bug below), same motor/battery as Pro, IP54-rated
+  electronics, positioned as the classic-geometry alternative to the Pro.
+- Plus: the higher-torque model (70+Nm, 48V 14Ah), 26x3" fat tires, positioned as the most
+  powerful RS-A01 for hills and stop-and-go riding.
+
+**Action 2 -- found and fixed 2 real data bugs while sourcing the copy (Supabase):**
+Cross-checking the manufacturer spec sheet against the DB surfaced two more data-accuracy bugs
+in the same P0.9 family as prior runs' weight/unit fixes:
+- `samebike-rs-a01-men`: `wheel_size` was `26.0`, but samebike.com's own MEN product page
+  specs 27.5" wheels (the Pro and Plus are genuinely 26"; MEN is the outlier). Fixed to `27.5`.
+- `samebike-rs-a01-pro` and `samebike-rs-a01-men`: both had `has_suspension = 'front'`, but the
+  manufacturer specs dual suspension (front fork + seatpost/seat-tube) for both. Fixed to
+  `'full'`. Left `samebike-rs-a01-plus` at `'front'` -- its spec sheet only lists front-fork
+  suspension, no seat-tube shock, so no change was warranted there.
+
+**Action 3 -- sitewide `frame_material` spelling fix (Supabase, P0.10, new roadmap item):**
+While in the data, ran a quick sitewide consistency check and found 60 of 108 bikes had
+`frame_material = 'Aluminium'` (British spelling) against 47 with `'Aluminum'` (US spelling) --
+a copy inconsistency across every spec table on a site whose stated convention is US English.
+Normalized all 60 rows: `UPDATE ebikes SET frame_material = 'Aluminum' WHERE frame_material =
+'Aluminium'`. Site now reads 107 Aluminum / 1 Steel / 1 Magnesium, zero British spelling left.
+
+**Verified:** re-queried Supabase to confirm all updates (3 descriptions/highlights, 1 wheel_size,
+2 has_suspension, 60 frame_material rows). Started the dev server and loaded
+`/e-bikes/samebike/samebike-rs-a01-men` live: confirmed the new description text, "27.5"" wheel
+size, "Full" suspension, and "Aluminum" material all render correctly in the Specifications
+table. `tsc --noEmit -p tsconfig.json` clean (no code changed, data-only run).
+
+**Expected impact:** strengthens on-page content on the two best-positioned bike pages on the
+site at the exact moment GSC shows them converting real clicks (pos 9.1 and pos 16 respectively)
+-- richer, accurate, differentiated copy is the direct lever the task brief calls out for
+striking-distance pages. The wheel-size and suspension fixes remove two more instances of the
+same "spec table states something false" trust problem this sweep has been chipping away at for
+several runs. The spelling fix is smaller but touches every one of 60 bikes' spec tables at once.
+
+**Next candidates:** (1) ROADMAP P0.9 -- the 3 remaining broken-weight ENGWE bikes (L20 3.0
+  Boost, L20 3.0 Pro, LE20) and the 4 ENGWE stub-description bikes (EASE 2 PRO, Y600, L16, Y400)
+  are still outstanding from run 3, plus the original ~19-bike Eunorau/SAMEBIKE/VTUVIA/DYU list.
+  (2) `/e-bikes/eunorau/eunorau-meta-24-1` and `/e-bikes/duotts/duotts-e29` just picked up their
+  first GSC clicks this run -- worth checking their descriptions for the same thin/generic
+  pattern found on the RS-A01 family. (3) `best cargo ebike` (139 impr, pos 74.3) remains the
+  single largest impression pool on the site with zero clicks -- still a competitive-depth
+  problem rather than a quick technical fix, per every prior run's read. (4) State page expansion
+  (P2.5), still untouched.
