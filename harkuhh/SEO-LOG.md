@@ -1028,3 +1028,116 @@ several runs. The spelling fix is smaller but touches every one of 60 bikes' spe
   single largest impression pool on the site with zero clicks -- still a competitive-depth
   problem rather than a quick technical fix, per every prior run's read. (4) State page expansion
   (P2.5), still untouched.
+
+---
+
+## 2026-07-06 (run 5) -- ENGWE Dutch `highlights` bug (sitewide) + closed out P0.9's ENGWE punch list + fixed false "discontinued" messaging on the site's two highest-signal pages
+
+**GSC snapshot (28d, ending 2026-07-03):** 2 clicks, 681 impressions, CTR 0.3%. Query-level
+striking distance table is empty, but page-level striking distance is real: `/e-bikes/samebike/
+samebike-rs-a01-men` pos 9.1 (1 click), `/e-bikes/samebike/samebike-rs-a01-pro` pos 16.0 (2
+clicks) -- both deepened earlier today in run 4 -- and `/e-bikes/duotts/duotts-duotts-c29-k` pos
+16.2 (1 click, 16.7% CTR). Checked C29-K's Supabase row: description and highlights were already
+solid (no stub/Dutch issue), so no further action needed there this run. `/best/cargo-ebikes`
+remains the largest impression pool (139 impr, pos 74.3, 0 clicks) -- unchanged competitive-depth
+read from every prior run.
+
+**PostHog snapshot (28d):** 63 pageviews / 22 visitors (same window). `/e-bikes/duotts/
+duotts-duotts-c29-k` appears in both GSC (pos 16.2, 1 click) AND PostHog (5 views) -- the
+dual-signal page the task brief calls out as highest-priority, but its content was already fine.
+ENGWE N1 Pro: still the only bike with confirmed affiliate clicks (2, seventh consecutive run).
+
+**Decision:** With the striking-distance page (C29-K) already in good shape, resumed the queued
+P0.9 ENGWE punch list (3 broken-weight bikes + 4 stub-description bikes from runs 3-4) rather than
+repeat work. While pulling every ENGWE row to plan those fixes, found something bigger: **all 22
+ENGWE bikes still had Dutch `highlights` arrays** -- the 2026-07-04 run only translated the
+`description` field, never touched `highlights`, so bullet points like "70Nm koppel", "Volledige
+vering", "140 km bereik", "Opvouwbaar frame" were still shipping in Dutch on every ENGWE detail
+page and card, sitewide, for two more runs without anyone catching it. Highlights render more
+prominently than the paragraph description (a bulleted list right under the price), making this
+arguably worse than the description bug it should have been caught alongside.
+
+**Action 1 -- Translated all 22 ENGWE `highlights` arrays to English (Supabase, live immediately):**
+Used the already-corrected mile/lbs DB columns for consistency rather than re-deriving from the
+stale Dutch km/kg numbers. Also caught a distinct instance the original description-fix pass
+missed entirely: `engwe-p275-se` -- the single highest-GSC-impression bike page on the whole site
+(22 impr/run) -- still had 2 Dutch bullets ("Torquesensor voor soepel rijden", "Slechts €899") and
+a Euro symbol on a USD-priced page. Fixed. Ran a sitewide regex sweep across every brand's
+`description` + `highlights` afterward and confirmed zero Dutch remnants remain anywhere on the
+site.
+
+**Action 2 -- Closed the P0.9 ENGWE punch list queued since runs 3-4 (Supabase):**
+- `L20 3.0 Boost`: `weight` was a copy-paste of `max_weight` (both 150). Sourced real specs
+  (engwe.com, horizonmicromobility.com): 33 kg net weight, 150 kg max load. Fixed weight_lbs
+  0->72.8, max_weight 150->331 (kg->lbs conversion, matching the pattern already applied to the
+  rest of ENGWE).
+- `L20 3.0 Pro`: same copy-paste bug. Verified 32.8 kg / 150 kg max load. Fixed weight_lbs
+  0->72.3, max_weight 150->331.
+- `LE20`: `weight=200` exceeded its own `max_weight=180` -- impossible under any unit reading.
+  Verified 36.8 kg single-battery weight / 200 kg max load. Fixed weight_lbs 0->81.1, max_weight
+  180->441.
+- `L16` (confirmed a real e-bike, not a stub/mislabeled item): had `weight=0`, `weight_lbs=0`,
+  `max_weight=0` and a bare one-line description. Verified 39.6 kg weight / 120 kg max load
+  directly from us.engwe.com. Fixed weight_lbs 0->87.3, max_weight 0->264, wrote a full editorial
+  description.
+
+**Action 3 -- New discovery, NOT resolved: 3 ENGWE catalog "bikes" are actually electric scooters
+(ROADMAP P0.13, needs Dylan's call):**
+While sourcing specs for the last 2 stub bikes (`Y400`, `Y600`) and `EASE 2 PRO`, web research
+confirmed all three are **not pedal e-bikes**: `EASE 2 PRO` is a 4-wheel folding mobility scooter
+capped at ~5 mph (manufacturer spec: 0-5 mph, 12 mi range -- nothing like the 20mph/30mi our
+catalog implied); `Y400` and `Y600` are seated electric scooters per every retailer listing found,
+despite being stored with bicycle-style fields (26" "wheel_size", 3-7 "gears") that do not match
+either product's actual 10" wheels. Rather than silently reclassify or delete them (a bigger,
+more consequential change than a data-quality run should make unilaterally), wrote honest
+descriptions for all three clarifying what they actually are, and fixed their worst zero-value
+fields with verified numbers: `Y400` torque 0->24, weight_lbs 0->52 (24 kg), max_weight 0->265
+(120 kg); `Y600` max_weight 0->265 (120 kg; torque/weight were already correct); `EASE 2 PRO`
+max_weight 0->265 (120 kg; left torque/weight/range alone -- multiple sources disagreed and this
+product's category mismatch needs a human decision before its numbers are worth trusting).
+Flagged as ROADMAP P0.13 for Dylan: keep these three (clearly labeled as scooters) or pull them
+from the e-bike catalog/filters/best-of surfaces entirely.
+
+**Action 4 -- Fixed false "discontinued" messaging on the site's two highest-signal pages
+(ROADMAP P0.14, code change in `app/e-bikes/[brand]/[model]/page.tsx`):**
+10 bikes are flagged `available=false` in Supabase, including `P275 SE` (top GSC impressions,
+22/run) and `N1 Pro` (the only bike with repeat confirmed affiliate clicks, 7 consecutive runs).
+The template said "{brand} has discontinued the {model}, so it can no longer be bought from the
+manufacturer" for all of them. Fetched ENGWE's own live product pages for 2 of the 10 (N1 Pro,
+Engine X) to verify: both are explicitly labeled "Pre-sale, expected to be back in stock in early
+July" -- today is 2026-07-06, inside that exact restock window -- not discontinued. Fixed:
+- Banner copy: "No longer available" / "has discontinued... no longer be bought" -> "Temporarily
+  out of stock" / "has paused new orders... while it restocks. Check the official site below for
+  the latest availability."
+- Added a "Check current availability ->" affiliate-tagged CTA linking to the official product
+  page. Previously the only CTA for an unavailable bike was an internal redirect with no path
+  back to the manufacturer to check restock status -- meaning a visitor to the #1 impression page
+  or the only page with confirmed clicks had no way to actually check if it's back yet.
+- Product schema `availability`: `https://schema.org/Discontinued` (implies permanent) ->
+  `https://schema.org/OutOfStock` (accurate for a temporary restock).
+
+**Verified:** re-queried Supabase to confirm all 22 highlights translations + 4 weight/payload
+fixes + 3 scooter description/field fixes landed correctly. `tsc --noEmit -p tsconfig.json` clean.
+Loaded `/e-bikes/engwe/engwe-p275-se` live in the dev preview: confirmed English highlights render
+("Torque sensor for smooth riding", "Just $899", etc.), the new "Temporarily out of stock" banner
+and copy render correctly, and the new "Check current availability ->" button links to the
+affiliate URL. No console errors.
+
+**Expected impact:** the highlights fix removes Dutch bullet text from 22 ENGWE detail pages and
+cards sitewide, including the #1 GSC-impression bike page, closing a gap the "all 22 descriptions
+fixed" claim from 2026-07-04 had left open for two runs. The discontinued->out-of-stock fix
+directly targets the two highest-signal pages on the entire site: telling a visitor a bike is
+permanently gone when ENGWE's own site says it is mid-restock is both inaccurate and actively
+pushes potential buyers to a competitor instead of encouraging them to check back or click through
+now. The scooter-vs-bike discovery (P0.13) is the most consequential open finding: three products
+appearing in e-bike search results, best-of pages and filters are not bicycles at all, which is a
+bigger trust risk than any single wrong spec number this sweep has fixed so far.
+
+**Next candidates:** (1) ROADMAP P0.13 -- Dylan decision needed on EASE 2 PRO/Y400/Y600 (keep as
+  clearly-labeled scooters vs. remove from the e-bike catalog). (2) The other 7 of the 10
+  `available=false` bikes (Engine X, L20 Boost, M1, N1 Air, P20, P275 Pro, P275 ST, plus SAMEBIKE
+  YINYU14) inherit the same fixed messaging automatically since it is template-level, but worth a
+  future run spot-checking a few more of them against the manufacturer site in case any have
+  actually restocked (`available` could flip back to true). (3) The original ~19-bike
+  Eunorau/SAMEBIKE/VTUVIA/DYU thin-description list from run 2 is still untouched. (4) State page
+  expansion (P2.5), still untouched.

@@ -73,7 +73,7 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
       '@type': 'Offer',
       priceCurrency: 'USD',
       price: bike.price,
-      availability: available ? 'https://schema.org/InStock' : 'https://schema.org/Discontinued',
+      availability: available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
       url: bike.affiliateUrl,
     },
     ...(ratingValue && {
@@ -198,10 +198,10 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
           <div>
             {!available && (
               <div className="mb-4 rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3">
-                <p className="text-sm font-bold text-amber-700 dark:text-amber-400">No longer available</p>
+                <p className="text-sm font-bold text-amber-700 dark:text-amber-400">Temporarily out of stock</p>
                 <p className="text-sm text-[var(--muted)] mt-1">
-                  {bike.brand} has discontinued the {bike.model}, so it can no longer be bought from the manufacturer.
-                  We keep this page for reference. See our similar picks below for current alternatives.
+                  {bike.brand} has paused new orders for the {bike.model} while it restocks. Check the official
+                  site below for the latest availability, or see similar picks for current alternatives.
                 </p>
               </div>
             )}
@@ -245,9 +245,9 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
               </div>
             ) : (
               <div className="flex flex-col sm:flex-row gap-3 mt-8">
-                <span aria-disabled="true" className="px-6 py-3 font-bold rounded-lg text-center bg-[var(--surface)] text-[var(--muted)] border border-[var(--border)] cursor-not-allowed">
-                  No longer available
-                </span>
+                <AffiliateLink href={bike.affiliateUrl} brand={bike.brand} model={bike.model} slug={bike.slug} price={bike.price} network={bike.affiliateNetwork} cta="official_site" className="px-6 py-3 border-2 font-bold rounded-lg text-center transition-colors bg-[var(--card-bg)]" style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}>
+                  Check current availability →
+                </AffiliateLink>
                 <Link href={`/e-bikes/overzicht?brand=${bike.brand}`} className="cta-primary px-6 py-3 font-bold rounded-lg text-center" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
                   See available {bike.brand} e-bikes →
                 </Link>
