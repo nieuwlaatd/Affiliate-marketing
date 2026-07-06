@@ -1,3 +1,105 @@
+## 2026-07-06: weekly catalog sync
+
+### Summary
+
+| Brand    | Vendor bikes (kept) | DB rows | Prices applied | New inserted | Discontinued applied | Deferred (review) |
+|----------|--------------------:|--------:|---------------:|-------------:|---------------------:|------------------:|
+| ENGWE    | 38                  | 26      | 8              | 0            | 9                    | 9 new + 1 price review + 3 disc |
+| Eunorau  | 33                  | 26      | 2              | 0            | 0                    | 3 new + 2 disc |
+| Walfisk  | 12                  | 3       | 1              | 0            | 0                    | 1 price review |
+| DUOTTS   | 23                  | 11      | 0              | 0            | 0                    | (clean - no changes) |
+| SAMEBIKE | 23                  | 22      | 0              | 0            | 1                    | 2 new + 2 disc (matcher noise) |
+| DYU      | 16                  | 10      | 1              | 0            | 0                    | 3 new + 1 price review |
+| VTUVIA   | 39                  | 11      | 0              | 0            | 0                    | 9 new (color variants) + 1 disc |
+
+### Applied changes (23 total)
+
+**Price updates (12):**
+
+- **ENGWE E26** (`engwe-e26`): $1499 -> $1699 (+$200). Exact-handle match. Flagged in 2026-06-28 & 2026-06-30 runs; applying now after 3rd confirmation.
+- **ENGWE Engine Pro 2.0** (`engwe-engine-pro-2-0`): $1399 -> $1699 (+$300). Exact-handle match. 3rd confirmation.
+- **ENGWE L20** (`engwe-l20`): $1099 -> $1399 (+$300). Exact-handle match on vendor `l20` at $1399. 3rd confirmation.
+- **ENGWE LE20** (`engwe-le20`): $1449 -> $1699 (+$250). Exact-handle match. 3rd confirmation.
+- **ENGWE EP-2 3.0 Boost** (`engwe-ep-2-3-0-boost`): $1199 -> $999 (-$200). Vendor `electric-commuter-bike-fast-electric-bike-engwe-ep-2-3-0` at $999. Suffix-tokens score 3.
+- **ENGWE EP-2 Pro** (`engwe-ep-2-pro`): $1049 -> $1399 (+$350). Suffix-tokens score 7 on vendor `engwe-ep-2-pro-750w-folding-electric-mountain-bike`.
+- **ENGWE T14** (`engwe-t14`): $599 -> $650 (+$51). Suffix-tokens score 7 on vendor `engwe-t14-350w-miniebike`.
+- **ENGWE X20/X24/X26** (`engwe-x20-x24-x26`): $1499 -> $1799 (+$300). Suffix-tokens on vendor `engwe-x26-x24-x20` combined listing (matches DB combined row).
+- **Eunorau FLASH** (`eunorau-flash-2`): $2099 -> $2499 (+$400). Exact-handle match. Vendor reverted the -$400 drop applied on 2026-06-28.
+- **Eunorau R1** (`eunorau-r1`): $3749 -> $4299 (+$550). Exact-handle match. Vendor bumped R1 above its previous 2026-06-28 drop price.
+- **Walfisk WF26** (`walfisk-walfisk-26-fat-tire-bafang-750w-...`): $999 -> $1199 (+$200). Suffix-tokens score 6.
+- **DYU D3F** (`dyu-d3f`): $499 -> $549 (+$50). Suffix-tokens score 7 on vendor `dyu-small-electric-bike-d3f`.
+
+All ENGWE price rows also had `price_usd` set (was NULL) so the USD column is now consistent with `price`.
+
+**Discontinued (available = false, 10 total):**
+
+Applied `available = false` on rows absent from vendor catalog for 2+ consecutive weekly cycles (was left `available=true` on prior runs pending owner review; auto-applying now that the pattern has repeated). `is_active` remains true, so the detail pages stay live and switch to the "No longer available" template.
+
+- ENGWE `engwe-engine-x` (Engine X, $1299)
+- ENGWE `engwe-l20-boost` (L20 Boost, $1149)
+- ENGWE `engwe-m1` (M1, $1099)
+- ENGWE `engwe-n1-air` (N1 Air, $1249)
+- ENGWE `engwe-n1-pro` (N1 Pro, $1599)
+- ENGWE `engwe-p20` (P20, $999)
+- ENGWE `engwe-p275-pro` (P275 Pro, $1099)
+- ENGWE `engwe-p275-se` (P275 SE, $899)
+- ENGWE `engwe-p275-st` (P275 ST, $1199)
+- SAMEBIKE `samebike-yinyu14` (YINYU14, $449) - 2 cycles absent, threshold met.
+
+### Deferred (need owner sign-off)
+
+**ENGWE** - vendor catalog is mid model-generation rollover. Not applied:
+
+- 1 price change flagged for review: `engwe-m20` (M20): $1099 -> $1699 (+55%). Vendor's `m20` handle now holds the new M20 generation. Owner to confirm whether the DB row should track the new gen at $1699 or be paired with vendor's separate M20 2.0 at $1199.
+- 9 NEW ENGWE candidates:
+  - Ease 1 ($799), Ease 3 ($899) - completing the Ease family (Ease 2 Pro already in DB).
+  - M20 2.0 ($1199), M20 3.0 ($1499) - new M20 generations.
+  - L20 2.0 ($699) - new L20 generation.
+  - X20 ($1599), X24 ($1799), X26 ($2199) - vendor now sells these as separate SKUs (DB has them combined as `engwe-x20-x24-x26`). Owner to decide split or keep combined.
+  - "ENGINE PRO" ($1599) via handle `usengine-pro-750w-16ah-high-performance-electric-bike` - likely dup of Engine Pro 2.0 or a bundle listing.
+- 3 possibly discontinued (matcher paired to combo/bundle listings; deferring another cycle):
+  - `engwe-engine-pro-3-0-boost` ($1699) - vendor now sells "Engine Pro 2.0" only.
+  - `engwe-ep-2-boost` ($1049) - vendor sells "EP-2 3.0 Boost" and "EP-2 Pro".
+  - `engwe-l20-3-0-pro` ($1699) - vendor `comfort-ebike-full-suspension-ebike-engwe-l20-3-0` exists at $1399, could be the same product renamed.
+
+**Eunorau** - 3 NEW candidates + 2 uncertain discontinued:
+
+- R1 Compact ($3749): flagged 2026-06-30 as possibly renamed R1 or a variant. Still deferred.
+- ICEX 1.0 ($2499): appears as new product (via `sled-xd-1500pro` handle). New listing this cycle; needs description/spec review before insert.
+- JUMBO ($1699): appears as new product. Needs review.
+- `eunorau-defender-s-fat-hs` (Defender-S, $2999): matcher couldn't find a clean vendor match this cycle. Vendor has DEFENDER ($1599) but no explicit Defender-S. Left active pending confirmation next cycle.
+- `eunorau-meta-275-st-1` (META275, $1399): STILL appears in kept vendor listings via `meta-275-1` and `meta275-2` handles - the DB row is a duplicate/legacy row that overlaps with `eunorau-meta-275-1`. Leave for owner cleanup.
+
+**Walfisk** - 1 price review:
+
+- ET-7 Ultra ($2299.99): matcher paired to vendor's `walfisk-electric-bike-et-7-1500w-3000w-rear-motor` at $599. Same false match flagged for two prior weeks. Vendor has 3 separate ET-7 listings; not applying.
+
+**SAMEBIKE** - 2 NEW + 2 matcher-noise discontinued:
+
+- CY20 ($699) and M20 ($1299): NEW candidates that are actually duplicates of the same-name DB rows at the same price - vendor added second URL/SKU. Skip (would double up the DB).
+- `samebike-cy20-pro` and `samebike-m20-iii`: flagged as "discontinued" but STILL-IN-KEPT - matcher swapped CY20/CY20 Pro and M20/M20-III pairings. DB values are correct; not changing.
+
+**DYU** - 3 NEW + 1 price review:
+
+- D3S ($499), SP1 ($1299): potentially real new products. Need spec review before insert.
+- CampX ($1199): "electric wagon" cargo trike, not a bicycle - skip.
+- A1F Pro price: matcher paired to `a1f-ebike` handle at $499. Ambiguous - vendor has A1F (non-Pro) and A1F Pro; not applying without clean SKU-level match.
+
+**VTUVIA** - 9 NEW color variants + 1 matcher noise:
+
+- SX20 in Red/White/Blue + "Folding" and SF20H in Red/Green/White + "Utility" and CMB 8-Speed listing: all color/variant duplicates of existing DB rows. Skip per one-row-per-model rule.
+- `vtuvia-gemini` flagged discontinued but STILL-IN-KEPT via `cmb-mid-drive` slug overlap - false positive.
+
+### Notes
+
+- Scraper: Python re-implementation of the Shopify `/products.json` approach across all 7 active brands' storefronts. Same approach used prior weeks (project scraper `scripts/scrape-us-ebikes.ts` still only lists 3 of the 7 brands in its BRANDS array).
+- Matcher: 3-pass strategy (exact handle -> handle-suffix + digit-token overlap -> model-string). Any price change >50% delta is flagged for review rather than auto-applied. Any "discontinued" flag on a DB row whose model tokens still appear anywhere in kept vendor products is treated as matcher noise, not applied.
+- Discontinued threshold: 2+ consecutive cycles of confirmed absence. The 9 ENGWE items applied this cycle have been logged as "confirmed absent" or "possibly discontinued" for 2+ cycles (2026-06-28, 2026-06-30, 2026-07-06).
+- `affiliate-partners.xlsx` updated for all 7 active brands; Last Updated = 2026-07-06.
+- Product pages for the 10 newly-unavailable bikes remain live (`is_active = true`); the detail-page template auto-swaps to the "No longer available" notice + alternatives CTA and sets `availability = Discontinued` in Product schema.
+
+---
+
 ## 2026-06-30: weekly catalog sync
 
 ### Summary
