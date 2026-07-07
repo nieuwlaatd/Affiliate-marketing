@@ -10,7 +10,7 @@ import { getAllBikes, getBikeBySlug, getSimilarBikes } from '@/lib/ebike-data';
 
 const motorLabels: Record<string, string> = { 'mid-drive': 'Mid-drive', 'front-hub': 'Front hub', 'rear-hub': 'Rear hub' };
 const frameLabels: Record<string, string> = { 'step-through': 'Step-through', 'step-over': 'Step-over', 'sport': 'Sport' };
-const gearLabels: Record<string, string> = { 'derailleur': 'Derailleur', 'internal-hub': 'Internal hub', 'cvt': 'CVT', 'single-speed': 'Single speed' };
+const gearLabels: Record<string, string> = { 'derailleur': 'Derailleur', 'internal-hub': 'Internal hub', 'naaf': 'Internal hub', 'cvt': 'CVT', 'single-speed': 'Single speed' };
 const usageLabels: Record<string, string> = { 'commuting': 'Commuting', 'recreation': 'Recreation', 'sport': 'Sport', 'cargo': 'Cargo', 'off-road': 'Off-road' };
 const classLabels: Record<string, string> = { 'class-1': 'Class 1 (pedal-assist, 20 mph)', 'class-2': 'Class 2 (throttle, 20 mph)', 'class-3': 'Class 3 (pedal-assist, 28 mph)' };
 

@@ -1246,3 +1246,109 @@ bigger trust risk than any single wrong spec number this sweep has fixed so far.
   actually restocked (`available` could flip back to true). (3) The original ~19-bike
   Eunorau/SAMEBIKE/VTUVIA/DYU thin-description list from run 2 is still untouched. (4) State page
   expansion (P2.5), still untouched.
+
+---
+
+## 2026-07-07 (run 6) -- ENGWE `motor_type` Dutch-value bug fixed sitewide (P0.17) + P1.1 detail-page depth on 3 high-signal pages
+
+**GSC snapshot (28d, ending 2026-07-04):** 2 clicks, 716 impressions, CTR 0.3% -- identical totals
+to the run already logged today, confirming this is a same-day second run with no new GSC window
+yet (3-day lag). No striking-distance or high-impression/low-CTR entries in the tool output. Top
+signals unchanged: `/best/cargo-ebikes` still the largest impression pool (136 impr, pos 74.3, 0
+clicks); `/e-bikes/engwe/engwe-p275-se` still the top single-bike page (21 impr, pos 20.3, 1 click);
+`/e-bikes/duotts/duotts-duotts-c29-k` converting (1 click, pos 16.2); `/blog/best-ebikes-for-hills`
+(103 impr, pos 44.7) and a newly-visible `/blog/ebike-maintenance-tips` (38 impr, pos 51.7) are the
+next-largest impression pools with no clicks yet.
+
+**PostHog snapshot (28d):** 64 pageviews / 23 visitors -- also identical to the already-logged run
+today. Top pages: homepage (12/8), `/e-bikes/overzicht` (10/4), DUOTTS S26 (6/5), DUOTTS C29-K
+(5/1). ENGWE N1 Pro: still the only bike with confirmed affiliate clicks (2).
+
+**Decision:** With both data sources unchanged since the last logged run, resumed ROADMAP P1.1's
+explicit "still to do" item -- deepen `engwe-p275-se`, `duotts-duotts-c29-k`, and the Walfisk WF26
+detail pages. While pulling their Supabase rows to plan the editorial rewrite, found a bigger issue.
+
+**Discovery -- ENGWE `motor_type` Dutch-value bug, sitewide (all 22 bikes), previously uncaught:**
+`engwe-p275-se`'s `motor_type` column was `"naaf-achter"` (Dutch: "hub-rear"), not a value the
+detail page's `motorLabels` lookup (`{'mid-drive', 'front-hub', 'rear-hub'}`) recognizes. A query
+across the whole brand showed this is not a one-off: all 22 ENGWE rows use Dutch values --
+`naaf-achter` (21 bikes) or `midden` ("middle", 5 bikes) -- values the prior Dutch-translation
+sweeps (P0.6 suitable_for/frame_type, 2026-07-04 descriptions, run 5 highlights) never touched
+because they only checked those specific fields. Two concrete, currently-live effects: (1) the
+"Motor type" row in the Specifications table renders blank (`{undefined}` in JSX resolves to
+nothing) on every one of the 22 ENGWE detail pages, including `engwe-p275-se` (top GSC impressions)
+and `engwe-n1-pro` (only bike with confirmed affiliate clicks); (2) the "Consider alternatives if
+you ride hills" warning logic (`bike.motorType !== 'mid-drive' && bike.torque < 80`) incorrectly
+fires on genuine mid-drive bikes, since `'midden' !== 'mid-drive'` is true -- affecting N1 Pro,
+L20 3.0 Pro, P275 Pro, P275 ST, and LE20, which the warning wrongly implies handle hills poorly.
+
+**Action 1 -- Fixed sitewide (Supabase, live immediately):** Verified the translation before
+writing anything, by cross-checking each bike's torque value: the 5 `midden` bikes cluster at
+65-100 Nm and include ENGWE's known mid-drive flagships (N1 Pro, L20 3.0 Pro), while the 21
+`naaf-achter` bikes span 24-90 Nm across ENGWE's standard hub-motor lineup -- consistent with
+`midden` = mid-drive, `naaf-achter` = rear-hub. Applied: `UPDATE ebikes SET motor_type =
+'rear-hub' WHERE brand='ENGWE' AND motor_type='naaf-achter'` (21 rows) and `UPDATE ebikes SET
+motor_type = 'mid-drive' WHERE brand='ENGWE' AND motor_type='midden'` (5 rows). Confirmed via
+`SELECT motor_type, COUNT(*) ... GROUP BY motor_type` = clean 21 rear-hub / 5 mid-drive split, and
+confirmed no other brand in the catalog has non-standard `motor_type` values.
+
+**Action 2 -- P1.1: deepened the 3 detail pages flagged "still to do" (Supabase, live
+immediately):** Rewrote one-sentence generic descriptions into 3-4 sentence differentiated
+editorial copy for `engwe-p275-se` (torque-sensor explainer, 100mi claimed / 75mi real framing,
+$899 value positioning), `duotts-duotts-c29-k` (29" wheel + 20Ah battery framing, 90mi claimed /
+65mi real, commuting/recreation fit), and the Walfisk WF26 (Bafang 750W + fat tire traction
+framing, 50mi claimed / 38mi real, Class 3 / all-terrain fit). Cross-checked each new description's
+range and weight claims against the bike's own `range_manufacturer`/`range_practical`/`weight_lbs`
+columns before writing, to avoid the same contradiction bug caught and fixed in the 2026-07-07
+(run 5→6 predecessor) Eunorau/SAMEBIKE sweep.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (data-only run). Started the dev server and
+fetched all 3 pages plus `engwe-n1-pro` directly: confirmed "Motor type" now renders "Rear hub" on
+P275 SE and "Mid-drive" on N1 Pro (both previously blank), and confirmed all 3 new descriptions
+render correctly in both the visible page content and the Product/Review JSON-LD schema, with no
+console errors.
+
+**Action 3 -- followed the same lead further: checked every remaining ENGWE enum-like column for
+the same bug class, found two more (one data, one code):**
+- `price_category`: 14 ENGWE rows had `'midden'` instead of `'mid-range'`. Checked the DB check
+  constraint first (`ebikes_price_category_check` explicitly allows both `'midden'` and
+  `'mid-range'`, so this was a legal-but-wrong value, not a schema violation) -- confirmed via grep
+  that `priceCategory` is not currently rendered or filtered on anywhere in `app/` or
+  `lib/ebike-filters.ts` (dormant bug, no live user-facing impact yet, but the same root cause and
+  a one-line fix). `UPDATE ebikes SET price_category = 'mid-range' WHERE brand='ENGWE' AND
+  price_category='midden'` -- now matches the value every other brand uses and the TS type
+  (`'budget' | 'mid-range' | 'premium'`) already declares.
+- `gear_type`: attempted the same DB-side fix for 4 ENGWE bikes with `gear_type='naaf'`
+  (P275 Pro, T14, P20, P275 ST), but the `ebikes_gear_type_check` constraint only permits
+  `['derailleur', 'naaf', 'cvt']` -- `'naaf'` is the schema's own canonical value here, not stray
+  data (changing it to `'internal-hub'` would have violated the constraint). The actual bug is on
+  the frontend: `gearLabels` in `app/e-bikes/[brand]/[model]/page.tsx` was missing a `'naaf'` key,
+  so the "Type" row under Drivetrain rendered blank for these 4 bikes. Fixed with a one-line code
+  change: added `'naaf': 'Internal hub'` to `gearLabels`. Verified live: `engwe-p275-pro`'s Type
+  row now shows "Internal hub" (previously blank).
+
+**Verified (all three actions):** `npx tsc --noEmit -p tsconfig.json` clean after both the data
+changes and the `gearLabels` code edit. Dev server checks: `engwe-p275-se`/`engwe-n1-pro` Motor
+type correct ("Rear hub"/"Mid-drive"), `engwe-p275-pro` gear Type now "Internal hub", all 3 new
+descriptions render in page content + JSON-LD. No console errors.
+
+**Expected impact:** the `motor_type` fix removes a blank spec-table field from 22 ENGWE detail
+pages sitewide, including the two highest-signal pages on the entire site, and corrects a false
+"struggles on hills" implication on 5 genuine mid-drive bikes. The `gear_type` label fix removes a
+second blank spec-table field on 4 more ENGWE pages. The detail-page depth work directly targets
+ROADMAP P1.1's named "still to do" pages, all three carrying real GSC or PostHog signal (top
+impressions, converting clicks, or page-1 history).
+
+**Next candidates:** (1) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600
+scooter-vs-bike classification. (2) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and
+`vtuvia-reindeer-1` still need human research, not a guess. (3) State page expansion (P2.5), still
+untouched across every run logged so far -- the single largest unaddressed roadmap item; worth
+committing to this as the primary focus of a future run given data signals have been flat/repeating
+for several consecutive runs. (4) `/blog/ebike-maintenance-tips` newly showing 38 impressions at
+pos 51.7 -- worth a content-depth pass next time GSC data refreshes with a new window. (5) This run
+found 3 separate missed-field Dutch/enum bugs (`motor_type`, `price_category`, `gear_type`) that
+every prior "sitewide Dutch sweep" missed because those sweeps only grepped `description` +
+`highlights` text columns, never structured enum columns. Followed up by checking every other
+enum-like column across all brands this run (`frame_type`, `bike_class`, `has_suspension`,
+`suitable_for`) -- all clean, standard English values sitewide, so this class of bug is now closed
+out rather than just flagged.
