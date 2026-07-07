@@ -1031,6 +1031,111 @@ several runs. The spelling fix is smaller but touches every one of 60 bikes' spe
 
 ---
 
+## 2026-07-07 -- Closed the original ~19-bike P0.9 sweep (Eunorau/SAMEBIKE/VTUVIA/DYU premium bikes)
+
+**GSC snapshot (28d, ending 2026-07-04):** 2 clicks, 716 impressions (+35 from last window), CTR
+0.3%. Page-level movement: `/e-bikes/samebike/samebike-rs-a01-pro` improved to **pos 14.7** (7
+impr, 2 clicks, 28.6% CTR), up from pos 16 -- the content deepened in run 4 appears to be working.
+`/e-bikes/samebike/samebike-rs-a01-men` holds pos 9.1 (9 impr, 1 click). `/e-bikes/engwe/engwe-p275-se`
+now 21 impr, pos 20.3 (still the top single-bike impression page). Two pages picked up their
+*second* consecutive window with a confirmed click: `/e-bikes/eunorau/eunorau-meta-24-1` (5 impr,
+pos 23.2) and `/e-bikes/duotts/duotts-e29` (3 impr, pos 21.3) -- both flagged as a "next candidate"
+since run 4. `/best/cargo-ebikes` still the largest impression pool (136 impr, pos 74.3, 0 clicks) --
+unchanged competitive-depth read. No query-level striking-distance (pos 5-20) entries this run.
+
+**PostHog snapshot (28d):** 64 pageviews / 23 visitors (up slightly). Top pages: homepage (12/8),
+`/e-bikes/overzicht` (10/4), DUOTTS S26 (6/5, still the most-visited product page), DUOTTS C29-K
+(5/1, new appearance), DUOTTS C29max (4/1). `duotts-duotts-c29-k` now shows up in **both** GSC (pos
+16.2 in the prior run) and PostHog -- the dual-signal page the task brief flags as highest priority.
+ENGWE N1 Pro: still the only bike with confirmed affiliate clicks (2, eighth consecutive run).
+
+**Investigation before committing to this run's work:** Checked whether `eunorau-meta-24-1`,
+`duotts-e29` and `duotts-duotts-c29-k` (all converting or dual-signal) actually needed the "thin
+generic description" fix that helped the RS-A01 family in run 4. Pulled all three rows: all had
+solid, differentiated, real editorial descriptions already (e.g. eunorau-meta-24-1: "48V 500W hub
+motor and torque sensor... At 61.7 lbs and rated for up to 100 miles..."). No action needed there --
+this was a genuine dead end, not a missed opportunity.
+
+**Decision:** With the highest-signal pages already in good shape, resumed the original P0.9 list
+that has been re-flagged as "still untouched" in every log entry since 2026-07-05 run 1 (5
+consecutive runs): ~19 Eunorau/SAMEBIKE/VTUVIA/DYU bikes with placeholder weight/torque/payload and
+one-line stub descriptions.
+
+**Action -- researched and fixed 16 of 19 bikes (Supabase, live immediately), sourced from
+manufacturer sites (eunorau-ebike.com + AU/CA/US regional mirrors, samebike.com, vtuviaebike.com,
+dyucycle.com) and cross-checked against retailer listings (bikeberry.com, motorizedbicyclehq.com,
+electricbikereview.com, ebikehaul.com):**
+
+*Eunorau (10 bikes, all had `weight=0`/`weight_lbs=0`/`max_weight=0`, several priced $2,000-$3,999
+-- the catalog's premium full-suspension/mid-drive line):*
+- DEFENDER: 66 lbs, 300 lb payload (60 Nm torque was already correct)
+- FAT-HD 1.0: 78.7 lbs, 375 lb payload (160 Nm already correct)
+- FAT-HD 2.0: 81.6 lbs, 375 lb payload (160 Nm already correct)
+- FAT-HS: 77.1 lbs, 300 lb payload (160 Nm already correct)
+- FLASH AWD 1.0: 82 lbs, 440 lb payload (184 Nm already correct)
+- META275 1.0: 68.3 lbs, 286 lb payload, torque 0 -> 65 Nm
+- S1 (dirt bike): 152 lbs, 220 lb payload (150 Nm already correct)
+- SPECTER-S 3.0: 88.2 lbs, 300 lb payload (160 Nm already correct)
+- SPECTER-ST 2.0: 88 lbs, 300 lb payload (160 Nm already correct)
+- URUS 2.0: 61.7 lbs, 300 lb payload (120 Nm already correct)
+
+*SAMEBIKE (3 bikes):* CREST 99 lbs/330 lb payload (85 Nm already correct); STORM 99 lbs/330 lb
+payload, torque 0 -> 85 Nm; RS-A08-II 79 lbs/330 lb payload, torque 0 -> 80 Nm.
+
+*VTUVIA (1 bike):* FMB 60 lbs, 250 lb payload (160 Nm already correct).
+
+*DYU (3 bikes):* C2 weight 0 -> 52 lbs/265 lb payload; C5 weight 0 -> 59.5 lbs/265 lb payload; C6
+(weight was already 60 lbs) max_weight 0 -> 265 lbs. Left torque at 0 for all three -- DYU does not
+publish torque figures anywhere findable, and every prior run reached the same conclusion; a
+fabricated number would be worse than a blank one.
+
+All 16 also got new multi-sentence editorial descriptions and refreshed `highlights` arrays
+(replacing one-line spec fragments like "DYU C2: 250W motor, 25 mi range, $549.").
+
+**Self-caught error, fixed before shipping:** first-draft descriptions for CREST, STORM and
+RS-A08-II quoted the manufacturer's marketing-copy range ("70-140 km in eco mode, tested with a 75kg
+rider") -- but the site's own `range_manufacturer`/`range_practical` columns for all three already
+show 30 mi / 22 mi, a figure that would have contradicted the same page's own spec table. Rewrote
+all 3 to state "claimed 30 mile range (about 22 miles real-world)" instead. Same catch on DEFENDER:
+first draft said "roughly 80 miles" (a dual-battery config figure), but the DB's own range fields
+are 40 mi manufacturer / 30 mi practical (base single-battery) -- corrected before shipping. Caught
+this by cross-checking my own draft text against the DB's existing range columns rather than just
+trusting the manufacturer source in isolation.
+
+**Left unfixed, flagged as new ROADMAP P0.16 (needs a decision, not a guess):**
+- `eunorau-defender-s-fat-hs`: DB model name is "Defender-S" but its existing description reads
+  like the FAT-HS's mid-drive spec (1000W Bafang M615, 160 Nm) -- Defender-S is actually a
+  different, AWD dual-hub-motor bike. Couldn't confirm from public sources which product this row
+  is meant to represent, so didn't touch weight/torque/description.
+- `vtuvia-reindeer-1` ("REINDEER 1.0", $1699): every current listing found is for "Reindeer 2.0" at
+  the same price; no distinct spec sheet for a "1.0" surfaced. Left weight/torque/payload at 0
+  rather than assume it's identical to the 2.0.
+
+**Verified:** re-queried Supabase to confirm all 20 UPDATE statements (16 fixes + 4 range-text
+corrections) landed correctly. `npx tsc --noEmit -p tsconfig.json` clean (data-only run, no code
+changed). Loaded `/e-bikes/eunorau/eunorau-urus` and `/e-bikes/samebike/samebike-storm-fat-tire-mountain-e-bike`
+live in the dev preview: Specifications table shows "61.7 lbs / 300 lbs payload" and "99 lbs / 330
+lbs payload" respectively (both previously "0"). Confirmed the corrected range text renders with no
+contradiction against the spec table. No console errors.
+
+**Expected impact:** removes `0 lbs` weight and `0 lb` payload -- both shown in the on-page spec
+table and interpolated into the meta description and FAQ schema -- from 16 detail pages, including
+several of the catalog's most expensive products ($2,000-$3,999 Eunorau full-suspension/mid-drive
+bikes), where a broken spec is a sharper trust signal than on a budget bike. Closes a punch list
+that had been re-flagged as "still untouched" in 5 consecutive log entries.
+
+**Next candidates:** (1) ROADMAP P0.16 -- the 2 remaining ambiguous bikes (`eunorau-defender-s-fat-hs`,
+  `vtuvia-reindeer-1`) need a human decision or deeper research, not a guess. (2) ROADMAP P0.13 --
+  Dylan decision still needed on the 3 ENGWE scooter-not-bike products. (3) The 3 remaining
+  broken-weight ENGWE bikes (L20 3.0 Boost, L20 3.0 Pro, LE20) and 4 stub-description ENGWE bikes
+  (EASE 2 PRO, Y600, L16, Y400) flagged since runs 3-4 -- check current status, may already be
+  resolved by a later run's sweep. (4) State page expansion (P2.5), still untouched across every
+  run logged so far -- the single largest unaddressed roadmap item. (5) `duotts-duotts-c29-k` is a
+  genuine dual-signal page (GSC + PostHog) with already-solid content -- worth checking if its
+  striking-distance position has moved now that GSC shows regular movement again.
+
+---
+
 ## 2026-07-06 (run 5) -- ENGWE Dutch `highlights` bug (sitewide) + closed out P0.9's ENGWE punch list + fixed false "discontinued" messaging on the site's two highest-signal pages
 
 **GSC snapshot (28d, ending 2026-07-03):** 2 clicks, 681 impressions, CTR 0.3%. Query-level
