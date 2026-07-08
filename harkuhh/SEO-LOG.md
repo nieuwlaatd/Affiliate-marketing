@@ -1503,3 +1503,92 @@ still needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike classification. (3) ROADMAP
 (GSC click, pos 18.5) still a candidate for a P1.1 depth pass. (5) Watch for the next GSC window to
 refresh (data has been stuck on the 2026-06-07 to 2026-07-05 window for two consecutive runs now) --
 if it stays stale next run too, worth checking the GSC integration itself rather than assuming lag.
+
+---
+
+## 2026-07-08 (run 9) -- GSC window investigated (not a bug) + duotts-e29 depth (P1.1) + 5 more states (P2.5)
+
+**GSC snapshot (28d, ending 2026-07-05):** 2 clicks, 794 impressions, CTR 0.3% -- same window as
+the previous two logged runs, and now confirmed why: read `scripts/gsc-insights.ts` (line 78,
+`endDate = isoDaysAgo(3)`), which computes the window from `new Date()` minus a 3-day lag buffer.
+Since this scheduled task can run multiple times within the same calendar day (runs 7, 8, and 9 all
+landed on 2026-07-08), the GSC window is expected to stay identical across same-day runs -- this is
+correct behavior for GSC's real data lag, not a broken integration. Closes out the "check the GSC
+integration itself" item flagged at the end of run 8. Query/page tables unchanged from run 8: top
+demand still `electric bike for heavy riders` (49 impr, pos 46.8, 1 click) and `/best/cargo-ebikes`
+(139 impr, pos 74.4, 0 clicks, already assessed as an authority ceiling). `duotts-e29` again appears
+with a real click (pos 18.5, 25% CTR) -- third consecutive pull showing this signal.
+
+**PostHog snapshot (28d):** 69 pageviews / 28 visitors (up slightly from 68/27). Google now the
+clear top traffic source (29 views) ahead of direct (27), continuing the trend from the last two
+runs. Conversion events unchanged at 3 total (`affiliate_link_clicked`): ENGWE N1 Pro (2), DUOTTS
+F20 (1) -- no new converting bike this window.
+
+**Decision:** Both data sources flat again versus the last two logged runs, with one exception: the
+`duotts-e29` GSC click signal has now recurred for three straight pulls without ever getting the
+P1.1 depth treatment despite being named as a candidate twice. Fixed that plus advanced the largest
+untouched roadmap item (P2.5 state expansion), per run 8's own "worth another batch of 5 next time
+data is flat again" note.
+
+**Action 1 -- P1.1: `duotts-e29` description depth (Supabase, live immediately):** Was one generic
+sentence ("A lightweight e-MTB with Bafang motor, torque sensor, Shimano hydraulic brakes, and DNM
+air rear shock..."). Rewrote to 4 sentences: torque-sensing motor + hydraulic brakes + air shock
+detail, weight positioning (58.6 lbs, light for a full-suspension e-MTB), claimed-vs-real range
+framing (56mi manufacturer / 36mi practical, matching its own DB columns exactly), and price
+positioning ($1,429 vs comparable torque-sensor e-MTBs). No numbers changed, only added context
+around already-correct DB values.
+
+**Action 2 -- P2.5: 5 more state pages added to `lib/state-data.ts`:** Indiana, Connecticut,
+Alabama, South Carolina, Kentucky (25 -> 30 states). Before writing, ran a web search to verify each
+state's actual e-bike law rather than assuming the standard three-class template used for the last
+batch -- this caught that **South Carolina and Kentucky do not use the three-class system** at all
+(South Carolina defines a single 750W/20mph "electric-assist bicycle" category with no helmet law at
+any age; Kentucky has no statewide e-bike statute whatsoever and treats e-bikes as plain bicycles,
+with only scattered local rules like Louisville Metro Parks' under-18 helmet requirement). Wrote both
+with `classSystem: false` and outlier-law framing matching the existing Hawaii/New Jersey entries,
+instead of the standard template that would have stated an inaccurate law. Indiana, Connecticut, and
+Alabama do use the three-class system and got the standard template, each with a genuine differentiator:
+Indiana's Class 3 under-18 helmet rule and 15+ minimum operating age; Connecticut's unusually strict
+all-age, all-class helmet law plus a statewide Class 3 trail/path ban (one of only ~5 states with an
+all-age helmet rule); Alabama's statewide sidewalk-riding ban and mandatory-sidepath rule alongside
+its Class 3 age/helmet rules.
+
+**Action 3 -- Found and fixed a live factual error on an already-published state page:** the
+Kentucky search result named North Carolina alongside SC/KY as a three-class non-adopter, which
+contradicted our existing `north-carolina` entry (`classSystem: true`, "28 mph (Class 3)", "Required
+for riders under 16"). Ran a dedicated web search to confirm rather than trust one incidental mention:
+confirmed North Carolina uses a single "electric assisted bicycle" definition (750W, 20 mph motor-only
+speed, no Class 1/2/3 tiers) and that a bill to adopt the three-class system (SB 576) has been
+introduced but not passed as of 2026. Rewrote the entry to `classSystem: false` with accurate
+maxSpeed/helmet/lawSummary fields and an added riding tip flagging the missing Class 3 category,
+matching the SC/KY outlier-law pattern. This had been live and inaccurate since the file was first
+created (well before this run), so this is a correction, not new content.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean. Started the dev server and loaded
+`/best-ebikes/kentucky` directly: confirmed the "Non-standard" class-system label, correct helmet/
+law copy, and full buyer content render with no console errors (the only network failures were the
+pre-existing unrelated AvantLink affiliate-tracking pixel block, not caused by this change). Also
+loaded `/e-bikes/duotts/duotts-e29` and confirmed the new 4-sentence description renders on the page.
+
+**Expected impact:** `duotts-e29` gets the same editorial depth treatment as every other page with a
+real click signal, closing a gap that persisted across two prior runs' own candidate lists. The 5 new
+state pages are additional low-competition local-intent ranking surfaces. Catching the SC/KY legal
+framing before publishing, and catching the pre-existing North Carolina inaccuracy after publishing,
+both avoid shipping incorrect legal claims on public pages -- a genuine trust and liability risk for
+an affiliate site giving legal-adjacent guidance to real buyers.
+
+**Verified (North Carolina fix):** `npx tsc --noEmit -p tsconfig.json` clean after the edit (same
+check already covered this file). Not re-run in the browser separately since it's the same
+`state-data.ts` file and page template already verified working for Kentucky above.
+
+**Next candidates:** (1) Continue P2.5 -- Louisiana, Oklahoma, Iowa, and ~20 smaller states remain;
+verify each one's actual class-system status via web search before writing (now standard practice
+after SC/KY/NC all turned out to be non-adopters). (2) Audit the remaining ~24 already-published
+states' `classSystem`/`maxSpeed`/`helmetRequired` fields against a real source -- they were written
+before this run started verifying per-state, and North Carolina alone was found wrong on the first
+adjacent-mention check; there is no reason to assume the rest are all correct. Alaska (also named as a
+non-adopter in this run's research) is not yet in the file, so no action needed there unless it gets
+added later. (3) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike
+classification. (4) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need
+human research. (5) `/blog/ebike-maintenance-tips` still showing impressions (38 impr, pos 51.7 last
+run) -- worth a depth pass once a second data point confirms it's a real, growing cluster.
