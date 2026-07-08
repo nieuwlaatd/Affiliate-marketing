@@ -1450,3 +1450,56 @@ as an open content task; 6+ runs have confirmed the content is genuinely solid a
 pos 74 despite 139 impr/window is very likely a competitive/authority ceiling, not something another
 content pass will move. (6) `/blog/ebike-maintenance-tips` newly showing 38 impr at pos 51.7 --
 worth a depth pass once GSC shows a second data point confirming it's a real, growing cluster.
+
+---
+
+## 2026-07-08 (run 8) -- State page expansion (P2.5): 5 new states
+
+**GSC snapshot (28d, ending 2026-07-05):** 2 clicks, 794 impressions, CTR 0.3% -- identical totals
+and identical query/page tables to the previous run's snapshot (same window; GSC has not refreshed
+yet). No new striking-distance queries, no new high-impression/low-CTR pages. Confirmed the top
+signals are unchanged: `electric bike for heavy riders` (49 impr, pos 46.8, 1 click), `/best/cargo-
+ebikes` (139 impr, pos 74.4, 0 clicks, already assessed as an authority ceiling not a content gap),
+`engwe-p275-se` (21 impr, pos 20.3).
+
+**PostHog snapshot (28d):** 68 pageviews / 27 visitors (up slightly from 66/25). Google overtook
+direct as the top source last run (28 vs 27 views) and holds that lead this run too. Conversion
+events unchanged at 3 total (`affiliate_link_clicked`): ENGWE N1 Pro (2), DUOTTS F20 (1) -- no new
+converting bike this window, so no new dual-signal page to chase.
+
+**Decision:** With both data sources flat versus the last logged run (same GSC window, only a
+marginal PostHog uptick, no new conversion signal), there was no fresh data-driven lever to pull.
+Per the last several runs' own "next candidates," state page expansion (P2.5) has been flagged as
+the single largest unaddressed roadmap item for 7+ consecutive runs without action -- committed this
+run to it.
+
+**Action -- 5 new state pages added to `lib/state-data.ts` (live immediately, auto-added to sitemap
+via `getAllStateSlugs()`):** Tennessee, Missouri, Maryland, Wisconsin, Nevada. Chosen for geographic
+and demand spread not yet covered by the existing 20 states (South, Midwest x2, Mid-Atlantic, West),
+each with genuinely differentiated terrain/law content matching the existing template depth (three-
+class law summary, helmet/license/speed/wattage facts, 4 riding tips specific to real geography and
+climate in that state, 5 top cities, FAQ-ready copy). All 5 use the standard three-class e-bike model
+law framework (no license/registration/insurance, helmet-under-X requirement) consistent with the
+15 other standard-law states already in the file; none needed an outlier-law treatment like Hawaii/
+New Jersey. State count: 20 -> 25.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean. Started the dev server and loaded
+`/best-ebikes/nevada` and `/best-ebikes/wisconsin` directly: confirmed correct title, hero intro,
+quick-facts grid, law summary, riding tips list, and FAQ section all render with the new copy, no
+console errors, no failed requests (the only network failures seen were an unrelated pre-existing
+AvantLink affiliate-tracking pixel blocked by the browser's cross-origin policy, not caused by this
+change).
+
+**Expected impact:** Each new state page is a low-competition ranking surface for "best e-bike in
+[state]" and "[state] e-bike laws" queries -- exactly the local-intent, lower-competition wins P2.5
+was written to capture. These pages also link into the store locator and quiz, so any traffic they
+attract feeds the existing conversion funnel rather than requiring new infrastructure.
+
+**Next candidates:** (1) Continue P2.5 -- ~20 states remain unadded (Indiana, Connecticut, South
+Carolina, Alabama, Kentucky, Louisiana, Oklahoma, Iowa, and other smaller-population states); worth
+another batch of 5 next time GSC/PostHog data is flat again. (2) ROADMAP P0.13 -- Dylan decision
+still needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike classification. (3) ROADMAP P0.16 --
+`eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need human research. (4) `duotts-e29`
+(GSC click, pos 18.5) still a candidate for a P1.1 depth pass. (5) Watch for the next GSC window to
+refresh (data has been stuck on the 2026-06-07 to 2026-07-05 window for two consecutive runs now) --
+if it stays stale next run too, worth checking the GSC integration itself rather than assuming lag.
