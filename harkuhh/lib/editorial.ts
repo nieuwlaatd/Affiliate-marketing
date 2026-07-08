@@ -11,7 +11,7 @@
 
 export const SITE = {
   name: 'Best Bike For Me',
-  url: 'https://www.bestbikeforme.com',
+  url: 'https://bestbikeforme.com',
   foundedYear: 2026,
   contactEmail: 'hello@bestbikeforme.com',
 } as const;

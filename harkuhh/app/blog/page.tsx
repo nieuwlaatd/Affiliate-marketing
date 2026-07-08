@@ -29,11 +29,11 @@ export default function BlogIndexPage() {
     '@type': 'Blog',
     name: 'Best Bike For Me Blog',
     description: 'Expert guides, buying advice and maintenance tips for electric bikes.',
-    url: 'https://www.bestbikeforme.com/blog',
+    url: 'https://bestbikeforme.com/blog',
     publisher: {
       '@type': 'Organization',
       name: 'Best Bike For Me',
-      url: 'https://www.bestbikeforme.com',
+      url: 'https://bestbikeforme.com',
     },
   };
 

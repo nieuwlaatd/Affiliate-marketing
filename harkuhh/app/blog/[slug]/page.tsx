@@ -60,7 +60,7 @@ export default async function BlogPostPage({
       name: SITE.name,
       url: SITE.url,
     },
-    mainEntityOfPage: `https://www.bestbikeforme.com/blog/${post.slug}`,
+    mainEntityOfPage: `https://bestbikeforme.com/blog/${post.slug}`,
   };
 
   return (

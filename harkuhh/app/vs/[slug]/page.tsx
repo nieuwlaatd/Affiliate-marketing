@@ -5,15 +5,18 @@ import Image from 'next/image';
 import { getAllBikes } from '@/lib/ebike-data';
 import { EBike } from '@/lib/types';
 
-// Curated high-volume matchups (SEO). Each side is a brand slug; we pick that
-// brand's top-scoring bike. Add more as the database grows.
+// Curated matchups (SEO). Each side is a brand slug; we pick that brand's
+// top-scoring bike. Must use brands actually in the catalog (see lib/ebike-data.ts) --
+// a slug that matches no bike or brand renders notFound(), which ships a dead
+// 404 URL in the sitemap. Add more real brand-vs-brand pairs as the catalog grows;
+// once P2.1 (Aventon/Lectric/Rad Power/Ride1Up/Velotric affiliate approval) lands,
+// those become real high-volume matchups worth adding here.
 const MATCHUPS: [string, string][] = [
-  ['aventon', 'rad-power-bikes'],
-  ['lectric', 'rad-power-bikes'],
-  ['velotric', 'aventon'],
-  ['ride1up', 'aventon'],
-  ['himiway', 'heybike'],
-  ['lectric', 'aventon'],
+  ['engwe', 'eunorau'],
+  ['duotts', 'engwe'],
+  ['eunorau', 'samebike'],
+  ['vtuvia', 'dyu'],
+  ['walfisk', 'engwe'],
 ];
 
 function brandSlug(b: EBike): string {

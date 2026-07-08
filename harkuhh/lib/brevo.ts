@@ -1,6 +1,6 @@
 const BREVO_API_URL = "https://api.brevo.com/v3";
 
-const SITE_URL = "https://www.bestbikeforme.com";
+const SITE_URL = "https://bestbikeforme.com";
 
 interface SendEmailParams {
   to: { email: string; name?: string }[];

@@ -1,9 +1,9 @@
 import type { MetadataRoute } from 'next';
 import { getAllBikes } from '@/lib/ebike-data';
-import { getAllSlugs } from '@/lib/blog-data';
+import { getAllPosts } from '@/lib/blog-data';
 import { getAllStateSlugs } from '@/lib/state-data';
 
-const SITE_URL = 'https://www.bestbikeforme.com';
+const SITE_URL = 'https://bestbikeforme.com';
 
 const BEST_CATEGORIES = [
   'ebikes-under-1000',
@@ -20,13 +20,14 @@ const BEST_CATEGORIES = [
   'off-road-ebikes',
 ];
 
+// Must match app/vs/[slug]/page.tsx's MATCHUPS exactly -- both sides need to be
+// real catalog brands or the page 404s while still being listed in the sitemap.
 const VS_MATCHUPS = [
-  'aventon-vs-rad-power-bikes',
-  'lectric-vs-rad-power-bikes',
-  'velotric-vs-aventon',
-  'ride1up-vs-aventon',
-  'himiway-vs-heybike',
-  'lectric-vs-aventon',
+  'engwe-vs-eunorau',
+  'duotts-vs-engwe',
+  'eunorau-vs-samebike',
+  'vtuvia-vs-dyu',
+  'walfisk-vs-engwe',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -40,6 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/stores`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${SITE_URL}/e-bikes/quiz`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${SITE_URL}/best-ebikes`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${SITE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${SITE_URL}/how-we-test`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${SITE_URL}/privacy`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
@@ -75,9 +77,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // DB unavailable at build time — static routes still ship
   }
 
-  const blogRoutes: MetadataRoute.Sitemap = getAllSlugs().map((slug) => ({
-    url: `${SITE_URL}/blog/${slug}`,
-    lastModified: now,
+  // Echte publicatie/update-datums: Google vertrouwt lastmod alleen als die
+  // niet bij elke build verspringt, en pikt nieuwe posts dan sneller op.
+  const blogRoutes: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedAt ?? post.publishedAt),
     changeFrequency: 'monthly',
     priority: 0.7,
   }));

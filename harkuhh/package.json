@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "gsc": "tsx scripts/gsc-insights.ts",
+    "gsc:index": "tsx scripts/gsc-index-check.ts",
     "posthog": "tsx scripts/posthog-insights.ts"
   },
   "dependencies": {

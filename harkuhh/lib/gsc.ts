@@ -117,3 +117,67 @@ export async function listSites(): Promise<{ siteUrl: string; permissionLevel: s
   });
   return res.data.siteEntry ?? [];
 }
+
+const INSPECTION_API_BASE = 'https://searchconsole.googleapis.com/v1';
+
+export interface UrlInspectionResult {
+  inspectionUrl: string;
+  verdict?: string; // PASS | PARTIAL | FAIL | NEUTRAL
+  coverageState?: string; // e.g. "Submitted and indexed", "Discovered - currently not indexed"
+  robotsTxtState?: string;
+  indexingState?: string;
+  lastCrawlTime?: string;
+  pageFetchState?: string;
+  googleCanonical?: string;
+  userCanonical?: string;
+  sitemap?: string[];
+  referringUrls?: string[];
+  raw?: unknown;
+}
+
+/**
+ * Check the live index status of a single URL via the URL Inspection API
+ * (separate from Search Analytics — this reflects Google's actual crawl/index
+ * state, i.e. what shows in GSC's "Page indexing" report).
+ * Same auth (webmasters.readonly scope covers this endpoint too).
+ */
+export async function inspectUrl(inspectionUrl: string): Promise<UrlInspectionResult> {
+  const client = getClient();
+  const siteUrl = getSiteUrl();
+  const res = await client.request<{
+    inspectionResult?: {
+      indexStatusResult?: {
+        verdict?: string;
+        coverageState?: string;
+        robotsTxtState?: string;
+        indexingState?: string;
+        lastCrawlTime?: string;
+        pageFetchState?: string;
+        googleCanonical?: string;
+        userCanonical?: string;
+        sitemap?: string[];
+        referringUrls?: string[];
+      };
+    };
+  }>({
+    url: `${INSPECTION_API_BASE}/urlInspection/index:inspect`,
+    method: 'POST',
+    data: { inspectionUrl, siteUrl },
+  });
+
+  const r = res.data.inspectionResult?.indexStatusResult;
+  return {
+    inspectionUrl,
+    verdict: r?.verdict,
+    coverageState: r?.coverageState,
+    robotsTxtState: r?.robotsTxtState,
+    indexingState: r?.indexingState,
+    lastCrawlTime: r?.lastCrawlTime,
+    pageFetchState: r?.pageFetchState,
+    googleCanonical: r?.googleCanonical,
+    userCanonical: r?.userCanonical,
+    sitemap: r?.sitemap,
+    referringUrls: r?.referringUrls,
+    raw: res.data,
+  };
+}

@@ -13,7 +13,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.bestbikeforme.com"),
+  metadataBase: new URL("https://bestbikeforme.com"),
   title: {
     default: "Best Bike For Me | Find the Right E-Bike for Your Ride",
     template: "%s | Best Bike For Me",
@@ -67,7 +67,7 @@ export default function RootLayout({
             "@context": "https://schema.org",
             "@type": "Organization",
             name: "Best Bike For Me",
-            url: "https://www.bestbikeforme.com",
+            url: "https://bestbikeforme.com",
             description: "Unbiased, data-driven e-bike reviews and comparison tools to help riders find the right electric bike.",
           })}}
         />

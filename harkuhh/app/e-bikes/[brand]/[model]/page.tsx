@@ -28,9 +28,11 @@ export async function generateMetadata({ params }: { params: Promise<{ brand: st
   if (!bike) return { title: 'E-Bike not found' };
   const title = `${bike.brand} ${bike.model} Review ${bike.year} | Specs, Price & Where to Buy`;
   const description = `${bike.brand} ${bike.model} review: ${bike.rangePractical} mi real-world range, ${bike.torque} Nm motor, $${bike.price.toLocaleString('en-US')}. Score: ${bike.scoreOverall}/10. Full specs and where to buy.`;
+  const brandSlug = bike.brand.toLowerCase().replace(/\s+/g, '-');
   return {
     title,
     description,
+    alternates: { canonical: `/e-bikes/${brandSlug}/${bike.slug}` },
     openGraph: { title, description, images: bike.images?.[0] ? [bike.images[0]] : [], type: 'website' },
     twitter: { card: 'summary_large_image', title, description },
   };
@@ -58,7 +60,7 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
   const similar = await getSimilarBikes(bike, 3);
 
   const brandSlug = bike.brand.toLowerCase().replace(/\s+/g, '-');
-  const siteUrl = 'https://www.bestbikeforme.com';
+  const siteUrl = 'https://bestbikeforme.com';
 
   const ratingValue = bike.scoreOverall ? (bike.scoreOverall / 2).toFixed(1) : null;
 
