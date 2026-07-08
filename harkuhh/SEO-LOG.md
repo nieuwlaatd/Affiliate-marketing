@@ -1352,3 +1352,101 @@ every prior "sitewide Dutch sweep" missed because those sweeps only grepped `des
 enum-like column across all brands this run (`frame_type`, `bike_class`, `has_suspension`,
 `suitable_for`) -- all clean, standard English values sitewide, so this class of bug is now closed
 out rather than just flagged.
+
+---
+
+## 2026-07-08 (run 7) -- kg/km unit leaks in editorial text (P0.18, sitewide) + DUOTTS F20 depth (P0.19)
+
+**GSC snapshot (28d, ending 2026-07-05):** 2 clicks, 794 impressions (+78), CTR 0.3%. Query-level
+striking distance table empty, but page-level signals show real movement: homepage `/` now 3
+clicks/3 impr at pos 1.0 (tiny sample, but a new all-click page). `/e-bikes/samebike/
+samebike-rs-a01-pro` improved to pos 14.7 with 2 clicks (28.6% CTR) -- the run-4 depth pass is
+paying off. Two **new** single-click bike pages appeared this window: `/e-bikes/duotts/duotts-e29`
+(pos 18.5, 25% CTR) and `/e-bikes/eunorau/eunorau-meta-24-1` (pos 23.2, 20% CTR) -- checked
+meta-24-1's Supabase row and it already has a solid differentiated description (confirmed dead end,
+no action needed). `/best/cargo-ebikes` still the largest impression pool (139 impr, pos 74.4, 0
+clicks) -- this has now been flagged as "stagnant despite content" in 6+ consecutive log entries
+without resolution; read its actual page content this run (900+ words, 7 FAQs, comparison table,
+relatedPosts -- all genuinely solid) and concluded this is very likely a competitive-depth /
+off-page-authority ceiling (ROADMAP's own framing: "the real bottleneck is traffic and authority"),
+not a content gap -- deprioritized further content passes on this specific page until backlinks
+(P4.1, Dylan) or domain age change the picture. `/best/folding-ebikes` unchanged (pos 16.8, 0
+clicks on tiny volume).
+
+**PostHog snapshot (28d):** 66 pageviews / 25 visitors (up from 64/23). Traffic sources: Google now
+28 views, ahead of direct (26) for the first time -- organic is overtaking direct traffic. **Key
+signal: 3rd confirmed affiliate click, and it's a new bike** -- DUOTTS F20 got its first-ever
+confirmed `affiliate_link_clicked` event (alongside ENGWE N1 Pro's usual 2). F20 also appears in
+PostHog's top-pages list (2 views/2 visitors) but not yet in GSC's click table -- a PostHog-only
+conversion signal.
+
+**Decision:** Investigated the two new-signal bikes (`duotts-f20`, `duotts-e29`) before writing
+anything, per task brief step 2 guidance to check dual/new signals first. Found something bigger
+than either bike individually.
+
+**Discovery -- kg/km units leaking into editorial `description`/`highlights` text, sitewide (not
+previously caught):** Every prior "Dutch sweep" (2026-07-04, run 5, run 6) grepped `description` +
+`highlights` for non-English *words* and structured enum columns for non-English *values*, but
+never checked for metric units embedded in otherwise-correct English sentences. Ran a sitewide regex
+(`\d+\s*kg|\d+\s*km` against description + highlights, all brands) and found 9 affected bikes:
+- **DUOTTS**: `E29` ("...at just 26.6kg"), `F20` ("...for 140km range")
+- **DYU**: `M20` ("Up to 160km range"), `Stroll 1` ("Lightweight 19.5kg frame")
+- **ENGWE**: `N1 Air` ("lightweight 15.6 kg city e-bike"), `N1 Pro` ("At 19 kg, it balances..."),
+  `P20` ("...at 18.5 kg with a torque sensor")
+- **SAMEBIKE**: `M20-III` ("Up to 280km total range", "Heavy-duty 180kg payload")
+
+Three of these (`N1 Air`, `N1 Pro`, `P20`) were worse than a unit-convention slip: the description
+paragraph stated a kg weight while a *highlights bullet two lines below it on the same page* stated
+the lbs figure (e.g. N1 Pro: "At 19 kg, it balances capability..." right above a highlight reading
+"Just 41.9 lbs") -- a visible self-contradiction on the same detail page, not just a wrong-unit-for-
+audience issue.
+
+**Verification before touching anything:** cross-checked every kg/km figure against that bike's own
+`weight_lbs` / `range_manufacturer` / `range_practical` / `max_weight` columns. All 9 matched exactly
+(19kg = 41.9 lbs; 15.6kg = 34.4 lbs; 18.5kg = 40.8 lbs; 26.6kg = 58.6 lbs; 19.5kg = 43 lbs; 140km =
+87mi manufacturer range; 160km = 99mi manufacturer range; 280km = 174mi manufacturer range; 180kg =
+396 lb payload). This was purely a unit-translation fix, not a data-accuracy question -- no numbers
+were changed, only the unit and wording of already-correct figures.
+
+**Action 1 -- Fixed all 9 (Supabase, live immediately):** Used `replace()` on `description` and
+`array_replace()` on `highlights` to swap each kg/km mention for the equivalent lbs/mi figure already
+sitting in that row's own spec columns, adding "(X mi real-world)" framing where a manufacturer-vs-
+practical range gap existed (matching the site's established claimed-vs-real convention). Re-ran the
+sitewide regex sweep afterward: zero remaining kg/km matches in `description` or `highlights` across
+the entire catalog.
+
+**Action 2 -- P1.1: DUOTTS F20 description depth (Supabase, live immediately):** F20's first
+confirmed affiliate click this run made it a clear candidate for the same depth treatment given to
+every other converting bike. Rewrote its one-sentence description into 3 sentences: battery/motor/
+frame specifics, claimed-vs-real range framing (87mi claimed / 56mi real-world), and price
+positioning ($1,199 vs comparable 1000W full-suspension fat-tire bikes) -- cross-checked against its
+own DB range/weight columns to avoid introducing a new contradiction.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (data-only run). Started the dev server and
+fetched all 9 fixed pages directly: confirmed each editorial description/highlight now reads the
+lbs/mi figure with zero remaining kg/km text in the prose (the only remaining "kg" mentions on any
+page come from an unrelated raw manufacturer spec-sheet table further down the ENGWE pages that
+already shows both units side-by-side, e.g. "15.6 kg (34.39 lbs)" -- confirmed this is a different,
+pre-existing, non-buggy field and left untouched). Confirmed the new F20 description and the fixed
+F20/M20-III highlights render correctly with no console errors, all pages 200.
+
+**Expected impact:** removes a unit-consistency trust break from 9 detail pages across 4 brands,
+including the two highest-revenue-signal pages in the entire catalog this run (`engwe-n1-pro`, the
+only bike with confirmed clicks for 9 consecutive runs, and `duotts-f20`, which just converted for
+the first time). The 3 self-contradicting ENGWE pages (stating both "19 kg" and "41.9 lbs" for the
+same bike on the same page) were the sharpest instances -- a buyer noticing two different weight
+figures on one page is a concrete, specific trust break, not just an awkward phrasing. Also closes
+out a class of bug that 3 consecutive prior "Dutch sweep" runs (07-04, run 5, run 6) all missed
+because none of them checked for metric units specifically, only non-English words/values.
+
+**Next candidates:** (1) State page expansion (P2.5), still untouched across 7+ consecutive
+logged runs -- the single largest unaddressed roadmap item; strongly worth committing a full run to
+this next, since GSC/PostHog signals are flat-to-slowly-growing and this is the biggest structural
+gap left. (2) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike
+classification. (3) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need
+human research. (4) `duotts-e29` (new GSC click, pos 18.5) has a decent but not deeply differentiated
+description -- candidate for the next P1.1 depth pass. (5) `/best/cargo-ebikes` -- stop treating this
+as an open content task; 6+ runs have confirmed the content is genuinely solid and the stagnation at
+pos 74 despite 139 impr/window is very likely a competitive/authority ceiling, not something another
+content pass will move. (6) `/blog/ebike-maintenance-tips` newly showing 38 impr at pos 51.7 --
+worth a depth pass once GSC shows a second data point confirming it's a real, growing cluster.
