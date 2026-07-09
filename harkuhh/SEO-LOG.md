@@ -1789,3 +1789,80 @@ dual-signal priority page on the site. (6) GSC window has now been stuck on the 
 2026-07-06 range for 3 consecutive same-day runs (10, 11, 12) -- still consistent with the documented
 lag buffer, but this is the longest same-day streak yet; worth a fresh pull next calendar day to confirm
 the window actually advances once a new day starts.
+
+---
+
+## 2026-07-09 (run 13) -- Final 5 states (P2.5 complete): Delaware, New Hampshire, Vermont, Rhode Island, Alaska
+
+**GSC snapshot (28d, ending 2026-07-06):** 2 clicks, 832 impressions, CTR 0.2% -- identical to runs 10,
+11, and 12's snapshot (same window; GSC still has not refreshed). Query/page tables unchanged: `electric
+bike for heavy riders` still the top demand query (47 impr, pos 46.4, 1 click), `/best/cargo-ebikes`
+still the largest impression pool (120 impr, pos 75.6, 0 clicks, still treated as an authority ceiling
+per the last 6 runs' assessment). No new striking-distance or high-impression/low-CTR signal. This is now
+4 consecutive same-day runs (10-13) on the identical window -- consistent with the documented 3-day lag
+buffer, per run 9's root-cause finding, not a bug.
+
+**PostHog snapshot (28d):** 70 pageviews / 28 visitors, fully flat versus runs 10, 11, and 12 (also
+70/28). Google holds the top traffic source (29 views) ahead of direct (27), unchanged for 5 consecutive
+runs. Conversion events unchanged at 3 total (`affiliate_link_clicked`): ENGWE N1 Pro (2), DUOTTS F20
+(1) -- no new converting bike, and DUOTTS S26 still has not gained any GSC impressions/clicks to match
+its PostHog traffic (now 4 consecutive runs watching this signal without movement).
+
+**Decision:** Both data sources fully flat versus the three immediately prior runs (identical GSC window,
+identical PostHog totals down to the pageview/visitor count) with no new dual-signal page to chase.
+Finished the last untouched roadmap item per run 12's own "next candidates": the final 5 states, closing
+out P2.5 for all 50 states.
+
+**Action -- Final 5 state pages added to `lib/state-data.ts` (live immediately, auto-added to sitemap via
+`getAllStateSlugs()`):** Delaware, New Hampshire, Vermont, Rhode Island, Alaska (45 -> 50 states, all 50
+US states now live). Verified each state's actual e-bike law via web search before writing (standard
+practice since the SC/KY/NC/Montana non-adopter discoveries in runs 9 and 12). This batch surfaced the
+most significant outlier of the entire P2.5 sweep: **Alaska has no enacted statewide e-bike classification
+law at all** -- HB 8 was vetoed by the governor in 2023 and a follow-up bill, SB 62, stalled in Senate
+State Affairs, so e-bikes are not formally defined as Class 1/2/3 anywhere in Alaska statute as of 2026.
+This is a different kind of outlier than Montana/SC/KY/NC, which all have some single-tier definition;
+Alaska simply has no codified e-bike law, so trail access depends entirely on the individual land manager
+(Alaska State Parks has adopted its own three-class definitions for park trail-access purposes only, not
+as state law). Ran a second, more targeted search specifically to resolve conflicting claims across
+sources (one set of results incorrectly suggested Alaska classifies e-bikes as motorcycles requiring an
+operator's license; a second pass confirmed the actual current status is "no enacted law," not "regulated
+as a motor vehicle") before writing the entry -- wrote it as `classSystem: false` with a plain-language
+explanation of the legal gray area rather than asserting either extreme. Delaware, New Hampshire, Vermont,
+and Rhode Island all confirmed standard three-class adoption, each with a genuine sourced differentiator:
+Delaware requires a helmet for all Class 3 riders/passengers regardless of age (not just under-18), plus a
+mandatory speedometer on Class 3 bikes; New Hampshire bars Class 3 e-bikes from most multi-use paths
+unless the path runs alongside a road; Vermont has no statewide e-bike helmet law at any age or class,
+confirmed via its actual statute text (§1136a) after several secondary-source blogs incorrectly claimed a
+Class 3 helmet mandate -- one of only 13 US states with zero helmet mandate; Rhode Island (three-class
+since July 2024) applies its under-21 helmet rule to all three classes, the only state that broad, rather
+than the more common Class-3-only or under-18-only pattern.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (exit 0). Started the dev server and loaded all 5
+new pages: `/best-ebikes/alaska` confirmed via accessibility snapshot showing the "Non-standard"
+class-system label, the custom max-speed/max-motor text ("Not codified statewide..."), and the correct
+law summary citing HB 8 and SB 62; `/best-ebikes/delaware`, `/rhode-island`, `/vermont`, and
+`/new-hampshire` all confirmed HTTP 200 via server logs with zero console errors on any page.
+
+**Expected impact:** P2.5 is now functionally complete -- all 50 states have a dedicated, individually
+verified local-intent page rather than templated copy, closing out the single largest roadmap item this
+autonomous loop has worked since run 8. The Alaska page in particular avoids a legal-accuracy trap that a
+less careful pass would likely have hit (either wrongly asserting motor-vehicle-style licensing, or wrongly
+assuming the standard three-class template applies), consistent with the per-state verification discipline
+established since the SC/KY/NC/Montana catches.
+
+**Next candidates:** (1) P2.5 is now complete (50/50 states) -- no further state-page expansion needed;
+future work on this surface should be an accuracy audit pass, not new pages (see item 2). (2) Audit the
+~40 already-published standard-three-class states' `helmetRequired`/`maxSpeed` fields against a real
+source; North Carolina, South Carolina, Kentucky, and Montana were all found to have been mis-templated on
+first write, and Vermont this run needed a second, more careful search to correct a helmet-law error a less
+careful pass would have shipped -- there is no strong reason to assume every earlier state page is
+error-free. (3) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike
+classification. (4) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need human
+research. (5) `/blog/ebike-maintenance-tips` still showing impressions (pos ~52) -- worth a depth pass once
+GSC shows continued growth on this cluster. (6) Watch DUOTTS S26 in the next PostHog/GSC pull -- still a
+PostHog-only traffic signal after 4 consecutive runs without any matching GSC impressions/clicks. (7) GSC
+window has now been stuck on the same 2026-06-08 to 2026-07-06 range for 4 consecutive same-day runs
+(10-13) -- still consistent with the documented lag buffer, but worth a fresh pull next calendar day to
+confirm the window actually advances. (8) With P2.5 complete, the next largest untouched roadmap item is
+P1.1 (bike detail page depth) for any remaining thin-description bikes not yet covered by prior sweeps, or
+P2.3 (high-intent vs-pages -- only 3 exist currently).
