@@ -1592,3 +1592,74 @@ added later. (3) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400
 classification. (4) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need
 human research. (5) `/blog/ebike-maintenance-tips` still showing impressions (38 impr, pos 51.7 last
 run) -- worth a depth pass once a second data point confirms it's a real, growing cluster.
+
+---
+
+## 2026-07-09 (run 10) -- DUOTTS S26 description depth (P1.1) + 5 more states (P2.5)
+
+**GSC snapshot (28d, ending 2026-07-06):** 2 clicks, 832 impressions (+38 vs last window), CTR 0.2%.
+Query-level striking-distance table still empty, but page-level signals show the same core cluster
+persisting: `/` now 3 clicks/3 impr at pos 1.0 (branded-query effect, small sample). `/e-bikes/samebike/
+samebike-rs-a01-pro` holds at pos 14.7 with 2 clicks (28.6% CTR). `duotts-duotts-c29-k` (pos 14.7),
+`duotts-e29` (pos 18.5, already given P1.1 depth in run 9), `engwe-p275-se` (21 impr, pos 20.3),
+`eunorau-meta-24-1` (pos 23.2, previously confirmed to already have a solid description -- no action),
+and `samebike-rs-a01-men` (pos 9.1) round out the recurring single-click bike pages. `/best/cargo-
+ebikes` still the largest impression pool (120 impr, pos 75.6, 0 clicks) -- continuing to treat this as
+an authority ceiling per the last 3 runs' assessment, not a content gap. `/best/folding-ebikes` (6 impr,
+pos 17.3) and `/blog/best-ebikes-for-hills` (96 impr, pos 44.9) unchanged. No new striking-distance or
+high-impression/low-CTR signal appeared this run.
+
+**PostHog snapshot (28d):** 70 pageviews / 28 visitors (flat vs 69/28 last run). Google holds the top
+traffic source (29 views) ahead of direct (27), continuing the trend from the last 3 runs. Conversion
+events unchanged at 3 total (`affiliate_link_clicked`): ENGWE N1 Pro (2), DUOTTS F20 (1) -- no new
+converting bike. **Key signal: DUOTTS S26 was the top individual bike page this window** -- 6 views,
+5 visitors, 5 sessions, more than any other single bike page in the snapshot -- despite not appearing
+in GSC's click table at all (a PostHog-only traffic signal). S26 has been named as "PostHog's top
+product page" in at least 2 earlier logged runs (2026-06-29, 2026-07-04) but never actually received
+the P1.1 depth treatment other high-signal bikes got.
+
+**Decision:** Both data sources were flat-to-repeating versus the last several runs (same recurring GSC
+page set, no new conversion event), so leaned on the one genuinely new-looking signal (S26's traffic
+spike) plus the largest untouched roadmap item (P2.5 state expansion, flagged again at the end of run 9).
+
+**Action 1 -- P1.1: DUOTTS S26 description depth (Supabase, live immediately):** Checked the row first --
+confirmed it still had only the original one-sentence description ("The DUOTTS S26 is an all-wheel-drive
+fat-tire e-bike with dual 750W motors (1500W combined) and a 20Ah Samsung battery, built for serious
+off-road traction."). Rewrote to 5 sentences: dual-motor AWD traction detail (why single-motor bikes
+spin out where this doesn't), torque/climbing capability (110 Nm), claimed-vs-real range framing (75mi
+manufacturer / 55mi practical, matching its own `range_practical`/`range_manufacturer` columns exactly),
+and price positioning ($1,349 vs comparable AWD fat-tire bikes). No spec numbers changed, only added
+editorial context around already-correct DB values.
+
+**Action 2 -- P2.5: 5 more state pages added to `lib/state-data.ts`:** Louisiana, Oklahoma, Iowa,
+Kansas, Arkansas (30 -> 35 states). Verified each state's actual e-bike law via web search before
+writing (standard practice since the SC/KY/NC non-adopter discoveries in run 9) -- all 5 confirmed to
+use the standard three-class system, so no `classSystem: false` outlier entries needed this batch, but
+each got a genuine differentiator instead of boilerplate: Louisiana requires a Class 3 helmet for riders
+of *any* age (stricter than the usual under-18 threshold) with a $50 fine waivable by helmet purchase;
+Oklahoma has no statewide helmet law at all for any class; Iowa's three-class law is comparatively new
+(2021, HF 493) and requires a Class 3 speedometer; Kansas state parks cap assisted speed at 20 mph,
+which excludes Class 3 bikes from the state's well-known rail-trail network even though they're legal on
+roads; Arkansas requires a Class 3 helmet for riders under 21, an unusually high age threshold, and was
+one of the earliest adopters (Act 956, 2017).
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean. Started the dev server and confirmed all 5 new
+state pages (`/best-ebikes/louisiana`, `/oklahoma`, `/iowa`, `/kansas`, `/arkansas`) return HTTP 200;
+loaded `/best-ebikes/kansas` directly and confirmed the correct law summary, quick-facts grid, and riding
+tips render with no console errors. Also loaded `/e-bikes/duotts/duotts-s26` and confirmed the new
+5-sentence description renders on the page with no console errors.
+
+**Expected impact:** DUOTTS S26 gets the same editorial depth treatment as every other page with a real
+traffic/conversion signal, closing a gap that had persisted across 2+ prior logged runs despite being
+named each time. The 5 new state pages add more low-competition local-intent ranking surfaces (35 states
+live now), each with a genuinely differentiated legal hook rather than templated copy, which should help
+them read as distinct pages to Google rather than a thin, repeated pattern.
+
+**Next candidates:** (1) Continue P2.5 -- roughly 15 smaller states remain (Mississippi, New Mexico,
+Nebraska, West Virginia, Idaho, Montana, and others); keep verifying class-system status per state via
+web search before writing. (2) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600
+scooter-vs-bike classification. (3) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1`
+still need human research. (4) `/blog/ebike-maintenance-tips` still showing impressions (pos ~52) --
+worth a depth pass once GSC shows continued growth on this cluster. (5) Watch DUOTTS S26 in the next
+PostHog/GSC pull -- if it starts showing GSC impressions/clicks to match its PostHog traffic, it becomes
+the clearest dual-signal priority page on the site.
