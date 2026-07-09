@@ -1663,3 +1663,60 @@ still need human research. (4) `/blog/ebike-maintenance-tips` still showing impr
 worth a depth pass once GSC shows continued growth on this cluster. (5) Watch DUOTTS S26 in the next
 PostHog/GSC pull -- if it starts showing GSC impressions/clicks to match its PostHog traffic, it becomes
 the clearest dual-signal priority page on the site.
+
+---
+
+## 2026-07-09 (run 11) -- 5 more states (P2.5): Idaho, New Mexico, Mississippi, West Virginia, Nebraska
+
+**GSC snapshot (28d, ending 2026-07-06):** 2 clicks, 832 impressions, CTR 0.2% -- identical to run 10's
+snapshot (same window; GSC has not refreshed since). Query/page tables unchanged: `electric bike for
+heavy riders` still the top demand query (47 impr, pos 46.4, 1 click), `/best/cargo-ebikes` still the
+largest impression pool (120 impr, pos 75.6, 0 clicks, still treated as an authority ceiling per the last
+4 runs' assessment). No new striking-distance or high-impression/low-CTR signal. Striking-distance table
+still empty.
+
+**PostHog snapshot (28d):** 70 pageviews / 28 visitors, flat versus run 10 (also 70/28). Google holds
+the top traffic source (29 views) ahead of direct (27), unchanged. Conversion events unchanged at 3 total
+(`affiliate_link_clicked`): ENGWE N1 Pro (2), DUOTTS F20 (1) -- no new converting bike, and DUOTTS S26
+did not gain any new GSC impressions/clicks this pull (still a PostHog-only signal, watch continues).
+
+**Decision:** Both data sources fully flat versus the immediately prior run (same GSC window, identical
+PostHog totals) with no new dual-signal page to chase. Per run 10's own "next candidates," continued the
+largest untouched roadmap item: P2.5 state page expansion.
+
+**Action -- 5 more state pages added to `lib/state-data.ts` (live immediately, auto-added to sitemap via
+`getAllStateSlugs()`):** Idaho, New Mexico, Mississippi, West Virginia, Nebraska (35 -> 40 states).
+Verified each state's actual e-bike law via web search before writing (standard practice since the
+SC/KY/NC non-adopter discoveries in run 9) -- all 5 confirmed to use the standard three-class system, so
+no `classSystem: false` outlier entries needed this batch, but each got a genuine, sourced differentiator:
+Idaho has no statewide helmet law and is still actively updating its e-bike statute (HB 500, signed March
+2026, effective July 2026); New Mexico's default path-access rule treats throttle-equipped Class 2 the
+same as Class 3, excluding both from paths unless a local government opts in (Albuquerque did, in 2024);
+Mississippi has no statewide helmet law of any kind, for e-bikes or regular bicycles, a genuine outlier
+even among permissive states; West Virginia's 2023 law (HB 2062) explicitly expanded e-bike access to
+rail-trails and was framed around tourism access, since it's the only state entirely within the
+Appalachians; Nebraska sets no statewide minimum age for Class 3 operation on top of having no helmet
+law, unusually permissive even by three-class standards.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean. Started the dev server and confirmed all 5 new
+state pages (`/best-ebikes/idaho`, `/new-mexico`, `/mississippi`, `/west-virginia`, `/nebraska`) return
+HTTP 200; loaded `/best-ebikes/nebraska` directly via accessibility snapshot and confirmed the correct
+title, quick-facts grid (class system, license, max speed, max motor), full law summary, helmet/bike-path
+copy, and riding tips render correctly with zero console errors.
+
+**Expected impact:** 5 more low-competition local-intent ranking surfaces (40 states live now), each with
+a genuinely differentiated legal hook (verified via web search, not templated) rather than boilerplate
+copy repeated across pages, which should help them read as distinct pages to Google.
+
+**Next candidates:** (1) Continue P2.5 -- roughly 10 smaller states remain (Maine, Montana, North
+Dakota, South Dakota, Wyoming, Delaware, New Hampshire, Vermont, Rhode Island, Alaska); keep verifying
+class-system status per state via web search before writing. (2) ROADMAP P0.13 -- Dylan decision still
+needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike classification. (3) ROADMAP P0.16 --
+`eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need human research. (4)
+`/blog/ebike-maintenance-tips` still showing impressions (pos ~52) -- worth a depth pass once GSC shows
+continued growth on this cluster. (5) Watch DUOTTS S26 in the next PostHog/GSC pull -- still a
+PostHog-only traffic signal after 2 consecutive runs; if it starts showing GSC impressions/clicks it
+becomes the clearest dual-signal priority page on the site. (6) GSC window has now been stuck on the same
+2026-06-08 to 2026-07-06 range for 2 consecutive same-day runs (10, 11) -- consistent with the documented
+3-day lag buffer and multiple same-day runs, not a bug (same root cause identified in run 9), but worth
+a fresh pull next calendar day to confirm the window actually advances.
