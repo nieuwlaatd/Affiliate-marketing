@@ -274,7 +274,8 @@ If your commute has specific constraints (budget, hills, storage), take our [Fin
     description: 'Keep your electric bike running smoothly with these essential maintenance habits. Most take under 5 minutes.',
     category: 'Tips',
     publishedAt: '2026-05-28',
-    readingTime: 6,
+    updatedAt: '2026-07-10',
+    readingTime: 7,
     coverAlt: 'Person cleaning an electric bike chain with a brush',
     relatedSlugs: ['ebike-battery-range-guide', 'how-to-choose-an-electric-bike'],
     content: `
@@ -321,7 +322,7 @@ Remove the battery before washing and make sure all ports and connectors are dry
 
 ## 7. Get an annual professional tune-up
 
-Even with good home maintenance, have a bike shop do a full tune-up once a year. They'll check spoke tension, wheel trueness, headset and bottom bracket bearings, and the electrical system. These are things that are hard to inspect at home.
+Even with good home maintenance, have a bike shop do a full tune-up once a year. They'll check spoke tension, wheel trueness, headset and bottom bracket bearings, and the electrical system. These are things that are hard to inspect at home. Use our [dealer locator](/stores) to find a shop near you that services e-bikes specifically, not just regular bicycles.
 
 ## When to worry
 
@@ -333,7 +334,27 @@ Take your e-bike to a shop immediately if:
 
 Catching problems early is always cheaper than fixing them late.
 
-Regular maintenance keeps your ride safe and your e-bike's resale value high. A well-maintained battery can last 500 to 1,000+ charge cycles, which means potentially 5+ years of riding.
+Regular maintenance keeps your ride safe and your e-bike's resale value high. A well-maintained battery can last 500 to 1,000+ charge cycles, which means potentially 5+ years of riding. Our [battery and range guide](/blog/ebike-battery-range-guide) covers how to get the most out of every charge.
+
+## Frequently asked questions
+
+**How long does an e-bike battery actually last?**
+Most lithium-ion e-bike batteries last 500 to 1,000 full charge cycles before capacity drops meaningfully, which works out to roughly 3-5 years for a daily commuter or longer for occasional riders. Storing it at 20-80% charge and avoiding extreme heat both extend that lifespan.
+
+**How often should I lubricate my e-bike chain?**
+Every 100-200 miles, or after any ride in the rain. A dry, squeaking chain is the single fastest way to wear out an expensive drivetrain, and lubing it takes under two minutes.
+
+**Can I ride my e-bike in the rain?**
+Most e-bikes are rated for rain but not submersion. Riding in rain is fine; just avoid pressure-washing afterward, keep the battery and charging port dry, and wipe down electrical connectors before storage.
+
+**How much does e-bike maintenance typically cost per year?**
+Budget $50-150 a year for an owner who handles chain lube, tire pressure, and bolt checks at home, plus one $75-150 professional tune-up. Neglecting maintenance costs far more once a drivetrain or motor needs replacing.
+
+**Do e-bike motors need regular servicing?**
+Hub motors are sealed and largely maintenance-free; mid-drive motors benefit from an annual bike shop check since they interact with the chain and gearing. Unusual grinding or clicking noises from either type mean stop riding and get it inspected.
+
+**How do I know when my e-bike battery needs replacing?**
+If a full charge gives noticeably less range than it used to, or the battery won't hold a charge overnight, it is likely near end of life. Most manufacturers sell replacement batteries separately, so check your model's specs before assuming the whole bike needs replacing.
 `,
   },
   {

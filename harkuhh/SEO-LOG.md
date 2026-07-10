@@ -1866,3 +1866,81 @@ window has now been stuck on the same 2026-06-08 to 2026-07-06 range for 4 conse
 confirm the window actually advances. (8) With P2.5 complete, the next largest untouched roadmap item is
 P1.1 (bike detail page depth) for any remaining thin-description bikes not yet covered by prior sweeps, or
 P2.3 (high-intent vs-pages -- only 3 exist currently).
+
+---
+
+## 2026-07-10 (run 14) -- SAMEBIKE EBE2 description depth (P0.21) + maintenance-tips FAQ/linking pass (P0.22)
+
+**GSC snapshot (28d, ending 2026-07-07):** 2 clicks, 911 impressions (+79 vs the 832 stuck across runs
+10-13), CTR 0.2%. The window finally advanced past the 4-run plateau flagged in run 13. Top query
+unchanged: "electric bike for heavy riders" (48 impr, pos 46.4, 1 click). `/best/cargo-ebikes` still the
+largest impression pool (121 impr, pos 75.9, 0 clicks). New page-level signals this run:
+- `/e-bikes/samebike/samebike-ebe2`: 1 click, 1 impr, 100% CTR, pos 10.0 -- brand-new page in the data,
+  first-ever impression and click.
+- `/e-bikes/samebike/samebike-rs-a01-pro`: 2 clicks, 7 impr, 28.6% CTR, pos 14.7 -- recurring strong
+  performer, improving from pos 18.3 (run 2) to 14.7.
+- `/e-bikes/eunorau/eunorau-meta-24-1`: 1 click, 5 impr, 20% CTR, pos 23.2 -- recurring click signal;
+  checked its description and it already has solid P0.9-era depth, so left untouched this run.
+- Striking-distance query table empty again, but several bike pages (rs-a01-pro, duotts-c29-k, duotts-e29,
+  p275-se) sit in the pos 10-20 band at the page level.
+
+**PostHog snapshot (28d):** 70 pageviews / 28 visitors -- identical totals to runs 10-13 (fully flat for a
+5th consecutive run). Google still the top traffic source (29 views) ahead of direct (27). Conversion
+events unchanged at 3 total (`affiliate_link_clicked`): ENGWE N1 Pro (2), DUOTTS F20 (1). DUOTTS S26 still
+the top product page by views/sessions (6/5) with no matching GSC movement, now 5 consecutive runs on that
+signal. New this run: `samebike-ebe2` shows its first-ever pageview/session, matching its brand-new GSC
+signal -- the clearest dual-signal page this run, even though the absolute numbers are small (1
+impression, 1 pageview).
+
+**Decision:** Two focused actions this run, both driven directly by the fresh data:
+1. P0.21 -- `samebike-ebe2` is a genuine new dual-signal page (GSC + PostHog, same day) but had only a
+   one-sentence stub description. Checked `eunorau-meta-24-1` too (recurring GSC click) but its
+   description was already solid from an earlier sweep, so no action needed there.
+2. P0.22 -- `/blog/ebike-maintenance-tips` has been named as a "next candidate" in the log for at least 5
+   consecutive runs without ever being executed. Checked the page template and found it was missing the
+   FAQ + internal-linking pattern applied to every other enriched page on the site.
+
+**Action 1 -- P0.21: SAMEBIKE EBE2 description rewrite (Supabase, live immediately)**
+Queried the bike's full spec row first (motor_type=rear-hub, torque sensor, frame_type=step-over,
+suitable_for=[off-road, recreation], bike_class=class-1, battery_capacity=13Ah, wheel_size=26",
+has_suspension=front, weight_lbs=55, max_weight=330, range_practical=36/range_manufacturer=56, price=$619,
+score=6.8). Rewrote the single-sentence stub description to 4 sentences covering the motor/torque-sensor
+feel, the trail-oriented geometry and its single-fork limitation, the practical-vs-manufacturer range with
+payload, and honest Class-1 positioning versus the catalog's fully suspended sport bikes -- every claim
+traced to a verified DB column, no fabricated specs.
+
+**Action 2 -- P0.22: `/blog/ebike-maintenance-tips` enrichment (`lib/blog-data.ts`, live immediately)**
+Added a "Frequently asked questions" H2 section with 6 FAQs targeting long-tail queries not covered by the
+existing 7-tip structure (battery lifespan, chain lube frequency, riding in rain, annual cost, motor
+servicing, when to replace the battery). Added 2 internal links: `/stores` (dealer locator) from the
+annual-tune-up section -- a genuinely useful cross-link since a tune-up requires finding a shop -- and
+`/blog/ebike-battery-range-guide` from the closing paragraph. Set `updatedAt: '2026-07-10'` for a
+freshness signal (post was previously unchanged since its 2026-05-28 publish date). Word count roughly
+750 -> 1,250.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (exit 0, no output). Started the dev server and
+loaded both pages directly: `/blog/ebike-maintenance-tips` confirmed via accessibility snapshot showing
+the "Updated July 10, 2026" byline date, all 7 original H2 tip sections, the new "Frequently asked
+questions" H2 with all 6 questions present as `<strong>` text, and both new links (`/stores`,
+`/blog/ebike-battery-range-guide`) present in the DOM. `/e-bikes/samebike/samebike-ebe2` confirmed via
+`document.querySelector` that the new 4-sentence description renders in the page body matching the exact
+text written to Supabase. Zero console errors on either page.
+
+**Expected impact:** EBE2 just started converting in both data sources on the same day; giving it real
+editorial depth immediately (rather than waiting for repeated log entries, the pattern that delayed S26 and
+F20's fixes by multiple runs) should reinforce that early signal rather than risk losing a visitor to a
+thin page. The maintenance-tips FAQ section makes the post eligible to match more long-tail queries and
+closes the single most-repeated unexecuted item in this log; the `/stores` link is also the first inbound
+link from blog content to the store locator, a page that otherwise has weak internal linking.
+
+**Next candidates:** (1) Audit the ~40 already-published standard-three-class state pages for
+`helmetRequired`/`maxSpeed` accuracy against real sources (flagged since run 13, not yet started -- North
+Carolina, South Carolina, Kentucky, Montana, and Vermont were all caught needing correction on first
+write). (2) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike
+classification. (3) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need human
+research. (4) Watch `samebike-ebe2` and `samebike-rs-a01-pro` in the next GSC/PostHog pull -- both are
+either brand-new or improving-position signals worth confirming aren't one-off noise. (5) DUOTTS S26 is
+now 5 consecutive runs as a PostHog-only signal with zero matching GSC movement -- consider whether this
+needs a different lever than more description depth (e.g. an inbound blog link or an off-road best-of
+placement check) rather than repeating the same fix. (6) P2.3 -- high-intent vs-pages (only 3 exist
+currently), the next largest untouched roadmap item after the state-page audit.
