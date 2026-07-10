@@ -2008,3 +2008,84 @@ and prominence on `/best/off-road-ebikes`. (6) P2.3 has more room -- only 3 of t
 real GSC/PostHog signal have been paired into vs-pages so far; candidates for a future run include
 `eunorau-meta-275-st-1` (3 PostHog visitors) and `engwe-l20` (3 PostHog visitors, Dutch-description fix
 beneficiary).
+
+---
+
+## 2026-07-10 (run 16) -- State-page legal accuracy audit, batch 1 (P0.23)
+
+**GSC snapshot (28d, ending 2026-07-07):** 2 clicks, 911 impressions, CTR 0.2% -- identical window to run 15
+(3rd consecutive run on this same snapshot). New detail this run: a fresh query surfaced, "samebike rs-a01
+pro review" (1 click, 100% CTR, pos 43.0) -- a specific-intent review search converting on the RS-A01 Pro
+page, reinforcing it as the site's strongest single-bike performer (now also 2 clicks/7 impr/pos 14.7 at the
+page level, up from pos 18.3 at first tracking in run 2). `/best/cargo-ebikes` still the largest impression
+pool (121 impr, pos 75.9, 0 clicks, unchanged for 4+ runs).
+
+**PostHog snapshot (28d):** 70 pageviews / 28 visitors -- identical totals to runs 10-15 (7th consecutive
+flat run). DUOTTS S26 still the top product page by views/sessions (6/5), still zero matching GSC signal (7th
+consecutive run on this watch item). New minor page-level movement: `duotts-duotts-c29max-electric-bike` (4
+views/1 visitor) and `samebike-cy20-pro`/`vtuvia-zeal-xt8` (1/1 each) appeared for the first time, but none
+crossed the threshold of a real dual-signal page worth a dedicated action this run. Conversion events
+unchanged at 3 total (`affiliate_link_clicked`): ENGWE N1 Pro (2), DUOTTS F20 (1).
+
+**Decision:** Both data sources are flat/repeating with no new dual-signal page strong enough to justify
+another description-depth pass (the RS-A01 Pro's new query is a confirmation of existing strength, not a new
+target). Advanced the item flagged as the largest untouched roadmap task in runs 13, 14, and 15's own "next
+candidates" without ever being started: auditing the ~20 oldest state pages, which predate the per-state
+web-verification discipline adopted at run 9 after the SC/KY/NC outlier catches.
+
+**Action -- P0.23: audited 8 of the ~20 pre-run-9 state pages against real sources (`lib/state-data.ts`,
+live immediately):** California, Texas, New York, Florida, Washington, Oregon, Colorado, Hawaii. Found and
+fixed 6 real errors:
+- **Washington** -- `helmetRequired` claimed "Required for all riders in many counties and cities (including
+  King County/Seattle)". Both King County and Seattle repealed their all-ages helmet ordinances in 2022; this
+  was a flat factual error naming two specific major jurisdictions incorrectly. Rewrote to state no statewide
+  law and the 2022 repeals, updated `lawSummary` to match.
+- **Oregon** -- `helmetRequired` claimed "No state requirement (local rules may vary)". Oregon actually
+  requires helmets for all riders under 16 statewide -- the site was asserting the opposite of the real law.
+  Fixed to state the under-16 requirement.
+- **New York** -- `maxSpeed` read "25 mph (Class 3, NYC limit)", implying 25 mph was NYC's cap. In reality 25
+  mph is the *statewide* Class 3 definition (legal only within NYC), and NYC has capped all e-bikes at 15 mph
+  on city streets since October 2025 -- the field had the relationship backwards. Fixed `maxSpeed` and
+  `lawSummary` to state both figures correctly and cite the October 2025 NYC cap.
+- **Colorado** -- `helmetRequired` said "No state requirement for adults", which is true but omits Colorado's
+  actual rule: helmets are required under C.R.S. 42-4-1412 for riders under 18 on a Class 3 e-bike
+  specifically. Fixed to state the real rule instead of only the negative case.
+- **California** -- `helmetRequired` read "Required for riders under 18. Class 3 riders under 18 must wear a
+  helmet," which conflates two separate rules and implies Class 3's helmet mandate only applies under 18. The
+  actual law: general under-18 bicycle helmet law (CVC 21212) plus a *separate*, all-ages Class 3 helmet
+  mandate (CVC 21213(b)) that applies regardless of age. Rewrote to state both rules distinctly.
+- **Hawaii** -- stale against a brand-new law. HB2021 (signed June 2026, per Hawaii Bicycling League) raised
+  the statewide helmet age from under 16 to under 18 and formally defined "e-bike" as capped at 750W, with
+  anything more powerful reclassified as a "high-speed electric device" banned from roads, bike lanes, and
+  sidewalks. Updated `helmetRequired`, `maxSpeed`, and `lawSummary` to reflect the new law while keeping the
+  750W `maxWattage` field (already correct, now also the legal ceiling for what counts as an e-bike at all).
+- **Florida** checked and confirmed already accurate (under-16 bicycle helmet law applies to e-bikes, no
+  separate Class 3 rule) -- no change made.
+- **Texas** was not technically wrong ("No state helmet requirement for adults") but was incomplete versus
+  the site's own pattern on other state pages of naming local-city exceptions; added the Houston/Dallas/Fort
+  Worth/Austin/Highland Park age variations sourced this run for consistency with how every other
+  local-nuance state page on the site is written.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (exit 0, no output). Started the dev server and
+loaded `/best-ebikes/washington`, `/best-ebikes/hawaii`, and `/best-ebikes/new-york` directly via
+`get_page_text` -- confirmed the corrected helmet/speed copy renders in both the law-summary paragraph and
+the FAQ section (which reuses the same fields) on all 3 pages checked, zero console errors on any page.
+
+**Expected impact:** Fixes 6 confirmed factual errors on state pages that predate the site's own
+verification standard -- most notably Washington's incorrect Seattle/King County helmet claim and New York's
+inverted NYC-speed-limit framing, both concrete, checkable claims a Seattle or NYC-based reader could catch
+as wrong. This is a trust/accuracy fix rather than a ranking play, consistent with how the SC/KY/NC/Montana/
+Vermont catches were treated. Hawaii's update also keeps the page current against a law that took effect
+within the last ~5 weeks (June 2026), which the automated GSC/PostHog loop would have no way to detect
+without an active audit pass like this one.
+
+**Next candidates:** (1) P0.23 continuation -- 12 states remain from the original pre-run-9 batch: Arizona,
+Illinois, North Carolina, Virginia, Georgia, Massachusetts, Utah, Michigan, Pennsylvania, New Jersey,
+Minnesota, Ohio. North Carolina in particular was already flagged as a non-standard outlier in run 9's
+research but should be re-verified directly against a source rather than trusted from memory. (2) ROADMAP
+P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike classification. (3) ROADMAP
+P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need human research. (4) DUOTTS S26 is now
+7 consecutive runs as a PostHog-only signal with zero matching GSC movement. (5) Watch
+`duotts-duotts-c29max-electric-bike`, which showed its first real PostHog traffic (4 views) this run --
+confirm it isn't one-off noise before acting. (6) GSC has now shown the identical 2026-06-09 to 2026-07-07
+window for 3 consecutive runs (14-16); worth a fresh pull next calendar day to confirm it advances.
