@@ -1944,3 +1944,67 @@ now 5 consecutive runs as a PostHog-only signal with zero matching GSC movement 
 needs a different lever than more description depth (e.g. an inbound blog link or an off-road best-of
 placement check) rather than repeating the same fix. (6) P2.3 -- high-intent vs-pages (only 3 exist
 currently), the next largest untouched roadmap item after the state-page audit.
+
+---
+
+## 2026-07-10 (run 15) -- Bike-level vs-pages (P2.3)
+
+**GSC snapshot (28d, ending 2026-07-07):** 2 clicks, 911 impressions, CTR 0.2% -- same window as run 14
+(no new data yet). New page-level detail versus run 14: `/e-bikes/samebike/samebike-rs-a01-pro` climbed
+from pos 14.7 (unchanged this window) to a confirmed 2 clicks / 7 impr / 28.6% CTR; `/` (homepage) now
+shows 3 clicks / 3 impr / 100% CTR at pos 1.0 (branded query, not actionable); query-level striking-distance
+and high-impression/low-CTR tables both empty again. `/best/cargo-ebikes` still the largest impression pool
+(121 impr, pos 75.9, 0 clicks, unchanged).
+
+**PostHog snapshot (28d):** 70 pageviews / 28 visitors -- identical to runs 10-14 (6th consecutive flat
+run). DUOTTS S26 still the top product page by views/sessions (6/5), still zero matching GSC signal (6th
+consecutive run on this watch item). Conversion events unchanged at 3 total (`affiliate_link_clicked`):
+ENGWE N1 Pro (2), DUOTTS F20 (1).
+
+**Decision:** Both data sources fully flat versus run 14. Advanced ROADMAP P2.3 (high-intent vs-pages,
+flagged as the next largest untouched item in runs 13 and 14's own "next candidates"), and used it to also
+address item (5) from run 14 -- DUOTTS S26 needing "a different lever than more description depth" -- by
+giving it a genuine new inbound link and comparison surface instead of repeating a description rewrite.
+
+**Action -- 3 new bike-level vs-pages (`app/vs/[slug]/page.tsx` + `app/sitemap.ts`, live immediately):**
+The existing `MATCHUPS` array only had 5 brand-level pairs (each side picks that brand's top-scoring bike).
+`findSide()` already supported an exact-bike-slug match as its first check, so no code changes were needed
+beyond adding entries -- confirmed all 3 target slugs exist verbatim in Supabase via `execute_sql` before
+wiring them up:
+1. `engwe-n1-pro-vs-duotts-s26` -- pairs the only bike with confirmed repeat affiliate clicks (N1 Pro, 2
+   clicks) against the top PostHog product page with zero matching GSC signal for 6 consecutive runs (S26).
+   Gives S26 a fresh internal link and a real comparison-intent surface ("N1 Pro vs S26"-style searches)
+   rather than another content-depth pass on a page that already has depth.
+2. `samebike-rs-a01-pro-vs-samebike-rs-a01-men` -- same model, two variants, both with real GSC clicks and
+   climbing positions (Pro: pos 14.7, 2 clicks; MEN: pos 9.1, 1 click) -- a natural "which RS-A01 should I
+   buy" query neither variant's own detail page can answer on its own.
+3. `duotts-duotts-c29-k-vs-eunorau-meta-24-1` -- both bikes logged a confirmed GSC click this run, similar
+   mid-range price tier, no prior comparison surface between them.
+All 3 added to `VS_MATCHUPS` in `app/sitemap.ts` (must mirror `MATCHUPS` exactly per the existing code
+comment). Site now has 8 vs-pages total (5 brand-level + 3 bike-level).
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (exit 0). Started the dev server and loaded all 3
+new URLs via `window.location.assign` + DOM checks (screenshot tool timed out this run but was superseded
+by direct DOM/accessibility verification): `engwe-n1-pro-vs-duotts-s26` renders h1 "ENGWE N1 Pro vs DUOTTS
+S26 AWD"; `samebike-rs-a01-pro-vs-samebike-rs-a01-men` renders h1 "SAMEBIKE RS-A01 Pro vs SAMEBIKE RS-A01
+MEN" with the correct tied-score verdict copy (both 7.2); `duotts-duotts-c29-k-vs-eunorau-meta-24-1` renders
+h1 "DUOTTS C29-K vs Eunorau META24 1.0". Server logs confirmed `GET /vs/engwe-n1-pro-vs-duotts-s26 200`.
+Zero console errors on any of the 3 pages.
+
+**Expected impact:** 3 new ranking surfaces targeting bottom-of-funnel comparison queries between bikes
+that already have confirmed click/traffic signal, rather than speculative brand pairings. The S26 matchup
+in particular is a direct response to a signal that has now persisted unaddressed for 6 runs -- if a
+different lever was ever going to move that page, an inbound link from a bike with proven conversion intent
+is a stronger candidate than a 7th description-depth pass.
+
+**Next candidates:** (1) Audit the ~40 already-published standard-three-class state pages for
+`helmetRequired`/`maxSpeed` accuracy (flagged since run 13, still not started -- the largest untouched
+roadmap item after P2.3). (2) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600
+scooter-vs-bike classification. (3) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1`
+still need human research. (4) Watch whether the new vs-pages pick up any GSC impressions in the next
+window (2-3 week lag expected). (5) Watch DUOTTS S26 for GSC movement now that it has a second inbound link
+via the new vs-page -- if still flat next run, the remaining lever to try is checking its actual placement
+and prominence on `/best/off-road-ebikes`. (6) P2.3 has more room -- only 3 of the site's ~15 bikes with
+real GSC/PostHog signal have been paired into vs-pages so far; candidates for a future run include
+`eunorau-meta-275-st-1` (3 PostHog visitors) and `engwe-l20` (3 PostHog visitors, Dutch-description fix
+beneficiary).

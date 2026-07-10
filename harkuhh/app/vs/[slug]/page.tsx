@@ -5,10 +5,11 @@ import Image from 'next/image';
 import { getAllBikes } from '@/lib/ebike-data';
 import { EBike } from '@/lib/types';
 
-// Curated matchups (SEO). Each side is a brand slug; we pick that brand's
-// top-scoring bike. Must use brands actually in the catalog (see lib/ebike-data.ts) --
-// a slug that matches no bike or brand renders notFound(), which ships a dead
-// 404 URL in the sitemap. Add more real brand-vs-brand pairs as the catalog grows;
+// Curated matchups (SEO). Each side is either a brand slug (we pick that brand's
+// top-scoring bike) or an exact bike slug (findSide checks exact-slug match first).
+// Must resolve to real catalog brands/bikes (see lib/ebike-data.ts) -- a slug that
+// matches no bike or brand renders notFound(), which ships a dead 404 URL in the
+// sitemap. Add more real brand-vs-brand or bike-vs-bike pairs as the catalog grows;
 // once P2.1 (Aventon/Lectric/Rad Power/Ride1Up/Velotric affiliate approval) lands,
 // those become real high-volume matchups worth adding here.
 const MATCHUPS: [string, string][] = [
@@ -17,6 +18,12 @@ const MATCHUPS: [string, string][] = [
   ['eunorau', 'samebike'],
   ['vtuvia', 'dyu'],
   ['walfisk', 'engwe'],
+  // Bike-level matchups (2026-07-10, run 15): pairs actual bikes with GSC/PostHog
+  // revenue signal rather than brand top-scorers, targeting real comparison-intent
+  // searches between models buyers are already clicking on.
+  ['engwe-n1-pro', 'duotts-s26'], // top affiliate-click bike vs top PostHog product page (S26 has zero matching GSC signal after 6 runs -- this gives it a fresh internal link + comparison surface)
+  ['samebike-rs-a01-pro', 'samebike-rs-a01-men'], // two variants of the same model, both climbing in GSC (pos 14.7 / pos 9.1) -- a natural "which RS-A01 should I buy" query
+  ['duotts-duotts-c29-k', 'eunorau-meta-24-1'], // both have a confirmed GSC click this run, mid-range price tier
 ];
 
 function brandSlug(b: EBike): string {
