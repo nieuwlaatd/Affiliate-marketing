@@ -2089,3 +2089,94 @@ P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need human re
 `duotts-duotts-c29max-electric-bike`, which showed its first real PostHog traffic (4 views) this run --
 confirm it isn't one-off noise before acting. (6) GSC has now shown the identical 2026-06-09 to 2026-07-07
 window for 3 consecutive runs (14-16); worth a fresh pull next calendar day to confirm it advances.
+
+---
+
+## 2026-07-11 (run 17) -- DUOTTS C29Max description depth + state-page audit batch 2 (P0.23)
+
+**GSC snapshot (28d, ending 2026-07-08):** 2 clicks, 942 impressions (+31 vs run 16's window), CTR 0.2% --
+the window finally advanced a day, ending the 3-run stall flagged in run 16. New query-level detail:
+"samebike rs-a01 pro review" improved from pos 43.0 (run 16) to pos 27.5, still converting at 50% CTR (1
+click/2 impr). Page-level striking-distance signals (pos 5-20, via the page-level TOP PAGES table since the
+query-level striking-distance tool output was empty again): `/e-bikes/samebike/samebike-rs-a01-men` pos 9.1,
+`/e-bikes/samebike/samebike-ebe2` pos 11.0 (50% CTR), `/e-bikes/duotts/duotts-duotts-c29-k` pos 13.3,
+`/e-bikes/samebike/samebike-rs-a01-pro` pos 14.4 (2 clicks/25% CTR), `/e-bikes/duotts/duotts-e29` pos 15.6,
+`/best/folding-ebikes` pos 18.1 (1 click) -- six pages already in or near page-1/2 territory, none newly
+actionable versus prior runs' descriptions of the same pages. `/best/cargo-ebikes` still the largest
+impression pool (116 impr, pos 76.4, 0 clicks, 5th+ consecutive flat run at this position).
+
+**PostHog snapshot (28d):** 73 pageviews / 29 visitors (up slightly from 70/28). DUOTTS S26 still the top
+product page by views/sessions (6/5), now 8 consecutive runs as a PostHog-only signal with zero matching GSC
+movement. `duotts-duotts-c29max-electric-bike` repeated its run-16 signal with another 4 views/1 visitor --
+two consecutive runs of real (if modest) traffic, crossing the threshold run 16 set for "confirm it isn't
+one-off noise before acting." New minor appearance: `samebike-cy20-pro` (1 view/1 visitor). Conversion events
+unchanged at 3 total (`affiliate_link_clicked`): ENGWE N1 Pro (2), DUOTTS F20 (1).
+
+**Decision:** Two focused actions this run: (1) act on the confirmed 2-run C29Max signal per the established
+S26/F20/EBE2 pattern (deepen a thin description as soon as a page shows repeat traffic, rather than letting it
+sit unaddressed for multiple runs); (2) continue P0.23, the largest unfinished roadmap item, with the next
+batch of 6 pre-run-9 state pages.
+
+**Action 1 -- DUOTTS C29Max description depth (Supabase, live immediately):** Queried the full spec row first
+(price $1,149, 750W rear-hub with torque sensor, 75 Nm, 15Ah battery, 50mi manufacturer/38mi practical range,
+29" wheels, Shimano 21-speed derailleur, front suspension, 62 lbs, 330 lb payload, Class 2 with throttle).
+Rewrote the single-sentence stub to 4 sentences: the torque-sensor upgrade over the base C29 platform,
+claimed-vs-real range framing (50mi/38mi), the 29"-wheel/21-speed fit for paved commuting and light gravel,
+and price positioning ($1,149 vs comparable torque-sensor 29ers under $1,200) with an honest note on the 62
+lb weight.
+
+**Action 2 -- P0.23 batch 2: audited 6 more pre-run-9 state pages (`lib/state-data.ts`, live immediately):**
+Arizona, Illinois, North Carolina, Virginia, Georgia, Massachusetts. Found and fixed 5 of 6:
+- **North Carolina** -- `helmetRequired` read "No statewide requirement, though riders under 16 are advised to
+  wear one," downgrading a real legal mandate to a mere suggestion. G.S. 20-171.9 actually makes it unlawful
+  for a parent/guardian to let a rider under 16 use a bicycle or e-bike without a helmet (up to a $10 fine,
+  usually waived on a first offense if a helmet is bought). Fixed both `helmetRequired` and `lawSummary` to
+  state it as a requirement with the citation.
+- **Virginia** -- same conflation pattern as California/Colorado in run 16's batch: `helmetRequired` said only
+  "Required for riders under 14," omitting Virginia's separate, stricter all-ages Class 3 rule (Va. Code
+  46.2-908.1: every Class 3 operator and passenger must wear a helmet regardless of age, and must be 14+ to
+  ride one unsupervised). Rewrote to state both rules distinctly.
+- **Georgia** -- identical conflation: `helmetRequired` said only "Required for riders under 16," omitting
+  Georgia's own all-ages Class 3 helmet mandate (on top of, not instead of, the general under-16 rule) and the
+  Class 3 minimum age of 15. Fixed to state both.
+- **Massachusetts** -- the largest single catch across both audit batches. The page claimed MA "adopted the
+  three-class system" with a 28 mph Class 3 tier (`classSystem: true`, `maxSpeed: '28 mph (Class 3)'`). In
+  reality, Massachusetts law (M.G.L. c.90 section 1B) only legally recognizes Class 1 and Class 2 e-bikes,
+  both capped at 20 mph; a 28 mph pedal-assist bike does not meet the state's "electric bicycle" definition
+  and is instead a motorized bicycle/moped requiring RMV registration, a driver's license or learner's permit,
+  a DOT-approved helmet for rider and passenger at any age, and a minimum operating age of 16. Rewrote the
+  full entry: `classSystem` false, `maxSpeed`, `helmetRequired`, `bikePaths`, `lawSummary`, first `ridingTips`
+  bullet, `metaDescription`, and `intro` all updated to state the real Class 1/2-only law, and noted
+  Massachusetts's pending "Ride Safe Act" (S.3077, filed May 2026, not yet passed) for context. Verified via
+  `mass.gov`/Justia citations of M.G.L. c.90 section 1B that Class 1/2 e-bikes are explicitly excluded from
+  the "motorized bicycle" definition while anything faster is not.
+- **Arizona** and **Illinois** checked and confirmed already accurate -- neither state has a statewide helmet
+  law for e-bike riders of any age. Enhanced (not fixed) Arizona's entry with the specific cities that fill
+  the gap with their own under-18 ordinances (Scottsdale, Mesa, Tucson, Sierra Vista, Yuma, Glendale, Pima
+  County), matching the local-nuance pattern already applied to Texas and Colorado in run 16.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (exit 0, no output). Loaded `/best-ebikes/massachusetts`,
+`/best-ebikes/virginia`, `/best-ebikes/north-carolina`, `/best-ebikes/georgia`, and
+`/e-bikes/duotts/duotts-duotts-c29max-electric-bike` directly in the dev server: confirmed the corrected law
+copy renders in both the law-summary paragraph and the reused FAQ section, the Massachusetts "Class system"
+stat box now reads "Non-standard" instead of "Three-class (1/2/3)", and the new C29Max description renders in
+the page body. Zero console errors on any of the 5 pages checked.
+
+**Expected impact:** Massachusetts is the most consequential fix across both P0.23 batches so far: the site
+was telling Massachusetts buyers a 28 mph "Class 3" e-bike was a legal, unregistered bicycle there, when
+riding one on public roads without RMV registration and a license is actually a moped violation under state
+law. Virginia and Georgia close the same all-ages-Class-3-mandate gap already identified as a recurring error
+pattern in run 16 (California, Colorado). The C29Max fix follows the site's own established rule: give a page
+real editorial depth as soon as it shows a second consecutive run of real traffic, rather than letting it sit
+thin for multiple cycles the way S26 and F20 did before their fixes landed.
+
+**Next candidates:** (1) P0.23 batch 3 -- 6 states remain: Utah, Michigan, Pennsylvania, New Jersey,
+Minnesota, Ohio. Once these are done, the entire pre-run-9 state-page backlog is closed out. (2) ROADMAP
+P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike classification. (3) ROADMAP
+P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need human research. (4) DUOTTS S26 is now
+8 consecutive runs as a PostHog-only signal with zero matching GSC movement -- consider whether an actual
+placement/prominence check on `/best/off-road-ebikes` (flagged as the next lever back in run 14) is overdue
+now that a fresh inbound link and a second best-of appearance haven't moved it. (5) Watch
+`samebike-cy20-pro`, which showed its first PostHog traffic (1 view) this run -- confirm it isn't one-off
+noise before acting. (6) "samebike rs-a01 pro review" query improved from pos 43 to pos 27.5 this run -- watch
+whether it keeps climbing toward the pos 5-20 striking-distance zone.
