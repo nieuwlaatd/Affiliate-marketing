@@ -2180,3 +2180,96 @@ now that a fresh inbound link and a second best-of appearance haven't moved it. 
 `samebike-cy20-pro`, which showed its first PostHog traffic (1 view) this run -- confirm it isn't one-off
 noise before acting. (6) "samebike rs-a01 pro review" query improved from pos 43 to pos 27.5 this run -- watch
 whether it keeps climbing toward the pos 5-20 striking-distance zone.
+
+---
+
+## 2026-07-11 (run 18) -- State-page legal accuracy audit, batch 3 of 3 -- closes P0.23
+
+**GSC snapshot (28d, ending 2026-07-08):** 2 clicks, 942 impressions, CTR 0.2% -- identical window and
+totals to run 17 (no new day advanced). Same query/page picture as run 17: "samebike rs-a01 pro review" at
+pos 27.5, six pages already in striking-distance-adjacent territory (`samebike-rs-a01-men` pos 9.1,
+`samebike-ebe2` pos 11.0, `duotts-duotts-c29-k` pos 13.3, `samebike-rs-a01-pro` pos 14.4, `duotts-e29` pos
+15.6, `/best/folding-ebikes` pos 18.1), `/best/cargo-ebikes` still the largest flat impression pool (116
+impr, pos 76.4, 0 clicks).
+
+**PostHog snapshot (28d):** 73 pageviews / 29 visitors -- identical totals to run 17 (2nd consecutive flat
+run). DUOTTS S26 still the top product page (6/5), now 9 consecutive runs as a PostHog-only signal with no
+matching GSC movement. `duotts-duotts-c29max-electric-bike` did not repeat its 2-run signal this pull (fell
+out of the top-20 list). No new dual-signal page crossed the action threshold.
+
+**Decision:** Both data sources fully flat versus run 17, with no new page strong enough to justify another
+description-depth pass. Advanced the item flagged as the largest untouched roadmap task across runs 16 and
+17's own "next candidates": the final batch of the pre-run-9 state-page legal audit (P0.23), closing out the
+entire ~20-state backlog that predates the per-state web-verification discipline adopted at run 9.
+
+**Action -- P0.23 batch 3: audited the final 6 pre-run-9 state pages (`lib/state-data.ts`, live
+immediately):** Utah, Michigan, Pennsylvania, New Jersey, Minnesota, Ohio. Researched each against primary
+sources (state agency pages, statute text via Justia/Revisor/Ohio Laws, and 2026 law-firm/industry trackers
+cross-checked against each other) before editing. Found and fixed 5 of 6:
+- **Pennsylvania** -- the single biggest catch this run, same failure class as Massachusetts in batch 2. The
+  page said Pennsylvania "adopted the three-class e-bike system" with a 28 mph Class 3 tier (`classSystem:
+  true`, `maxSpeed: '28 mph (Class 3)'`). In reality Pennsylvania has never adopted the three-class model:
+  under Act 154 of 2014, a "pedalcycle with electric assist" (75 Pa.C.S. Section 102) must have a motor of
+  750W or less, weigh under 100 lbs, and cut off assistance at 20 mph to legally qualify as a bicycle. A 28
+  mph Class 3-style e-bike falls outside that definition and cannot easily be registered as a motor vehicle
+  either (confirmed via a July 2026 BikePGH.org explainer plus Justia/LegalFix statute citations), leaving it
+  with no clear legal path on PA public roads. Rewrote `classSystem` (true to false), `maxSpeed`,
+  `bikePaths`, and `lawSummary` to state the real single-tier definition, the 75 Pa.C.S. Section 3514 age-16
+  minimum to operate, and kept the already-correct under-12 helmet rule (75 Pa.C.S. Section 3510) with its
+  citation added.
+- **Minnesota** -- a reversed factual claim, not just an omission. `maxWattage` read "1000W, one of the
+  highest limits in the nation," repeated in `lawSummary`, a `ridingTips` bullet, `metaDescription`, and
+  `intro`. Minn. Stat. Section 169.011 subd. 27 actually defines an "electric-assisted bicycle" as capped at
+  750W, the same standard cap used by nearly every other three-class state (verified directly against the MN
+  Revisor's own statute text). Fixed all five fields; the flagship ridingTips bullet was rewritten from "MN
+  allows 1000W motors, giving you more power than most states" to the opposite, accurate framing: the 750W
+  cap matches most other states, so nearly every mainstream e-bike is already compliant. Also added the real
+  minimum-age rule (15, Minn. Stat. Section 169.222) and a note on city-level helmet ordinances (e.g. Blaine)
+  that the old copy omitted entirely.
+- **Utah** -- stale against a brand-new law rather than an old error. HB 381, effective May 6, 2026 (confirmed
+  via the Utah Highway Safety Office's own site plus May 2026 local-news coverage), expanded the helmet
+  mandate from Class-3-only to all riders under 21 on public roads, made it illegal for anyone under 16 to
+  operate a Class 3 e-bike, and added a supervision requirement for riders ages 8-14. The page still said
+  "No state requirement" for helmets. Rewrote `helmetRequired` and `lawSummary` to reflect the new law,
+  including the pending May 2027 safety-certificate requirement for ages 8-15 riding unsupervised.
+- **Michigan** and **Ohio** -- same conflation pattern flagged repeatedly in batch 2 (Virginia, Georgia):
+  both said "No state requirement" for helmets, omitting each state's real Class 3 helmet mandate. Michigan
+  requires a helmet for Class 3 operators/passengers under 18 (MCL 257.662a); Ohio requires one for Class 3
+  operators/passengers at *any* age (ORC 4511.522), one of only a handful of states with an all-ages e-bike
+  helmet law. Ohio's `maxSpeed` was also flatly wrong ("20 mph (motor-assisted)" for all classes) despite
+  `classSystem: true` -- fixed to "28 mph (Class 3)" and added the Class 3 path-access restriction to
+  `bikePaths`. Both states' `lawSummary` and `helmetRequired` rewritten with the real rule and citation.
+- **New Jersey** was already directionally correct (the 2026 reclassification away from the three-class
+  system was already reflected) but imprecise: the old copy implied a single uniform "motorized bicycle"
+  category requiring a driver's license, when the real law (confirmed via the official NJ MVC page and the
+  NJ Bike & Walk Coalition's law-firm-sourced FAQ) splits e-bikes into two tiers -- "low-speed electric
+  bicycles" (pedal-assist only, capped 20 mph, no insurance required) and "motorized bicycles" (throttle or
+  21-28 mph, insurance required) -- both needing registration and either a special 15-16 e-bike license or a
+  standard 17+ driver's license. Rewrote `helmetRequired`, `maxSpeed`, and `lawSummary` with the two-tier
+  detail, the age-15 floor, and the July 19, 2026 compliance deadline.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (exit 0). Started the dev server and loaded
+`/best-ebikes/pennsylvania`, `/best-ebikes/minnesota`, and `/best-ebikes/ohio` via `get_page_text`: confirmed
+Pennsylvania's stat box now reads "Non-standard" (matching the Massachusetts pattern) with the corrected law
+copy in both the summary paragraph and the FAQ section; Minnesota shows "750W" in the Max Motor stat and the
+corrected ridingTips bullet; Ohio shows "28 mph (Class 3)" and the all-ages Class 3 helmet copy. Zero console
+errors on any of the 3 pages checked.
+
+**Expected impact:** Closes the entire pre-run-9 state-page legal-accuracy backlog (all ~50 state pages are
+now web-verified against primary sources). Pennsylvania is the most consequential fix in this batch and the
+second Massachusetts-level catch across the whole three-batch audit -- the site was telling Pennsylvania
+buyers a 28 mph "Class 3" e-bike was a legal bicycle there, when it actually falls into a regulatory gap with
+no clear path to being ridden legally on PA public roads. Minnesota's reversed 750W/1000W claim is the kind
+of error that could actively mislead a buyer's purchase decision (recommending they look for higher-wattage
+motors than the market or the law typically supports).
+
+**Next candidates:** (1) P0.23 is now fully closed -- no state-page legal-audit work remains queued. (2)
+ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike classification. (3)
+ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need human research. (4) DUOTTS
+S26 is now 9 consecutive runs as a PostHog-only signal with zero matching GSC movement -- worth an actual
+placement/prominence check on `/best/off-road-ebikes` next time this run has spare capacity, since two
+inbound links and a vs-page haven't moved it. (5) "samebike rs-a01 pro review" query improved from pos 43 to
+pos 27.5 in run 17 and held there this run -- watch whether it keeps climbing toward the pos 5-20
+striking-distance zone. (6) With the state-page backlog closed, the next-largest untouched roadmap item is
+P2.3 (only 3 of ~15 signal-bearing bikes have vs-pages) or a fresh look at P1.4 (price/freshness "last
+checked" dates), neither of which has been started.
