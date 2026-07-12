@@ -2483,3 +2483,89 @@ ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need 
 best-of pages' top-8 comparison tables next run, and whether that correlates with any GSC movement on the
 newly-higher-scored Eunorau pages (`eunorau-flash-awd-1-0`, `eunorau-fat-hd-2-0` in particular). (6) Continue
 watching `duotts-duotts-c29-k`'s first GSC click and the 11-run DUOTTS S26 PostHog-only signal.
+
+---
+
+## 2026-07-12 (run 21) -- P0.25 closed (flagship weight/motor-type bugs) + new PostHog signal enriched
+
+**GSC snapshot (28d, ending 2026-07-09):** 1 click, 1024 impressions, CTR 0.1% -- identical totals to run 20
+(GSC's ~3-day lag means no new window has landed since the last two pulls). Same page picture:
+`samebike-rs-a01-men` pos 9.0, `duotts-duotts-c29-k` pos 13.3 (1 click), `samebike-ebe2` pos 11.0,
+`/blog/best-ebikes-for-heavy-riders` still the top query cluster (53 impr, pos 45.3), `/best/cargo-ebikes`
+still the largest flat impression pool (120 impr, pos 77.2, 0 clicks).
+
+**PostHog snapshot (28d):** 78 pageviews / 31 visitors (+3 / +1 vs run 20 -- essentially flat). DUOTTS S26
+still the top product page (6/5), now a 12th consecutive run as a PostHog-only signal with no GSC movement.
+`eunorau-meta-275-st-1` and `engwe-l20` held their 3-views/3-visitors signal. **New this run:**
+`samebike-cy20-pro` appeared for the first time with 3 views / 2 visitors / 2 sessions -- zero prior signal
+in any previous log entry. Conversion events unchanged at 3 total (ENGWE N1 Pro x2, DUOTTS F20 x1).
+
+**Decision:** Both data sources essentially flat. Closed out ROADMAP P0.25 (the two data bugs run 20 found
+but deliberately left unfixed pending manufacturer-spec research), and gave the new `samebike-cy20-pro`
+PostHog signal the same immediate depth treatment established for S26/F20/EBE2 in runs 14-15.
+
+**Action 1 -- P0.25 closed: sourced real specs for 3 Eunorau flagships, fixed 2 data bugs + wrote real
+descriptions (Supabase, live immediately).** Web-verified against eunorau-ebike.com official product pages:
+
+- `eunorau-flash-lite-2-0` ($1,899): `weight_lbs` 0→82, `max_weight` 0→440 (official page: "82-92 lbs" /
+  "440 lbs total payload capacity"). While fixing this, noticed it was scored `score_value=2.5` /
+  `score_overall=6.1` despite being nearly spec-identical to its own same-price sibling
+  `eunorau-flash-lite-st` (same torque, weight, max_weight) but with *more than double the range* (165 mi
+  practical vs 75 mi) -- and the ST sibling scored `score_value=6.0` in the run-20 audit. Re-verified the
+  P0.24 regression weights against the ST sibling's own stored numbers first (predicted 7.42 vs actual 7.4,
+  confirming the formula), then applied the same logic: `score_value` 2.5→6.5, `score_overall` 6.1→7.3.
+- `eunorau-r1` / `eunorau-r1-plus` ($4,299/$4,499): official pages give R1 = 130 lbs, R1+ = 150 lbs curb
+  weight (both previously wrongly set to 220 lbs, identical to `max_weight`). Fixed `weight_lbs` 220→130
+  (R1) and 220→150 (R1+); left `max_weight`=220 unchanged for both since a secondary retailer listing
+  (bikeberry.com) corroborates that figure and Eunorau's own page doesn't list payload separately.
+- **Second bug found on the same two rows while sourcing specs:** `motor_type` was stored as `rear-hub` for
+  both R1 and R1+, but both bikes' own `description` text ("mid-motor") and Eunorau's official product
+  titles ("R1 72V4,000W Middle Motor...") say mid-drive. Corrected `motor_type` `rear-hub`→`mid-drive` on
+  both. This is the same class of bug as the P0.17 ENGWE `motor_type` fix (silently wrong spec-table field
+  + wrong hills-warning logic, since the detail page's "consider alternatives if..." block checks
+  `motorType !== 'mid-drive'`). Also caught the `highlights` arrays citing "48V" battery voltage on both
+  bikes when the motor and battery are both 72V per every source (DB description already said 72V
+  correctly) -- fixed to 72V in highlights.
+- Replaced all 3 bikes' single-line spec-fragment descriptions with real editorial copy (motor, torque,
+  claimed-vs-real range framing using each bike's own DB range columns, weight/payload, price positioning
+  against the nearest sibling) and rewrote their `highlights` arrays to match the corrected data.
+
+**Action 2 -- New PostHog signal enriched: `samebike-cy20-pro` (ROADMAP P0.26, new).** First-ever PostHog
+appearance this run (3 views/2 visitors/2 sessions). Had a single generic stub description ("An upgraded
+folding commuter with enhanced features..."). While researching real specs to write proper depth (via
+samebike.com), found the manufacturer's own product page confirms front-fork + seat-post suspension ("double
+shock suspension"), but the DB's `has_suspension` field said `front` only -- corrected to `full`. Rewrote
+description to 4 sentences (motor/torque, suspension + gearing, claimed-vs-real range using the bike's own
+DB columns, price positioning against the folding-ebike cluster) and highlights to match.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (data-only run, no code changed). Started the dev
+server and loaded all 4 changed pages directly: `eunorau-r1` (confirmed 130 lbs weight / 220 lb payload /
+Mid-drive motor type / corrected description and highlights all render; Value 1 / Overall 6.5 unchanged --
+left as-is, see reasoning below), `eunorau-flash-lite-2-0` (confirmed 82 lbs / 440 lb payload / Value 6.5 /
+Overall 7.3), `samebike-cy20-pro` (confirmed Suspension: Full, new description). Zero console errors on any
+page.
+
+**Score note -- `eunorau-r1`/`eunorau-r1-plus` `score_value` intentionally left at 1.0, not recalibrated:**
+unlike FLASH LITE 2.0, these two have no clean same-price sibling in the catalog (R1/R1+ are the only
+electric-dirt-bike-class products at their $4,000+ tier) -- the site's own methodology scores value "against
+direct rivals at the same price," and guessing a higher value score without a real comparable would repeat
+the exact mistake the P0.9/P0.24 sweeps exist to prevent. Left as a legitimate (if severe) low-value
+judgment on a niche premium product, consistent with the equally-conservative treatment `URUS 2.0` and
+`FMB` got in the run-20 audit.
+
+**Expected impact:** Removes a "0 lbs"/"physically impossible payload" trust break from 2 of the 3
+highest-priced bikes in the entire catalog ($4,299/$4,499), and fixes a wrong motor-type spec-table value +
+wrong battery voltage on the same 2 pages -- the motor-type error also matters functionally since it feeds
+the detail page's hills-warning logic. FLASH LITE 2.0's score correction (6.1→7.3 overall) should improve
+its placement on `/best/long-range-ebikes` and `/best/fat-tire-ebikes`, both of which sort by score. The
+`samebike-cy20-pro` depth treatment applies the same "enrich on first traffic signal" pattern that worked
+for S26/F20/EBE2, rather than waiting multiple runs.
+
+**Next candidates:** (1) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600
+scooter-vs-bike classification. (2) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1`
+still need human research. (3) P1.4 (price/freshness "last checked" dates) is now the largest fully-untouched
+roadmap item and the next logical target if data signals stay flat. (4) Watch whether `samebike-cy20-pro`
+gets a second consecutive PostHog run before treating it as a real trend (P0.26). (5) Continue watching
+`duotts-duotts-c29-k`'s GSC click and the now-12-run DUOTTS S26 PostHog-only signal -- if S26 still shows
+zero GSC query-level movement after the P2.3 score fix (run 19) and this many runs, the off-road page's
+card-grid prominence beyond the top-8 table may need a second look.
