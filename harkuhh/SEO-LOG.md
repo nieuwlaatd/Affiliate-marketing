@@ -2373,3 +2373,113 @@ whether the corrected S26 score/rank change produces any GSC movement over the n
 still shows zero query-level signal after this, the off-road page's card-grid prominence (not just the
 top-8 table) may need a second look. (6) `duotts-duotts-c29-k`'s first GSC click this run is worth watching
 for a repeat before treating it as a real trend.
+
+---
+
+## 2026-07-12 (run 20) -- score_value dedicated audit, closes P0.24
+
+**GSC snapshot (28d, ending 2026-07-09):** 1 click, 1024 impressions, CTR 0.1% -- identical window and
+totals to run 19 (GSC's lag means no new day has advanced since the last pull). Same page-level picture:
+`samebike-rs-a01-pro` pos 10.3, `samebike-rs-a01-men` pos 9.0, `samebike-ebe2` pos 11.0,
+`duotts-duotts-c29-k` pos 13.3 (first GSC click), `duotts-e29` pos 25.1, `/blog/best-ebikes-for-heavy-riders`
+still the largest query cluster (53 impr, pos 45.3), `/best/cargo-ebikes` still the largest flat impression
+pool (120 impr, pos 77.2, 0 clicks).
+
+**PostHog snapshot (28d):** 75 pageviews / 30 visitors -- identical totals to run 19 (no new events in the
+gap between runs). DUOTTS S26 still the top product page (6/5), now 11 consecutive runs as a PostHog-only
+signal. `eunorau-meta-275-st-1` and `engwe-l20` both held their 3-views/3-visitors signal (now already
+covered by the run-19 vs-page). No new dual-signal page. Conversion events unchanged at 3 total.
+
+**Decision:** Both data sources fully flat versus run 19 with no new page crossing an action threshold.
+Advanced the item run 19 explicitly flagged as needing "a dedicated audit run" rather than another
+one-bike patch: ROADMAP P0.24, the systemic `score_value` miscalibration found while fixing DUOTTS S26.
+
+**Action -- P0.24: full `score_value` audit across the catalog (Supabase, live immediately).** Pulled
+`score_overall`, all 6 axis scores, price, torque, `weight_lbs`, `max_weight`, `range_practical` for all 109
+scored bikes. Re-verified run 19's regression weights (value 0.29, range 0.19, power 0.15, comfort 0.14,
+build 0.17, versatility 0.09) against `duotts-s26` (exact match, 7.85 predicted vs 7.8 actual) and
+`samebike-m20-iii` (8.07 predicted vs 7.8 actual, within the ~0.1-0.3 residual run 19 documented) before
+using it to recompute `score_overall` on any bike.
+
+Built a price-tier sibling comparison: for each bike with a conspicuously low `score_value` (roughly <=3.7,
+matching run 19's threshold), found the closest same-price or near-price bike from a brand whose
+`score_value` looked internally consistent (mainly ENGWE via its `score_price_quality` column, plus
+DUOTTS/SAMEBIKE/VTUVIA bikes with populated `score_value`), and compared torque/range/payload directly. Only
+corrected a bike's score when its own specs were comparable to or better than the trusted sibling's --
+declined to correct bikes that were genuinely weaker (see exclusions below).
+
+**Clearest catches (identical or near-identical price, objectively equal-or-better specs, previously scored
+far lower):**
+- `eunorau-fat-awd-2`/`eunorau-fat-awd-3-0` ($1,699, 110 Nm/60 mi/375 lb) vs `engwe-engine-pro-3-0-boost`
+  (same $1,699, 90 Nm/60 mi/331 lb, value 8.8) -- Eunorau beats it on torque and payload at an identical
+  price. `score_value` 1.3 -> 7.5 (overall 6.1 -> 7.8) on both.
+- `eunorau-meta-275-st-1`/`eunorau-meta-275-1` ($1,399, 65 Nm/49 mi/286 lb) vs `duotts-n26`/`duotts-f26`
+  (same $1,399, 65 Nm/48 mi/330 lb, value 7.5) -- near-identical torque and range, slightly lower payload.
+  `score_value` 1.5 -> 6.5 (overall 4.8 -> 6.3) on both.
+- `eunorau-flash-awd-1-0` ($2,099, 184 Nm/165 mi/440 lb) vs `duotts-e26` (same $2,099, 80 Nm/48 mi/330 lb,
+  value 7.0) -- Eunorau more than doubles torque, range and payload at the same price. `score_value` 2.8 ->
+  8.0 (overall 6.3 -> 7.9).
+- `eunorau-fat-hd-2-0` ($2,099, 160 Nm/60 mi/375 lb, build 9.0) vs the same `duotts-e26` sibling -- double
+  the torque, better range, higher payload and better build score. `score_value` 1.5 -> 7.0 (overall 6.7 ->
+  8.3).
+
+**Full list of 29 bikes corrected (`score_value` -> new value, `score_overall` recomputed via the fitted
+weights each time):** Eunorau E-FAT-MN (1.7->5.5), META275 ST 1.0 + META275 1.0 (1.5->6.5 each), META24/26/20
+1.0 (1.6->6.5 each), DEFENDER (1.2->4.0), S1 dirt bike (1.3->3.5), MAX-CARGO 2.0 (1.3->5.0), FAT-AWD 2.0 +
+3.0 (1.3->7.5 each), META275 2.0 (1.6->5.5), G30 (1.3->5.0), FLASH LITE ST (1.6->6.0), FAT-HD 1.0 (1.7->5.5),
+FLASH AWD (2.8->8.0), FAT-HD 2.0 (1.5->7.0), FLASH (2.0->7.5), SPECTER-ST 2.0 (1.1->4.5), FAT-HS (1.1->4.5),
+SPECTER-S 3.0 (1.1->4.5), URUS 2.0 (1.0->2.5); DUOTTS C29Max (2.2->6.0), C29-K (2.6->7.0), F26 Lite
+(2.0->5.5); Walfisk WF26 (2.3->5.5), WF750 UrbanX (2.2->6.0), ET-7 Ultra (3.4->7.5); VTUVIA FMB (1.0->3.0).
+Bikes with a genuine (not-only-partial-comparison) sibling got the closer-to-sibling number; bikes with no
+exact same-price comparison (S1, DEFENDER, URUS, FMB, the three $2,999 Eunorau premium bikes) got a more
+conservative correction reflecting a real, if smaller, value gap versus their tier.
+
+**Deliberately left untouched, with reasoning:**
+- `duotts-duotts-c29lite-electric-bike` ($759, value 1.8) -- checked against its own $799 sibling `duotts-c29`
+  (65 Nm/40 mi/330 lb, value 8.0): C29 Lite has weaker torque and range for almost the same price. The low
+  score is a legitimate reflection of bad value, not a bug -- left as-is.
+- DYU C2/C5/C6 and `engwe-ease-2-pro` -- `torque=0` bikes already flagged by prior P0.9 runs; a low value
+  score against broken spec data isn't the issue to fix here.
+- `vtuvia-reindeer-step-thru-electric-bike` -- the P0.16 zero-value bike, needs human research per that entry,
+  not a score guess.
+- `eunorau-defender-s-fat-hs` -- already flagged P0.16 (mislabeled drivetrain, needs human research) and also
+  has `weight_lbs=0`/`max_weight=0`, so left un-scored.
+- `eunorau-flash-lite-2-0` and `eunorau-r1`/`eunorau-r1-plus` -- new data bugs found while building the
+  comparison table (see below); scoring on top of broken weight/payload data would repeat the same mistake
+  the P0.9 sweep exists to prevent, so left alone and logged instead.
+
+**New discovery (not fixed, logged as ROADMAP P0.25):** Two more P0.9-pattern data bugs surfaced while
+building the price-tier comparison table. `eunorau-flash-lite-2-0` (FLASH LITE, $1,899) has `weight_lbs=0`
+and `max_weight=0` -- the exact placeholder-zero bug from the original sweep. `eunorau-r1` and
+`eunorau-r1-plus` ($4,299/$4,499) both have `max_weight` (220 lbs) exactly equal to their own `weight_lbs`
+(220 lbs) -- a bike's max payload capacity being identical to its own curb weight is physically implausible
+and looks like the same copy-paste bug pattern the original P0.9 sweep found on the Eunorau META bikes.
+
+**Verified:** Started the dev server and loaded `eunorau-flash-awd-1-0` directly: confirmed Value 8 / Overall
+7.9 render correctly in the Scores section and spec table, "Similar e-bikes" section shows the corrected
+FLASH LITE ST (7.4) and FAT-HD 1.0 (7.3) alongside the still-flagged, unscored FLASH LITE (6.1, unchanged).
+Loaded `duotts-duotts-c29-k`: Value 7 / Overall 7.5 render correctly, "Similar e-bikes" shows corrected
+C29Max (6.5) and F26 Lite (6.7). Loaded `/best/off-road-ebikes`: renders cleanly. Zero console errors on all
+3 pages. `npx tsc --noEmit -p tsconfig.json` clean (no code changed, data-only run, but ran it per the task's
+standard verification step; exit clean).
+
+**Expected impact:** This is the largest single-run correction to the site's scoring since the S26 fix,
+covering 29 of the roughly 30+ bikes run 19's regression flagged as anomalous. The Eunorau brand -- more
+than a third of the entire catalog and including several of its highest-priced flagships -- was previously
+scored as though every one of its non-budget bikes was bad value regardless of actual specs, which
+contradicts the site's own documented "How We Test" methodology and would have suppressed every affected
+bike's ranking on every best-of page that sorts or filters by score. Bikes like `eunorau-flash-awd-1-0` and
+`eunorau-fat-hd-2-0` move from bottom-quartile to top-quartile `score_overall` (7.9 and 8.3 respectively),
+which should improve their card-grid and comparison-table placement on `/best/off-road-ebikes`,
+`/best/fat-tire-ebikes`, `/best/long-range-ebikes` and `/best/ebikes-under-2000` immediately, with any GSC
+effect showing up over the next several pulls as pages re-index.
+
+**Next candidates:** (1) ROADMAP P0.25 (new) -- `eunorau-flash-lite-2-0` zero-weight bug and the
+`eunorau-r1`/`r1-plus` max_weight-equals-weight bug, both need real manufacturer specs sourced before fixing.
+(2) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike classification. (3)
+ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need human research. (4) P1.4
+(price/freshness "last checked" dates) is now the largest fully-untouched roadmap item. (5) Watch whether the
+29 corrected `score_overall` values produce any placement shift on the off-road, fat-tire and long-range
+best-of pages' top-8 comparison tables next run, and whether that correlates with any GSC movement on the
+newly-higher-scored Eunorau pages (`eunorau-flash-awd-1-0`, `eunorau-fat-hd-2-0` in particular). (6) Continue
+watching `duotts-duotts-c29-k`'s first GSC click and the 11-run DUOTTS S26 PostHog-only signal.
