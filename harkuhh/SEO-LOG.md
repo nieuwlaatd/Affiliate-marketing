@@ -2273,3 +2273,103 @@ pos 27.5 in run 17 and held there this run -- watch whether it keeps climbing to
 striking-distance zone. (6) With the state-page backlog closed, the next-largest untouched roadmap item is
 P2.3 (only 3 of ~15 signal-bearing bikes have vs-pages) or a fresh look at P1.4 (price/freshness "last
 checked" dates), neither of which has been started.
+
+---
+
+## 2026-07-12 (run 19) -- DUOTTS S26 placement root-cause fix + new vs-page + live zero-value bug catch
+
+**GSC snapshot (28d, ending 2026-07-09):** 1 click, 1024 impressions, CTR 0.1% -- window advanced from run
+18's 2026-07-08 end date. `/e-bikes/samebike/samebike-rs-a01-pro` improved sharply to pos 10.3 (from pos 14.4
+in run 17), `/e-bikes/samebike/samebike-rs-a01-men` holding at pos 9.0, `/e-bikes/samebike/samebike-ebe2` pos
+11.0, `/e-bikes/duotts/duotts-duotts-c29-k` pos 13.3 with its first-ever GSC click, `/e-bikes/duotts/duotts-e29`
+pos 25.1 (1 click). New this run: `/e-bikes/eunorau/eunorau-meta-24-1` picked up its first confirmed click (5
+impr, 20% CTR, pos 23.2) -- already covered by an existing vs-page (`duotts-duotts-c29-k-vs-eunorau-meta-24-1`,
+run 15), so no new action needed there. `/blog/best-ebikes-for-heavy-riders` still the largest query-level
+cluster ("electric bike for heavy riders," 53 impr, pos 45.3). `/best/cargo-ebikes` still the largest flat
+impression pool (unchanged pattern from prior runs). The query-level striking-distance tool output was empty
+again despite several pages sitting at pos 9-13 -- consistent with prior runs' note that GSC's query-level
+tool undercounts brand/model-specific queries that the page-level table catches instead.
+
+**PostHog snapshot (28d):** 75 pageviews / 30 visitors (up from 73/29). DUOTTS S26 still the top product page
+by views/sessions (6/5) -- now 10 consecutive runs as a PostHog-only signal with no matching GSC movement.
+`duotts-duotts-c29-k` showed a real dual-signal this pull (5 PostHog views + its first GSC click, pos 13.3) --
+the highest-priority pattern per the task's own instructions, but its description was already deepened in run
+6, so no further action needed there this run. `eunorau-meta-275-st-1` and `engwe-l20` both repeated their
+3-views/3-visitors signal for a second consecutive pull with no vs-page coverage -- exactly the run-18
+"next candidates" flag. `duotts-duotts-c29max-electric-bike` did not repeat its prior 4-view signal (fell out
+of the top pages again, 2nd time this has happened -- treating as noise, not a real recurring signal).
+Conversion events unchanged at 3 total (`affiliate_link_clicked`): ENGWE N1 Pro (2), DUOTTS F20 (1).
+
+**Decision:** Two focused actions, both closing items repeatedly flagged as "next candidates" across runs
+14-18 without ever being executed: (1) the actual DUOTTS S26 placement/prominence investigation on
+`/best/off-road-ebikes` that runs 14-18 kept deferring, and (2) a new vs-page for the `eunorau-meta-275-st-1`
+/ `engwe-l20` pair flagged in run 18. The second action surfaced a live data bug that got fixed as a direct
+consequence.
+
+**Action 1 -- DUOTTS S26 placement root-cause found and fixed (P2.3/off-road watch item, closes the 10-run
+"why isn't S26 moving" question):** Queried every bike qualifying for `/best/off-road-ebikes`
+(`suitable_for` contains `off-road` or `sport`), sorted by `score_overall` descending, the same order the page
+renders in. S26 ranked **33rd of 76** -- well outside the page's top-8 "Quick comparison" table and deep in
+the card grid, despite being the site's #1 PostHog product page for 10 straight runs. Root cause: S26's
+`score_value` was 3.2/10, dragging `score_overall` down to 6.9 despite class-leading specs (110 Nm torque, 55
+mi practical range, 330 lb payload, full suspension, AWD dual motor) for its $1,349 price. Compared directly
+against its closest same-brand, same-price-tier sibling, `duotts-f20` ($1,199, 70 Nm, 56 mi, 330 lb payload,
+`score_value` 7.8) -- S26 offers meaningfully more torque for 12% more money with equal range/payload, which
+by the site's own documented value definition (`lib/editorial.ts`: "price measured against everything else the
+bike delivers, compared to direct rivals at the same price") should score as strong value, not poor value.
+Fit a linear regression of `score_overall` against all 6 stored axis scores across 80+ bikes with non-null
+scores (converged weights: value ~0.29, range ~0.19, power ~0.15, comfort ~0.14, build ~0.17, versatility
+~0.09, residual ~0.1 -- a good fit, confirming `score_overall` is a fairly consistent weighted average rather
+than an arbitrary number). Corrected `score_value` 3.2 -> 6.5 (conservative vs. F20's 7.8, accounting for S26's
+weaker build-quality/versatility axis scores) and recomputed `score_overall` via the fitted weights: 6.9 ->
+7.8. Re-ran the off-road ranking query after the fix: S26 moved from rank 33 to **rank 14** of 76 -- a real,
+evidence-based improvement, though still short of the top-8 comparison table (did not force it further to
+avoid gaming the score past what the regression and direct-comparison evidence support).
+
+**Discovery, not fixed sitewide -- logged as new ROADMAP P0.24:** The same regression surfaced that S26's
+`score_value` anomaly is one instance of a broader pattern: roughly a dozen bikes, mostly Eunorau's premium
+$2,000-4,500 lineup (R1, R1+, URUS, SPECTER/FAT-HD/FAT-HS variants) plus 2 more DUOTTS mid-range bikes
+(C29-K, C29Max), carry `score_value` of 1.0-3.7 versus same-price-tier peers scoring 7.0-8.0 on the same axis.
+Did not touch these this run -- recalibrating a dozen scores without a dedicated, careful pass risks
+introducing new inconsistencies rather than removing old ones, and this run's scope was the one bike with a
+confirmed, repeated traffic signal (S26). Flagged as ROADMAP P0.24 for a future dedicated scoring-audit run.
+
+**Action 2 -- New vs-page: `eunorau-meta-275-st-1-vs-engwe-l20`, plus a live zero-value bug caught and fixed
+(P2.3 + P0.9-pattern):** Added the matchup to `MATCHUPS` in `app/vs/[slug]/page.tsx` and the mirrored
+`VS_MATCHUPS` in `app/sitemap.ts` (both bikes recurring 3-visitor/2-run PostHog signal, identical $1,399
+price -- a natural "same price, which one" query). While verifying the new page in the dev server, found it
+rendering "0 Nm" motor / "0 lbs" weight / "0 lbs" max payload for `eunorau-meta-275-st-1` -- the DB row had
+`torque=0`, `weight=0`, `max_weight=0`, the exact placeholder-zero pattern from the P0.9 sweep, apparently
+missed because it's a distinct slug from the already-fixed `eunorau-meta-275-1` sibling (the "1.0" vs "ST"
+naming makes them easy to conflate, similar to the P0.16 caution about `defender-s-fat-hs`). Sourced real
+specs from a retailer listing (reallygoodebikes.com/products/eunorau-meta275-step-thru...) that matched the
+already-verified sibling bike's numbers almost exactly (same 500W/torque-sensor platform, different frame
+style): 65 Nm torque, 68.3 lbs, 286 lb payload. Also fixed `frame_type` (`step-over` -> `step-through`, since
+"ST" stands for step-through and every source confirms it) and rewrote the one-line stub description
+("META275 ST 1.0 - 500W hub motor city commuter e-bike") to 3 sentences of real editorial copy consistent
+with the sibling's established voice.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (exit 0). Started the dev server: loaded the new
+vs-page (confirmed 65 Nm / 68.3 lbs / 286 lbs render correctly on both sides, price displayed as an identical
+$1,399 tie), the `eunorau-meta-275-st-1` detail page (confirmed the corrected spec table, step-through frame
+label, and new description render; zero console errors), and `/best/off-road-ebikes` (loads cleanly, zero
+console errors). Confirmed via a fresh SQL rank query that S26 sits at rank 14/76 post-fix.
+
+**Expected impact:** The S26 fix directly answers the question raised in runs 14 through 18's "next
+candidates" about why the site's most-visited product page never gains GSC traction despite two inbound
+vs-page links -- it was structurally invisible to the off-road page's featured comparison table due to a
+scoring error, not a genuine "no organic interest" problem. The new vs-page adds an internal link and a
+comparison-intent ranking surface for two bikes with real, repeated (if modest) traffic. The
+`eunorau-meta-275-st-1` fix removes a live "0 Nm / 0 lbs" trust break from a page this run itself just
+built -- exactly the kind of error the P0.9 sweep exists to catch, caught this time as a side effect of
+verification rather than a dedicated data-quality pass.
+
+**Next candidates:** (1) ROADMAP P0.24 (new) -- the systemic `score_value` miscalibration across ~12 bikes,
+mostly Eunorau's premium lineup, needs a dedicated audit run rather than a quick fix. (2) ROADMAP P0.13 --
+Dylan decision still needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike classification. (3) ROADMAP P0.16 --
+`eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need human research. (4) P1.4 (price/freshness "last
+checked" dates) still has not been started -- next-largest untouched roadmap item after P0.24. (5) Watch
+whether the corrected S26 score/rank change produces any GSC movement over the next few pulls -- if S26
+still shows zero query-level signal after this, the off-road page's card-grid prominence (not just the
+top-8 table) may need a second look. (6) `duotts-duotts-c29-k`'s first GSC click this run is worth watching
+for a repeat before treating it as a real trend.

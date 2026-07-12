@@ -24,6 +24,7 @@ const MATCHUPS: [string, string][] = [
   ['engwe-n1-pro', 'duotts-s26'], // top affiliate-click bike vs top PostHog product page (S26 has zero matching GSC signal after 6 runs -- this gives it a fresh internal link + comparison surface)
   ['samebike-rs-a01-pro', 'samebike-rs-a01-men'], // two variants of the same model, both climbing in GSC (pos 14.7 / pos 9.1) -- a natural "which RS-A01 should I buy" query
   ['duotts-duotts-c29-k', 'eunorau-meta-24-1'], // both have a confirmed GSC click this run, mid-range price tier
+  ['eunorau-meta-275-st-1', 'engwe-l20'], // both recurring PostHog signal (3 visitors, 2 consecutive pulls) with no vs-page yet, identical $1,399 price -- a natural "same price, which one" query
 ];
 
 function brandSlug(b: EBike): string {
