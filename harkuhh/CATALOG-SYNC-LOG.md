@@ -1,3 +1,106 @@
+## 2026-07-13: weekly catalog sync
+
+### Summary
+
+| Brand    | Vendor bikes (kept) | DB rows | Prices applied | New inserted | Discontinued applied | Deferred (review) |
+|----------|--------------------:|--------:|---------------:|-------------:|---------------------:|------------------:|
+| ENGWE    | 20                  | 26      | 2              | 0            | 0                    | 8 new + 1 false-match price + 6 disc |
+| Eunorau  | 32                  | 26      | 5              | 0            | 1                    | 8 new + 1 dup |
+| Walfisk  | 6                   | 3       | 1              | 0            | 0                    | 1 false-match price + 3 new |
+| DUOTTS   | 11                  | 11      | 9              | 0            | 0                    | (clean) |
+| SAMEBIKE | 21                  | 22      | 1              | 0            | 0                    | (clean) |
+| DYU      | 12                  | 10      | 0              | 0            | 0                    | 2 new + 1 ambiguous price |
+| VTUVIA   | 20                  | 11      | 0              | 0            | 0                    | 9 new (color variants) |
+
+### Applied changes (20 total)
+
+**Price updates (18):**
+
+_ENGWE (2):_
+- **M20** (`engwe-m20`): $1099 -> $1399 (+$300). Exact-handle match. Second cycle applying: flagged 2026-06-28 as $1099 vs $1699, deferred; vendor lowered to $1399 this cycle so applying now.
+- **X20/X24/X26** (`engwe-x20-x24-x26`): $1799 -> $1599 (-$200). Score 90 on vendor's `engwe-x26-x24-x20` combined listing.
+
+_Eunorau (5):_
+- **FAT-HD 2.0** (`eunorau-fat-hd-2-0`): $2099 -> $2399 (+$300). Exact-handle match.
+- **META20 1.0** (`eunorau-meta-20-1`): $1549 -> $1699 (+$150). Exact-handle match.
+- **META24 1.0** (`eunorau-meta-24-1`): $1499 -> $1699 (+$200). Exact-handle match.
+- **META26 1.0** (`eunorau-meta-26-1`): $1499 -> $1699 (+$200). Exact-handle match.
+- **S1** (`eunorau-s1-dirt-bike`): $1599 -> $1699 (+$100). Exact-handle match.
+
+_Walfisk (1):_
+- **WF26** (`walfisk-walfisk-26-fat-tire-bafang-750w-...`): $1199 -> $999 (-$200). Score 90. Vendor reverted below the +$200 bump applied 2026-07-06.
+
+_DUOTTS (9):_
+- **C29 Lite** (`duotts-duotts-c29lite-electric-bike`): $759 -> $729 (-$30). Exact match.
+- **C29-K** (`duotts-duotts-c29-k`): $1219 -> $1149 (-$70). Exact match.
+- **E26** (`duotts-e26`): $2099 -> $1899 (-$200). Score 90 on `duotts-e26-electric-bike`.
+- **E29** (`duotts-e29`): $1429 -> $1299 (-$130). Score 90.
+- **F20** (`duotts-f20`): $1199 -> $1099 (-$100). Score 90.
+- **F26** (`duotts-f26`): $1399 -> $1349 (-$50). Exact match.
+- **F26 Lite** (`duotts-duotts-f26lite-electric-bike`): $1269 -> $1199 (-$70). Exact match.
+- **N26** (`duotts-n26`): $1399 -> $1299 (-$100). Score 90.
+- **S26 AWD** (`duotts-s26`): $1349 -> $1299 (-$50). Exact match.
+
+_SAMEBIKE (1):_
+- **RS-A02 Plus** (`samebike-rs-a02-plus`): $1499 -> $1399 (-$100). Score 90 on `samebike-rsa02plus-foldable-off-road-ebike`.
+
+**Discontinued (available = false, 1):**
+
+- **Eunorau Defender-S** (`eunorau-defender-s-fat-hs`, $2999): 2 consecutive cycles absent. 2026-07-06 log noted "Left active pending confirmation next cycle"; this run confirms. `is_active` stays true; detail page auto-switches to "No longer available" template.
+
+**Returned (0):** Matcher paired `engwe-engine-x` to vendor's `usengine-pro-...` ENGINE PRO handle at score 80 — false positive. `Engine X` and `Engine PRO` are different SKUs. Left DB row as `available=false` (unchanged from 2026-07-06).
+
+### Deferred (need owner sign-off)
+
+**ENGWE** — 3rd consecutive cycle of vendor generation rollover; not applying without owner decision:
+
+- 1 price change SKIPPED as false match: `engwe-engine-x` matched to `usengine-pro-750w-16ah-high-performance-electric-bike` ($1599). These are different products (Engine X vs ENGINE PRO). Kept DB row `available=false`.
+- 8 NEW ENGWE candidates (all still deferred, some for 3+ cycles):
+  - **L20 3.0** ($1399) via `comfort-ebike-full-suspension-ebike-engwe-l20-3-0` — could be the renamed L20 3.0 Pro; owner to decide slug mapping.
+  - **EP-2 3.0** ($1499) via `electric-commuter-bike-fast-electric-bike-engwe-ep-2-3-0` — likely rename of DB's `engwe-ep-2-3-0-boost` at $999 (removed "Boost", raised price).
+  - **M20 3.0** ($1499), **M20 2.0** ($999), **L20 2.0** ($699) — new generation SKUs.
+  - **X24** ($1799), **X20** ($1599), **X26** ($1499) — separate SKUs; DB has them combined as `engwe-x20-x24-x26` (now $1599).
+- 6 rows still absent from vendor and NOT applied to available=false (rollover context makes discontinued read ambiguous):
+  - `engwe-engine-pro-3-0-boost` ($1699) — vendor sells "Engine Pro 2.0" now.
+  - `engwe-ep-2-boost` ($1049) — vendor sells "EP-2 3.0" and "EP-2 Pro".
+  - `engwe-l20-3-0-boost` ($1399), `engwe-l20-3-0-pro` ($1699) — vendor has "L20 3.0" ($1399) which may be either.
+  - `engwe-ep-2-3-0-boost` ($999) — vendor renamed to plain "EP-2 3.0" at $1499 (see NEW above).
+  - `engwe-ease-2-pro` ($999) — vendor still lists at $999 but body_html now describes a "4-wheel electric scooter with seat" (mobility scooter), not a bike. Category-fit issue for future audit.
+
+**Eunorau** — 8 NEW candidates:
+- **R1-17** ($3749): 2nd cycle deferred; may be R1 Compact / older R1 variant.
+- **JUMBO** ($1699): 2nd cycle deferred; needs spec review.
+- 3 battery accessories ($459/$499/$499): auto-caught by battery filter next cycle if I add strict "-battery" handle rejection.
+- 2 bike-trailer accessories ($329 each): not bikes.
+- 1 wheel-set part ($399).
+
+**Eunorau META275 (`eunorau-meta-275-st-1`)**: duplicate of `eunorau-meta-275-1` (both $1399, same specs). Owner cleanup, not sync's job.
+
+**Walfisk** — 1 recurring false price + 3 non-bike NEW:
+- **ET-7 Ultra** DB $2299.99 vs vendor $599 on the `walfisk-electric-bike-et-7-1500w-3000w-rear-motor` handle: same false pairing flagged 3+ prior cycles. Vendor has 3 ET-7 SKUs; the -74% delta blocked auto-apply as intended.
+- 3 NEW candidates (skip): removable battery ($499), extra battery ($599), VIPERA at $1399.99 (a real bike but 2nd cycle deferred).
+
+**DYU** — 2 NEW + 1 ambiguous price:
+- **D3S** ($499) and **SP1** ($1299): NEW; 2nd cycle deferred pending spec review.
+- **A1F Pro** price: matched to `a1f-ebike` handle at $499 (score 80). Prior weeks noted vendor has both A1F non-Pro and A1F Pro at similar handles; can't disambiguate cleanly. Not applying.
+
+**SAMEBIKE**: clean. All 20 remaining DB rows matched vendor at identical prices.
+
+**VTUVIA** — 9 NEW candidates, all color/variant/duplicate SKUs of existing rows (one-row-per-model rule):
+- SX20 in Red/White/Blue/Antelope Silvery/Folding — same as DB `vtuvia-sx20`.
+- SF20H in Black/Red/Green/Utility — same as DB `vtuvia-sf20h`.
+- CMB 10-Speed ($2149): 4+ cycles deferred pending owner decision (DB has 8-speed at $1899).
+
+### Notes
+
+- Scraper: Python re-implementation of Shopify `/products.json` across all 7 brands; DUOTTS storefront is `duotts.com` (not `duotts-ebike.com` shown in xlsx). Filter tightened this run to permit moped-style bikes with "battery" in title while still rejecting battery-only SKUs and mobility scooters. `scripts/scrape-us-ebikes.ts` BRANDS array still only covers 3 of 7; the Python variant remains the working sync tool.
+- Matcher: exact-handle -> substring-in-either-direction -> normalized-token overlap. Threshold: score >= 80 and pct delta <= 30% for auto-apply. Score 50-79 flagged for review.
+- All 18 applied price rows also have `price_usd` re-anchored to the same value so USD stays consistent with base `price` (some legacy rows had price_usd = old-tier from an earlier EUR->USD import).
+- `affiliate-partners.xlsx` updated for all 7 active brands; Last Updated = 2026-07-13.
+- Product pages for `eunorau-defender-s-fat-hs` remain live (`is_active = true`); detail template auto-swaps to "No longer available" notice + alternatives CTA and sets `availability = Discontinued` in Product schema.
+
+---
+
 ## 2026-07-06: weekly catalog sync
 
 ### Summary
