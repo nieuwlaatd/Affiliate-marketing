@@ -2569,3 +2569,79 @@ gets a second consecutive PostHog run before treating it as a real trend (P0.26)
 `duotts-duotts-c29-k`'s GSC click and the now-12-run DUOTTS S26 PostHog-only signal -- if S26 still shows
 zero GSC query-level movement after the P2.3 score fix (run 19) and this many runs, the off-road page's
 card-grid prominence beyond the top-8 table may need a second look.
+
+---
+
+## 2026-07-13 (run 22) -- `samebike-cy20-pro` trend confirmed + folding-filter visibility bug fixed (P0.26/P0.27)
+
+**GSC snapshot (28d, ending 2026-07-10):** 1 click, 1086 impressions, CTR 0.1% (impressions +62 vs run 21's
+1024, still essentially flat). Top query unchanged: "electric bike for heavy riders" (57 impr, pos 44.5, the
+one confirmed click). Page-level picture stable: `duotts-duotts-c29-k` pos 13.0 (10 impr, 1 click, 10% CTR --
+now a dual GSC+PostHog signal, see below), `samebike-rs-a01-men` pos 9.0 (10 impr, 1 click), `samebike-ebe2`
+pos 11.0 (2 impr, 1 click, 50% CTR), `/best/folding-ebikes` pos 16.2 (10 impr, 1 click, 10% CTR -- its first
+logged click), `/best/cargo-ebikes` still the largest flat pool (109 impr, pos 77.6, 0 clicks, unchanged
+across many runs). No queries in strict striking distance (pos 5-20) in the tool's query-level output.
+
+**PostHog snapshot (28d):** 78 pageviews / 31 visitors (flat vs run 21's 78/31). DUOTTS S26 still the top
+product page (6 views/5 visitors), now a 13th consecutive PostHog-only run with zero matching GSC signal.
+**`samebike-cy20-pro` repeated its run-21 signal (3 views/2 visitors/2 sessions again)** -- a genuine 2nd
+consecutive run, satisfying the "watch for a repeat before treating as a trend" rule from P0.26.
+`duotts-duotts-c29-k` also showed 5 views/1 visitor in PostHog this run, meaning it now has *both* a GSC
+striking-distance signal (pos 13.0, 1 click) and PostHog traffic -- the dual-signal case the task instructions
+flag as highest priority. Conversion events unchanged at 3 total (ENGWE N1 Pro x2, DUOTTS F20 x1).
+
+**Decision:** Confirmed `samebike-cy20-pro` as a real trend per P0.26, then investigated why a bike that
+already got the full depth treatment last run (run 21) was still getting zero organic reach. Checked
+`duotts-duotts-c29-k` next (the new dual-signal bike) but found it already has a vs-page (`duotts-duotts-c29-k`
+vs `eunorau-meta-24-1`, added run 19) and full detail-page depth (added run 6) -- no further action needed
+there this run, logged as confirmation only. The real, actionable find was on `samebike-cy20-pro`.
+
+**Action -- P0.26: found and fixed why `samebike-cy20-pro` gets zero organic reach despite good content.**
+Queried the bike's own Supabase row: its `description` explicitly says "a folding frame that collapses for
+car-trunk or closet storage," but `dimensions` was `null`. `/best/folding-ebikes` filters strictly on
+`!!b.dimensions?.foldedSize` (`app/best/[category]/page.tsx:143`) -- so despite being a folding bike by its
+own copy, it was structurally invisible on the one best-of page built for exactly that search intent. This is
+the same class of bug as the original P2.6 discovery (a real folding bike hidden from the folding page by a
+missing field, not a missing bike). Sourced folded dimensions from 3 independent SAMEBIKE product listings
+(samebike.com EU, us.samebike.com two US variants) -- all converged on roughly 880×490mm with folded height
+varying 700-850mm across listings/regions; used the majority figure (850mm, matching 2 of 3 sources) --
+and set `dimensions = {"foldedSize": "88*49*85 cm"}`. It was already correctly showing on `/best/commuter-ebikes`
+and `/best/recreation-ebikes` via its existing `suitable_for` tags, so no additional internal-linking work
+was needed once the filter-blocking bug was fixed.
+
+**Action -- P0.27: found and fixed 4 more ENGWE bikes with a placeholder `foldedSize` value.** While querying
+for other bikes with a non-numeric `foldedSize` (a quick regex sweep: `dimensions->>'foldedSize' !~ '^[0-9]'`),
+found `engwe-ep-2-3-0-boost`, `engwe-engine-pro-3-0-boost`, `engwe-l20-3-0-pro` and `engwe-l20-3-0-boost` all
+had `foldedSize: "Yes"` -- a boolean-shaped placeholder instead of real dimensions. This didn't break the
+folding-page filter (a truthy string still passes `!!`), and `foldedSize` isn't rendered as text anywhere on
+the site today, so there's no current visible bug -- but it's a landmine for the moment any future template
+prints it, and it's inconsistent with every other bike's real cm-dimension data. Sourced real folded
+dimensions from ENGWE's own product pages (engwe.com, uk.engwe.com) and replaced all 4: EP-2 3.0 Boost and
+Engine Pro 3.0 Boost both 97×53×81 cm, L20 3.0 Pro 102×53×78 cm, L20 3.0 Boost 100×51×75 cm.
+
+**New discovery, not fixed, logged as ROADMAP P0.28:** while sourcing `samebike-cy20-pro`'s folded
+dimensions, found its `torque` field (35 Nm) doesn't match any SAMEBIKE CY20 Pro listing found online (EU
+250W variant lists 50+ Nm, US 500W variant lists 55+ Nm) -- no listing matches this DB row's exact
+combination of $759 price / 250W motor / 35 Nm torque. Left untouched rather than guess which real-world
+SKU/region this row represents, consistent with the P0.16 precedent of not fabricating specs for an
+ambiguous product match.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (data-only run, no code changed). Started the dev
+server and loaded `/best/folding-ebikes` directly: confirmed SAMEBIKE CY20 Pro now renders in the card grid
+(8th of 9 bikes, score 6.9, ~36 mi range, 55 lbs, Full susp., Class 1, Commuting/Recreation tags) alongside
+the 4 corrected ENGWE bikes. Zero console errors.
+
+**Expected impact:** `/best/folding-ebikes` already has its first-ever GSC click this run (pos 16.2, 10%
+CTR) -- adding a 9th bike to a page that was already converting, at a price point ($759) below every other
+bike currently listed there, fills a real gap in the page's price-range coverage and gives the page's own
+existing traffic another relevant option. The 4 ENGWE placeholder fixes are a data-integrity closeout with no
+immediate ranking effect but remove a landmine before it becomes a visible bug.
+
+**Next candidates:** (1) ROADMAP P0.28 (new) -- `samebike-cy20-pro` torque/variant mismatch needs a human
+call or a future run finding an exact-match listing. (2) ROADMAP P0.13 -- Dylan decision still needed on
+EASE 2 PRO/Y400/Y600 scooter-vs-bike classification. (3) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and
+`vtuvia-reindeer-1` still need human research. (4) P1.4 (price/freshness "last checked" dates) remains the
+largest fully-untouched roadmap item -- worth scoping as a real feature (likely needs a new DB column, not a
+cosmetic date stamp) if data signals stay flat next run. (5) Continue watching the now-13-run DUOTTS S26
+PostHog-only signal and the newly-confirmed `duotts-duotts-c29-k` dual-signal page for any GSC query-level
+movement.
