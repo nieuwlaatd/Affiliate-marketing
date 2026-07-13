@@ -182,6 +182,7 @@ export function mapRowToEBike(row: Record<string, unknown>): EBike {
     model: row.model as string,
     year: row.year as number,
     price: Number(row.price_usd ?? row.price),
+    updatedAt: row.updated_at as string | undefined,
     priceCategory: (row.price_category as EBike['priceCategory']) || 'mid-range',
     images: (row.images as string[]) || [],
     motorType: (row.motor_type as EBike['motorType']) || 'rear-hub',

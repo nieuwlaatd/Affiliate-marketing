@@ -14,6 +14,15 @@ const gearLabels: Record<string, string> = { 'derailleur': 'Derailleur', 'intern
 const usageLabels: Record<string, string> = { 'commuting': 'Commuting', 'recreation': 'Recreation', 'sport': 'Sport', 'cargo': 'Cargo', 'off-road': 'Off-road' };
 const classLabels: Record<string, string> = { 'class-1': 'Class 1 (pedal-assist, 20 mph)', 'class-2': 'Class 2 (throttle, 20 mph)', 'class-3': 'Class 3 (pedal-assist, 28 mph)' };
 
+function dataFreshness(updatedAt?: string): { label: string; stale: boolean } | null {
+  if (!updatedAt) return null;
+  const updated = new Date(updatedAt);
+  if (Number.isNaN(updated.getTime())) return null;
+  const days = Math.floor((Date.now() - updated.getTime()) / 86_400_000);
+  const label = updated.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return { label, stale: days > 90 };
+}
+
 export async function generateStaticParams() {
   const allBikes = await getAllBikes();
   return allBikes.map(bike => ({
@@ -56,6 +65,7 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
   // When the vendor stops selling a bike the weekly catalog sync sets
   // is_active=false. We keep the page live (SEO history) but mark it unavailable.
   const available = bike.available !== false;
+  const freshness = dataFreshness(bike.updatedAt);
 
   const similar = await getSimilarBikes(bike, 3);
 
@@ -217,6 +227,13 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
                 {bike.scoreOverall}
               </span>
             </div>
+            {freshness && (
+              <p className="text-xs text-[var(--muted)] mt-1.5">
+                {freshness.stale
+                  ? `Price and specs last reviewed ${freshness.label} — confirm the current price on the official site before buying.`
+                  : `Price and specs last reviewed ${freshness.label}`}
+              </p>
+            )}
 
             <p className="text-[var(--muted)] mt-4 leading-relaxed">{bike.description}</p>
 

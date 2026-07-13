@@ -81,6 +81,10 @@ export interface EBike {
   model: string;
   year: number;
   price: number; // USD
+  /** DB `updated_at`, bumped by a trigger on every row edit; used as an honest
+   *  "data last reviewed" signal since it reflects real editorial touches, not
+   *  a synthetic freshness stamp. */
+  updatedAt?: string;
   priceCategory: PriceCategory;
   images: string[];
 

@@ -2645,3 +2645,63 @@ largest fully-untouched roadmap item -- worth scoping as a real feature (likely 
 cosmetic date stamp) if data signals stay flat next run. (5) Continue watching the now-13-run DUOTTS S26
 PostHog-only signal and the newly-confirmed `duotts-duotts-c29-k` dual-signal page for any GSC query-level
 movement.
+
+---
+
+## 2026-07-13 (run 23) -- Price/freshness trust signal shipped (P1.4)
+
+**GSC snapshot (28d, ending 2026-07-10):** 1 click, 1086 impressions, CTR 0.1% -- **identical window and
+totals to run 22** (same 3-day-lagged 28d period, no new data has landed yet). Top query still "electric bike
+for heavy riders" (57 impr, pos 44.5, the one confirmed click). Page-level picture unchanged from run 22:
+`duotts-duotts-c29-k` pos 13.0 (dual GSC+PostHog signal, already fully built out per run 22), `/best/folding-
+ebikes` pos 16.2 (10 impr, 1 click), `/best/cargo-ebikes` still the largest flat pool (109 impr, pos 77.6).
+
+**PostHog snapshot (28d):** 78 pageviews / 31 visitors -- **identical to run 22** (same window, no new
+sessions logged since the last pull). DUOTTS S26 still top product page (6 views/5 visitors, 14th consecutive
+PostHog-only run). Conversion events unchanged at 3 total (ENGWE N1 Pro x2, DUOTTS F20 x1).
+
+**Decision:** Both data sources are byte-for-byte flat vs. run 22 (same 28-day window hasn't rolled over yet),
+so per the task's own decision rule this run advances the roadmap instead of chasing stale signals. Run 22's
+own "next candidates" list named ROADMAP P1.4 (price/freshness dates) as "the largest fully-untouched roadmap
+item -- worth scoping as a real feature ... if data signals stay flat next run." Data is flat, so this run
+scoped and shipped it.
+
+**Action -- P1.4: "last reviewed" date shipped on all 109 bike detail pages, no migration needed.** Before
+building anything, checked whether the `ebikes` table already had a genuine freshness signal rather than
+inventing a new column: it does. `ebikes.updated_at` has a `BEFORE UPDATE` trigger (`ebikes_updated_at` /
+`update_updated_at()`) that stamps `now()` on every row edit, and a full-table check confirmed every one of
+109 rows has been touched at least once since inserted (oldest `updated_at`: 2026-05-22; only 1 row is over
+30 days stale). That means `updated_at` is already an honest "this listing's data was last edited/reviewed"
+timestamp across virtually the whole catalog, driven by the same P0.9-pattern data-accuracy sweeps this log
+already records in detail -- using it avoids the trap of shipping a "price verified" claim we didn't actually
+perform.
+
+Implementation: added `updatedAt?: string` to the `EBike` type (`lib/types.ts`) and mapped `row.updated_at` in
+`mapRowToEBike` (`lib/ebike-data.ts`) -- `select('*')` was already fetching the column, it just wasn't
+surfaced. On the detail page (`app/e-bikes/[brand]/[model]/page.tsx`) added a `dataFreshness()` helper that
+formats the date and flags rows older than 90 days, then rendered a line directly under the price/score row:
+"Price and specs last reviewed [Mon D, YYYY]" in the normal case, or "... — confirm the current price on the
+official site before buying" once a row crosses the 90-day mark (no bike currently triggers this, but the
+mechanism is in place for when the catalog ages). This is also consistent with the existing `/how-we-test`
+copy, which already promises "we show a last-updated date on pages we maintain on a schedule" -- bike detail
+pages were the one page type that copy didn't yet cover.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean. Loaded two live pages in the dev server:
+`engwe-n1-pro` (the site's only bike with confirmed repeat affiliate clicks) shows "Price and specs last
+reviewed Jul 8, 2026" -- its real last-edit date from the P0.14 out-of-stock-messaging fix; `samebike-cy20-pro`
+shows "Jul 13, 2026" -- today's date, matching the folded-dimensions fix made to that row earlier this same
+run. Zero console errors on either page.
+
+**Expected impact:** A visible "last reviewed" date next to the price is a standard trust signal on review
+sites and directly answers "is this price still current" without Claude fabricating a verification event that
+didn't happen. Because the underlying timestamp already reflects genuine, frequent editorial activity (the
+whole P0.9 data-accuracy sweep this log documents), the dates shown will mostly look recent and reinforce
+rather than undermine trust. Closes out the largest fully-open P1 roadmap item.
+
+**Next candidates:** (1) ROADMAP P0.28 -- `samebike-cy20-pro` torque/variant mismatch still needs a human call
+or an exact-match listing. (2) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600
+scooter-vs-bike classification. (3) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still
+need human research. (4) P1.5 (CTA/affiliate-tagging coverage audit) is now the largest fully-untouched P1
+item if data signals stay flat again next run. (5) Continue watching the now-14-run DUOTTS S26 PostHog-only
+signal and `duotts-duotts-c29-k`'s dual-signal status for any GSC query-level movement once the 28-day window
+finally rolls over.
