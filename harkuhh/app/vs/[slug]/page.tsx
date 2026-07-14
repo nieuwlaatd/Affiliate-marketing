@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getAllBikes } from '@/lib/ebike-data';
 import { EBike } from '@/lib/types';
+import AffiliateLink from '@/components/AffiliateLink';
 
 // Curated matchups (SEO). Each side is either a brand slug (we pick that brand's
 // top-scoring bike) or an exact bike slug (findSide checks exact-slug match first).
@@ -135,10 +136,10 @@ export default async function VsPage({ params }: { params: Promise<{ slug: strin
           <div className="grid grid-cols-[120px_1fr_1fr] sm:grid-cols-[160px_1fr_1fr] gap-3 pt-6">
             <div />
             {[a, b].map((bike) => (
-              <a key={bike.slug} href={bike.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored"
+              <AffiliateLink key={bike.slug} href={bike.affiliateUrl} brand={bike.brand} model={bike.model} slug={bike.slug} price={bike.price} network={bike.affiliateNetwork} cta="check_price"
                 className="cta-primary px-4 py-2.5 text-sm font-bold rounded-lg text-center" style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}>
                 Check price →
-              </a>
+              </AffiliateLink>
             ))}
           </div>
         </div>

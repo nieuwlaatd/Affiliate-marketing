@@ -2705,3 +2705,71 @@ need human research. (4) P1.5 (CTA/affiliate-tagging coverage audit) is now the 
 item if data signals stay flat again next run. (5) Continue watching the now-14-run DUOTTS S26 PostHog-only
 signal and `duotts-duotts-c29-k`'s dual-signal status for any GSC query-level movement once the 28-day window
 finally rolls over.
+
+---
+
+## 2026-07-14 (run 24) -- CTA/affiliate click-tracking gap fixed on vs-pages + compare tool (P1.5)
+
+**GSC snapshot (28d, ending 2026-07-11):** 2 clicks, 1152 impressions (+66 vs run 23's 1086), CTR 0.2%.
+Slow, steady impression growth continues. Top converting query still "electric bike for heavy riders" (64
+impr, pos 43.8, both confirmed clicks). New page-level clicks this window not seen in prior logs:
+`duotts-duotts-c29-k` (pos 13.3, 1 click -- the dual GSC+PostHog signal bike from run 22/23, already fully
+built out), `duotts-e29` (pos 21.1, 15 impr, 1 click -- first-ever click, already has P1.1 depth from run 9),
+`eunorau-meta-24-1` (pos 23.2, 5 impr, 1 click -- first-ever click), `samebike-ebe2` (pos 11.0, 1 click),
+`samebike-rs-a01-men`/`samebike-rs-a01-pro` (pos 9.0/10.3, 1 click each). Homepage itself converting well (3
+clicks/4 impr/75% CTR/pos 1.5). No queries in strict striking-distance (pos 5-20) tool output; no
+high-impression/low-CTR pages surfaced either.
+
+**PostHog snapshot (28d):** 80 pageviews / 33 visitors (up slightly from run 23's 78/31). DUOTTS S26 still
+top product page (6 views/5 visitors, 15th consecutive PostHog-only run with no matching GSC signal).
+`samebike-cy20-pro` repeated again (3 views/2 visitors, 3rd consecutive run -- already fully enriched since
+run 21). `duotts-duotts-c29-k` (5 views/1 visitor) confirms its dual-signal status again. Conversion events
+unchanged at 3 total (ENGWE N1 Pro x2, DUOTTS F20 x1) -- same count as every run since it first appeared,
+which became the reason to look harder at whether affiliate clicks were being tracked everywhere they happen.
+
+**Decision:** Both data sources essentially flat (no new striking-distance or low-CTR signals; the new
+single-clicks on `duotts-e29`/`eunorau-meta-24-1` are noise-level and both pages already have adequate depth
+or an existing vs-page). Per run 23's own "next candidates," P1.5 (CTA/affiliate-tagging audit) was the
+largest fully-untouched P1 item, so this run executed it -- and it's a good hypothesis for *why* affiliate
+click counts have been stuck at exactly 3 for many consecutive runs despite growing traffic: if some
+high-intent pages don't fire the tracking event, real conversions could be happening invisibly.
+
+**Action -- P1.5: audited every outbound "Check price" CTA site-wide.** Affiliate *tagging* (the actual `ref`/
+`sscid`/etc. query param that earns commission) was fully covered everywhere already -- every `bike.affiliateUrl`
+is tagged once, centrally, in `withAffiliateTag()` at data-fetch time (`lib/ebike-data.ts`), so no link was
+ever untagged. The real gap was click *tracking*: the bike detail page's two CTAs correctly use the
+`AffiliateLink` client component (`components/AffiliateLink.tsx`), which fires the `affiliate_link_clicked`
+PostHog event on click before navigating -- but `/vs/[slug]` (9 comparison pages: 5 brand-level + 4 bike-level,
+all bottom-of-funnel "which one should I buy" intent) and `/e-bikes/vergelijk` (the compare tool, a
+high-intent surface where a user has actively selected 2-3 bikes to weigh) both rendered their "Check price"
+buttons as plain `<a href={bike.affiliateUrl}>` with no `onClick` handler at all. Any affiliate click from
+either surface was completely invisible in PostHog, even though the link itself worked and earned commission
+normally. Fixed both: swapped the raw `<a>` for `AffiliateLink` in `app/vs/[slug]/page.tsx` (a server
+component -- `AffiliateLink` is a `"use client"` component and renders fine inside one) and
+`app/e-bikes/vergelijk/VergelijkClient.tsx` (already a client component), passing `cta="check_price"` plus
+brand/model/slug/price/network so the event carries the same properties as the detail-page version. Hover
+behavior needed no change -- both already used `cta-primary`.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean. Loaded both pages live in the dev server:
+`/vs/engwe-n1-pro-vs-duotts-s26` -- both "Check price ->" links render with correct tagged URLs
+(`engwe.com/...?ref=uzjsbqmm`, `duotts.com/...?ref=bestbikeforme`), clicked one, zero console errors (the
+`trackAffiliateClick` call is a documented no-op in dev since PostHog only initializes in production per
+`lib/analytics.ts`, so no network capture call was expected locally -- this matches how the already-working
+detail-page CTA behaves in dev too). `/e-bikes/vergelijk?bikes=engwe-n1-pro,duotts-s26` -- both "Check price"
+links render correctly with the same tagged URLs alongside working "Full review" internal links. No
+regressions on either page.
+
+**Expected impact:** No change to actual commission (links were always tagged), but going forward any
+affiliate clicks on vs-pages or the compare tool will show up in PostHog's `affiliate_link_clicked` event and
+the "Top bikes by affiliate clicks" report -- closing a blind spot on exactly the two page types built for
+bottom-of-funnel comparison intent. This may explain part of why the conversion-event count has looked flat
+at 3 for many runs while GSC clicks on bike pages have been slowly increasing: some of that intent may have
+been landing on vs-pages or the compare tool and converting untracked.
+
+**Next candidates:** (1) ROADMAP P0.28 -- `samebike-cy20-pro` torque/variant mismatch still needs a human call
+or an exact-match listing. (2) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600
+scooter-vs-bike classification. (3) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still
+need human research. (4) Watch whether affiliate click counts move up next run now that vs-pages/compare-tool
+clicks are tracked -- if `duotts-duotts-c29-k` or `eunorau-meta-24-1` (both got their first-ever GSC click
+this run and both have or are near a vs-page) show a tracked affiliate click, that would confirm the theory.
+(5) Continue watching the now-15-run DUOTTS S26 PostHog-only signal for any GSC query-level movement.
