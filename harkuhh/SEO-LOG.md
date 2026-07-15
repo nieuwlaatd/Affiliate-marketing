@@ -2773,3 +2773,79 @@ need human research. (4) Watch whether affiliate click counts move up next run n
 clicks are tracked -- if `duotts-duotts-c29-k` or `eunorau-meta-24-1` (both got their first-ever GSC click
 this run and both have or are near a vs-page) show a tracked affiliate click, that would confirm the theory.
 (5) Continue watching the now-15-run DUOTTS S26 PostHog-only signal for any GSC query-level movement.
+
+---
+
+## 2026-07-15 (run 25) -- F26 Lite description depth (first PostHog signal) + heavy-riders FAQ refresh
+
+**GSC snapshot (28d, ending 2026-07-12):** 2 clicks, 1200 impressions, CTR 0.2%. Top query still "electric
+bike for heavy riders" (66 impr, pos 43.3, both confirmed clicks -- this single query/page has driven 100% of
+the site's GSC clicks for several consecutive runs now). Page-level clicks this window: `/` (3 clicks/50% CTR,
+pos 3.0), `/best/folding-ebikes` (1 click, pos 16.2), `/blog/best-ebikes-for-heavy-riders` (1 click across a
+combined ~373 impressions at pos 29.9-46.1, still ranking deep despite being the top demand cluster),
+`duotts-duotts-c29-k`, `duotts-e29`, `eunorau-meta-24-1`, `samebike-ebe2`, `samebike-rs-a01-men/pro` (1 click
+each, all pages already enriched in prior runs). No queries in striking distance (pos 5-20) and no
+high-impression/low-CTR pages surfaced -- both automatic-priority buckets from the GSC tool were empty again.
+
+**PostHog snapshot (28d):** 82 pageviews / 35 visitors (up slightly from run 24's 80/33). DUOTTS S26 still top
+product page (6 views/5 visitors, 16th consecutive PostHog-only run with no matching GSC signal). Two new
+first-time entrants this run: `duotts-duotts-c29max-electric-bike` (4 views/1 visitor) and
+`duotts-duotts-f26lite-electric-bike` (2 views/1 visitor, also 1 session in the most-visited list) --
+`eunorau-meta-275-st-1` also logged real traffic again (3 views/3 visitors). Conversion events unchanged at 3
+total (ENGWE N1 Pro x2, DUOTTS F20 x1) -- no vs-page/compare-tool clicks recorded yet since the P1.5 tracking
+fix, but one 28-day window is a small sample to judge that from.
+
+**Decision:** Both GSC priority buckets (striking distance, high-impression/low-CTR) were empty again, and
+the recurring "needs Dylan" items (P0.28, P0.13, P0.16) can't be advanced by Claude. Checked the two new
+PostHog first-time entrants against the established "give first-signal pages the P1.1 depth treatment
+immediately" pattern (S26/F20/EBE2 precedent): `duotts-duotts-c29max-electric-bike` already had a full
+5-sentence editorial description in Supabase (done in an earlier run not yet reflected in the stale
+`data/us-ebikes.json` seed file I checked first -- confirmed live data is 100% Supabase via `lib/ebike-data.ts`,
+the JSON file is unused legacy), so no action needed there. `duotts-duotts-f26lite-electric-bike` still had
+only the single generic stub sentence from when it was first cataloged. That is this run's clearest,
+highest-confidence action.
+
+**Action 1 -- P0.29: F26 Lite description depth.** Sourced specs directly from its own Supabase row (750W
+rear-hub motor, 80 Nm torque -- the highest single-motor torque figure in DUOTTS' fat-tire lineup, full
+suspension, Class 3/25 mph throttle-assisted, 15Ah battery rated 50 mi claimed/38 mi practical, 330 lb
+payload, 70 lb frame, $1,199) and cross-checked against its closest siblings before writing: `duotts-s26`
+($1,299), `duotts-duotts-c29-k` ($1,149), `duotts-duotts-c29max-electric-bike` ($1,149, nearly identical
+range/battery numbers -- confirms the 38mi practical figure is consistent, not a one-off), and `duotts-f26`
+($1,349, the dual-motor AWD sibling with hydraulic brakes). Rewrote the description to 5 sentences covering
+the torque/suspension pitch, the Class 3 throttle-assisted top speed, the claimed-vs-real range framing tied
+to its C29Max sibling, and honest price positioning against the pricier dual-motor F26 (trading AWD/hydraulic
+brakes for a lighter frame at $150 less). While reviewing scores for a possible P0.24-style miscalibration
+(F26 Lite has more torque and less weight than F26 at a lower price, yet scores lower on value/overall), found
+this is not a bug: F26's dual-motor AWD, hydraulic disc brakes, and Bluetooth display are real feature/quality
+differentiators the P0.24 regression weights already account for via build-quality and versatility axes, not
+a same-spec-different-score anomaly like the cases that audit actually fixed. Left scores untouched.
+
+**Action 2 -- P0.4 continued: heavy-riders blog post FAQ refresh.** `/blog/best-ebikes-for-heavy-riders`
+remains the single page responsible for 100% of the site's confirmed GSC clicks across multiple consecutive
+runs, but its `updatedAt` was stuck at 2026-06-27 (18 days stale) while every other actively-worked page gets
+touched far more often. Added a 7th FAQ targeting the exact "best e-bike for a 250 lb man" long-tail phrasing
+(a natural People-Also-Ask variant of the page's core query that wasn't explicitly headed anywhere in the
+existing FAQ block, only covered contextually), citing the same two verified picks already used elsewhere in
+the post (Eunorau FLASH LITE ST, DUOTTS S26 AWD) so no new claims were introduced. Bumped `updatedAt` to
+2026-07-15 to reflect the real edit.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean. Loaded both pages live in the dev server:
+`/e-bikes/duotts/duotts-duotts-f26lite-electric-bike` renders the new 5-sentence description, correct specs,
+and "Price and specs last reviewed Jul 15, 2026" (today, matching this run's edit). `/blog/best-ebikes-for-
+heavy-riders` shows "Updated July 15, 2026" and the new FAQ renders correctly in the FAQ block, in position
+and formatted like the other six. Zero console errors on either page.
+
+**Expected impact:** F26 Lite's fix follows the exact playbook that has repeatedly correlated with pages
+starting to convert (S26, F20, EBE2 all got this treatment right after their first real-traffic signal). The
+heavy-riders FAQ addition is a small, low-risk addition to the site's single highest-value existing page --
+targets one more long-tail variant of the query that already produces the site's only clicks, with a fresher
+`updatedAt` as a secondary trust signal.
+
+**Next candidates:** (1) ROADMAP P0.28 -- `samebike-cy20-pro` torque/variant mismatch still needs a human call
+or an exact-match listing. (2) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600
+scooter-vs-bike classification. (3) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still
+need human research. (4) Watch whether affiliate click counts move now that vs-pages/compare-tool clicks are
+tracked (P1.5, shipped run 24) -- still 3 total after one window, worth another run or two before concluding
+anything. (5) Continue watching the now-16-run DUOTTS S26 PostHog-only signal and the newly-recurring
+`duotts-duotts-c29max-electric-bike`/`duotts-duotts-f26lite-electric-bike` entrants for a second consecutive
+run of traffic, which would upgrade them from noise to a confirmed pattern per the established rule.

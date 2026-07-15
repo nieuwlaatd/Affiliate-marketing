@@ -363,7 +363,7 @@ If a full charge gives noticeably less range than it used to, or the battery won
     description: 'Most e-bikes max out at 275 lbs. Here is how to find one that handles 300+ lbs safely, with real payload data and our top picks.',
     category: 'Buying Advice',
     publishedAt: '2026-05-29',
-    updatedAt: '2026-06-27',
+    updatedAt: '2026-07-15',
     readingTime: 12,
     coverAlt: 'Sturdy electric bike with reinforced frame on a city street',
     relatedSlugs: ['how-to-choose-an-electric-bike', 'ebike-battery-range-guide'],
@@ -463,6 +463,10 @@ Standard e-bikes cap out around 300-330 lbs. Heavy-duty models like the Eunorau 
 **Does being heavy significantly affect e-bike range?**
 
 Yes. Expect to lose roughly 5-8% of range per 20 lbs over the baseline test weight (usually 155 lbs). At 280 lbs -- 125 lbs over baseline -- that is approximately 30-40% less range than advertised. Choose a bike with the largest battery you can afford, and plan routes accordingly.
+
+**What is the best e-bike for a 250 lb man?**
+
+Look for a 330+ lb payload rating first, then torque. At 250 lbs you have less margin than lighter riders, so a bike rated exactly at 275 lbs leaves almost no buffer for gear or future weight change. The [Eunorau FLASH LITE ST](/e-bikes/eunorau/eunorau-flash-lite-st) (440 lb capacity, 92 Nm) and [DUOTTS S26 AWD](/e-bikes/duotts/duotts-s26) (330 lb capacity, 110 Nm combined, under $1,300) both clear 250 lbs with real margin to spare.
 
 ## Our recommendation
 
