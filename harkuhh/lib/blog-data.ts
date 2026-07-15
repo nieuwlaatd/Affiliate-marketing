@@ -881,9 +881,9 @@ For most urban commuters, the better use of an AWD price premium is a larger bat
 
 We carry three AWD models covering the main budget points and use cases. For the full list of off-road capable bikes including single-motor options, see our [best off-road e-bikes guide](/best/off-road-ebikes).
 
-**DUOTTS S26 AWD: Best-value AWD pick at $1,349**
+**DUOTTS S26 AWD: Best-value AWD pick at $1,299**
 
-The S26 is the most accessible AWD option in our catalog. Dual 750W motors deliver a combined 110 Nm of torque, a 26-inch fat tire platform handles mixed terrain confidently, and real-world range comes in around 55 miles. At $1,349, it undercuts most AWD competition by $300 or more. [Full specs and score for the DUOTTS S26.](/e-bikes/duotts/duotts-s26)
+The S26 is the most accessible AWD option in our catalog. Dual 750W motors deliver a combined 110 Nm of torque, a 26-inch fat tire platform handles mixed terrain confidently, and real-world range comes in around 55 miles. At $1,299, it undercuts most AWD competition by $300 or more. [Full specs and score for the DUOTTS S26.](/e-bikes/duotts/duotts-s26)
 
 **Eunorau FAT-AWD 3.0: Step-through AWD at $1,699**
 
@@ -913,7 +913,7 @@ AWD fat tire bikes typically weigh 75 to 85 lbs, roughly 8 to 12 lbs more than c
 
 **What is the best AWD e-bike under $1,500?**
 
-The DUOTTS S26 AWD at $1,349 is the strongest option under $1,500. It delivers 110 Nm of combined torque, 55 miles of real-world range, and a 26-inch fat tire platform suited to mixed terrain. [See our full review of the DUOTTS S26.](/e-bikes/duotts/duotts-s26)
+The DUOTTS S26 AWD at $1,299 is the strongest option under $1,500. It delivers 110 Nm of combined torque, 55 miles of real-world range, and a 26-inch fat tire platform suited to mixed terrain. [See our full review of the DUOTTS S26.](/e-bikes/duotts/duotts-s26)
 `,
   },
 ];

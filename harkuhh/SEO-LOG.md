@@ -2849,3 +2849,68 @@ tracked (P1.5, shipped run 24) -- still 3 total after one window, worth another 
 anything. (5) Continue watching the now-16-run DUOTTS S26 PostHog-only signal and the newly-recurring
 `duotts-duotts-c29max-electric-bike`/`duotts-duotts-f26lite-electric-bike` entrants for a second consecutive
 run of traffic, which would upgrade them from noise to a confirmed pattern per the established rule.
+
+---
+
+## 2026-07-16 (run 26) -- Stale hardcoded prices fixed on S26/E29/F20 (new P0.9-pattern bug, P0.30)
+
+**GSC snapshot (28d, ending 2026-07-12):** 2 clicks, 1200 impressions, CTR 0.2% -- identical totals to run 25
+(same 28-day window, GSC's ~3-day lag hasn't rolled over). Top query still "electric bike for heavy riders" (66
+impr, pos 43.3, both confirmed clicks). Best-positioned bike page this window: `duotts-duotts-c29-k` (pos 12.5,
+11 impr, 1 click, 9.1% CTR). Both automatic-priority buckets (striking distance, high-impression/low-CTR) were
+empty again.
+
+**PostHog snapshot (28d):** 86 pageviews / 39 visitors (up from run 25's 82/35). Notable shift: `duotts-duotts-
+c29-k` became the top PostHog page this run (9 views/5 visitors), overtaking DUOTTS S26 (6 views/5 visitors)
+which had held #1 for 16 consecutive runs -- a real behavior change, not noise, and it lines up with C29-K's
+best-ever GSC position (12.5) the same window. `duotts-duotts-c29max-electric-bike` repeated for a 2nd
+consecutive run (4 views/1 visitor), graduating from noise to a confirmed pattern per the established rule, but
+it already has a full 5-sentence description (run 25 finding), so no content action was needed there.
+Conversion events still flat at 3 total (ENGWE N1 Pro x2, DUOTTS F20 x1).
+
+**Decision:** Investigated the new C29-K dual-signal lead first (checked its live Supabase row -- description,
+specs, and score are already solid from run 6's P1.1 pass, nothing obviously actionable). While cross-checking
+sibling DUOTTS bikes' data for the writeup, noticed `duotts-s26`'s `price` column ($1,299) did not match the
+dollar figure inside its own `description` text ("At $1,349, it undercuts most AWD fat-tire e-bikes..."). That
+sent this run in a different, higher-value direction: a sitewide sweep for the same bug class.
+
+**Root cause found:** the 2026-07-13 weekly catalog sync (`CATALOG-SYNC-LOG.md`) updates the `ebikes.price`
+column directly for vendor price changes, but has no mechanism to touch free-text `description` or blog copy
+that an earlier SEO-loop run had hardcoded a dollar figure into -- so the two fields silently drift apart the
+moment a price changes. This is a new instance of the same "silent, sitewide data-integrity bug" pattern P0.9
+exists to catch, just in editorial text instead of spec fields.
+
+**Action -- P0.30: swept and fixed every live occurrence found.** Ran `SELECT slug, price, description FROM
+ebikes WHERE description ~ '\$[0-9]'` across the full 109-bike catalog and diffed each hit against its own
+`price` column. Found 3 real mismatches, all DUOTTS bikes touched by the 2026-07-13 sync: `duotts-s26` ($1,299
+actual vs "$1,349" in description -- the bike that just lost its 16-run #1 PostHog spot, still a top-3 page),
+`duotts-e29` ($1,299 actual vs "$1,429" in description -- logged its first-ever GSC click this run), `duotts-
+f20` ($1,099 actual vs "$1,199" in description -- one of only 2 bikes site-wide with a confirmed affiliate
+click). Fixed all 3 via targeted Supabase `UPDATE ... SET description = replace(...)`. Then grepped `lib/blog-
+data.ts` for the same pattern and found 2 more stale "$1,349" S26 mentions in `/blog/awd-ebikes-explained`
+(published 2026-07-04, before the sync) -- fixed both. Cross-checked every other blog-quoted price in that post
+plus the heavy-riders and hills posts (FAT-AWD 3.0/2.0 $1,699, Defender-S $2,999, FLASH $2,499, WF750 UrbanX
+$1,499, ET-7 Ultra $2,300, FLASH LITE ST $1,899, G30 $1,699) against live DB prices -- all already correct, so
+the drift was isolated to the 3 bikes + 1 post found this run, not a wider blog-wide problem.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean. Loaded all 3 fixed detail pages live in the dev server
+(`duotts-s26`, `duotts-e29`, `duotts-f20`) -- each now shows a price header that matches the dollar figure in
+its own description body exactly ($1,299/$1,299/$1,099 respectively). Loaded `/blog/awd-ebikes-explained` --
+both S26 mentions now read $1,299, consistent with the detail page. Zero console errors on any page.
+
+**Expected impact:** Removes a direct, visible price contradiction (header says one number, body copy says
+another) from the pages carrying the strongest historical traffic and conversion signal on the site --
+`duotts-s26` alone held the #1 PostHog spot for 16 straight runs before this one. A self-contradicting price is
+a sharper trust break for a buyer mid-decision than a missing spec field, since price is usually the first
+thing a comparison shopper double-checks.
+
+**Next candidates:** (1) This run's sweep only covered `description` + `blog-data.ts`; `app/vs/[slug]` pages,
+`app/best/[category]` buyer's-guide copy, and the remaining blog posts have not been checked for the same
+hardcoded-price-drift pattern and should be swept in a future run, especially after the next weekly catalog
+sync. (2) `duotts-duotts-c29-k`'s new #1 PostHog position (up from consistently trailing S26) is worth watching
+for a second consecutive run before treating it as a confirmed pattern rather than a one-window spike. (3)
+ROADMAP P0.28 -- `samebike-cy20-pro` torque/variant mismatch still needs a human call or an exact-match
+listing. (4) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y600 scooter-vs-bike
+classification. (5) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need human
+research. (6) Watch whether affiliate click counts move now that vs-pages/compare-tool clicks are tracked
+(P1.5, shipped run 24) -- still 3 total after two windows.
