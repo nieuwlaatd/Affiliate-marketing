@@ -2914,3 +2914,96 @@ listing. (4) ROADMAP P0.13 -- Dylan decision still needed on EASE 2 PRO/Y400/Y60
 classification. (5) ROADMAP P0.16 -- `eunorau-defender-s-fat-hs` and `vtuvia-reindeer-1` still need human
 research. (6) Watch whether affiliate click counts move now that vs-pages/compare-tool clicks are tracked
 (P1.5, shipped run 24) -- still 3 total after two windows.
+
+## 2026-07-16 (run 27) -- Price-drift sweep closed out + DUOTTS torque bug + 5 stub descriptions fixed
+
+**GSC snapshot (28d, ending 2026-07-13):** 3 clicks, 1,278 impressions, CTR 0.2%. Top
+query remains "electric bike for heavy riders" (3 clicks, 72 impr, pos 42.8). No
+queries in strict striking-distance (pos 5-20) this run, but several bike detail
+pages sit there at the page level: `samebike-rs-a01-men` (pos 9.0, page 1),
+`samebike-rs-a01-pro` (pos 10.6), `samebike-ebe2` (pos 11.0), `duotts-duotts-c29-k`
+(pos 12.6, 9.1% CTR), `best/folding-ebikes` (pos 16.2, 10% CTR) -- all already have
+prior depth investment from earlier runs (P1.1, P0.20/0.21). `/best/cargo-ebikes`
+remains stuck at pos 78.5 despite the most content investment of any page on the
+site; this looks like an authority/backlink ceiling (P4.1, Dylan-only), not a
+content gap.
+
+**PostHog snapshot (28d):** 88 pageviews, 41 unique visitors (up from 22/61 a few
+runs ago -- steady growth). `duotts-duotts-c29-k` is the top individual product
+page (11 views/7 visitors), confirming the dual GSC+PostHog signal the task
+prioritization rule calls for. 3 confirmed `affiliate_link_clicked` events: ENGWE
+N1 Pro (2), DUOTTS F20 (1). DUOTTS dominates both GSC and PostHog this run --
+5 of its detail pages show real traffic (C29-K, S26, F20, C29Max, F26 Lite).
+
+**Investigated `duotts-duotts-c29-k` first** (top dual-signal page): checked
+Supabase directly (confirmed live data source, `data/us-ebikes.json` is unused --
+only referenced by the scraper script) and found it already has the full P1.1
+depth treatment (run 6), the P0.24 corrected score (7.5/7.0), a dedicated vs-page,
+and no price-drift issue. Nothing left to fix on this specific page; the dual
+signal instead pointed at its brand (DUOTTS) as the highest-value area to keep
+working.
+
+**Action 1 -- Closed out the P0.30 follow-up price-drift sweep, zero new issues.**
+The prior run explicitly deferred checking `app/vs/[slug]`, `app/best/[category]`
+static copy, and the remaining blog posts for hardcoded `$` figures. Ran it: all
+15 `description ~ '\$[0-9]'` rows in `ebikes` now match their `price` column
+exactly (including the 5 fixed last run); `app/vs/[slug]/page.tsx` renders prices
+dynamically from bike data (no hardcoded figures to drift); `lib/blog-data.ts`
+`$` mentions are either generic cost-of-ownership ranges or the already-fixed S26
+figure (now correct). `app/best/[category]/page.tsx` prices are all generic
+price-tier guidance, not bike-specific. Clean bill of health -- no further action
+needed on this bug class unless a future catalog sync reintroduces drift.
+
+**Action 2 -- Found and fixed a real torque data bug on DUOTTS F26/N26.** While
+sourcing specs to deepen these two bikes' descriptions (below), noticed both
+claim "Dual 750W motors (AWD capability)" in `highlights` but stored `torque=65`,
+identical to the single-motor `duotts-c29` and inconsistent with the confirmed-AWD
+`duotts-s26` (which correctly stores 110 Nm *combined*). Verified against DUOTTS'
+own product pages: both F26 and N26 use two 65 Nm motors for a genuine 130 Nm
+combined figure; every other spec (weight 88.2/86.3 lbs, 330 lb payload,
+suspension config, ~75mi manufacturer range) matched the DB exactly, isolating
+`torque` as the only wrong field. Fixed both 65 -> 130 Nm.
+
+**Action 3 -- 5 DUOTTS bikes given full editorial descriptions** (were all under
+200 characters, one-line stubs, while every other actively-converting DUOTTS
+sibling already has 700+ character reviews): `duotts-c29` ($799, base commuter),
+`duotts-duotts-c29lite-electric-bike` ($729, budget entry point, honestly framed
+as weaker than its siblings -- matches the already-confirmed low P0.24 value
+score), `duotts-f26` ($1,349, dual-motor AWD, front suspension only), `duotts-n26`
+($1,299, dual-motor AWD, full suspension + bigger brakes -- framed as the better
+value between the two), `duotts-e26` ($1,899, premium Bafang e-MTB, positioned
+against the lighter `duotts-e29`). All descriptions cross-reference real DB specs
+and make honest sibling-vs-sibling comparisons (a first for this site -- prior
+descriptions never explicitly compared same-brand bikes against each other).
+Verified live in dev server (F26, N26 render correctly with updated torque and
+description); `tsc --noEmit` clean.
+
+**Discovery for future runs -- the P1.1 stub-description backlog is bigger than
+tracked:** a sitewide `length(description) < 200` query found 50 bikes still at
+one-sentence-stub depth (before this run's 5 fixes, now 45 remain), concentrated
+in SAMEBIKE (~18 bikes: XD26-II, RS-A07, YINYU14, LO26 Plus, 20LVXD30-II, RS-A02
+Pro/Plus, SY26-II, LOTDM200-II, LO26-II-YD, M20, CY20, C05 Pro, M20-III...),
+VTUVIA (~9: Reindeer 1.0/2.0, SX20, Zeal LT7/XT8, SN100, SF20H, CMB, Gemini), DYU
+(~7: A5, A1F Pro, C9, D3F, T1, M20, Stroll 1), plus a handful of ENGWE and Walfisk
+models. None of these currently show GSC/PostHog signal, which is why they were
+never prioritized -- but it is the largest remaining content-depth gap on the
+site. Recommend working it in brand-sized batches (as done here for DUOTTS)
+rather than all at once, sourcing real specs per brand's official site before
+writing, and prioritizing any brand that starts showing traffic signal first.
+`vtuvia-reindeer-step-thru-electric-bike` ("REINDEER 1.0") is in this list but
+should NOT be touched without resolving the P0.16 ambiguity first (unclear if
+it's a real distinct product from Reindeer 2.0).
+
+**Verified:** `tsc --noEmit` clean. F26 and N26 detail pages checked live in dev
+server -- torque, description, price-freshness line all render correctly, no
+console errors.
+
+**Next candidates:** (1) Continue the stub-description backlog above, next
+brand batch: SAMEBIKE (largest single-brand backlog, ~18 bikes). (2) P3.2 --
+quiz funnel optimization, not yet touched in any logged run. (3) Watch
+`duotts-duotts-c29-k` for a 2nd consecutive dual-signal run (would confirm the
+trend rather than a one-off spike). (4) `/best/cargo-ebikes` rank stagnation at
+pos 78.5 despite the most content investment on the site -- likely needs
+backlinks (P4.1, Dylan-only) rather than more on-page content.
+
+---
