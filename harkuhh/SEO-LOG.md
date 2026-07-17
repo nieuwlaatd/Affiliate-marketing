@@ -3214,3 +3214,105 @@ ROADMAP P0.28/P0.13/P0.16 -- still need Dylan/human research, unchanged this
 run.
 
 ---
+
+## 2026-07-17 (run 30) -- P0.16 VTUVIA Reindeer 1.0 resolved + SAMEBIKE duplicate-row question resolved (P0.35) + VTUVIA stub batch part 1 (P0.36)
+
+**Setup note:** `WebSearch`/`WebFetch` were back online this run (the run 29
+session-limit outage had cleared), unblocking both of run 29's deferred
+"resolve once web tooling is available" items in the same run.
+
+**GSC snapshot (28d, ending 2026-07-14):** 2 clicks, 1,355 impressions, CTR
+0.1% -- identical totals to run 29 (GSC's ~3-day lag means no new data point
+yet). Same top query ("electric bike for heavy riders", 2 clicks/71 impr/pos
+42.3) and same top pages, including `/best/cargo-ebikes` query-level
+positions still around pos 51-54 on "best cargo bike(s)" variants. No new
+striking-distance or high-impression/low-CTR signals.
+
+**PostHog snapshot (28d):** 96 pageviews / 47 visitors, same as run 29 (no
+new window yet). `duotts-duotts-c29-k` still #1 traffic page (11 views/7
+visitors). Conversions flat at 3 total (ENGWE N1 Pro x2, DUOTTS F20 x1). No
+new page-level signal to act on this run, so worked the roadmap backlog
+instead, per the "prefer a strong data signal, otherwise advance the
+roadmap" rule.
+
+**Action 1 -- P0.16: resolved `vtuvia-reindeer-step-thru-electric-bike`
+("REINDEER 1.0"), queued unresolved since run 6.** Confirmed via VTUVIA's own
+live product page (exact $1,699 price match) plus 4 independent retailer
+listings (electrek.uk, roadbikerider, mobilityready, ebikehaul) that this is
+a real, current, distinct SKU -- not a stale duplicate of Reindeer 2.0 --
+with consistent specs: 750W motor (1,100W peak), 80 Nm torque, 72 lbs, 400 lb
+payload, 48V 15Ah battery, ~55 mi manufacturer range. Fixed `torque` 0→80,
+`weight_lbs` 0→72, `max_weight` 0→400, `battery_capacity` 12→15,
+`range_manufacturer` 30→55, `range_practical` 22→38. The old range values
+(22/30) were byte-identical to sibling `vtuvia-giraffe`'s figures, confirming
+a copy-paste origin rather than a real spec. While fixing this, found the bad
+data had silently propagated into the bike's score: `score_value` was 1.0 and
+`score_overall` was 4.0, an exact copy of Giraffe's low scores (both rows had
+identical 1.1-or-1.0/3.8/2.5/6.0/6.0/8.0 score profiles) -- meaning a $1,699
+bike was showing up as one of the worst-value bikes on the entire site purely
+because of copy-pasted placeholder data. Recalibrated against same-price
+VTUVIA siblings (`sx20`, `sn100`, `reindeer-2`, all scoring 7.6 with similar
+specs): new scores 6.8/6.5/7.0/6.5/6.5, `score_overall` 7.0. Verified live in
+dev server -- description, highlights, spec table, and score all render
+correctly.
+
+**Action 2 -- P0.35: resolved the `samebike-20lvxd30-ii` / `samebike-cy20`
+duplicate-spec question flagged unresolved in run 29.** Fetched both
+official samebike.com product pages directly. Confirmed these are two real,
+different products sharing SAMEBIKE's common 250W/35Nm EU-legal baseline
+motor spec (which is why they looked like duplicates) but differing in fold
+mechanism, tires, and battery: 20LVXD30-II is a classic double-fold frame
+(handlebars + frame fold together), 20x1.95" tires, 48V 10.4Ah battery, 120 kg
+(264 lb) payload; CY20 is an ultra-compact 5-second seat-integrated fold,
+wider 20x2.35" tires, 36V 13Ah (468Wh) battery, 150 kg (330 lb) payload. The
+DB's shared placeholder values were a genuine copy-paste bug, not a
+duplicate row: `max_weight=330` and `battery_capacity=13` had both been set
+to CY20's real numbers, silently overwriting what should have been
+20LVXD30-II's own 264 lb / 10.4 Ah figures. Fixed `20lvxd30-ii`: `max_weight`
+330→264, `battery_capacity` 13→10. Fixed `cy20`: `weight_lbs` 55→62 (a US
+retailer listing gives 62 lbs for the US-spec variant; the EU spec page
+didn't list weight). Wrote fully differentiated editorial descriptions for
+both, each explicitly naming and contrasting against its sibling so a buyer
+comparing the two understands the actual tradeoff (smaller fold vs plusher
+ride). Verified live in dev server on the CY20 page -- description and specs
+render correctly.
+
+**Action 3 -- P0.36: VTUVIA stub-description batch, part 1 (3 of 8
+remaining).** Wrote full editorial descriptions + highlights for
+`vtuvia-reindeer-2`, `vtuvia-sx20`, `vtuvia-zeal-lt7` (all were single
+generic sentences under 200 chars despite complete, non-zero DB specs),
+using only already-verified DB fields, each noting how the bike compares to
+its closest sibling in the lineup. 5 more VTUVIA stubs remain
+(`sn100`, `zeal-xt8`, `cmb`, `sf20h`, `gemini`) -- deliberately capped this
+run's batch at 3 to keep scope to the "1-3 focused items" guidance alongside
+the two data-bug resolutions above.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (no code touched,
+Supabase-only content edits). Ran the dev server and checked 3 pages live
+(`vtuvia-reindeer-step-thru-electric-bike`, `samebike-cy20`) -- descriptions,
+highlights, spec tables, and the recalibrated score all render correctly,
+zero console errors.
+
+**Expected impact:** Closes two multi-run-queued data-integrity questions
+(P0.16, and the SAMEBIKE duplicate-row question from run 29) with sourced,
+verified fixes rather than further deferral, plus catches a genuine
+score-copy-paste bug that was quietly tanking one bike's rating. The VTUVIA
+batch continues the same stub-description trust pattern applied across
+SAMEBIKE, DUOTTS, and Eunorau in prior runs.
+
+**Next candidates:** (1) Finish the remaining 5 VTUVIA stubs (`sn100`,
+`zeal-xt8`, `cmb`, `sf20h`, `gemini`) -- straightforward, DB fields already
+complete and non-zero for all 5. (2) DYU (~7 bikes) stub-description batch
+still queued, not yet started. (3) `eunorau-defender-s-fat-hs` (ROADMAP
+P0.16b) still needs a Dylan/human call -- ambiguous which of two real
+Eunorau drivetrains the row represents. (4) Consider adding `tsx` to
+`package.json` `devDependencies` (flagged run 28, still unresolved). (5)
+Watch `/best/cargo-ebikes` query-level positions (pos ~51-54 on "best cargo
+bike(s)" variants) for continued movement. (6) Worth a dedicated future pass:
+now that P0.16's score-copy-paste bug is confirmed as a real bug class (not
+a one-off), consider a sitewide sweep for other bikes whose score profile is
+byte-identical to a different-priced sibling's -- same detection method used
+here (`score_value`/`score_overall` matching another row exactly) could
+surface more.
+
+---
