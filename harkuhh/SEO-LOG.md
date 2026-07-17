@@ -3106,3 +3106,111 @@ still likely a backlink/authority ceiling (P4.1, Dylan-only). (5) ROADMAP
 P0.28/P0.13/P0.16 -- still need Dylan/human research, unchanged this run.
 
 ---
+
+## 2026-07-17 (run 29) -- `duotts-duotts-c29-k` confirmed 3rd-run dual signal (nothing left to fix) + SAMEBIKE batch part 2 (P0.34)
+
+**Setup note:** `WebSearch` and `WebFetch` returned "You've hit your session
+limit, resets 4:50pm (Europe/Amsterdam)" for every call attempted this run --
+both tools were unavailable for the entire run, not just rate-limited on one
+query. This blocked the usual samebike.com spec-verification step, so this
+run's data-sourcing discipline had to change (see Action 2 below).
+
+**GSC snapshot (28d, ending 2026-07-14):** 2 clicks, 1,355 impressions, CTR
+0.1% (same window as run 28 -- GSC's ~3-day lag means no new data point yet).
+Top page by clicks: `/` (homepage) with 3 clicks at pos 3.0 -- strong. Other
+notable page-level clicks: `samebike-rs-a01-pro` (2 clicks, pos 9.2),
+`blog/best-ebikes-for-heavy-riders` (2 clicks, 307 impr, pos 30.2 -- a large
+impression jump vs prior windows), `duotts-duotts-c29-k` (1 click, 11 impr,
+pos 12.6), `duotts-e29` (1 click, pos 19.0), `duotts-f20` (1 click, pos 16.7),
+`eunorau-meta-24-1` (1 click, 20% CTR, pos 23.2 -- new signal, not previously
+flagged), `samebike-ebe2` (1 click, 50% CTR, pos 11.0). No queries in strict
+striking distance (pos 5-20) and no high-impression/low-CTR pages in the
+tool's automatic buckets -- both empty again this run. Also notable:
+"best cargo bike" (16 impr, pos 54.3) and "best cargo bikes" (20 impr, pos
+51.8) -- `/best/cargo-ebikes` query-level positions have moved up from the
+pos ~77-78 page-level average flagged as stagnant in recent runs, suggesting
+some real movement on specific query variants even if the page-level average
+hasn't caught up yet.
+
+**PostHog snapshot (28d):** 96 pageviews / 47 visitors (up from run 28's
+93/44). `duotts-duotts-c29-k` held the #1 traffic spot for a **3rd consecutive
+run** (11 views/7 visitors, same as run 28's count, was 9/5 the run before) --
+this graduates from "confirmed for 2" (flagged explicitly in run 28's next
+candidates) to a firmly established pattern. Conversion events still flat at
+3 total (ENGWE N1 Pro x2, DUOTTS F20 x1) -- no new affiliate clicks this
+window.
+
+**Action 1 -- Investigated `duotts-duotts-c29-k` for the 3rd-run signal,
+confirmed nothing left to fix on the page itself.** Same conclusion as run
+28: full P1.1 depth treatment, corrected P0.24 score, and a dedicated vs-page
+are all already in place. With no further on-page gap and no new query-level
+GSC signal pointing at a specific missing angle, did not force a speculative
+change to this page this run -- logging the 3rd-run confirmation here so a
+future run with a concrete idea (e.g. a new vs-page angle, or backlink
+opportunity once P4.1 starts) can act on it rather than repeating the "nothing
+to fix" investigation a 4th time.
+
+**Action 2 -- P0.34: continued the SAMEBIKE stub-description backlog under a
+web-tooling outage.** With `WebSearch`/`WebFetch` both down for the full run,
+wrote full editorial descriptions for 6 of the 8 remaining SAMEBIKE stub bikes
+(`samebike-lo26-plus`, `samebike-lotdm200-ii`, `samebike-rs-a07`,
+`samebike-sy26-ii`, `samebike-xd26-ii`, `samebike-yinyu14`) using only their
+already-populated, non-zero DB fields (torque, weight, battery, range,
+payload -- all cross-checked against each bike's own `highlights` array
+first, no new specs introduced, no fabrication). This is a narrower version
+of the usual batch discipline (which normally also re-verifies against
+samebike.com and catches drift bugs like run 28's torque/weight/price
+issues) -- chose to proceed on the lower-risk subset rather than skip the
+queued item entirely, per the "if a data script fails, still advance a
+roadmap item" fallback rule.
+
+**Discovery, not resolved -- `samebike-20lvxd30-ii` and `samebike-cy20` look
+like duplicate rows.** While pulling data for the remaining 2 of 8 stub
+bikes, found their specs are identical across every column: price $699,
+torque 35 Nm, weight 55 lbs, max_weight 330 lbs, range_practical 36 mi,
+range_manufacturer 56 mi, battery 13 Ah, motor rear-hub, frame step-over,
+wheel 20". Two different model names sharing every single spec value is a
+stronger signal than the "shared base frame" pattern seen elsewhere in
+SAMEBIKE's budget line (e.g. RS-A07/SY26-II/XD26-II share weight and payload
+but differ in torque/price/range) -- this pair matches on literally
+everything, which reads as either a copy-paste catalog error or two SKUs for
+the same physical product. Left both untouched rather than writing two
+near-identical descriptions off unverified data, consistent with the site's
+standing rule (see P0.16, P0.28) against guessing which of two possible
+real-world explanations applies. Also separately confirmed `eunorau-meta-24-1`
+(this run's new GSC signal, 1 click/20% CTR/pos 23.2) already has a 264-char
+description from a prior run -- no stub-description gap there, no action
+needed.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (no code touched,
+Supabase-only content edit). Browser preview tooling was unavailable for live
+page verification this run (`claude-sonnet-5 is temporarily unavailable`
+error on `preview_start`) -- relying on the same detail-page template that
+has correctly rendered dozens of prior description updates, plus a direct
+Supabase read-back confirming all 6 rows updated with the intended text
+(599-672 chars each, up from <200).
+
+**Expected impact:** Same trust rationale as every prior stub-description
+batch -- 6 more SAMEBIKE pages move from single-sentence stubs to full
+editorial reviews matching their siblings' depth. The duplicate-row
+discovery, if confirmed and fixed in a future run, would resolve a second
+instance of the same "which real product does this row represent" ambiguity
+class as P0.16/P0.28.
+
+**Next candidates:** (1) Resolve the `samebike-20lvxd30-ii` /
+`samebike-cy20` duplicate-spec question once web tooling is available --
+check samebike.com for both model names directly. (2) Only `samebike-cy20`
+remains unwritten in the original 8-bike backlog (20lvxd30-ii also blocked
+on the same question) -- both need the duplicate question resolved before
+writing descriptions. (3) VTUVIA (~9 bikes) and DYU (~7 bikes) stub-
+description batches still queued, and don't depend on the SAMEBIKE duplicate
+question -- a clean next batch once WebSearch/WebFetch are back. (4) Watch
+`/best/cargo-ebikes` query-level positions (now pos ~51-54 on "best cargo
+bike(s)" variants, up from the page-level pos ~77-78 average) for continued
+movement -- may indicate the content investment is starting to pay off
+despite the stagnant page-level average. (5) Consider adding `tsx` to
+`package.json` `devDependencies` (flagged run 28, still unresolved). (6)
+ROADMAP P0.28/P0.13/P0.16 -- still need Dylan/human research, unchanged this
+run.
+
+---
