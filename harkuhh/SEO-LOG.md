@@ -3007,3 +3007,102 @@ pos 78.5 despite the most content investment on the site -- likely needs
 backlinks (P4.1, Dylan-only) rather than more on-page content.
 
 ---
+
+## 2026-07-17 (run 28) -- SAMEBIKE stub-description batch (P0.33) + price_usd desync bug
+
+**Setup note:** `npm run gsc` / `npm run posthog` failed at the start of this run
+with `'tsx' is not recognized` -- the `tsx` devDependency used by both scripts
+was missing from `node_modules` even though it's referenced in `package.json`
+scripts (not listed in `package.json` `devDependencies` at all, actually --
+likely dropped in a prior dependency prune). Ran `npm install --save-dev tsx`
+to restore it; both scripts ran cleanly afterward. Flagging in case this
+recurs -- worth adding `tsx` to `package.json` devDependencies explicitly so a
+future clean install doesn't silently drop the SEO/PostHog tooling again.
+
+**GSC snapshot (28d, ending 2026-07-14):** 2 clicks, 1,355 impressions, CTR
+0.1%. Top query still "electric bike for heavy riders" (2 clicks, 71 impr, pos
+42.3). Best page-level performer: `samebike-rs-a01-pro` (2 clicks, 17 impr,
+11.8% CTR, pos 9.2). No queries in striking distance (pos 5-20) and no
+high-impression/low-CTR pages -- both automatic-priority buckets empty again.
+
+**PostHog snapshot (28d):** 93 pageviews / 44 visitors (up from run 27's
+88/41). `duotts-duotts-c29-k` repeated as the top individual product page for
+a 2nd consecutive run (11 views/7 visitors, was 9/5 last run) -- per the
+established rule this graduates from a one-window spike to a confirmed dual
+GSC+PostHog signal (its GSC position also held around pos 12.6). Investigated
+first: its Supabase row already has the full P1.1 depth treatment, corrected
+P0.24 score, and a dedicated vs-page (confirmed again this run) -- nothing
+left to fix on the page itself. `samebike-cy20-pro` (3 views/2 visitors) and
+`eunorau-meta-275-st-1` (3 views/3 visitors) both continue recurring but
+already have full descriptions from prior runs. Conversion events still flat
+at 3 total (ENGWE N1 Pro x2, DUOTTS F20 x1).
+
+**Decision:** With the C29-K dual-signal page confirmed as having no further
+gap, and no new GSC priority queries, the clearest move was to continue the
+roadmap's explicitly-queued P1.1 stub-description backlog, next brand batch:
+SAMEBIKE -- also justified by this run's own signals since `rs-a01-pro`
+(2 GSC clicks) and `cy20-pro`/`ebe2` (recurring PostHog) are the same brand.
+
+**Action -- P0.33: SAMEBIKE stub-description batch, 6 bikes.** Queried
+Supabase for all SAMEBIKE rows sorted by `length(description)` and confirmed
+14 bikes under 200 characters. Picked 6 for this batch (two natural sibling
+pairs plus two standalone models): `samebike-rs-a02-pro`, `samebike-rs-a02-plus`
+(RS-A02 folding fat-tire family), `samebike-m20`, `samebike-m20-iii` (M-series
+moped family), `samebike-lo26-ii-yd`, `samebike-c05-pro`. Sourced real specs
+via `WebSearch` + `WebFetch` directly against samebike.com official product
+pages for each model before writing (motor wattage, torque, battery, payload,
+range), matching the discipline used in every prior data-sourcing run.
+
+**Bugs found and fixed while sourcing:**
+1. `samebike-rs-a02-plus` stored `torque=80` Nm, identical to the base
+   `rs-a02-pro` -- but SAMEBIKE's own product page states 100+ Nm for the Plus
+   (the "Plus" tier should logically exceed the base Pro, and does per the
+   manufacturer). Fixed `torque` 80->100. The `highlights` array still said
+   "80Nm torque motor" after the first pass (same miss pattern as the P0.11
+   ENGWE highlights bug) -- caught on live verification and fixed to "100Nm
+   torque motor".
+2. `samebike-m20-iii` stored `weight_lbs=75`, but its official page lists
+   58,000 g (~128 lbs) -- fixed 75->128.
+3. **New bug class:** `samebike-m20` and `samebike-m20-iii` had their legacy
+   `price` column ($1,299 / $1,599) out of sync with the authoritative
+   `price_usd` column ($1,429 / $1,749) -- confirmed via `lib/ebike-data.ts:184`
+   (`price: Number(row.price_usd ?? row.price)`) that `price_usd` is what
+   actually renders. Every other SAMEBIKE row had the two columns matching, so
+   this was isolated, not systemic. Caught only because the first draft of
+   both descriptions cited the (wrong) `price` column figure and the live
+   preview showed a mismatched header vs. body price -- corrected both the
+   `price` column (synced to `price_usd`) and the dollar figures already
+   written into the descriptions ($1,299->$1,429, $1,599->$1,749, and the
+   "$300 more than the base M20" comparison recalculated to "$320 more").
+   Ran a sitewide `price IS DISTINCT FROM price_usd` sweep afterward: all
+   remaining mismatches are ENGWE rows with `price_usd IS NULL` (the intended
+   fallback case per the same code line, not a bug) -- confirms this was
+   fully isolated to the 2 SAMEBIKE rows and is now closed.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean. Loaded all 6 detail
+pages live in the dev server -- `samebike-rs-a02-pro`, `samebike-rs-a02-plus`,
+`samebike-m20`, `samebike-m20-iii`, `samebike-lo26-ii-yd`, `samebike-c05-pro`
+all render with header price = body-copy price = spec-table values, and
+`samebike-rs-a02-plus`'s highlights now read "100Nm torque motor" matching its
+description. Zero console errors on any page.
+
+**Expected impact:** Same trust rationale as every prior stub-description
+batch, plus this run closes out a previously-undetected price-integrity bug
+that would have shipped two SAMEBIKE pages with the header and body quoting
+different dollar amounts (the exact P0.30 trust break, just via a different
+column) had it not been caught during live verification instead of ending the
+run right after the Supabase writes.
+
+**Next candidates:** (1) Continue the SAMEBIKE stub-description backlog: 8
+bikes remain (`samebike-rs-a07`, `samebike-xd26-ii`, `samebike-lo26-plus`,
+`samebike-yinyu14`, `samebike-20lvxd30-ii`, `samebike-sy26-ii`,
+`samebike-lotdm200-ii`, `samebike-cy20`), then VTUVIA (~9) and DYU (~7). (2)
+Consider adding `tsx` to `package.json` `devDependencies` explicitly so the
+GSC/PostHog scripts survive a clean `npm install` (see setup note above). (3)
+Watch `duotts-duotts-c29-k` for a 3rd consecutive dual-signal run -- now
+confirmed for 2, would be a strong pattern at 3. (4) `/best/cargo-ebikes` rank
+stagnation at pos ~77-78 despite the most content investment on the site --
+still likely a backlink/authority ceiling (P4.1, Dylan-only). (5) ROADMAP
+P0.28/P0.13/P0.16 -- still need Dylan/human research, unchanged this run.
+
+---
