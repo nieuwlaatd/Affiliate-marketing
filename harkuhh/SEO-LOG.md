@@ -3316,3 +3316,85 @@ here (`score_value`/`score_overall` matching another row exactly) could
 surface more.
 
 ---
+
+## 2026-07-18 (run 31) -- VTUVIA stub-description batch closed out (P0.36 part 2) + SN100 weight bug fixed
+
+**GSC snapshot (28d, ending 2026-07-14):** 2 clicks, 1,355 impressions, CTR
+0.1% -- same window as run 30 (no new data point yet). Top query unchanged
+("electric bike for heavy riders", 2 clicks/71 impr/pos 42.3).
+
+**GSC snapshot (90d, ending 2026-07-14), used for page-level signal:** 5
+clicks, 1,677 impressions. `/e-bikes/samebike/samebike-rs-a01-pro` is now the
+single strongest page on the site: 3 clicks / 19 impr / 15.8% CTR / pos 11.1,
+driven specifically by the query "samebike rs-a01 pro review" (1 click / 10
+impr / 10% CTR / pos 12.2) -- a genuine striking-distance, high-intent
+"review" query the site's own title template (`{brand} {model} Review {year}
+| Specs, Price & Where to Buy`) already matches closely.
+
+**PostHog snapshot (28d):** 100 pageviews / 48 visitors (up from 96/47 last
+run). `duotts-duotts-c29-k` still #1 traffic page (11 views/7 visitors).
+`samebike-rs-a01-pro` also shows 2 views/2 visitors/2 sessions this window --
+**a dual GSC+PostHog signal**, the highest-priority combination per this
+task's own scoring rule. Conversions still 3 total (ENGWE N1 Pro x2, DUOTTS
+F20 x1), unchanged.
+
+**Decision -- checked `samebike-rs-a01-pro` first, found nothing to fix.**
+Read the current DB row: 464-char editorial description, 5-bullet highlights,
+`updated_at` 2026-07-06 -- this page already received the P1.1 depth
+treatment 12 days ago specifically because it was identified as a top
+performer, and the content, meta title, and FAQ schema are all already doing
+their job (15.8% CTR at pos 11 is strong for this site's baseline). No data
+bugs found. This confirms the P1.1 investment approach is working as
+intended rather than surfacing a new gap -- logging this as a validation
+point rather than forcing an unnecessary edit onto a page that is already
+converting well.
+
+**Action -- P0.36 part 2: VTUVIA stub-description batch closed out (5 of 5
+remaining bikes).** `vtuvia-sn100`, `vtuvia-zeal-xt8`, `vtuvia-cmb`,
+`vtuvia-sf20h`, `vtuvia-gemini` were all single-sentence stubs (142-163
+chars) despite complete, non-zero DB specs (torque/weight/battery/range/
+payload all already populated from a prior run). Verified current specs
+against vtuviaebike.com official product pages (Gemini, Zeal XT8, SF20H,
+SN100 spec page, CMB) plus ebikehaul.com as a second source for SN100, then
+wrote full editorial descriptions (600-800 chars) for all 5, each explicitly
+positioning the bike against its closest VTUVIA sibling (Gemini vs SN100 vs
+SF20H in the fat tire tier; Zeal XT8 vs CMB in the commuter/mid-drive tier).
+
+**Bug found and fixed -- SN100 weight_lbs was wrong.** VTUVIA's own spec page
+(`vtuviaebike.com/pages/sn100-specifications`) states the SN100 weighs 72
+lbs; the DB had `weight_lbs=87`. A second retailer (ebikehaul.com) confirmed
+the SN100's torque (85 Nm), battery (14 Ah), payload (400 lb), and range (70
+mi claimed) all matched the existing DB values exactly, isolating the error
+to weight alone rather than a wrong-variant mixup. Fixed `weight_lbs` 87→72
+and updated the matching highlights bullet ("87 lbs sturdy build" → "72 lbs
+curb weight") so the spec table and highlights stay consistent.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean (no code touched,
+Supabase-only content edits). Ran the dev server and checked 2 pages live
+(`vtuvia-sn100`, `vtuvia-cmb`) -- descriptions, highlights, and spec tables
+all render correctly with the corrected weight, zero console errors.
+
+**Expected impact:** Closes the entire VTUVIA stub-description backlog
+(mirrors the SAMEBIKE and DUOTTS batches already closed in prior runs),
+bringing all 5 remaining VTUVIA pages to the same editorial depth as their
+already-enriched siblings. The SN100 weight fix removes a wrong spec from a
+public-facing table and meta description. Confirming `samebike-rs-a01-pro`
+needs no further work validates that the P1.1 "invest in pages the moment
+they show signal" approach used since run 20 is paying off -- it is now the
+site's best-performing page by CTR and position.
+
+**Next candidates:** (1) DYU (~7 bikes) stub-description batch -- the last
+remaining brand-sized backlog of this type, not yet started. (2)
+`eunorau-defender-s-fat-hs` (ROADMAP P0.16b) still needs a Dylan/human call.
+(3) Consider adding `tsx` to `package.json` `devDependencies` (flagged run
+28, still unresolved). (4) `/blog/best-ebikes-for-heavy-riders` now has 307
+impressions (28d) at only 0.7% CTR, pos 30.2 -- the single highest-impression
+page on the site and still converting (2 of the site's 5 total 90-day
+clicks), but CTR is weak for its impression volume; a title/meta rewrite
+pass on this post could be the next run's highest-leverage single action.
+(5) `/best/cargo-ebikes` still stuck around pos 51-77 depending on window
+(query-level ~51-54, page-level ~77) despite repeated content investment --
+worth a fresh look at whether the content structure itself (not just depth)
+needs to change.
+
+---
