@@ -3494,3 +3494,91 @@ adding `tsx` to `package.json` `devDependencies` (flagged run 28, still
 unresolved).
 
 ---
+
+## 2026-07-19 (run 33) -- Quiz-funnel filter bug fixed (P3.2) + DYU C6 frame_type resolved (P0.38)
+
+**GSC snapshot (28d, ending 2026-07-15):** 2 clicks, 1,388 impressions (+736 from
+last logged window), CTR 0.1%. Impressions have grown sharply (site is getting
+crawled/shown far more) but clicks stayed flat, so overall CTR fell -- expected
+when a young site picks up a long tail of new deep-ranked queries. No queries in
+striking distance (pos 5-20, impr >= 30) and no high-impression/low-CTR pages
+(impr >= 100, CTR < 2%, pos <= 15) this window -- both tool outputs were empty.
+Top page is still `/blog/best-ebikes-for-heavy-riders` (325 impr, 2 clicks, 0.6%
+CTR, pos 30.5, 23% of all site impressions) -- the P0/P1.8 title/meta rewrite
+shipped 2026-07-18 (run 32), one day before this window's end, so it's too early
+to read a CTR effect yet. Homepage is ranking well (pos 3.0-6.8, 3 clicks) --
+likely branded queries. Several bike detail pages sit at pos 9-19 with real CTR
+(SAMEBIKE RS-A01 Pro 11.8%, RS-A01 Men 10%, EBE2 50%), consistent with prior runs.
+
+**PostHog snapshot (28d):** 117 pageviews, 59 unique visitors (up from 61
+views/22 visitors two windows ago). For the first time, `/e-bikes/overzicht`
+(the main listing page) is the single most-viewed page (18 views/5 visitors),
+ahead of the homepage (14/9). `engwe-p275-se` had its strongest run yet (10
+views/10 visitors/10 sessions -- every visitor unique) despite being marked
+unavailable. `duotts-duotts-c29-k` is a dual-signal page again (GSC: 1 click,
+pos 12.3, 8.3% CTR; PostHog: 11 views/7 visitors). Conversions: 4
+`affiliate_link_clicked` (ENGWE N1 Pro x2, DUOTTS S26 AWD, DUOTTS F20) and, for
+the first time ever, 1 `quiz_completed` event.
+
+**Investigated and ruled out:** checked whether `engwe-p275-se` and
+`engwe-n1-pro` (both `available=false` since run 5, 2026-07-06, when ENGWE's own
+site said "back in stock early July") had actually restocked, since P275 SE just
+posted its highest-ever traffic while marked out of stock -- a real conversion
+risk if the flag were stale. Fetched both live product pages on engwe.com: both
+still show "Unavailable" with a disabled Add to Cart button. The existing
+"temporarily out of stock" messaging (P0.14) is accurate; no data fix needed.
+
+**Action 1 -- P3.2: fixed a real quiz-funnel bug, first `quiz_completed` event
+made it worth auditing end-to-end.** `components/Funnel/HomeFunnel.tsx` collects
+6 answers (terrain, purpose, budget, distance, height, frame, class) and passes
+all of them as URL params to `/e-bikes/overzicht`, but
+`app/e-bikes/overzicht/page.tsx` only read 3 (`budget`, `purpose`, `terrain`) --
+`distance`, `height`, `frame`, and `class` were silently dropped, even though
+`lib/types.ts` (`FilterState`) and `lib/ebike-filters.ts` (`filterBikes`) already
+fully support all four (`distancePerRide`, `riderHeight`, `frameTypes`,
+`bikeClasses`). Every quiz completion since launch has landed on a
+less-personalized result page than the quiz itself promised ("we'll recommend
+bikes that fit your body" -- height was never actually applied). Fixed by mapping
+the 4 missing params to `initialFilters` in `page.tsx`. Verified live in dev
+server: a full 7-answer quiz URL (`terrain=hilly&purpose=commuting&budget=1500&
+distance=15&height=69&frame=step-through&class=class-1`) now shows all 7 filter
+chips active and narrows 109 bikes to 4, versus previously only 3 of the 7 would
+have applied. Confirmed the no-param case (`/e-bikes/overzicht` alone) is
+unaffected -- still shows all 109 bikes. Zero console errors, `tsc --noEmit`
+clean.
+
+**Action 2 -- P0.38: `dyu-c6` `frame_type` mismatch resolved.** DB stored
+`frame_type='step-over'` but the bike's own description said "step-through".
+Verified via dyucycle.com plus 2 independent retailers (electricscooterslondon.com:
+"250W Step-Through E-Bike"; ebikesdiscount.com: "Step-Through Frame") -- the
+description was correct, the DB field was wrong. Fixed to `'step-through'`.
+Re-checked the other half of P0.38 (DYU C2/C5/C6 `torque=0`): confirmed via a
+fresh web search that DYU still does not publish a Nm torque figure for the C6
+anywhere (only 250W/350W power specs) -- leaving it blank remains the correct
+call, not an oversight.
+
+**Verified:** `tsc --noEmit` clean. Both filter-bug and frame_type fixes checked
+live in the dev server (screenshots not needed -- page text confirmed exact
+filter-chip state and bike counts).
+
+**Expected impact:** the quiz-funnel fix is the highest-leverage change this run
+-- it doesn't move rankings, but it fixes a conversion-path bug that has been
+silently under-serving 100% of quiz completions since the funnel launched (only
+1 recorded so far, but the bug affects every future one too, and PostHog is
+just starting to show real usage). The DYU C6 fix is a small, sourced data-
+accuracy correction consistent with the site's no-fabrication rule.
+
+**Next candidates:** (1) Consider building a real "top 3 matches" quiz results
+page (still redirects to the general filtered listing, per ROADMAP P3.2) now
+that the underlying filter bug is fixed -- a dedicated results page with
+stronger affiliate CTAs would be the natural next step. (2)
+`eunorau-defender-s-fat-hs` (ROADMAP P0.16b) still needs a Dylan/human call. (3)
+Watch `/blog/best-ebikes-for-heavy-riders` CTR next run for the title/meta
+rewrite's effect now a full window has passed since it shipped. (4)
+`/best/cargo-ebikes` still stuck deep (pos 51-78) despite repeated content
+investment -- worth a fresh structural look. (5) `duotts-duotts-c29-k`'s
+repeated dual-signal status (GSC striking-distance-adjacent + strong PostHog
+traffic) makes it a good candidate for the next detail-page enrichment pass if
+a future run finds it thin.
+
+---

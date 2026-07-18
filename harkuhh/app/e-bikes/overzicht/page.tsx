@@ -41,6 +41,22 @@ export default async function FietsenOverzichtPage({
     initialFilters.terrain = terrain;
   }
 
+  const distance = Number(str('distance'));
+  if (distance && distance > 0) initialFilters.distancePerRide = distance;
+
+  const height = Number(str('height'));
+  if (height && height > 0) initialFilters.riderHeight = height;
+
+  const frame = str('frame');
+  if (frame === 'step-through' || frame === 'step-over' || frame === 'sport') {
+    initialFilters.frameTypes = [frame];
+  }
+
+  const bikeClass = str('class');
+  if (bikeClass === 'class-1' || bikeClass === 'class-2' || bikeClass === 'class-3') {
+    initialFilters.bikeClasses = [bikeClass];
+  }
+
   const ride = str('ride');
   const rideLabel = ride && RIDE_LABELS[ride] ? RIDE_LABELS[ride] : null;
 
