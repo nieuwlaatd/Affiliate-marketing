@@ -3398,3 +3398,99 @@ worth a fresh look at whether the content structure itself (not just depth)
 needs to change.
 
 ---
+
+## 2026-07-18 (run 32) -- Heavy-riders title/meta rewrite (P1.8) + DYU stub-description backlog closed (P0.37)
+
+**GSC snapshot (28d, ending 2026-07-15):** 2 clicks, 1,388 impressions, CTR
+0.1%. Top query unchanged ("electric bike for heavy riders", 2 clicks/69
+impr/2.9% CTR/pos 41.7). Top page by far: `/blog/best-ebikes-for-heavy-riders`
+at 325 impr / 2 clicks / 0.6% CTR / pos 30.5 -- 23% of the entire site's
+impressions concentrated on one page, and its CTR has been flagged as weak
+for its impression volume in the last 2 consecutive runs (run 30: 307 impr;
+run 31: 307 impr; this run: 325 impr, still climbing, still 0.6% CTR).
+
+**PostHog snapshot (28d):** 110 pageviews / 52 unique visitors (up from
+100/48 last run). `duotts-duotts-c29-k` still #1 traffic page (11 views/7
+visitors). 4 confirmed affiliate clicks total (ENGWE N1 Pro x2, DUOTTS S26
+AWD x1, DUOTTS F20 x1) + 1 quiz completion -- both are new conversion-event
+types appearing in the tool output for the first time this run.
+
+**Decision:** Two data-confirmed items, both explicitly queued as "next
+candidates" in prior runs:
+1. P1.8 (new) -- title/meta rewrite on `/blog/best-ebikes-for-heavy-riders`,
+   the clearest high-impression/low-CTR case on the site, flagged twice
+   before but never acted on.
+2. P0.37 -- DYU stub-description batch, the last remaining brand-sized
+   backlog of the multi-run SAMEBIKE/DUOTTS/VTUVIA/DYU description initiative.
+
+**Action 1 -- P1.8: title/meta rewrite on `/blog/best-ebikes-for-heavy-riders`.**
+Old title "Best E-Bikes for Heavy Riders: What to Look for at 250 lbs and
+Above" led with a generic "what to look for" framing that doesn't mirror the
+actual top query ("electric bike for heavy riders"). New title: "Best
+Electric Bikes for Heavy Riders (300+ lbs) in 2026" -- leads with "Electric
+Bikes" (matching the query's phrasing more closely than "E-Bikes"), adds a
+concrete number (300+ lbs) and a year for freshness, and is short enough to
+display in full in the SERP with the " | Best Bike For Me" suffix. New meta
+description leads with the same "most e-bikes cap out at 275 lbs" hook but
+now names the concrete payload ceiling (440 lb, matching the FLASH LITE ST
+pick already in the post) and the exact pick count (4) instead of vague
+"our top picks" language, both established CTR levers. No content changes
+inside the post itself -- this was purely a title/meta fix per the tool's
+own "high-impression/low-CTR -> rewrite title/meta" playbook.
+
+**Action 2 -- P0.37: DYU stub-description batch, 7 of 7 bikes, closing out
+the entire multi-brand stub-description initiative.** `dyu-a5`,
+`dyu-a1f-pro`, `dyu-c9`, `dyu-t1`, `dyu-d3f`, `dyu-m20`, `dyu-stroll-1` were
+all single-sentence stubs (126-158 chars) despite complete, non-zero DB
+specs (torque/weight/max_weight all already populated). Verified specs
+against dyucycle.com / us.dyucycle.com official product pages plus retailer
+cross-checks (electricrideco.com, oolactive.com) and wrote full editorial
+descriptions (369-504 chars) for all 7, each built around the bike's own
+existing DB numbers (no new figures introduced beyond what was already in
+the highlights/spec table) plus a sibling-differentiator: T1's magnesium
+alloy frame vs. its aluminum-frame siblings, C9 as the longest-range DYU
+(93 mi manufacturer / 60 mi practical), M20 as the heaviest and most rugged
+(88.2 lbs, fat tire, front+rear suspension), Stroll 1 as the lightest and
+most road-bike-like (43 lbs, 700C wheels), A5/A1F Pro/D3F as the compact
+folding tier differentiated by size and price ($519/$429/$549). This closes
+the entire stub-description initiative that has run across SAMEBIKE, DUOTTS,
+VTUVIA and now DYU over roughly 10 prior runs.
+
+**New candidates found while closing DYU, not resolved (added as ROADMAP
+P0.38):** (1) The 3 already-complete DYU bikes (`c2`, `c5`, `c6`) all have
+`torque=0` in the DB -- the same P0.9-pattern gap seen across other brands,
+not sourced this run since they were out of this run's stub-only scope.
+(2) `dyu-c6` has `frame_type='step-over'` in the DB but its own description
+text says "step-through" -- a data/copy mismatch worth a source check before
+touching either field.
+
+**Verified:** `npx tsc --noEmit -p tsconfig.json` clean. Ran the dev server
+and checked 3 pages live: `dyu-t1` (description, highlights, spec table all
+render correctly, apostrophe in "DYU's" escaped correctly in SQL), `dyu-d3f`
+(same), `/blog/best-ebikes-for-heavy-riders` (new title confirmed rendering
+as "Best Electric Bikes for Heavy Riders (300+ lbs) in 2026 | Best Bike For
+Me" in the browser tab title). Zero console errors on all 3 pages.
+
+**Expected impact:**
+- Heavy-riders title/meta: this page alone carries 23% of the site's total
+  search impressions, so even a modest CTR lift here (0.6% -> even 1.5-2%,
+  in line with what a compelling title typically achieves at this position)
+  would meaningfully move the site's total click count, which is currently
+  only 2 clicks/28d sitewide.
+- DYU descriptions: closes the last brand gap in a trust-focused initiative
+  that has now touched every stub description across the entire 109-bike
+  catalog. No brand on the site has a single-sentence description left.
+
+**Next candidates:** (1) ROADMAP P0.38 -- DYU C2/C5/C6 `torque=0` gap (3
+bikes) + `dyu-c6` frame_type/description mismatch. (2)
+`eunorau-defender-s-fat-hs` (ROADMAP P0.16b) still needs a Dylan/human call.
+(3) Watch `/blog/best-ebikes-for-heavy-riders` CTR next run to see if the
+title/meta change moved the needle -- if not, consider a more structural
+change (the post may need to rank higher before CTR improves meaningfully at
+pos 30). (4) `/best/cargo-ebikes` still stuck around pos 51-77 depending on
+window despite repeated content investment -- worth a fresh look at whether
+the content structure itself (not just depth) needs to change. (5) Consider
+adding `tsx` to `package.json` `devDependencies` (flagged run 28, still
+unresolved).
+
+---

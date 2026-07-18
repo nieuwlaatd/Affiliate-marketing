@@ -359,8 +359,8 @@ If a full charge gives noticeably less range than it used to, or the battery won
   },
   {
     slug: 'best-ebikes-for-heavy-riders',
-    title: 'Best E-Bikes for Heavy Riders: What to Look for at 250 lbs and Above',
-    description: 'Most e-bikes max out at 275 lbs. Here is how to find one that handles 300+ lbs safely, with real payload data and our top picks.',
+    title: 'Best Electric Bikes for Heavy Riders (300+ lbs) in 2026',
+    description: 'Most e-bikes cap out at 275 lbs. See real payload data and safety specs, plus 4 tested picks (up to 440 lb capacity) for riders 250 lbs and up.',
     category: 'Buying Advice',
     publishedAt: '2026-05-29',
     updatedAt: '2026-07-15',
