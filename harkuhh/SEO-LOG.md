@@ -3582,3 +3582,88 @@ traffic) makes it a good candidate for the next detail-page enrichment pass if
 a future run finds it thin.
 
 ---
+
+## 2026-07-19 (run 34) -- Top-converting bike's frame_type bug fixed (P0.39), heavy-riders page corrected
+
+**GSC snapshot (28d, ending 2026-07-16):** 2 clicks, 1,454 impressions, CTR
+0.1%. Top query remains "electric bike for heavy riders" (71 impr, 2 clicks,
+2.8% CTR, pos 41.4). No striking-distance queries (pos 5-20) and no
+high-impression/low-CTR pages this window -- both tool outputs empty again.
+`/blog/best-ebikes-for-heavy-riders` grew to 350 impr (23%+ of all site
+impressions) but still sits at pos 30.7 with 0.6% CTR -- the run-32 title/meta
+rewrite has had one full window to show effect and CTR has not moved yet;
+too early to call it either way given the position hasn't lifted.
+`/best/cargo-ebikes` remains stuck at pos 77.4 despite 103 impressions.
+Two SAMEBIKE RS-A01 pages continue to convert well (Pro: 10% CTR pos 9.3,
+Men: 10% CTR pos 9.0).
+
+**PostHog snapshot (28d):** 129 pageviews, 65 unique visitors (up from
+117/59). `/e-bikes/overzicht` is now the top page by views (19/5) for a
+second consecutive run, consistent with the P3.2 quiz-filter fix routing
+more personalized traffic there. `engwe-p275-se` posted its strongest run
+yet (13 views/13 visitors/13 sessions -- every visitor unique) while still
+marked out of stock. Conversions: 10 `affiliate_link_clicked` events (up
+from 4) and 1 `quiz_completed`. **New signal: Eunorau FLASH LITE ST logged
+4 affiliate clicks this window, the most of any bike, despite not
+appearing in the top-19 pageview list at all** -- an unusually high
+click-to-view ratio that made it worth investigating even though it wasn't
+a top-traffic page.
+
+**Action -- P0.39: found and fixed a live `frame_type` bug on the run's top
+affiliate-converting bike, which also touched the site's highest-impression
+content page.** Investigating why `eunorau-flash-lite-st` was converting so
+well surfaced two problems at once. First, the DB `frame_type` was
+`'step-over'`, but the bike is literally named the "ST" (step-through)
+variant of the FLASH LITE line. Verified via Eunorau's own product page
+(`eunorau-ebike.com/products/flash-lite-st`, titled "FLASH Lite ST City
+Commuter Step-Throu Electric Bicycle") plus 4 independent retailers
+(bikeberry.com, ebikehaul.com, ebikejoy.com, motorizedbicyclehq.com), all
+agreeing it's step-through. This silently excluded the bike from
+`/best/step-through-ebikes` (filters strictly on `frameType ===
+'step-through'`) -- the exact best-of page this bike should have been
+ranking on. Second, and more consequential: `/blog/best-ebikes-for-heavy-riders`
+(350 impressions this window, 23%+ of the entire site's search visibility)
+names this bike "Best overall" and its copy explicitly said "The step-over
+frame keeps a low standover height" -- a factual claim wrong on the site's
+single largest source of search traffic. Also found the detail page itself
+was still a 207-character single-sentence stub, unlike sibling
+`flash-lite-2-0`'s 694-character full description (same P0.9/family-
+completeness pattern as prior DUOTTS/SAMEBIKE/VTUVIA/DYU batches). Fixed
+all three in one pass: `frame_type` -> `step-through`, wrote a full
+editorial description (694 chars) using only already-verified DB fields
+(92 Nm torque, 82 lb weight, 440 lb payload, 75mi practical / 100mi claimed
+range, front suspension), added a step-through highlights bullet, corrected
+the blog post's frame-type sentence, and bumped the post's `updatedAt` to
+2026-07-19.
+
+**Verified:** `tsc --noEmit` clean. Checked live in the dev server (a stale
+Turbopack cache initially 404'd every bike detail page including ones
+untouched by this change -- a full server restart resolved it, confirming
+it was a dev-cache artifact, not a code regression): `eunorau-flash-lite-st`
+detail page renders "Step-through" in the spec table and the new
+description/highlights; `/best/step-through-ebikes` now includes the FLASH
+LITE ST in its listing; `/blog/best-ebikes-for-heavy-riders` renders the
+corrected sentence and the July 19 update date. Zero console errors on all
+three pages.
+
+**Expected impact:** this is the same trust/accuracy rationale as every
+prior P0.9-pattern fix, but on the highest-confidence dual-signal bike
+found yet (the run's top converter by a clear margin) and on the single
+page carrying the largest share of the site's search visibility --
+plausibly the highest-leverage individual fix logged since the run-32
+title/meta rewrite on the same post.
+
+**Next candidates:** (1) Watch `/blog/best-ebikes-for-heavy-riders` CTR over
+the next 1-2 windows now both the title/meta (run 32) and the on-page
+factual error (run 34) are fixed -- if CTR still doesn't move, the page
+likely needs to rank higher before CTR responds meaningfully at pos ~30.
+(2) `eunorau-defender-s-fat-hs` (ROADMAP P0.16b) still needs a Dylan/human
+call. (3) `/best/cargo-ebikes` still stuck at pos 77.4 despite repeated
+content investment -- worth a structural look (page layout/format, not just
+depth) next time it's picked up. (4) Consider a dedicated "top 3 matches"
+quiz results page now traffic to `/e-bikes/overzicht` is climbing
+(ROADMAP P3.2 follow-up). (5) `duotts-duotts-c29-k` remains a recurring
+dual-signal page (GSC pos 12.3 + PostHog 11 views/7 visitors this run) --
+still a good candidate for a fresh look if a future run finds it thin.
+
+---

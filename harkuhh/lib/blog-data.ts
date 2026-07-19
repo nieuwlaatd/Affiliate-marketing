@@ -363,7 +363,7 @@ If a full charge gives noticeably less range than it used to, or the battery won
     description: 'Most e-bikes cap out at 275 lbs. See real payload data and safety specs, plus 4 tested picks (up to 440 lb capacity) for riders 250 lbs and up.',
     category: 'Buying Advice',
     publishedAt: '2026-05-29',
-    updatedAt: '2026-07-15',
+    updatedAt: '2026-07-19',
     readingTime: 12,
     coverAlt: 'Sturdy electric bike with reinforced frame on a city street',
     relatedSlugs: ['how-to-choose-an-electric-bike', 'ebike-battery-range-guide'],
@@ -397,7 +397,7 @@ The listed max payload is not just a suggestion. It affects:
 
 ### Best overall: Eunorau FLASH LITE ST
 
-The [Eunorau FLASH LITE ST](/e-bikes/eunorau/eunorau-flash-lite-st) is the standout choice if you need an e-bike rated for heavy riders. It carries a verified **440 lb payload capacity** -- among the highest in any non-cargo e-bike. A 750W rear hub motor delivers 92 Nm of torque, enough for flat-to-moderate hills. The step-over frame keeps a low standover height, which matters when you need easy mounting at higher body weights. Price: around $1,899.
+The [Eunorau FLASH LITE ST](/e-bikes/eunorau/eunorau-flash-lite-st) is the standout choice if you need an e-bike rated for heavy riders. It carries a verified **440 lb payload capacity** -- among the highest in any non-cargo e-bike. A 750W rear hub motor delivers 92 Nm of torque, enough for flat-to-moderate hills. The step-through frame makes mounting and dismounting easier at higher body weights, without sacrificing the payload rating of a step-over design. Price: around $1,899.
 
 ### Best high-capacity cargo option: Eunorau G30
 
