@@ -445,6 +445,7 @@ export default function OverzichtClient({
                         price={bike.price}
                         network={bike.affiliateNetwork}
                         cta="check_price"
+                        source="quiz_top_match"
                         className="cta-primary px-4 py-2 rounded-lg text-sm font-bold"
                         style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}
                       >

@@ -3753,3 +3753,87 @@ recurring dual-signal page (PostHog 11 views/7 visitors last run) -- still a
 candidate for a fresh detail-page look if a future run finds it thin.
 
 ---
+
+## 2026-07-19 (run 36) -- FAT-AWD 2.0/3.0 duplicate-spec bug fixed + quiz-click source tagging shipped
+
+**GSC snapshot (28d, ending 2026-07-16):** essentially unchanged from run 35
+-- 2 clicks, 1,454 impressions, 0.1% CTR, same window re-pull. Top query
+still "electric bike for heavy riders" (71 impr, 2 clicks, pos 41.4). No
+striking-distance queries and no high-impression/low-CTR pages this window
+(both empty for a third consecutive run). `/best/cargo-ebikes` still flat at
+pos 77.4 -- confirmed again this run this is an authority ceiling (P4.1
+backlinks), not an on-page gap, per run 35's structural audit; not revisited.
+
+**PostHog snapshot (28d):** 133 pageviews, 67 unique visitors (flat vs run
+35). `/e-bikes/overzicht` remains the top page for a third consecutive run
+(19 views/5 visitors). `engwe-p275-se` still the strongest single bike page
+(13/13/13, still out of stock). Conversions: 10 `affiliate_link_clicked`, 1
+`quiz_completed`. Top affiliate-click bike: Eunorau FLASH LITE ST (4 clicks,
+the bike fixed in run 34) -- confirms that fix is already paying off.
+
+**Action 1 -- duplicate-spec + suspension bug fixed on `eunorau-fat-awd-2`/
+`eunorau-fat-awd-3-0`.** While investigating run 35's queued candidate list
+turned up nothing new to act on, a routine stub-description sweep
+(`length(description) < 300`) surfaced `eunorau-fat-awd-3-0` at a 77-char
+stub -- the shortest live description on the whole site. Pulling its full
+row for sourcing found it was byte-identical to `eunorau-fat-awd-2` across
+every spec column (price $1,699, torque 110 Nm, weight 79.4 lbs, battery
+15Ah, range 80/60 mi, payload 375 lbs, wheel size 26"), and both had
+`has_suspension='none'` despite the model line having a suspension fork --
+the same "which of two real products does this row represent" pattern as
+P0.35 (20lvxd30-ii/cy20). Sourced Eunorau's own product page plus 2
+independent retailers (ebikegeneration.com, journeybikes.com): confirmed
+both bikes genuinely share the same 500W dual-hub-motor AWD platform and an
+RST Guide front suspension fork (95mm travel) -- the DB `has_suspension`
+value was simply wrong on both rows, not a duplicate-row bug this time. The
+one real, sourced difference: the 3.0 uses a torque sensor where the 2.0
+uses a cadence sensor (confirmed via ebikegeneration's spec sheet for 2.0
+and Eunorau's own 3.0 product copy). Fixed `has_suspension` 'none'->'front'
+on both rows, wrote a full 774-char editorial description for 3.0 (previously
+77 chars) and refreshed 2.0's to reference the sensor difference, and
+corrected both bikes' highlights (both said "500W motor" singular on a
+dual-motor AWD bike -- fixed to "Dual 500W AWD motors").
+
+**Action 2 -- P3.2 follow-up, closes run-35 "Next candidate" #1: quiz-
+originated affiliate clicks are now tagged.** Added an optional `source`
+field threaded through `trackAffiliateClick` (`lib/analytics.ts`) ->
+`AffiliateLink` (`components/AffiliateLink.tsx`) -> the quiz top-3 hero's CTA
+in `OverzichtClient.tsx`, set to `"quiz_top_match"`. Regular browsing clicks
+(detail pages, vs-pages, compare tool, the full grid below the hero) are
+unaffected and continue to omit `source`. This makes it possible to measure
+the quiz hero's actual conversion contribution once it has accumulated a few
+runs of traffic, rather than having it blend into the undifferentiated
+`affiliate_link_clicked` count.
+
+**Verified:** `tsc --noEmit` clean. Checked both bike detail pages live in
+dev server -- `eunorau-fat-awd-3-0` and `eunorau-fat-awd-2` both render the
+new descriptions, highlights, and "Suspension: Front" spec row correctly;
+confirmed the FAT-AWD 2.0 sibling card on the 3.0 page still shows the
+correct $1,699 price (no drift). Re-checked the quiz hero with the same
+7-parameter URL used in run 35 -- top-3 cards render correctly, zero
+console errors. `read_console_messages` clean on both checks.
+
+**Expected impact:** the FAT-AWD fix removes a stub description and a wrong
+spec-table field from a $1,699 bike (same trust rationale as every P0.9-class
+fix); the quiz-click tagging is instrumentation, not a traffic/conversion
+change by itself, but unblocks measuring whether P3.2's hero is actually
+working once more quiz traffic accumulates.
+
+**Next candidates:** (1) Watch `affiliate_link_clicked` events for
+`source: "quiz_top_match"` over the next few runs now that it is live --
+once there is enough volume, compare quiz-hero conversion rate against the
+site's baseline affiliate-click rate. (2) `eunorau-defender-s-fat-hs`
+(ROADMAP P0.16b) still needs a Dylan/human call. (3) `/best/cargo-ebikes`'s
+pos-77 plateau remains a backlink/authority ceiling, not a content gap --
+still only worth revisiting if GSC shows it moving into striking distance.
+(4) A handful of ENGWE bikes still sit at 160-220 char descriptions (T14,
+EP-2 Boost/Pro/3.0 Boost, LE20, E26, L20 Boost, P275 ST, M1, Engine Pro 2.0,
+P20 and others) -- shorter than the 400-800 char standard applied to every
+other brand's stub sweep, though none are GSC/PostHog-flagged converters
+right now. Worth a dedicated ENGWE depth batch if a future run has no
+stronger dual-signal target. (5) `duotts-duotts-c29-k` remains a recurring
+dual-signal page but was checked this run and is not thin (631-char
+description, already deepened in run 6) -- no action needed, closing this
+out as a candidate.
+
+---

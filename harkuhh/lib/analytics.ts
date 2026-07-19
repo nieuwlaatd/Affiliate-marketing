@@ -21,6 +21,8 @@ export function trackAffiliateClick(p: {
   network?: string;
   /** Which button: "check_price" (primary) or "official_site". */
   cta: string;
+  /** Where the click happened: "quiz_top_match" or omitted for regular browsing. */
+  source?: string;
 }) {
   capture("affiliate_link_clicked", p);
 }

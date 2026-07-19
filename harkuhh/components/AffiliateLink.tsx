@@ -11,6 +11,8 @@ interface AffiliateLinkProps {
   network?: string;
   /** Which button this is: "check_price" (primary) or "official_site". */
   cta: string;
+  /** Where the click happened: "quiz_top_match" or omitted for regular browsing. */
+  source?: string;
   className?: string;
   style?: React.CSSProperties;
   children: React.ReactNode;
@@ -29,6 +31,7 @@ export default function AffiliateLink({
   price,
   network,
   cta,
+  source,
   className,
   style,
   children,
@@ -38,7 +41,7 @@ export default function AffiliateLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer sponsored"
-      onClick={() => trackAffiliateClick({ brand, model, slug, price, network, cta })}
+      onClick={() => trackAffiliateClick({ brand, model, slug, price, network, cta, source })}
       className={className}
       style={style}
     >
