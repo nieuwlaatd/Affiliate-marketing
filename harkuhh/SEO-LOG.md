@@ -3667,3 +3667,89 @@ dual-signal page (GSC pos 12.3 + PostHog 11 views/7 visitors this run) --
 still a good candidate for a fresh look if a future run finds it thin.
 
 ---
+
+## 2026-07-19 (run 35) -- Dedicated quiz "top 3 matches" results hero shipped (P3.2 follow-up)
+
+**GSC snapshot (28d, ending 2026-07-16):** 2 clicks, 1,454 impressions, CTR
+0.1% -- essentially unchanged from run 34's window. Top query remains
+"electric bike for heavy riders" (71 impr, 2 clicks, 2.8% CTR, pos 41.4).
+No striking-distance queries (pos 5-20) and no high-impression/low-CTR pages
+this window -- both tool outputs empty again, for the second consecutive
+run. `/blog/best-ebikes-for-heavy-riders` sits at 350 impr / pos 30.7 / 0.6%
+CTR, still too early to judge the run-32 title/meta rewrite or the run-34
+frame-type fix (both need a fresh window to show effect). `/best/cargo-ebikes`
+remains stuck at pos 77.4 despite repeated content investment across 3+
+prior runs -- checked this run whether the page needed real structural work
+(not just more depth) and found it already has 17 matching bikes, a "Quick
+comparison" spec table, 3 buyer's-guide sections, 7 FAQs, related-reading
+links and full schema -- the content and structure are already at parity
+with every other well-performing best-of page. The GSC-visible queries
+driving its impressions ("best cargo bike"/"best cargo bikes", pos 51-54)
+are simply outranked by higher-authority competitors; this looks like a
+domain-authority ceiling (ROADMAP P4.1, backlinks) rather than an on-page
+gap the loop can fix, so no further content changes were made here this run.
+
+**PostHog snapshot (28d):** 129 pageviews, 65 unique visitors (flat vs run
+34's 129/65 -- same window, essentially a re-pull). `/e-bikes/overzicht`
+remains the top page by views (19/5) for a second consecutive run.
+`engwe-p275-se` still posts the strongest single bike-page signal (13
+views/13/13, still out of stock). Conversions: 10 `affiliate_link_clicked`,
+1 `quiz_completed`. New name in the affiliate-click list: **DYU M20 logged 2
+clicks this window** -- checked its DB row for the P0.9-pattern bugs found
+on every other newly-converting bike in recent runs (stub description,
+zero torque/weight, frame-type mismatch) and found none: full 479-char
+editorial description, torque 50 Nm, weight 88.2 lbs, payload 264 lbs, all
+already fixed in the run-32 DYU stub-description batch. No action needed --
+this looks like the prior fix already paying off, not a new bug.
+
+**Action -- P3.2 follow-up: built the dedicated "top 3 matches" quiz results
+hero that 2 consecutive prior runs (33, 34) flagged as the natural next
+step now that `/e-bikes/overzicht` is the top PostHog page two runs
+running.** Previously, finishing the quiz just redirected to the fully-
+personalized (post run-33 fix) but still generic filtered grid -- no
+different from arriving via manual filters. Added a "Your top N matches"
+section to `app/e-bikes/overzicht/OverzichtClient.tsx`, gated on `rideLabel`
+being set (i.e. the visitor came from the quiz, not direct browsing/filter
+use): it re-sorts the already-filtered bike set by `scoreOverall`, takes the
+top 3, and renders them as larger, ranked cards (#1/#2/#3 badge, image, key
+specs -- practical range, torque, score -- price, and a primary "Check
+price" button). The CTA reuses the existing `AffiliateLink` client component
+(the same one already wired on bike detail pages per P1.5), so these
+quiz-driven affiliate clicks fire the identical `affiliate_link_clicked`
+PostHog event and are visible in the same conversion tracking, not a new
+untracked surface. The full filtered grid still renders below under an
+explicit "All matches" heading for anyone who wants to keep browsing or
+adjust filters. Non-quiz visits to `/e-bikes/overzicht` (direct filter use,
+no `rideLabel`) are unaffected -- the hero only renders when it has quiz
+context to justify a "top matches" framing.
+
+**Verified:** `tsc --noEmit` clean. Checked live in the dev server with a
+full 7-parameter quiz-style URL (`?terrain=hilly&ride=hills&purpose=commuting
+&budget=1500&distance=15&height=68&frame=step-through&class=class-1`): page
+correctly filtered to 4 of 109 bikes, the top-3 hero rendered ranked
+exactly by `scoreOverall` (7.4, 7.2, 7.2) with correct prices/specs, and the
+full grid rendered below under "All matches." Zero console errors, server
+logs showed a clean 200 response. (Browser-pane screenshot capture timed
+out repeatedly this run -- confirmed via page-text extraction and network/
+console logs instead, which showed no errors and a normal page load.)
+
+**Expected impact:** turns the quiz's terminal action from "see a filtered
+list" into "see 3 ranked picks with a direct buy link," which should lift
+the affiliate-click rate on quiz completions specifically -- the exact gap
+ROADMAP P3.2 was left open on. Low risk: purely additive UI, same tracked
+CTA component used elsewhere, no changes to filter logic or existing pages.
+
+**Next candidates:** (1) Watch whether `affiliate_link_clicked` events start
+showing quiz-originated bikes distinctly once this hero has a few runs of
+traffic -- consider adding a `source: 'quiz'` param to the tracked event if
+that distinction becomes valuable. (2) `eunorau-defender-s-fat-hs` (ROADMAP
+P0.16b) still needs a Dylan/human call. (3) `/best/cargo-ebikes`'s pos-77
+plateau looks like a backlink/authority ceiling, not a content gap -- worth
+revisiting only if GSC ever shows it moving into striking distance. (4)
+DYU M20's 2 affiliate clicks this run, combined with zero data issues found,
+suggests the run-32 DYU batch is already converting -- no further action
+needed there, just noting the signal. (5) `duotts-duotts-c29-k` remains a
+recurring dual-signal page (PostHog 11 views/7 visitors last run) -- still a
+candidate for a fresh detail-page look if a future run finds it thin.
+
+---

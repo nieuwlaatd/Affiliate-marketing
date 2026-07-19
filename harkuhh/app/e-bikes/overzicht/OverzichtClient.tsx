@@ -1,8 +1,11 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import BikeCard from '@/components/BikeCard';
 import KeuzehulpBar from '@/components/KeuzehulpBar';
+import AffiliateLink from '@/components/AffiliateLink';
 import { getAllBrands, filterBikes } from '@/lib/ebike-filters';
 import { EBike, FilterState } from '@/lib/types';
 
@@ -182,6 +185,11 @@ export default function OverzichtClient({
   });
 
   const filteredBikes = useMemo(() => filterBikes(initialBikes, filters), [initialBikes, filters]);
+
+  const topMatches = useMemo(
+    () => [...filteredBikes].sort((a, b) => b.scoreOverall - a.scoreOverall).slice(0, 3),
+    [filteredBikes]
+  );
 
   const toggleArrayFilter = (key: 'brands' | 'motorTypes' | 'frameTypes' | 'suitableFor' | 'bikeClasses' | 'suspensionTypes', value: string) => {
     setFilters(prev => {
@@ -385,6 +393,71 @@ export default function OverzichtClient({
           </div>
         </div>
 
+        {/* Quiz top matches */}
+        {rideLabel && topMatches.length > 0 && (
+          <div className="mb-10">
+            <h2 className="text-lg font-bold text-[var(--foreground)]">Your top {topMatches.length} matches</h2>
+            <p className="text-sm text-[var(--muted)] mt-1 mb-4">Ranked by our overall score among the bikes that fit your answers.</p>
+            <div className="grid sm:grid-cols-3 gap-5">
+              {topMatches.map((bike, i) => {
+                const brandSlug = bike.brand.toLowerCase().replace(/\s+/g, '-');
+                return (
+                  <div
+                    key={bike.id}
+                    className="relative bg-[var(--card-bg)] rounded-xl border-2 overflow-hidden flex flex-col"
+                    style={{ borderColor: i === 0 ? 'var(--accent)' : 'var(--border)' }}
+                  >
+                    <span
+                      className="absolute top-3 left-3 z-10 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
+                      style={{ backgroundColor: 'var(--accent)', color: 'var(--on-bordeaux)' }}
+                    >
+                      #{i + 1}
+                    </span>
+                    <Link href={`/e-bikes/${brandSlug}/${bike.slug}`} className="group block">
+                      <div className="aspect-[4/3] bg-gradient-to-br from-[var(--surface)] to-[var(--background)] relative overflow-hidden">
+                        {bike.images && bike.images.length > 0 && (
+                          <Image
+                            src={bike.images[0]}
+                            alt={`${bike.brand} ${bike.model} electric bike`}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            sizes="(max-width: 640px) 100vw, 33vw"
+                          />
+                        )}
+                      </div>
+                      <div className="px-4 pt-3">
+                        <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wide">{bike.brand}</p>
+                        <h3 className="text-base font-bold text-[var(--foreground)] group-hover:text-[var(--accent)] transition-colors">{bike.model}</h3>
+                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-xs text-[var(--muted)]">
+                          <span>~{bike.rangePractical} mi range</span>
+                          <span>{bike.torque} Nm</span>
+                          <span>Score {bike.scoreOverall}/10</span>
+                        </div>
+                      </div>
+                    </Link>
+                    <div className="px-4 pb-4 pt-3 mt-auto flex items-center justify-between gap-3">
+                      <span className="text-lg font-bold text-[var(--foreground)]">${bike.price.toLocaleString('en-US')}</span>
+                      <AffiliateLink
+                        href={bike.affiliateUrl}
+                        brand={bike.brand}
+                        model={bike.model}
+                        slug={bike.slug}
+                        price={bike.price}
+                        network={bike.affiliateNetwork}
+                        cta="check_price"
+                        className="cta-primary px-4 py-2 rounded-lg text-sm font-bold"
+                        style={{ backgroundColor: 'var(--cta)', color: 'var(--cta-ink)' }}
+                      >
+                        Check price
+                      </AffiliateLink>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Inline filter bar */}
         <KeuzehulpBar filters={filters} onFiltersChange={handleFiltersChange} />
 
@@ -563,6 +636,9 @@ export default function OverzichtClient({
 
           {/* Grid */}
           <div className="flex-1">
+            {rideLabel && filteredBikes.length > 0 && (
+              <h2 className="text-lg font-bold text-[var(--foreground)] mb-4">All matches</h2>
+            )}
             {filteredBikes.length > 0 ? (
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredBikes.map(bike => (
