@@ -3837,3 +3837,92 @@ description, already deepened in run 6) -- no action needed, closing this
 out as a candidate.
 
 ---
+
+## 2026-07-20 (run 37) -- ENGWE depth batch (4 signal bikes) + LE20 motor-type/torque contradiction + full_specs data bug fixed
+
+**GSC snapshot (28d, ending 2026-07-17):** 2 clicks, 1,493 impressions, 0.1%
+CTR -- essentially flat vs run 36. Top query still "electric bike for heavy
+riders" (71 impr, 2 clicks, pos 41.4). No striking-distance queries and no
+high-impression/low-CTR pages this window (empty for a fourth consecutive
+run). `/best/cargo-ebikes` still flat at pos 77.6 -- reconfirmed authority
+ceiling, not revisited per runs 35/36.
+
+**PostHog snapshot (28d):** 138 pageviews, 70 unique visitors (flat vs run
+36). `/e-bikes/overzicht` top page for a fourth consecutive run (20/5).
+`engwe-p275-se` still the strongest single bike page (13/13/13, still out of
+stock). Conversions: 10 `affiliate_link_clicked`, 1 `quiz_completed`. Top
+affiliate-click bikes this window: Eunorau FLASH LITE ST (4, the run-34 fix
+still converting), DYU M20 (2), **ENGWE N1 Pro (2)**. Checked for
+`source: "quiz_top_match"` (the run-36 instrumentation) via
+`read-data-schema` on `affiliate_link_clicked` -- the `source` property does
+not exist in the taxonomy yet, so zero quiz-hero clicks have landed so far;
+still too early to judge, watch again next run.
+
+**Action -- worked run 36's "Next candidate" #4 (ENGWE depth batch),
+narrowed to the 4 members with actual signal this run rather than the full
+21-bike list.** A stub-description sweep (`length(description) < 300` AND
+`brand = 'ENGWE'`) returned 21 bikes at 162-215 chars. Cross-referencing
+against this run's GSC/PostHog output found 4 of those 21 with real signal:
+`engwe-n1-pro` (2 affiliate clicks, the run's #2 converter), `engwe-le20`,
+`engwe-l20`, `engwe-n1-air` (all logged PostHog pageviews/sessions this
+run). Rewrote all 4 from single-sentence spec fragments to full editorial
+descriptions (670-840 chars each), each covering motor/torque, claimed-vs-
+real range, weight/payload, and an explicit price-vs-sibling comparison
+(N1 Pro vs N1 Air; L20 vs L20 3.0 Pro; LE20 vs L20/N1 as the dedicated cargo
+pick). No new spec claims were introduced beyond the bikes' own existing DB
+columns.
+
+**Bug found and fixed while sourcing LE20's copy:** `engwe-le20` had
+`motor_type='mid-drive'` sitting next to its own `torque=75` column and a
+description that already said "75 Nm motor" -- but `highlights[0]` claimed
+"100 Nm mid-drive motor with torque sensor," a straight self-contradiction
+on the same page (P0.18-class bug, this time as a spec-vs-highlight
+mismatch rather than a unit-leak). Verified via ENGWE's own product line
+(`engwe.com/products/engwe-le20-international-version`): the International/
+US-market LE20 is 75 Nm + rear-hub motor; the separate EU-market LE20 is
+100 Nm + mid-drive. The DB's own `weight_lbs=81.1` and `max_weight=441`
+already matched the International single-battery variant exactly (36.8 kg
+-> 81.1 lbs, 200 kg -> 440.9 lbs), confirming this row is the International
+SKU and the `motor_type` field was the only wrong piece. Fixed `motor_type`
+'mid-drive' -> 'rear-hub' and the highlights bullet to "75 Nm motor with
+torque sensor" to match.
+
+**Second bug found in the same row, one layer deeper:** the page's "All
+Technical Details" section renders `full_specs` (a raw scraped JSONB blob),
+which had a corrupted key/value pair -- `"Rear Hub Motor": "Mid-drive
+Motor"`, self-contradictory in its own label -- plus `"International
+Version": "EU Version"`, telling a US buyer they were looking at the wrong
+regional variant. Removed the stray corrupted key (the correct info was
+already present under the `"Motor"` key: "48V 250W Rear Hub Motor") and
+corrected the version label to "International Version (US/Global)".
+
+**Verified:** `tsc --noEmit` clean. Checked all 4 pages live in the dev
+server -- `engwe-le20` renders the new description, "Rear hub" motor type,
+"75 Nm" torque spec, corrected highlights bullet, and the cleaned-up
+technical-details table with no contradictory rows; `engwe-n1-pro` and
+`engwe-n1-air` render their new descriptions with zero console errors.
+`preview_logs` showed no server errors across all checks.
+
+**Expected impact:** removes a self-contradicting spec (75 Nm vs 100 Nm,
+rear-hub vs mid-drive) from a cargo bike's detail page and technical-details
+table, and gives the run's #2 confirmed affiliate-click bike (N1 Pro) real
+editorial depth for the first time -- same trust/conversion rationale as
+every prior "deepen the bike that's actually converting" fix.
+
+**Next candidates:** (1) 17 more ENGWE bikes remain in the <300-char stub
+list without this run's direct signal (T14, EP-2 3.0 Boost, EP-2 Boost,
+EP-2 Pro, E26, L20 Boost, Engine Pro 3.0 Boost, P275 ST, M1, Engine Pro 2.0,
+P20, L20 3.0 Pro, P275 Pro, M20, Engine X, L20 3.0 Boost, X20/X24/X26) --
+continue the batch in future runs, prioritizing any that pick up GSC/
+PostHog signal first. (2) Watch `affiliate_link_clicked` for
+`source: "quiz_top_match"` -- still zero events as of this run, worth
+checking again once quiz traffic accumulates. (3) `eunorau-defender-s-fat-hs`
+(ROADMAP P0.16b) still needs a Dylan/human call. (4) The `full_specs` JSONB
+column (raw scraped spec sheets, rendered as "All Technical Details" on
+every detail page) has not had a systematic corruption sweep the way
+`description`/`highlights`/core spec columns have -- LE20's stray key
+suggests other bikes scraped from multi-variant comparison pages could have
+the same issue; worth a dedicated sweep if a future run has research budget
+and no stronger signal-driven target.
+
+---
