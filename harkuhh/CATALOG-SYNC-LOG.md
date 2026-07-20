@@ -1,3 +1,78 @@
+## 2026-07-20: weekly catalog sync
+
+### Summary
+
+| Brand    | Vendor bikes (kept) | DB rows | Prices applied | New inserted | Discontinued applied | Deferred (review) |
+|----------|--------------------:|--------:|---------------:|-------------:|---------------------:|------------------:|
+| ENGWE    | 24                  | 26      | 0              | 0            | 0                    | 12 new + 5 disc (rollover, 4th cycle) |
+| Eunorau  | 28                  | 26      | 0              | 0            | 0                    | 1 price (R1 rename) + 4 new + 1 dup |
+| Walfisk  | 5                   | 3       | 0              | 0            | 0                    | 1 false-match price + 2 new |
+| DUOTTS   | 11                  | 11      | 0              | 0            | 0                    | (clean) |
+| SAMEBIKE | 21                  | 22      | 2              | 0            | 0                    | (clean) |
+| DYU      | 12                  | 10      | 2              | 0            | 0                    | 1 ambiguous price + 2 new |
+| VTUVIA   | 20                  | 11      | 0              | 0            | 0                    | 11 new (color/variant dupes) + 2 matcher-miss |
+
+### Applied changes (4 total)
+
+**Price updates (4):**
+
+_SAMEBIKE (2):_
+- **M20** (`samebike-m20`): $1429 -> $1299 (-$130). Score 0.75 on `samebike-m20-electric-motorcycle` handle (title "M20 100+Nm Retro Electric Bicycle"). Clean rename with price cut.
+- **M20-III** (`samebike-m20-iii`): $1749 -> $1599 (-$150). Score 0.77 on `m20-iii-retro-motorcycle` handle (title "M20-III 160+Nm High-Torque E-bike"). Clean match.
+
+_DYU (2):_
+- **M20** (`dyu-m20`): $949 -> $899 (-$50). Score 0.82 on `dyu-m20-all-terrain-long-range-electric-bike`. Exact-model match.
+- **D3F** (`dyu-d3f`): $549 -> $499 (-$50). Score 0.72 on `dyu-small-electric-bike-d3f`. Exact-model match.
+
+**New inserted (0), Discontinued applied (0), Returned (0).**
+
+### Deferred (need owner sign-off)
+
+**ENGWE** - 4th consecutive cycle of vendor generation rollover; not applying without owner decision:
+
+- 12 NEW ENGWE candidates (most repeating from prior cycles):
+  - **L20 3.0** ($1399) via `comfort-ebike-full-suspension-ebike-engwe-l20-3-0` - likely rename of L20 3.0 Boost/Pro
+  - **EP-2 3.0** ($1499) via `electric-commuter-bike-fast-electric-bike-engwe-ep-2-3-0` - likely rename of EP-2 3.0 Boost
+  - **M20 3.0** ($1499) via `3300-w-electric-bike-motor-engwe-m20-3-0-moped-style-ebike`
+  - **ENGINE PRO** ($1599) via `usengine-pro-750w-16ah-high-performance-electric-bike` - separate from Engine Pro 2.0
+  - **ENGWE Ease 1** ($799), **Ease 3** ($899) - new SKUs (Ease 2 Pro already tracked)
+  - **X24** ($1799), **X20** ($1599), **X26** ($1499) - separate SKUs; DB has combined `engwe-x20-x24-x26`
+  - **M20 2.0** ($999), **L20 2.0** ($699) - new-generation SKUs
+  - **Engwe EP-2 Pro (Battery Pack)** ($1599) via `us-ep-2-pro-gift-pack-...` - accessory/bundle, not a bike; suggest exclude
+- 5 rows absent from vendor and NOT applied to available=false (rollover context still ambiguous):
+  - `engwe-engine-pro-3-0-boost` ($1699), `engwe-ep-2-3-0-boost` ($999), `engwe-ep-2-boost` ($1049), `engwe-l20-3-0-boost` ($1399), `engwe-l20-3-0-pro` ($1699). Vendor now sells non-"Boost" 3.0 variants; renames vs discontinuations remain owner call.
+- Note: `engwe-x20-x24-x26` (combined listing) now correctly re-paired to vendor's `engwe-x26-x24-x20` at score 0.58; kept live.
+
+**Eunorau** - 1 significant price move deferred + 4 new:
+- **R1** (`eunorau-r1`): DB $4299 vs vendor `r1` $3750 (title "R1-19"). Score 0.69, -$549 (-12.8%). Vendor appears to have renamed R1 to R1-19 with a price drop; matcher confidence just below auto-apply threshold and past logs flagged R1-17/R1-19 as separate SKUs. Owner to confirm rename before applying.
+- **R1-17** ($3749): 3rd cycle deferred; separate SKU from R1-19.
+- **JUMBO** ($1699), **ICEX 1.0** ($2499) via `sled-xd-1500pro`, **2x Fat-HS** ($3449) - new SKUs.
+- **eunorau-meta-275-st-1** (`META275`): duplicate of `eunorau-meta-275-1` (same $1399, same specs). 3rd cycle flagged. Owner cleanup, not sync's job.
+
+**Walfisk** - 1 recurring false price + 2 new SKUs:
+- **ET-7 Ultra** (`walfisk-...-et-7-3000w-...`): DB $2300 vs vendor `walfisk-electric-bike-et-7-1500w-3000w-rear-motor` $599. Same false pairing flagged 4+ prior cycles. Score 0.62; -74% delta blocked auto-apply as intended.
+- **WALFISK VIPERA 20** ($1400) via `walfisk-1000w-17-5ah-fat-tire-retro-electri-bike` - new SKU.
+- **WALFISK ET-7 3000W (60V45Ah big battery variant)** ($2100) - additional ET-7 variant; catalog uses one shared title for multiple SKUs.
+
+**DYU** - 1 ambiguous price + 2 new:
+- **A1F Pro** (`dyu-a1f-pro`): DB $429 vs vendor `a1f-ebike` (title "DYU A1F Pro 16 Inch Full Folding Electric Bike") $499. Score 0.69. Same "price ambiguous" flag from 2026-07-13; possible A1F vs A1F Pro conflation. Owner to confirm.
+- **DYU D3S** ($499) via `dyu-d3s-14-inch-mini-folding-electric-bike` - 2nd cycle deferred, new SKU.
+- **DYU SP1** ($1299) via `dyu-sp1-20-inch-removable-power-bank-folding-ebike` - 2nd cycle deferred, new SKU.
+
+**VTUVIA** - 11 new candidates mostly color/variant duplicates + 2 matcher-miss:
+- 9 color variants of already-tracked models (SF20H black/red/green/white, SX20 red/white/blue, SX20 Foldable/Antelope) - not new products.
+- **CMB 10-Speed Ebike** ($2149), **CMB 8-Speed Ebike Mid-Drive** ($1899) - CMB variants; DB has `vtuvia-cmb` at $1899 (probably the 8-speed).
+- **VTUVIA CMB** (`vtuvia-cmb`): now in `possibly_discontinued` because the matcher paired other CMB entries elsewhere. Vendor still lists CMB - keep live.
+- **VTUVIA Gemini** (`vtuvia-gemini`): also flagged possibly_discontinued, but vendor still sells it under `gemini-dual-battery-1000w-electric-bike-all-terrain-vtuvia-ebike` at $1899 - keep live.
+
+### Notes
+
+- Sync fetched `/products.json` directly for each brand and diffed against the live Supabase catalog with a strict accessory filter (excludes batteries, frames, motors-only, kids' bikes, wagons, trikes, gift cards, and ship-to-UK/EU/Canada variants) and a hybrid fuzzy scorer (core-token F1 + exact-phrase presence + character SequenceMatcher + squash-substring bonus). Score threshold to auto-apply: >= 0.75 with |delta| <= 35% (or >= 0.85 with |delta| <= 45%). All values below moved to deferred.
+- Canonical scraper (`scripts/scrape-us-ebikes.ts`) BRANDS array still contains only Walfisk/Eunorau/DUOTTS; ENGWE/SAMEBIKE/DYU/VTUVIA were scraped via direct products.json fetch this cycle as in prior weekly runs.
+- No spec-only changes applied this run; full spec re-scoring would require running the canonical scraper for all 7 brands and diffing every field. Scheduled for a future manual pass.
+
+---
+
 ## 2026-07-13: weekly catalog sync
 
 ### Summary
