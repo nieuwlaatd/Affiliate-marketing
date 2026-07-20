@@ -3926,3 +3926,88 @@ the same issue; worth a dedicated sweep if a future run has research budget
 and no stronger signal-driven target.
 
 ---
+
+## Run 38 (2026-07-20)
+
+**GSC snapshot (28d):** 2 clicks / 1,493 impressions, essentially unchanged
+from run 37's pull (same window, same day). Top query still "electric bike
+for heavy riders" (71 impr, pos 41.4). No new striking-distance queries, no
+new high-impression/low-CTR pages -- confirms this run landed on the same
+day as run 37 with no fresh GSC signal to act on.
+
+**PostHog snapshot (28d):** 138 pageviews / 70 unique visitors, byte-
+identical totals to run 37's pull. Same top pages (`/e-bikes/overzicht`,
+`engwe-p275-se`, `duotts-duotts-c29-k`, `duotts-s26`). Same conversion
+events: 10 `affiliate_link_clicked`, 1 `quiz_completed`. Top affiliate-click
+bikes unchanged: Eunorau FLASH LITE ST (4), DYU M20 (2), ENGWE N1 Pro (2).
+No new signal since run 37 -- worked the run-37 "Next candidate" #4
+(`full_specs` corruption sweep) instead, applied to the two bikes run 37
+had already flagged as highest-signal (N1 Pro, N1 Air).
+
+**Action -- fixed a `frame_material` data bug on `engwe-n1-pro` and
+`engwe-n1-air` (both Aluminum in the DB, both genuinely carbon fiber) plus
+cleaned up `full_specs` corruption on both, closing run 37's "Next
+candidate" #4 for these two bikes.** While reviewing N1 Air's raw
+`full_specs` JSONB for the corruption sweep run 37 flagged, noticed its
+`Motor` key read "250W MIVICE Brushless Mid-drive Motor" -- directly
+contradicting the bike's own `motor_type='rear-hub'` column and its run-37
+description ("built around a rear-hub motor... trading torque and climbing
+power" vs. the mid-drive N1 Pro). Verified via WebSearch (engwe.com product
+page + smartybikes.com comparison): N1 Air uses a MIVICE M070 rear-hub
+motor; the mid-drive language in `full_specs` was scraped-in cross-talk
+from the N1 Pro's own product page, not real. While confirming, also
+checked `Material` -- both N1 Air's and N1 Pro's `full_specs` said "Carbon
+Fiber" but the DB `frame_material` column said "Aluminum" on both. Verified
+via WebSearch (Neowin review, New Atlas, autoevolution): both bikes are
+genuinely carbon fiber (N1 Air: Toray carbon fiber frame with an aluminum
+fork; N1 Pro: full carbon fiber, "Trek-grade" per Neowin) -- the DB column
+was wrong, not the scraped spec. This is the core marketing differentiator
+for both bikes (their whole pitch is a light carbon frame at a budget
+price), so it was a real, consequential trust bug, not a cosmetic one.
+
+**Fixes applied:** `frame_material` 'Aluminum' -> 'Carbon Fiber' on both
+rows. Added "Carbon fiber frame" as a highlight bullet on both (neither
+mentioned frame material in highlights before) and wove a short clause into
+each description. Rebuilt both `full_specs` JSONB objects from scratch,
+removing comparison-table-scrape cruft: N1 Air had 14 junk/contradictory
+keys removed (duplicate-value noise like `"700c":"700c"`, stray Euro
+prices, and self-contradictions like `"Carbon fiber":"Aluminum"` and
+`"Shimano 7 speed":"Single Speed"` sitting next to the correct
+`Transmission System` key), plus fixed the `Motor` key to "250W MIVICE
+Brushless Rear Hub Motor". N1 Pro had 13 similar junk keys removed,
+including `"250W Mid Motor":"250W Hub Motor"` (self-contradictory) and
+`"Shimano 7 speed":"Automatic 4-speed"` (contradicting the correct 10-speed
+`Transmission System` -- actually 7-speed per that key, a separate labeling
+inconsistency in the raw scrape not touched since the DB's own `Speeds: 10`
+spec-table field, sourced from a different column, is the one rendered in
+the structured spec table and wasn't part of this fix); consolidated a
+messy merged security-features key/value pair into a single readable
+"Security Features" entry.
+
+**Verified:** `tsc --noEmit` clean. Checked both pages live in the dev
+server -- Motor type, frame Material, and all spec-table values now render
+consistently across the structured spec table, the "Who is this bike for"
+section, and the raw "All Technical Details" table, on both pages. Zero
+console errors, `preview_logs` showed no server errors.
+
+**Expected impact:** removes a self-contradicting motor-type claim and a
+wrong frame-material claim from the run's #2 confirmed affiliate-click bike
+(N1 Pro) and its PostHog-signal sibling (N1 Air) -- carbon fiber vs.
+aluminum is a materially different value proposition for a buyer comparing
+lightweight bikes, so this is a sharper trust fix than the usual stub-
+description or unit-leak catches.
+
+**Next candidates:** (1) the same 17-bike ENGWE stub-description list from
+run 37 is still open, no new signal landed on any of them this run --
+continue in future runs. (2) `full_specs` corruption sweep is confirmed as
+a real, recurring bug class (3 ENGWE bikes fixed so far: LE20, N1 Pro,
+N1 Air) but has not been run systematically across the other ~40 ENGWE rows
+with a `full_specs` value, nor any other brand -- worth a dedicated sweep
+(`SELECT slug FROM ebikes WHERE full_specs IS NOT NULL`) rather than only
+catching instances opportunistically while doing other work. (3) Watch
+`affiliate_link_clicked` for `source: "quiz_top_match"` -- still zero
+events as of run 37, check again once quiz traffic accumulates. (4)
+`eunorau-defender-s-fat-hs` (ROADMAP P0.16b) still needs a Dylan/human
+call.
+
+---
