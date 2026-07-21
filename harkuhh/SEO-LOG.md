@@ -4011,3 +4011,101 @@ events as of run 37, check again once quiz traffic accumulates. (4)
 call.
 
 ---
+
+## Run 39 (2026-07-21)
+
+**GSC snapshot (28d):** 2 clicks / 1,524 impressions. Top query still
+"electric bike for heavy riders" (72 impr, pos 40.9, 2 clicks). Top page by
+clicks: `/` (3 clicks/6 impr/50% CTR/pos 3.0), then
+`/e-bikes/samebike/samebike-rs-a01-pro` (2 clicks/23 impr/pos 9.5) and
+`/blog/best-ebikes-for-heavy-riders` (2 clicks/387 impr/0.5% CTR/pos 30.3 --
+the run-32 title/meta rewrite hasn't lifted CTR yet, likely still
+propagating through the index). No striking-distance queries, no
+high-impression/low-CTR pages flagged by the script this run.
+
+**PostHog snapshot (28d):** 140 pageviews / 71 unique visitors. `engwe-p275-se`
+jumped to the #1 page this run (13 views/13 visitors/13 sessions), well
+above every other page including `/e-bikes/overzicht` (20 views/5 visitors)
+and `duotts-duotts-c29-k` (11 views/7 visitors) -- a much stronger single-
+page signal than any prior run's top PostHog page. 10 `affiliate_link_clicked`
+events (top bikes: Eunorau FLASH LITE ST 4, DYU M20 2, ENGWE N1 Pro 2),
+1 `quiz_completed`. `source: "quiz_top_match"` still not distinguishable in
+this run's pull (script doesn't break out click source yet -- unchanged
+from run 38's note).
+
+**Action -- `engwe-p275-se`, the run's #1 PostHog page, had six wrong spec
+columns despite being flagged as high-signal in multiple prior runs.**
+Before touching data, verified the bike's `available=false` status is still
+accurate: fetched ENGWE's own product page live, which still shows
+"Pre-sale, expected to be back in stock in mid-August" (pushed back from
+the "early July" window cited when P0.14 fixed the messaging on 2026-07-06)
+-- so the "Temporarily out of stock" copy and CTA added then remain
+correct and were left untouched.
+
+While confirming stock status, cross-checked every spec column against
+that same official page and against the bike's own `full_specs` JSONB
+(scraped from the same source in a past run but never reconciled against
+the structured columns) and found it disagreed with the core spec columns
+in six places: `weight_lbs` was 48.5 lbs (a stray 22kg-basis figure) when
+`full_specs.Bike Weight` already said "24 kg" (52.9 lbs), confirmed by
+2 more independent web sources; `frame_type` was `step-over` but 3+
+independent sources (evpowered.co.uk review, ebikesexpress.co.uk product
+title, ENGWE's own marketing copy) all describe it as step-through, which
+had been silently excluding a real step-through bike from
+`/best/step-through-ebikes`; `has_suspension` was `null` despite a
+confirmed front suspension fork (a basic hardtail fork, no rear suspension,
+per the evpowered review); `battery_capacity` was 16 Ah vs. the official
+page's 13 Ah; `wheel_size` was stored as 20" vs. the official page's
+27.5"; and `range_manufacturer`/`range_practical` (100/75 mi) turned out to
+be a km-as-miles bug that the original P0.7 sweep missed -- P275 SE was
+never on that sweep's fixed-bikes list, unlike its P275 Pro/ST siblings.
+ENGWE's page states 100 km/80 km/65 km at PAS 1/3/5, so the true
+manufacturer figure is 62 mi (100 km / 1.609), and practical range is 46 mi
+using the same ~0.747 practical-ratio already established and verified
+across P275 Pro, P275 ST, L20 and LE20's own manufacturer/practical pairs.
+
+**Fixes applied:** `weight_lbs` 48.5->52.9, `frame_type` step-over-
+>step-through, `has_suspension` null->front, `battery_capacity` 16->13,
+`wheel_size` 20->27.5, `range_manufacturer` 100->62, `range_practical`
+75->46. Rewrote the description to reflect the corrected weight, frame
+type, suspension, battery and range figures, and added a "Step-through
+frame with front suspension" highlight bullet (previously no highlight
+mentioned frame type or suspension at all).
+
+**Verified:** dev server render of `engwe-p275-se` shows every spec-table
+value now consistent with the `full_specs` "All Technical Details" table
+(weight, frame type, suspension, battery, wheel size, both range figures
+all agree everywhere on the page). Checked `/best/step-through-ebikes` --
+the bike correctly matches the frame-type filter now; it doesn't appear in
+the rendered top-11 list because that page (like others) surfaces
+available bikes first, which is correct given P275 SE's genuine
+out-of-stock status. Zero console errors, `tsc --noEmit` clean, no blog
+posts or other pages reference this bike's specs in hardcoded text.
+
+**Expected impact:** the run's highest-traffic single page (13 sessions,
+nearly double the next-highest page) was showing six wrong numbers across
+weight, frame type, suspension, battery and range -- correcting them
+directly protects trust on the page currently pulling the most real
+visitors, and the frame-type fix makes a real bike newly eligible for a
+ranking surface built for exactly its category (once it's back in stock in
+mid-August).
+
+**Next candidates:** (1) the 17-bike ENGWE stub-description list from
+run 37 is still open (T14, EP-2 3.0 Boost, EP-2 Boost, EP-2 Pro, E26, L20
+Boost, Engine Pro 3.0 Boost, P275 ST, M1, Engine Pro 2.0, P20, L20 3.0 Pro,
+P275 Pro, M20, Engine X, L20 3.0 Boost, X20/X24/X26) -- none picked up
+fresh signal this run, continue opportunistically. (2) The `full_specs`
+JSONB reconciliation pattern that caught this run's P275 SE bug (core
+columns silently drifting from the same scraped blob already sitting in
+the row) is now confirmed on 4 separate bikes across 3 runs (LE20, N1 Pro,
+N1 Air, P275 SE) -- still worth the systematic sweep flagged in run 38
+rather than only catching instances opportunistically. (3) `/blog/best-
+ebikes-for-heavy-riders` CTR is still 0.5% at pos 30.3, three runs after
+the run-32 title/meta rewrite -- give it one more run to reflect in GSC
+before considering a second iteration. (4) `eunorau-defender-s-fat-hs`
+(ROADMAP P0.16b) still needs a Dylan/human call. (5) Watch
+`engwe-p275-se`'s PostHog signal next run -- if it holds a second
+consecutive run as the top page, it's a strong candidate for restock-alert
+messaging or a "notify me" capture once it's confirmed as a repeat driver.
+
+---
