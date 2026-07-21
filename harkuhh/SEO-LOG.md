@@ -4239,3 +4239,175 @@ needs another run or two to reflect the run-32 title/meta rewrite in GSC.
 (4) `eunorau-defender-s-fat-hs` (ROADMAP P0.16b) still needs a Dylan/human
 call. (5) `samebike-cy20-pro` torque mismatch (ROADMAP P0.28) still needs
 either a Dylan gut-check or a future run finding an exact-matching listing.
+
+---
+
+## Run 41 (2026-07-21)
+
+**GSC (28-day window):** still very low absolute volume (2 clicks / 1,524
+impressions / 0.1% CTR sitewide) but the top-pages table shows a new
+signal: `/e-bikes/samebike/samebike-rs-a01-pro` picked up 2 clicks on 23
+impressions at pos 9.5 (8.7% CTR) -- a page-1 position on a real click,
+not just an impression. It already went through a full editorial-depth
+pass on 2026-07-06 (ROADMAP P1.1), so no content action needed, just
+noting it as a page to keep an eye on. No striking-distance queries and no
+high-impression/low-CTR pages surfaced this run (both sections empty --
+GSC data is still too thin for those buckets to populate).
+
+**PostHog (28-day window):** 140 pageviews / 71 visitors, 10
+`affiliate_link_clicked` events, 1 `quiz_completed`. Top bikes by
+affiliate clicks: Eunorau FLASH LITE ST (4), then a 3-way tie at 2 clicks
+each -- DYU M20, ENGWE N1 Pro, and (new this run) nothing else crossed 2.
+DYU M20 hadn't previously been called out as a converting bike in any
+prior log entry, making it this run's highest-priority PostHog signal per
+the "give real editorial investment to pages with actual conversion
+signal" pattern established across S26/F20/EBE2/F26-Lite/FLASH-LITE-ST/N1
+Pro. `engwe-p275-se` remained the top PostHog pageview page (13/13/13) but
+was fully data-audited last run (run 39) with no new issues to chase.
+
+**Investigated `dyu-m20` (2 confirmed affiliate clicks, tied for #2 this
+run) and found a live spec-table contradiction:** `has_suspension` was
+stored as `front` but the bike's own description (written in the run-32
+DYU stub-description batch) already said "a powerful motor with front and
+rear suspension smooths out rough terrain" -- description and structured
+column disagreed on the same page. Web-verified via DYU's own site
+(us.dyucycle.com / dyubikes.com product and review pages): the M20
+genuinely has front fork + rear dual suspension ("both front fork and
+rear dual suspension, providing better shock absorption"), and net weight
+of 40 kg (88 lbs) matches the stored `weight_lbs=88.2` exactly, confirming
+the source is reliable. Fixed `has_suspension` to `full`.
+
+**Continued the run-37/40 "next candidate": ENGWE 13-bike stub-description
+depth pass** (of the 17-bike backlog list, this closes 13 -- the ones the
+run-40 full_specs sweep had just re-verified as data-clean, making them the
+strongest candidates for a trustworthy depth pass). Wrote full editorial
+descriptions (483-745 chars, up from 162-214-char stubs) for `engwe-t14`,
+`engwe-ep-2-boost`, `engwe-ep-2-pro`, `engwe-e26`, `engwe-l20-boost`,
+`engwe-m1`, `engwe-engine-pro-2-0`, `engwe-p20`, `engwe-l20-3-0-pro`,
+`engwe-p275-pro`, `engwe-p275-st`, `engwe-m20`, `engwe-x20-x24-x26`, all
+grounded directly in each bike's own `full_specs` JSONB (ENGWE's own
+scraped spec sheet, already cross-checked against the structured columns
+by run 40) so no new figures were introduced beyond what was already
+verified.
+
+While reading through each bike's `full_specs` to write copy, found the
+run-40 sweep had fixed structured-column drift but left several bikes'
+raw `full_specs` blobs with self-contradicting junk key/value pairs still
+intact -- the same comparison-table-scrape corruption pattern first found
+on `engwe-le20` (run 37) and `engwe-n1-air`/`engwe-n1-pro` (run 38), but
+never swept across the rest of the catalog:
+
+- **`engwe-ep-2-boost`**: `✔:x` (garbage), `180mm:160mm` (contradicts its
+  own `Brake:"180 mm Front & Rear Disc Mechanical Brake"` key), `€1099`
+  Euro-price leak, plus 4 harmless label=value duplicates (`250W:250W`,
+  `55Nm:55Nm`, `120 km:120 km`, `624 Wh:624 Wh`). Removed all 7.
+- **`engwe-l20-boost`**: `Torque sensor:Speed sensor` -- a directly
+  self-contradicting pair (the label claims a torque sensor, the value
+  says speed sensor); `85 km:75 km` and `126 KM:140 KM`, two mismatched
+  duplicate-range pairs; `€1149:€1099` Euro leak (two different wrong
+  Euro figures in the same blob); `✔:X` and `48V 250W:48V 250W` noise.
+  Removed all 8.
+- **`engwe-l20-3-0-pro`**: the worst of the four -- `100Nm:50Nm` and
+  `720Wh:545Wh` both directly contradict the bike's own correct
+  `Max Torque:100Nm` and `Battery:"48V 15Ah (720Wh)"` keys sitting a few
+  rows away in the same object; `€1899:€3999` Euro leak; a tire-size
+  contradiction (`20" × 3.0":20" × 2.4"` vs. the bike's own
+  `Tires:"20\" × 3.0\" Urban Hybrid Tires"`); `Full Suspension:/` (a
+  nonsense placeholder even though the bike's own `Frame Style` and
+  `Rear Suspension` keys already confirm real suspension); a
+  `Shimano 7 speed:Shimano 8 speed` pair contradicting the bike's own
+  7-speed `Cassette`/`Rear Derailleur` keys; and a mangled
+  `Motion DetectiveGPS TrackingAPP Control:/` key. Removed all 8.
+- **`engwe-engine-pro-2-0`**: `75Nm Torque:55Nm Torque` and
+  `Torque Sensor:Cadence Sensor`, both contradicting the bike's own
+  correct `Torque:"75 Nm"` and `Sensor:"Torque Sensor"` keys. Removed
+  both.
+- **`engwe-x20-x24-x26`**: `Price:"€1,899.00"` -- a Euro-price leak (same
+  P0.11-class "Euro symbol on a USD-priced US site" trust issue found on
+  `engwe-p275-se` back in run 5), doubly wrong since the bike's actual
+  USD `price` column is $1,599, not even the same number with a currency
+  swap. Removed.
+
+Also found and fixed 2 more `has_suspension=null`-despite-own-claim data
+bugs (the same pattern the run-40 sweep closed for 12 other bikes, but
+these 2 weren't part of that batch because neither had a description/
+highlight suspension claim loud enough to flag until writing full copy
+surfaced it):
+
+- **`engwe-e26`**: description/highlight already said "full suspension"
+  but `has_suspension` was `null` and `full_specs` has no explicit
+  suspension key at all. Web-verified via ENGWE's own product pages plus
+  2 independent sources (a front suspension fork + rear seat suspension,
+  sometimes marketed as "double suspension") -- confirmed the existing
+  copy was accurate, the DB field just never captured it. Fixed to
+  `full`.
+- **`engwe-x20-x24-x26`**: same null-despite-claim pattern (highlight said
+  "Full suspension"). Web-verified via ENGWE's own listing: a genuine
+  "triple suspension" system (front hydraulic fork + middle mechanical
+  shock + rear air shock). Fixed to `full`.
+
+One more live bug found while writing `engwe-t14`'s description: its
+highlight bullet hardcoded `"Lowest price in the lineup - $599"` while its
+actual DB `price` is $650 -- a P0.30-class price-drift bug (the highlight
+text was never updated when the price changed, or was copied from a
+sibling). Confirmed $650 is still genuinely the lowest price among real
+ENGWE e-bikes (excluding the 2 non-bike scooter SKUs from P0.13) before
+fixing the highlight text to $650.
+
+**Verified:** dev server render of `engwe-l20-3-0-pro` (the worst
+full_specs corruption case) and `dyu-m20` (the PostHog-signal fix) --
+both pages' spec tables, "All Technical Details" sections, and prose
+descriptions all agree with each other now; zero console errors.
+`tsc --noEmit` clean (DB-only run, no code touched, ran anyway per the
+standing verification step). Also ran a sitewide check
+(`SELECT brand, COUNT(*) FROM ebikes WHERE full_specs IS NOT NULL GROUP BY
+brand`) confirming `full_specs` exists only on ENGWE rows (22 of 22) --
+the whole junk-key corruption bug class is scoped to ENGWE's scrape
+pipeline and can be considered closed once the remaining 4 bikes (E26 and
+X20/X24/X26 were touched this run for suspension only; still need a
+`full_specs` junk-key check) are confirmed clean.
+
+**Expected impact:** 13 stub descriptions replaced with real editorial
+copy on pages whose underlying data is now verified accurate (post run-40
+sweep), removing the "unfinished/copy-pasted spec sheet" trust signal on
+just under half of ENGWE's full 22-bike catalog. The `full_specs`
+junk-key cleanup removes visibly self-contradicting rows (e.g. a page
+telling a visitor "100Nm" in the spec table and "50Nm" three rows down in
+the raw details) that would undermine trust on close inspection --
+`engwe-l20-3-0-pro` at $1,699 is one of the pricier bikes in the catalog,
+making it a higher-stakes page for this kind of visible inconsistency.
+The `dyu-m20` fix directly touches a bike with real, current affiliate-
+click revenue signal (2 of the run's 10 total clicks).
+
+Ran one further pass after closing the depth batch: pulled every
+remaining ENGWE `full_specs` row not yet explicitly checked this run
+(`engwe-l20-3-0-boost`, `engwe-p275-pro`, `engwe-m20`,
+`engwe-ep-2-3-0-boost`, `engwe-engine-pro-3-0-boost`, `engwe-l20`,
+`engwe-t14`, `engwe-m1`, `engwe-e26`, `engwe-ep-2-pro`, `engwe-p275-st`,
+`engwe-engine-x`, `engwe-p20`, `engwe-p275-se`) and found one more
+instance of the same corruption: **`engwe-l20-3-0-boost`** had `2H:/`,
+`75Nm:65Nm` (contradicting its own `Max Torque:75Nm`), `648Wh:500Wh`
+(contradicting its own `Battery:"48V 13.5Ah (648Wh)"`), `135 km:/`,
+`€1399:€2599` Euro leak, a tire-size contradiction
+(`20" × 3.0":20" × 2.4"`), `Full Suspension:/`, `Shimano 7 speed:Shimano
+10 speed` (contradicting its own 7-speed `Cassette`/`Rear Derailleur`),
+and `250W Hub Motor:250W Mid-drive Motor` (self-contradicting; the bike's
+real `Motor` key confirms hub, not mid-drive). Removed all 9. The other
+13 checked this pass came back clean -- no junk keys.
+
+This closes the `full_specs` junk-key bug class with full confidence: all
+22 ENGWE rows with a `full_specs` column (confirmed via
+`SELECT brand, COUNT(*) FROM ebikes WHERE full_specs IS NOT NULL GROUP BY
+brand` = `{"ENGWE": 22}`, the only brand with this column) have now been
+explicitly checked for self-contradicting label=value pairs across runs
+37, 38, 40, and 41, with every instance found removed.
+
+**Next candidates:** (1) the run-37 17-bike ENGWE stub-description
+backlog is now fully closed -- the list only ever had 13 members (T14,
+EP-2 Boost, EP-2 Pro, E26, L20 Boost, P275 ST, M1, Engine Pro 2.0, P20,
+L20 3.0 Pro, P275 Pro, M20, X20/X24/X26), all 13 rewritten this run. (2)
+`samebike-rs-a01-pro`'s new GSC click signal (pos 9.5, 23 impr) is worth a
+second look next run if it repeats -- it already has full editorial
+depth, so any next action would be a title/meta CTR tweak, not a content
+rewrite. (3) `eunorau-defender-s-fat-hs` (P0.16b) and `samebike-cy20-pro`
+torque mismatch (P0.28) still need a Dylan/human call.
