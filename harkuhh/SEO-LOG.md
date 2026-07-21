@@ -4411,3 +4411,139 @@ second look next run if it repeats -- it already has full editorial
 depth, so any next action would be a title/meta CTR tweak, not a content
 rewrite. (3) `eunorau-defender-s-fat-hs` (P0.16b) and `samebike-cy20-pro`
 torque mismatch (P0.28) still need a Dylan/human call.
+
+## 2026-07-22 (run 42)
+
+**GSC signals (28-day window):** 1,524 impressions / 2 clicks / 0.1% CTR.
+`/blog/best-ebikes-for-heavy-riders` remains the top-impression page (387
+impr, up from 325 last run, still pos 30.3, 0.5% CTR) despite 2 prior
+rounds of title/meta and content work -- this looks like an authority
+ceiling rather than an on-page problem now. `samebike-rs-a01-pro`
+repeated its click signal for a 2nd straight run (pos 9.5, 23 impr, 8.7%
+CTR) -- confirmed as flagged in run 41's "next candidates," but on
+inspection it already has full editorial depth from the 2026-07-06 pass
+and an 8.7% CTR at pos 9.5 is already strong, so no action taken; noted
+as a stable converter to stop re-flagging.
+
+**PostHog signals (28-day window):** 140 pageviews / 71 visitors, 10
+`affiliate_link_clicked` events, 1 `quiz_completed`. Top affiliate
+converters: Eunorau FLASH LITE ST (4 clicks), DYU M20 (2), ENGWE N1 Pro
+(2). `engwe-p275-se` remains the top pageview page (13/13/13) but was
+fully data-audited in run 39 with no new issues to chase this run.
+
+**Found and fixed a sitewide ENGWE `battery_capacity` bug, the largest
+single-field data bug found yet on the site.** With the GSC/PostHog
+signals mostly repeating already-addressed items, ran a fresh
+cross-check of every remaining ENGWE structured column against its own
+`full_specs` JSONB (the exact method that found the P0.45/P0.46 bugs) on
+a column those sweeps had not yet checked: `battery_capacity`. Found
+`SELECT slug, battery_capacity, full_specs->>'Battery' FROM ebikes WHERE
+brand='ENGWE'` showed `battery_capacity=16` on 21 of 22 rows, while
+`full_specs.Battery` (or the equivalent single/dual-battery-version key)
+gave real figures ranging from 9.6 Ah to 19.2 Ah -- meaning `16` was a
+placeholder default that was almost never actually overwritten with the
+scraped spec. This field renders directly on every detail page's spec
+table (`{bike.batteryCapacity} Ah` in
+`app/e-bikes/[brand]/[model]/page.tsx:321`), so this was a visible wrong
+number on 19 pages, not a hidden data issue.
+
+Fixed all 19 wrong rows (2 -- `engwe-e26`, `engwe-engine-pro-2-0` --
+coincidentally already matched at 16Ah; `engwe-p275-se` was already
+correct from the run-39 fix): `engwe-engine-pro-3-0-boost` 16->15,
+`engwe-engine-x` 16->13, `engwe-ep-2-3-0-boost` 16->14 (13.5 rounded),
+`engwe-ep-2-boost` 16->13, `engwe-ep-2-pro` 16->13, `engwe-l20` 16->13,
+`engwe-l20-3-0-boost` 16->14 (13.5 rounded), `engwe-l20-3-0-pro` 16->15,
+`engwe-l20-boost` 16->13, `engwe-n1-air` 16->10, `engwe-n1-pro` 16->10,
+`engwe-p20` 16->10 (9.6 rounded), `engwe-p275-pro` 16->19 (19.2 rounded),
+`engwe-p275-st` 16->19 (19.2 rounded), `engwe-t14` 16->10. The worst
+overstatements -- N1 Pro and N1 Air both showing 16Ah for a true 10Ah
+pack, a 60% inflation -- hit the run's #2 confirmed-affiliate-click bike
+and its PostHog-signal sibling directly.
+
+Four rows (`engwe-le20`, `engwe-m1`, `engwe-m20`,
+`engwe-x20-x24-x26`) have no single `Battery` key in `full_specs` --
+these ENGWE listings scrape multiple battery-version options (single vs.
+dual pack) into separate keys. Rather than guess, matched each row's
+already-corrected `weight_lbs`/`range_manufacturer` (fixed in runs 40-41)
+against the matching version's own weight/mileage figures in
+`full_specs` to confirm which battery version the row represents before
+picking its Ah number: `engwe-x20-x24-x26`'s `weight_lbs=96.1` matches
+`full_specs`' own "29.2Ah Battery Version Bike Weight: 43.6 kg (96 lbs)"
+exactly (and its `range_manufacturer=93mi` matches that version's "150
+km" mileage figure), confirming the dual-battery 29.2Ah reading, not the
+single-battery option. Same method for LE20 (19.2Ah, single-battery
+config, matching the run-40 weight fix), M1 (15.6Ah, single-battery), and
+M20 (13Ah, the only non-versioned figure given). Fixed all 4
+(19.2->19, 15.6->16, 13->13, 29.2->29 after integer rounding).
+
+While fixing, found 2 now-stale prose mentions of the old wrong 16Ah
+figure that a battery_capacity-only DB fix would have left contradicting
+the spec table: `engwe-l20`'s description said "the 16Ah battery is
+rated for 87 miles" (now 13Ah) and `engwe-n1-air`'s said "Samsung battery
+cells in a 16Ah pack" (now 10Ah pack). Both corrected. Checked the other
+17 fixed bikes' description/highlights for the same pattern -- 12 of them
+were part of the run-41 stub-description batch and were already written
+directly from the correct `full_specs` figures, so no further prose
+drift found.
+
+**Found and fixed a legal-disclosure gap on the site's #1-impression
+page.** While reviewing `/blog/best-ebikes-for-heavy-riders`'s 5 picks
+against each bike's own detail-page copy, noticed the "Best for power and
+range" pick (Walfisk ET-7 Ultra) is recommended with no mention that its
+own product-page description already states "Not street-legal as a Class
+e-bike; intended for off-road use" -- a 3000W motor is nearly 4x the
+750W federal cap that defines a legal low-speed e-bike, so it cannot
+qualify as a Class 1-3 e-bike in any US state. The blog post recommended
+it for "heavier riders" without that caveat, which reads as a street/
+commuting recommendation given the other 4 picks in the same list are
+commuting-oriented. Fixed the blog post's pick blurb to state the
+caveat plainly, renamed the heading to "Best for power and range
+(off-road only)," and pointed readers back to the four Class-compliant
+picks above it if they need a street-legal option. Added a matching
+highlight bullet ("Off-road use only, not street-legal") to the bike's
+own detail page so the disclosure is consistent everywhere the bike
+appears, not just buried in its description paragraph.
+
+**Closed the remaining ENGWE description-depth gaps.** A sitewide
+`length(description) < 220` sweep across the whole catalog found 4 more
+ENGWE bikes that were never part of the run-37/41 13-bike stub list --
+`engwe-ep-2-3-0-boost`, `engwe-engine-pro-3-0-boost`, `engwe-engine-x`,
+`engwe-l20-3-0-boost` (172-206 char two-sentence stubs) -- and rewrote
+all 4 to full editorial depth (480-620 chars) with sibling positioning,
+using the now-corrected battery figures. The same sweep also caught 2
+Walfisk bikes still at single-sentence depth (`walfisk-wf750-urbanx`,
+149 chars; the ET-7 Ultra, 195 chars) -- both rewritten, with the ET-7
+Ultra's rewrite folding in the off-road/non-street-legal disclosure.
+
+**Verified:** dev server render of the ET-7 Ultra detail page (spec
+table shows "45 Ah" correctly, new highlight renders, zero console
+errors), the heavy-riders blog post (disclaimer text renders correctly
+in the ET-7 Ultra pick section), and `engwe-n1-air` (spec table now
+shows "10 Ah" matching the corrected description text, was "16 Ah"
+before this run). `tsc --noEmit` clean (one code file touched,
+`lib/blog-data.ts`; everything else was a DB-only change).
+
+**Expected impact:** the `battery_capacity` fix corrects a visibly wrong
+spec-table number on 19 ENGWE detail pages, including the two bikes with
+the strongest current affiliate-click signal (N1 Pro, N1 Air), which
+were overstating battery capacity by 60%. The Walfisk fix closes a real
+legal-accuracy gap on the single highest-impression page on the entire
+site (23%+ of all site impressions) -- recommending a non-street-legal
+vehicle without disclosure is a sharper trust/liability issue than a
+missing spec, in the same category as the P0.23 state-law accuracy
+fixes.
+
+**Next candidates:** (1) the ENGWE `battery_capacity` bug is now closed;
+worth confirming next run that no other numeric spec column (charge
+time, assist levels) still silently drifts from `full_specs` the same
+way. (2) `samebike-rs-a01-pro`'s GSC click has now repeated twice with
+strong CTR and full existing depth -- treat as a stable converter, stop
+re-flagging unless it changes materially. (3) the heavy-riders post's
+CTR/position plateau (pos 30.3, 0.5% CTR) after 2 rounds of on-page work
+suggests further gains there need backlinks/authority (P4.1, Dylan-only)
+rather than more content changes. (4) `eunorau-defender-s-fat-hs`
+(P0.16b) and `samebike-cy20-pro` torque mismatch (P0.28) still need a
+Dylan/human call. (5) worth a light check on whether any other brand has
+a similar hardcoded-placeholder pattern on a numeric column -- none found
+yet, but the ENGWE instance went unnoticed for 6 runs before a
+column-by-column full_specs cross-check caught it.

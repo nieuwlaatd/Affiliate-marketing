@@ -411,9 +411,9 @@ The [Eunorau FAT-AWD 3.0](/e-bikes/eunorau/eunorau-fat-awd-3-0) carries 375 lbs 
 
 If you want a 330 lb capacity bike under $1,400, the [DUOTTS S26 AWD](/e-bikes/duotts/duotts-s26) delivers. Dual hub motors produce 110 Nm of combined torque, which is exceptional at this price point. The AWD traction also helps heavier riders start smoothly on hills where a single rear wheel might spin. Price: around $1,299.
 
-### Best for power and range: Walfisk ET-7 Ultra
+### Best for power and range (off-road only): Walfisk ET-7 Ultra
 
-The [Walfisk ET-7 Ultra](/e-bikes/walfisk/walfisk-walfisk-electric-bike-et-7-3000w-brushless-motor-60v45ah-big-battery-bla) has a 330 lb capacity and the largest battery in our heavy-rider picks: a 60V 45Ah pack (2,700 Wh). For heavier riders who lose 30-40% of rated range due to extra body weight, a bigger battery is the direct solution. A 130 Nm motor means it also climbs hills confidently. Price: around $2,300.
+The [Walfisk ET-7 Ultra](/e-bikes/walfisk/walfisk-walfisk-electric-bike-et-7-3000w-brushless-motor-60v45ah-big-battery-bla) has a 330 lb capacity and the largest battery in our heavy-rider picks: a 60V 45Ah pack (2,700 Wh). For heavier riders who lose 30-40% of rated range due to extra body weight, a bigger battery is the direct solution, and a 130 Nm motor means it also climbs hills confidently. Important caveat: its 3000W motor is far above the 750W federal limit for a legal e-bike, so it does not qualify as a Class 1-3 e-bike in any US state. It is built for private off-road and trail use only, not for riding on public roads or bike paths. If you need a heavy-duty bike for street commuting, pick one of the four Class-compliant options above instead. Price: around $2,300.
 
 ## Frame types for larger riders
 
