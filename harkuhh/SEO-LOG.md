@@ -4109,3 +4109,133 @@ consecutive run as the top page, it's a strong candidate for restock-alert
 messaging or a "notify me" capture once it's confirmed as a repeat driver.
 
 ---
+
+## Run 40 (2026-07-21)
+
+**GSC snapshot (28d):** 2 clicks / 1,524 impressions -- identical totals to
+run 39 (same 28-day window, no new indexation/ranking movement yet). Top
+query still "electric bike for heavy riders" (72 impr, pos 40.9). No
+striking-distance queries, no high-impression/low-CTR pages flagged.
+
+**PostHog snapshot (28d):** 140 pageviews / 71 unique visitors -- also
+identical to run 39's pull. `engwe-p275-se` still the #1 page (13/13/13),
+`e-bikes/overzicht` #2 (20/5). 10 `affiliate_link_clicked` events (top:
+Eunorau FLASH LITE ST 4, DYU M20 2, ENGWE N1 Pro 2), 1 `quiz_completed`.
+No new signal versus run 39 in either data source -- both pulls landed
+inside the same reporting window as the last run, so this run advanced the
+roadmap instead of chasing a fresh GSC/PostHog signal.
+
+**Action -- systematic `full_specs` reconciliation sweep across all 20
+ENGWE bikes with a scraped spec blob, closing the run-38/39 "worth a
+dedicated sweep" candidate.** Runs 37-39 had caught the same bug class
+opportunistically on 4 bikes (LE20, N1 Pro, N1 Air, P275 SE) across 3
+separate runs: a bike's own `full_specs` JSONB (scraped from the
+manufacturer page) disagreeing with the structured columns the rest of the
+site actually renders from. Queried `SELECT ... FROM ebikes WHERE brand
+ILIKE 'engwe' AND full_specs IS NOT NULL` (20 rows) and manually
+cross-checked `weight_lbs`, `max_weight`, `wheel_size`, `frame_type`,
+`frame_material`, `has_suspension`, `range_manufacturer`, and
+`range_practical` against each row's own spec blob.
+
+Found the bug on 12 of 20 bikes (60% hit rate -- confirms this was a real,
+widespread pattern, not a handful of one-offs):
+
+- **`engwe-m1`** (worst single catch): `weight_lbs` was 165.3 lbs -- an
+  impossible figure for a 20" fat-tire bike that doesn't match either its
+  own single-battery (39.5 kg/87.1 lbs) or dual-battery (43 kg/94.8 lbs)
+  spec. `frame_material` was `Aluminum` but `full_specs.Material` says
+  "High Carbon Steel". `range_manufacturer`/`range_practical` were 25/18
+  mi versus the true ~56/42 mi (90 km single-battery mileage). `has_suspension`
+  was `null` despite `full_specs.Suspension` = "Double Suspension". Fixed
+  all five fields plus the stale "Up to 25 mi range" highlight bullet.
+- **`engwe-engine-x`**: `wheel_size` 28"->20", `weight_lbs` 77.2->69.9 lbs,
+  `range_manufacturer`/`range_practical` 100/75->75/56 mi (another
+  km-as-miles instance the original P0.7 sweep missed), `has_suspension`
+  null->full (the bike's own description/highlight already said "dual
+  suspension" -- the structured field had just never captured it).
+- **`engwe-m20`**: `max_weight` 331->265 lbs (payload is 120 kg/264 lbs per
+  spec, not 331), `range_manufacturer`/`range_practical` 75/56->47/35 mi
+  (km-as-miles), `has_suspension` null->full (matching its own pre-existing
+  "full suspension" description).
+- **`engwe-n1-pro`/`engwe-n1-air`**: both had the identical km-as-miles
+  range bug (100/75 mi shown, should be 62/46 mi) that the run-38
+  frame-material fix didn't touch. N1 Air additionally had `wheel_size`
+  20"->29" (700x38C tires match N1 Pro's 700-42C wheel, not a 20" wheel).
+  N1 Pro is the run's #2 confirmed-affiliate-click bike, so this closes a
+  real trust bug on real conversion traffic.
+- **`engwe-p20`**: same km-as-miles pattern, 100/75->62/46 mi.
+- **`engwe-le20`**: description/highlights quoted dual-battery mileage
+  (211/158 mi) while `weight_lbs`/`max_weight` reflect the single-battery
+  config (a mismatch dating to the 2026-07-06 weight fix that was never
+  cross-checked against range). Recalculated range to the single-battery
+  figure (109/81 mi) and reworded the description to stop implying
+  dual-battery is the base configuration.
+- **`engwe-x20-x24-x26`**: `range_manufacturer`/`range_practical`
+  25/18->93/69 mi, matched to the dual-battery weight variant already
+  stored (96 lbs).
+- **`engwe-engine-pro-3-0-boost`** and **`engwe-ep-2-3-0-boost`**: both had
+  `frame_material='Aluminum'` when `full_specs.Frame Material` explicitly
+  says "Magnesium Alloy... Step-Through Design" -- fixed `frame_material`
+  to Magnesium, `frame_type` to step-through, `wheel_size` (28"/24"->20" on
+  both, matching their 20"x4.0" tire spec), and `has_suspension`
+  (full / front, matching confirmed front+rear vs. front-only suspension
+  travel specs in their own full_specs).
+- **`engwe-l20-3-0-boost`/`engwe-l20-3-0-pro`**: `has_suspension` null->full
+  on both (both list "Compact, Full Suspension" frame style plus explicit
+  rear-suspension travel, never captured in the structured column).
+- **`engwe-p275-pro`/`engwe-p275-st`**: `max_weight` 298->220 lbs on both
+  (100 kg/220 lbs payload per spec, not 298); P275 ST also had `wheel_size`
+  29"->27.5".
+- **`engwe-ep-2-pro`**: `weight_lbs` 72.8->66.1 lbs.
+- **`engwe-t14`**: `wheel_size` 20"->14" -- a mini/kids-scale folding bike
+  with 14" wheels; its own highlight bullet already correctly said
+  "14-inch wheels" while the structured field was wrong.
+
+After each column fix, re-checked the bike's own `description`/`highlights`
+for now-stale prose and found (and fixed) 6 further self-contradictions
+this exposed or created: Engine X, M20, M1, N1 Air, N1 Pro and LE20 all had
+sentences or highlight bullets quoting the old, now-wrong range numbers.
+N1 Air's description also said "a compact 20-inch-wheel frame", which
+became newly wrong the moment its `wheel_size` was corrected to 29" --
+caught and fixed before shipping.
+
+Left `engwe-l20`, `engwe-l20-boost`, `engwe-ep-2-boost`, and `engwe-e26`
+untouched -- cross-checked clean against their own `full_specs`, no
+discrepancies found.
+
+**Verified:** dev server render of `engwe-n1-pro` and `engwe-m1` (the two
+highest-value fixes -- #2 affiliate-click bike and the worst data bug)
+shows the structured spec table, "Who is this bike for" section, and
+prose description all agreeing with each other; zero console errors.
+`tsc --noEmit` clean (no code touched, DB-only run, but ran it anyway per
+the standing verification step). Also confirmed no blog posts or vs-pages
+hardcode any of these 12 bikes' specs in a way that would now drift
+(`grep` for bike names in `blog-data.ts` -- zero matches; `vs/[slug]`
+renders prices/specs dynamically from bike data per the P0.30b audit).
+
+**Expected impact:** the km-as-miles range bug alone was silently
+overstating manufacturer range by roughly 1.6x on 5 bikes (Engine X, M20,
+N1 Air, N1 Pro, P20) -- N1 Pro and N1 Air being two of the site's
+highest-signal pages. The M1 weight/suspension/material bugs were the
+single worst data-integrity gap found in any run so far (a 165 lb "20-inch
+fat tire bike" and a missing suspension spec despite the bike literally
+listing "Double Suspension"), on a bike that had never previously been
+flagged in any log. Closing the systemic sweep (rather than catching one
+instance per run) should prevent this bug class from resurfacing
+opportunistically bike-by-bike going forward.
+
+**Next candidates:** (1) the 17-bike ENGWE stub-description list from
+run 37 is still open (T14, EP-2 Boost, EP-2 Pro, E26, L20 Boost, P275 ST,
+M1, Engine Pro 2.0, P20, L20 3.0 Pro, P275 Pro, M20, X20/X24/X26 -- several
+of these just had their spec bugs fixed this run, which makes them a
+stronger candidate for the depth pass next since their numbers are now
+trustworthy) -- continue in future runs. (2) The same `full_specs`
+reconciliation sweep has only been run on ENGWE -- worth checking whether
+other brands with a `full_specs` column (if any) have the same drift;
+quick `SELECT brand, COUNT(*) FROM ebikes WHERE full_specs IS NOT NULL
+GROUP BY brand` first to see if it's an ENGWE-only scrape artifact before
+spending a run on it. (3) `/blog/best-ebikes-for-heavy-riders` CTR still
+needs another run or two to reflect the run-32 title/meta rewrite in GSC.
+(4) `eunorau-defender-s-fat-hs` (ROADMAP P0.16b) still needs a Dylan/human
+call. (5) `samebike-cy20-pro` torque mismatch (ROADMAP P0.28) still needs
+either a Dylan gut-check or a future run finding an exact-matching listing.
