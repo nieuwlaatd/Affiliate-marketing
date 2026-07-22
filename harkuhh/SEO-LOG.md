@@ -4633,3 +4633,106 @@ Dylan/human call. (5) worth a light check on whether any other brand has
 a similar hardcoded-placeholder pattern on a numeric column -- none found
 yet, but the ENGWE instance went unnoticed for 6 runs before a
 column-by-column full_specs cross-check caught it.
+
+## 2026-07-23 (run 44)
+
+**GSC signals (28-day window):** 1,572 impressions / 2 clicks / 0.1%
+CTR. Same top page/query pattern as run 43: `/blog/best-ebikes-for-heavy-
+riders` still the top-impression page (407 impr, pos 30.5, 0.5% CTR,
+unchanged), `samebike-rs-a01-pro` at pos 9.7 (26 impr, 2 clicks, 7.7%
+CTR), `/best/folding-ebikes` logged a click (8 impr, 12.5% CTR, pos
+12.9). `/best/cargo-ebikes` remains the largest flat impression pool (107
+impr, pos 73.5, 0 clicks) -- consistent with ~15 prior log entries
+concluding this is an authority ceiling, not an on-page gap; no action
+taken.
+
+**PostHog signals (28-day window):** 153 pageviews / 74 visitors, 10
+`affiliate_link_clicked` events, 1 `quiz_completed`. Same top converters
+as run 43 (Eunorau FLASH LITE ST 4 clicks, DYU M20 2, ENGWE N1 Pro 2).
+`engwe-p275-se` still the top pageview page (13/13/13). `samebike-cy20-
+pro` repeated its pageview signal for a 4th consecutive run (3 views/2
+visitors) -- still the bike with the unresolved P0.28 torque mismatch, no
+new source found, left untouched per the standing rule.
+
+Both GSC and PostHog signals were pure repeats of run 43 with nothing new
+to chase (no striking-distance queries, no new high-impression/low-CTR
+pages, no new stub descriptions, no new price drift -- ran the standing
+`description ~ '\$[0-9]'` vs `price` sweep across all ~70 price-mentioning
+rows and found zero mismatches, confirming the P0.30 fix line is
+holding). With both data sources flat, ran a fresh data-quality angle
+instead: audited every bike with `score_value <= 3.0`, the site's
+near-floor value scores, to check whether the P0.24 miscalibration bug
+class (29 bikes fixed in that run by comparing against same-price-tier
+siblings) had further undetected instances.
+
+**Found and fixed the real root cause behind 4 of the worst `score_value`
+scores on the site: a `has_suspension`/range data-drift bug identical in
+shape to the P0.17/P0.46 "structured column contradicts its own
+description" pattern, just never caught because the resulting low scores
+read as plausible rather than buggy.** `samebike-crest`,
+`samebike-storm`, and `samebike-rsa08-ii` (all $1,549-1,599, score_value
+1.1-1.4) each had `has_suspension='none'` and a 30mi/22mi range in the
+structured columns -- despite their own `description` text already
+saying "full suspension" (and, for CREST/STORM, "48V 20Ah battery").
+Verified all 3 directly against samebike.com's own product pages (2
+independent fetches per bike): CREST and STORM are byte-identical
+products, both genuinely full-suspension, 48V 20Ah (960Wh), 85+ Nm, with
+an official 140km max-mode / 70km real-mode range (87mi / 43mi) -- not
+the stored 12Ah/30mi/22mi. RS-A08-II is full dual-suspension (100mm front
++ hydraulic rear), 48V 17Ah, with a 130km max-mode range (81mi / 40mi
+practical, applying the same ~50% real-world ratio CREST's own two-tier
+official figures confirm). Fixed `has_suspension`, `range_manufacturer`,
+`range_practical`, and `battery_capacity` (CREST/STORM only) on all 3.
+
+The same pattern turned up on `vtuvia-giraffe` ($1,599, score_value 1.1):
+`has_suspension='none'`/30mi range in the DB while its own description
+already said "up to 50 miles of range," and vtuviaebike.com plus 3
+independent retailer listings confirm a front suspension fork and 50mi
+manufacturer / 38mi real-world range. Fixed the same way.
+
+For all 4, recalculated `score_range` and `score_comfort` off the
+corrected data (using the site's own observed range-practical-to-score
+and suspension-to-comfort distributions as a consistency check) and
+`score_value`/`score_overall` via the P0.24 sibling-tier-comparison
+method against same-price full-suspension bikes already known to be
+correctly scored (`vtuvia-zeal-xt8`, `eunorau-fat-awd-3-0`,
+`samebike-m20-iii`, all scoring value 7.0-7.5). Net changes: CREST/STORM
+3.3->6.1 overall (value 1.1->6.5), RS-A08-II 3.8->6.0 overall (value
+1.4->5.5), Giraffe 4.0->5.8 overall (value 1.1->5.5).
+
+Checked every other `score_value<=3` bike before closing the sweep and
+left the rest untouched as legitimately low, not bugs: `eunorau-r1`/`r1-
+plus` (value=1, but these are the two most expensive bikes in the catalog
+at $4,299-4,499 with no same-tier rival to compare against -- a low value
+score for the priciest flagship is expected); `duotts-c29lite` (already
+confirmed genuinely weaker than its own C29 sibling in the P0.24 audit);
+`dyu-c2`/`c5`/`c6` and `engwe-ease-2-pro` (all `torque=0`, a
+previously-documented "not publicly published" or scooter-reclassification
+case unrelated to suspension/range, left as-is per the standing
+don't-fabricate-specs rule).
+
+**Verified:** live in dev server (`samebike-crest-fat-tire-mountain-e-
+bike`): spec table renders 20 Ah battery, 87 mi claimed / 43 mi
+real-world range, "Full" suspension, all matching the corrected
+description text; overall score badge shows 6.1. `tsc --noEmit` clean
+(DB-only run, no code files touched).
+
+**Expected impact:** 4 bikes were showing a spec table that silently
+contradicted their own product description (missing suspension, ~3x
+understated range) and, as a direct consequence, three of them were
+carrying the worst value/overall scores on the entire site -- a
+methodology-trust issue as much as a spec-accuracy one, since the site's
+own "How We Test" page promises value scored against real specs. This
+could plausibly have been suppressing all 4 from ranking well on
+`/best/off-road-ebikes` and similar score-sorted surfaces.
+
+**Next candidates:** (1) the `score_value<=3.0` outlier sweep is closed
+for now -- run the same `has_suspension`/range-vs-description
+cross-check on bottom-decile scores of *other* axes (range, comfort,
+power) in a future run, since that is exactly how these bugs were hiding
+in plain sight behind scores that looked plausible. (2) `samebike-cy20-
+pro` (P0.28) has now shown PostHog signal for 4 consecutive runs with no
+resolving source -- still needs a Dylan/human call. (3)
+`eunorau-defender-s-fat-hs` (P0.16b) also still needs a human call. (4)
+`/best/cargo-ebikes` remains flat at pos 73.5 despite 107 impressions --
+reconfirming the authority-ceiling read, not a new candidate to chase.
