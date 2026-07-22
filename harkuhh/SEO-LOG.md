@@ -4412,6 +4412,92 @@ depth, so any next action would be a title/meta CTR tweak, not a content
 rewrite. (3) `eunorau-defender-s-fat-hs` (P0.16b) and `samebike-cy20-pro`
 torque mismatch (P0.28) still need a Dylan/human call.
 
+## 2026-07-22 (run 43)
+
+**GSC signals (28-day window):** 1,572 impressions / 2 clicks / 0.1% CTR.
+`/blog/best-ebikes-for-heavy-riders` remains the top-impression page (407
+impr, still pos 30.5, 0.5% CTR) -- consistent with run 42's read that
+further CTR gains here need backlinks/authority, not more on-page work;
+no action taken. `samebike-rs-a01-pro` did not repeat in this run's top
+pages, consistent with treating it as a stable converter rather than a
+recurring signal to chase. New this run: `/e-bikes/samebike/samebike-rs-a01-pro`
+logged 2 clicks at pos 9.7 (26 impr, 7.7% CTR) and `/best/folding-ebikes`
+logged its first click (8 impr, 12.5% CTR, pos 12.9) -- both already have
+full editorial depth from prior runs, no gap to fix.
+
+**PostHog signals (28-day window):** 149 pageviews / 72 visitors, 10
+`affiliate_link_clicked` events, 1 `quiz_completed`. Top affiliate
+converters unchanged from run 42: Eunorau FLASH LITE ST (4 clicks), DYU
+M20 (2), ENGWE N1 Pro (2). `engwe-p275-se` remains the top pageview page
+(13/13/13), still fully data-audited from run 39 with nothing new to
+chase. `samebike-cy20-pro` repeated its pageview signal for a 3rd run (3
+views/2 visitors) -- this is the bike with the unresolved P0.28 torque
+mismatch; still no source matching both its $759 price and 35 Nm/250W
+spec combination, so left untouched per the standing "don't guess between
+real variants" rule.
+
+**Found and fixed an ENGWE `charge_time` bug on the 4 fast-charging
+"Boost/Pro" models, closing the run-42 "next candidate" (confirm no other
+ENGWE structured column drifts from `full_specs`).** Checked `charge_time`
+against each bike's own `full_specs.Charger`/`Charging Time` fields and
+found `engwe-l20-3-0-boost`, `engwe-l20-3-0-pro`, and
+`engwe-engine-pro-3-0-boost` all showing 5.5-6.0 hrs -- nearly identical
+to their non-Boost siblings' slower ~2A chargers -- despite their own
+`full_specs.Charger` already listing 8A fast chargers, and
+`engwe-ep-2-3-0-boost` showing 5.5 hrs despite a 4A fast charger. This
+field renders directly on the spec table (`{bike.chargeTime} hrs` in
+`app/e-bikes/[brand]/[model]/page.tsx:324`) and on `/e-bikes/vergelijk`.
+Verified via ENGWE's own product pages (engwe.com + engwe-bikes-eu.com,
+independently consistent) and cross-checked against the amp-hour math
+(13.5-15Ah battery / 8A or 4A charger): L20 3.0 Boost, L20 3.0 Pro, and
+Engine Pro 3.0 Boost all fast-charge in 2 hours; EP-2 3.0 Boost in 3.5
+hours. Fixed all 4 `charge_time` values and added a sourced "fast
+charging" highlight bullet to each, since the fast charger is these
+models' actual marketed differentiator and none of the four surfaced it
+anywhere on the page before this fix. A full sitewide `charge_time` sweep
+after the fix found no further outliers -- values now scale consistently
+with battery capacity across every brand, closing this column out.
+
+**Found and fixed a recurrence of the P0.30 price-drift bug class on
+`samebike-m20`/`samebike-m20-iii`.** A routine `description ~ '\$[0-9]'`
+sweep (the standing check from P0.30/P0.33) found both bikes'
+descriptions still quoting $1,429/$1,749 -- the exact figures run 28
+synced `price` to in 2026-07-17 -- while the current `price` and
+`price_usd` columns (both updated 2026-07-20, in agreement with each
+other) now read $1,299/$1,599. This is the same bug pattern as P0.30 in a
+new instance: a legitimate vendor catalog sync lowered the price columns
+correctly, but has no way to touch the dollar figure hardcoded into
+free-text `description`, so the two silently drifted apart again after
+being fixed once. Updated both descriptions to the current $1,299/$1,599
+prices and recalculated the M20-III's "$X more than the base M20" delta
+from the now-wrong $320 to the correct $300. Verified live in dev server:
+`engwe-l20-3-0-boost` spec table shows "2 hrs" and the new highlight;
+`samebike-m20-iii` header price ($1,599) now matches body copy. DB-only
+run, no code files touched; `tsc --noEmit` ran clean as a sanity check.
+
+**Expected impact:** the charge-time fix corrects a spec-table number
+that was 3-4x too slow on 4 bikes whose entire "Boost" branding is built
+around fast charging -- a real understated selling point, not just a
+cosmetic error. The price-drift fix closes a self-contradicting price
+(header vs. body) on 2 pages, the same class of trust break the P0.30
+fix targeted on the site's then-highest-traffic page.
+
+**Next candidates:** (1) the ENGWE structured-column drift sweep
+(weight/max_weight/wheel_size/frame_type/frame_material/has_suspension/
+range/battery_capacity/charge_time/assist-levels) is now fully closed --
+no further columns to check against `full_specs` without new discovery.
+(2) the P0.30 price-drift bug class is confirmed recurring: run the
+`description ~ '\$[0-9]'` vs `price` sweep as a standing check on any
+future run that touches pricing, not a one-time closed item -- it will
+resurface every time the vendor sync updates a price column. (3)
+`samebike-cy20-pro` (P0.28 torque mismatch) has now shown PostHog signal
+for 3 consecutive runs without a source resolving it -- still needs a
+Dylan/human call rather than a guess. (4) `eunorau-defender-s-fat-hs`
+(P0.16b) also still needs a human call. (5) description-depth sweep
+(`length(description) < 220`) is fully closed sitewide except the
+Dylan-blocked `eunorau-defender-s-fat-hs` -- no further stub-description
+batches remain.
+
 ## 2026-07-22 (run 42)
 
 **GSC signals (28-day window):** 1,524 impressions / 2 clicks / 0.1% CTR.
