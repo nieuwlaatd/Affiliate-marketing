@@ -4823,3 +4823,75 @@ closed unless a new low-score bike surfaces. (4) `samebike-cy20-pro`
 (P0.28) and `eunorau-defender-s-fat-hs` (P0.16b) still need a human call.
 (5) `/best/cargo-ebikes` remains an authority-ceiling case, not an
 on-page one -- do not re-chase with content edits.
+
+## Run 46 -- 2026-07-23
+
+**GSC signals (28-day window):** 2 clicks / 1,581 impressions / 0.1% CTR, a
+near-exact repeat of runs 44/45 -- heavy-riders post still the top-impression
+page (418 impr, pos 30.5, 2 clicks), `samebike-rs-a01-pro` still converting
+(2 clicks, pos 9.7), `/best/cargo-ebikes` still flat (102 impr, pos 72, 0
+clicks). No new striking-distance queries, no new high-impression/low-CTR
+pages. Nothing new to act on from GSC alone.
+
+**PostHog signals (28-day window):** 153 pageviews / 74 visitors, 10
+`affiliate_link_clicked` events, 1 `quiz_completed`. Same top pages/converters
+as run 45: `engwe-p275-se` #1 pageview page (13/13/13, still out of stock,
+already deeply audited run 39); Eunorau FLASH LITE ST top affiliate-click bike
+(4 clicks, already has full depth from run 34); DYU M20 and ENGWE N1 Pro tied
+at 2 clicks each, both already deeply audited. No new first-signal bikes.
+
+**This run's target:** with both data sources flat for the third consecutive
+run, worked the two queued "next candidates" from run 45's log entry.
+
+**(1) Closed run-45 next-candidate #1** -- ran the NULL-score sweep
+(`score_power`/`score_build_quality`/`score_versatility` IS NULL) across every
+brand besides ENGWE (which run 45 already fixed). Result: zero NULLs anywhere
+outside ENGWE. Clean bill of health, no action needed.
+
+**(2) Fixed run-45 next-candidate #2** -- the `score_power = 2.5`
+uncalibrated-placeholder bug. Confirmed 7 bikes across 3 brands (Eunorau,
+SAMEBIKE, VTUVIA) shared the identical `score_power=2.5` despite torque
+ranging 65-85 Nm (`eunorau-e-fat-mn`, `eunorau-g30-cargo`,
+`eunorau-meta-275-1`, `eunorau-meta-275-st-1`, `samebike-crest`,
+`samebike-storm`, `vtuvia-giraffe`) -- the same "identical score regardless of
+real spec spread" signature as the P0.24 `score_value` bug, just on a
+different axis. Built a per-brand torque->power calibration curve from each
+brand's own already-correctly-scored bikes: SAMEBIKE has a clean stepped
+curve (30 Nm=4.5 up to 160 Nm=9.5), giving 85 Nm=8.0; VTUVIA's own sibling
+`zeal-lt7` scores 65 Nm at exactly 6.5; Eunorau's curve (60 Nm=5.8, 92
+Nm=8.9) interpolates to 65 Nm=6.3 and 80 Nm=7.7. Set each bike's
+`score_power` accordingly. While building the curves, found 2 more bikes
+that weren't exactly 2.5 but were still clear outliers against their own
+brand's curve: `samebike-rsa08-ii` (80 Nm, scored 3.8 vs. the curve's 8.0)
+and `eunorau-max-cargo` (70 Nm, scored 3.8 vs. the curve's ~6.8) -- fixed
+both the same way. Recomputed `score_overall` for all 9 bikes via the
+P0.24/run-45 weighted formula (value 0.29 / range 0.19 / power 0.15 /
+comfort 0.14 / build 0.17 / versatility 0.09); all 9 shifted modestly upward
+(+0.1 to +0.8): `eunorau-e-fat-mn` 5.5->6.3, `eunorau-g30-cargo` 5.9->6.4,
+`eunorau-max-cargo` 5.3->5.7, `eunorau-meta-275-1`/`meta-275-st-1` 6.3->6.8,
+`samebike-crest`/`storm` 6.1->6.9, `samebike-rsa08-ii` 6.0->6.7,
+`vtuvia-giraffe` 5.8->6.4.
+
+**Verified:** live in dev server (`samebike-crest-fat-tire-mountain-e-bike`:
+Power now shows 8 (was 2.5), Overall 6.9 (was 6.1), all other spec fields
+unchanged). `tsc --noEmit` clean (DB-only run, no code files touched).
+
+**Expected impact:** closes the exact bug class run 45 flagged as its #2
+next candidate, correcting understated `score_overall` on 9 bikes including
+2 (`samebike-crest`, `samebike-storm`, $1,549 each) that had just been the
+subject of a dedicated has_suspension/range data-quality fix one run earlier
+(P0.49) -- these bikes' scores were still wrong even after that fix because
+the root cause was on a different axis (power) that P0.49 didn't touch.
+
+**Next candidates:** (1) both of run 45's flagged candidates are now closed
+-- GSC/PostHog have been flat for 3 consecutive runs (44/45/46), so the next
+run should either look for a 4th consecutive-flat check before concluding
+the current top pages are at an authority ceiling, or run a fresh
+data-quality angle (e.g. cross-check `score_comfort`/`score_build_quality`
+for the same "identical value across a real spec spread" signature that
+caught both the `score_value` and `score_power` bugs -- worth a dedicated
+pass since the pattern has now repeated twice). (2) `samebike-cy20-pro`
+(P0.28, torque mismatch) and `eunorau-defender-s-fat-hs` (P0.16b) still need
+a Dylan/human call. (3) `/best/cargo-ebikes` remains an authority-ceiling
+case (102 impr, pos 72, flat for 5+ runs) -- do not re-chase with content
+edits.
