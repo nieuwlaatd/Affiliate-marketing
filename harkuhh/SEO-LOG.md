@@ -4736,3 +4736,90 @@ resolving source -- still needs a Dylan/human call. (3)
 `eunorau-defender-s-fat-hs` (P0.16b) also still needs a human call. (4)
 `/best/cargo-ebikes` remains flat at pos 73.5 despite 107 impressions --
 reconfirming the authority-ceiling read, not a new candidate to chase.
+
+## Run 45 -- 2026-07-23
+
+**GSC signals (28-day window):** 2 clicks / 1,581 impressions / 0.1% CTR,
+essentially a repeat of run 44 -- heavy-riders post still the top-impression
+page (418 impr, pos 30.5, 2 clicks), `samebike-rs-a01-pro` still converting
+(2 clicks, pos 9.7), `/best/cargo-ebikes` still flat (102 impr, pos 72, 0
+clicks). No new striking-distance queries, no new high-impression/low-CTR
+pages. Nothing new to act on from GSC alone this run.
+
+**PostHog signals (28-day window):** 153 pageviews / 74 visitors, 10
+`affiliate_link_clicked` events. `engwe-p275-se` is the #1 page again (13
+views/13 visitors, still genuinely out of stock, already deeply audited in
+run 39). Eunorau FLASH LITE ST is the top affiliate-click bike this window
+(4 clicks) -- already has full depth from run 34, nothing further to add.
+DYU M20 and ENGWE N1 Pro tied at 2 clicks each, both already deeply audited
+in prior runs. No new first-signal bikes.
+
+**This run's target:** since GSC/PostHog repeated run 44's signals with no
+new pages to act on, followed run 44's own "next candidate" #1: extend the
+has_suspension/description cross-check methodology to other score axes.
+Ran `SELECT score_power, count(*) FROM ebikes GROUP BY score_power` as a
+first pass and found something far more serious than a miscalibration:
+**22 of 22 ENGWE bikes had `score_power`, `score_build_quality`, and
+`score_versatility` all NULL in the database.**
+`lib/ebike-data.ts:209/211/212` maps a null score straight to `0` with no
+fallback (unlike `scoreValue`, which correctly falls back to
+`score_price_quality` -- that fallback is why nobody had caught this
+sooner: the Value axis looked fine). Verified live on production
+(`bestbikeforme.com/e-bikes/engwe/engwe-n1-pro`, the run's #2 PostHog page
+and one of the most-audited bikes on the whole site): the Scores section
+showed "Overall score 8.6" directly above "Power 0", "Build quality 0",
+"Versatility 0". This affected every ENGWE bike, the site's largest brand
+(22 of ~110), including nearly every high-signal page surfaced across the
+last 10+ runs.
+
+**Fix:** sourced calibrated values for all 3 axes across all 22 bikes
+rather than a placeholder fill. `score_power` came from each bike's own
+`torque`/`motor_type`, cross-referenced against roughly 40 same-torque,
+same-price-tier bikes from DUOTTS, SAMEBIKE, VTUVIA, Eunorau and Walfisk
+that already carried real power scores (e.g. every 55 Nm rear-hub bike in
+the catalog from other brands clusters at 6.5). `score_build_quality`
+came from frame material and componentry (carbon fiber frames +8.0,
+magnesium +7.5, steel +6.5, standard aluminum baseline 7.0, single-speed
+budget build 6.0). `score_versatility` came from `suitable_for` category
+count (2 categories -> 6.5, 3 categories -> 7.5), matching the pattern in
+every other brand's already-populated versatility scores. Sanity-checked
+every one of the 22 against the P0.24 weighted-average formula (value
+0.29 / range 0.19 / power 0.15 / comfort 0.14 / build 0.17 / versatility
+0.09), recomputed and compared to each bike's own already-stored
+`score_overall` -- all 22 landed within about 0.3 of the stored overall,
+the same tolerance P0.24 itself reported as an acceptable fit.
+
+**Verified:** live in dev server (`engwe-n1-pro`: Power 8.5 / Build
+quality 8 / Versatility 7.5, all replacing "0"; `engwe-t14`: Power 3.5 /
+Build 6 / Versatility 6.5, also replacing "0"). `tsc --noEmit` clean
+(DB-only run, no code files touched). Confirmed the codebase has no
+`revalidate` export or ISR anywhere -- production is a fully static
+build, so this fix will only appear on the live site after the Vercel
+deploy this run's git push triggers, not immediately.
+
+**Expected impact:** the single most severe display bug found in the
+entire multi-run SEO/data-quality initiative to date -- not a wrong
+number but a literal broken-looking "0" sitting directly beside an
+8+/10 overall score, on the site's largest brand and its highest-signal
+pages, undermining the "How We Test" page's core promise (six
+transparently-scored axes) at the exact moment a buying-intent visitor
+is reading the Scores section.
+
+**Next candidates:** (1) highest priority -- run the same NULL-score
+sweep (`score_power`/`score_build_quality`/`score_versatility` IS NULL)
+across every other brand; run 45 only confirmed and fixed ENGWE. (2)
+while calibrating run 45's power scores, found a second, lower-severity
+pattern: 8 bikes across Eunorau/SAMEBIKE/VTUVIA (`eunorau-e-fat-mn`,
+`eunorau-meta-275-st-1`, `eunorau-meta-275-1`, `eunorau-g30-cargo`,
+`samebike-crest`, `samebike-storm`, `vtuvia-giraffe`, and possibly more)
+all show `score_power` = exactly 2.5 regardless of actual torque (55-85
+Nm), while same-torque bikes from other brands score 6.5-8.2 -- looks
+like the same "uncalibrated placeholder" bug class P0.24 found on
+score_value, just on the power axis; deserves its own dedicated
+sibling-comparison pass rather than a rushed fix. (3) the P0.49
+has_suspension/description cross-check found no new instances when
+applied to this run's bottom-decile-per-axis list -- can be considered
+closed unless a new low-score bike surfaces. (4) `samebike-cy20-pro`
+(P0.28) and `eunorau-defender-s-fat-hs` (P0.16b) still need a human call.
+(5) `/best/cargo-ebikes` remains an authority-ceiling case, not an
+on-page one -- do not re-chase with content edits.
