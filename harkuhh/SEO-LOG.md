@@ -4895,3 +4895,86 @@ pass since the pattern has now repeated twice). (2) `samebike-cy20-pro`
 a Dylan/human call. (3) `/best/cargo-ebikes` remains an authority-ceiling
 case (102 impr, pos 72, flat for 5+ runs) -- do not re-chase with content
 edits.
+
+## Run 47 -- 2026-07-23
+
+**GSC signals (28-day window):** 2 clicks / 1,581 impressions / 0.1% CTR --
+identical to runs 44/45/46 (4th consecutive flat window). Heavy-riders post
+still the top-impression page (418 impr, pos 30.5), `samebike-rs-a01-pro`
+still converting (2 clicks, pos 9.7), `/best/cargo-ebikes` still flat (102
+impr, pos 72, 0 clicks). No new striking-distance queries, no new
+high-impression/low-CTR pages.
+
+**PostHog signals (28-day window):** 159 pageviews / 75 visitors (up
+marginally from 153/74), 10 `affiliate_link_clicked` events, 1
+`quiz_completed`. Same top pages/converters as runs 45/46:
+`engwe-p275-se` #1 pageview page (13/13/13, still out of stock, already
+deeply audited run 39); Eunorau FLASH LITE ST top affiliate-click bike (4
+clicks, already has full depth from run 34); DYU M20 and ENGWE N1 Pro tied
+at 2 clicks each. No new first-signal bikes.
+
+**This run's target:** with both data sources now flat for a 4th straight
+run, followed run 46's queued next candidate: extend the "identical score
+across a real spec spread" detection method (which caught `score_value` in
+P0.24 and `score_power` in P0.51) to `score_comfort` and
+`score_build_quality`.
+
+Cross-tabulated `score_comfort` against `has_suspension` per brand (the
+strongest real-world driver of ride comfort) rather than just grouping by
+raw value, since comfort scores cluster at common round numbers (7.0, 7.5,
+8.0) across many legitimately-different bikes and a flat GROUP BY doesn't
+distinguish a placeholder from a real shared tier. This surfaced **Eunorau
+FAT-AWD 2.0 and FAT-AWD 3.0** ($1,699 each, 110 Nm, front suspension per
+P0.40) still scored `score_comfort=4.0` -- identical to Eunorau's
+*no-suspension* budget bikes (META20/24/26 1.0, all scoring 3.0-4.0)
+despite P0.40 (run 36) having corrected their `has_suspension` from 'none'
+to 'front' (a confirmed RST Guide fork, 95mm travel) five runs earlier. The
+suspension-data fix never propagated to the downstream comfort score --
+the exact same "root fix landed, but a derived field was left stale"
+failure mode as P0.49/P0.50/P0.51, just discovered on the comfort axis this
+time and traced back 5 runs instead of 1.
+
+**Fix:** compared against Eunorau's other front-suspension siblings at
+similar build quality (`eunorau-defender`: 60 Nm/build 7 -> comfort 6.0;
+`eunorau-fat-hd-2-0`: 160 Nm/build 9 -> comfort 6.0) and set both FAT-AWD
+bikes' `score_comfort` 4.0 -> 6.0. Recomputed `score_overall` via the
+standing P0.24 weighted formula (value 0.29 / range 0.19 / power 0.15 /
+comfort 0.14 / build 0.17 / versatility 0.09): both bikes 7.8 -> 8.1.
+Sanity-checked the formula itself against `eunorau-fat-hd-2-0`'s own known
+values first (computed 8.34 vs. its stored 8.3 overall -- confirms the
+fit still holds before trusting it for the fix).
+
+**Also checked, no bug found:** DUOTTS F26/N26 (torque corrected 65->130 Nm
+combined in P0.31) -- their `score_power` (8.5/8.0) already scales
+correctly with the corrected torque relative to siblings, so the
+stale-score pattern didn't repeat there. Re-verified the 3 SAMEBIKE +
+1 VTUVIA bikes P0.49 fixed last week (`samebike-crest`, `samebike-storm`,
+`samebike-rsa08-ii`, `vtuvia-giraffe`) still show internally consistent
+comfort scores (7.5/7.5/7.5/6.5) with no drift.
+
+**Verified:** query-confirmed in Supabase (`eunorau-fat-awd-2`,
+`eunorau-fat-awd-3-0`: `score_comfort=6.0`, `score_overall=8.1`, both
+matching the target values). `tsc --noEmit` clean (DB-only run, no code
+files touched).
+
+**Expected impact:** closes a real understatement of `score_overall` on 2
+bikes that carry genuine front suspension and above-average torque (110
+Nm, higher than both comparison siblings) but were still being scored as
+if they had neither -- not a cosmetic rounding gap, the same class of
+trust-methodology bug as every P0.24/P0.49/P0.50/P0.51 fix this cycle.
+
+**Next candidates:** (1) GSC/PostHog have now been flat for 4 consecutive
+runs (44-47) -- worth treating the current top pages (heavy-riders post,
+P275 SE, S26, C29-K, RS-A01 Pro) as at an authority ceiling for now and
+leaning harder into data-quality sweeps or net-new content/catalog work
+until a new signal appears, rather than re-checking GSC/PostHog for a 5th
+identical read next run. (2) the "stale derived score after an upstream
+data fix" bug class has now hit 3 different axes (value, power, comfort)
+across 5 runs -- a single sweep that cross-references every P0.9/P0.16/
+P0.40/P0.49-style "has_suspension or range corrected" log entry against
+that bike's current score_comfort/score_range would likely find any
+remaining stragglers faster than spot-checking one bike group at a time.
+(3) `samebike-cy20-pro` (P0.28, torque mismatch) and
+`eunorau-defender-s-fat-hs` (P0.16b) still need a Dylan/human call. (4)
+`/best/cargo-ebikes` remains an authority-ceiling case (102 impr, pos 72,
+flat for 6+ runs) -- do not re-chase with content edits.
