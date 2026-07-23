@@ -5071,3 +5071,101 @@ authority-ceiling case (pos 73+, 0 clicks) -- do not re-chase with content
 edits. (6) the P0.30 price-drift bug class remains a standing check --
 re-verify `description ~ '\$[0-9]'` vs `price` whenever touching pricing
 copy.
+
+---
+
+## Run 49 (2026-07-24)
+
+**GSC signals (28-day window):** 2 clicks / 1,581 impressions / 0.1% CTR --
+identical to runs 44-48 (6th consecutive flat window). Same top query
+("electric bike for heavy riders", 73 impr/2 clicks/pos 40.1), same top
+pages (`/`, `samebike-rs-a01-pro`, heavy-riders post at 418 impr/pos 30.5,
+`/best/folding-ebikes`, `duotts-duotts-c29-k`, `duotts-f20`, `duotts-s26`,
+`eunorau-meta-24-1`, `samebike-ebe2`, walfisk ET-7). No new striking-distance
+queries, no new high-impression/low-CTR pages.
+
+**PostHog signals (28-day window):** 159 pageviews / 75 visitors (unchanged
+from runs 45-48), 10 `affiliate_link_clicked` events, 1 `quiz_completed`.
+Same top pages/converters as runs 45-48: `engwe-p275-se` #1 pageview page
+(13/13/13, still out of stock, deeply audited run 39); Eunorau FLASH LITE ST
+top affiliate-click bike (4 clicks); DYU M20 and ENGWE N1 Pro tied at 2
+clicks each. No new first-signal bikes.
+
+**This run's target:** with both data sources flat for a 6th straight run,
+followed run 48's queued next candidate: swept `score_versatility`, the one
+score axis never explicitly checked by the P0.24/P0.51/P0.52/P0.53 series.
+
+A `GROUP BY brand, score_versatility` cross-referenced against
+`array_length(suitable_for, 1)` per bike found a clean, expected gradient
+across all 109 bikes: 1 category ~5.5, 2 categories ~6.0-7.5, 3 categories
+~6.0-7.5, 4 categories ~8.0, and the two 5-category cargo bikes (Eunorau
+MAX-CARGO, G30) both correctly at the ceiling (10.0). No flat-placeholder
+signature (no cluster of identical scores spanning a real category-count
+spread), unlike the value/power/comfort/range axes this cycle. This closes
+the full 6-axis score-integrity sweep with every axis now either fixed
+(value/power/comfort/range) or confirmed clean (build quality, versatility).
+
+**Also ran two standing checks** (both queued as recurring, not one-time,
+per runs 30b/48): (1) `description ~ '\$[0-9]'` vs `price` sweep -- zero
+drift found across all 15 rows with embedded dollar figures (the P0.30 bug
+class has not recurred since the run-43 SAMEBIKE M20/M20-III catch). (2)
+`description ~ '\d+\s*Nm'` vs `torque` column sweep, a new check extending
+the P0.42/P0.45 "prose contradicts structured column" pattern to torque
+specifically -- one flagged case (`samebike-rs-a02-plus`) was a false
+positive: its description names its own sibling's 80 Nm figure before
+correctly stating its own 100 Nm, and the DB torque (100) already matches.
+No real torque mismatches found.
+
+**Fix:** a third sweep (`has_suspension IN ('none', NULL)` cross-referenced
+against descriptions mentioning "suspension"/"shock") found one real bug:
+`dyu-a5` had `has_suspension='none'` while its own description already read
+"a suspension front fork for a smoother ride over rough pavement." Verified
+via DYU's own product page (dyucycle.com/products/dyu-a5-14inch-folding-electric-bike)
+plus 2 independent listings: the A5 has a front suspension fork and a
+seat-post shock absorber (DYU's own copy calls it "dual suspension"),
+matching the site's existing convention of scoring front+seat combinations
+as `full` (per `samebike-cy20-pro`, `samebike-rs-a01-pro`,
+`samebike-rs-a01-men`, `engwe-e26`, all logged in prior runs). Fixed
+`has_suspension` 'none'->'full', added a "Front fork + seat-post
+suspension" highlight bullet (previously undisclosed anywhere but the
+prose), and recalibrated `score_comfort` 5.0->6.0 against sibling
+comparables (DYU's other no-suspension 14-16" bikes score comfort 5.0;
+larger-wheel front-suspension siblings score 6.5-7.5, so 6.0 reflects a
+real but modest gain appropriate to a compact 14" folder). Recomputed
+`score_overall` via the standing P0.24 weighted formula (value 0.29/range
+0.19/power 0.15/comfort 0.14/build 0.17/versatility 0.09) -- held at 5.8,
+since comfort's 0.14 weight only moves the total by +0.14, within existing
+rounding tolerance.
+
+**Verified:** live in dev server (`/e-bikes/dyu/dyu-a5`): spec table shows
+"Suspension: Full", Comfort score renders "6", the new highlight bullet
+displays, Overall stays "5.8", zero console errors. `tsc --noEmit` clean
+(DB-only run, no code files touched).
+
+**Expected impact:** closes the multi-run score-integrity initiative
+(P0.24 value / P0.51 power / P0.52 comfort / P0.53 range / this run's
+versatility check) with a full 6-axis clean bill of health across the
+catalog. The `dyu-a5` fix is a 5th instance of the recurring "structured
+column silently contradicts the bike's own prose" bug class (P0.17/P0.42/
+P0.45/P0.46/P0.49), smaller in scale than prior catches (1 low-signal
+budget bike vs. a top-converter) but the same trust-integrity issue: a
+spec-table field telling a reader the opposite of what the paragraph two
+lines above it says.
+
+**Next candidates:** (1) GSC/PostHog have now been flat for 6 consecutive
+runs (44-49) -- the score-integrity and description-depth initiatives are
+largely exhausted (6/6 score axes clean, all brand stub-description
+backlogs closed, full_specs junk-key sweeps closed on ENGWE). Worth
+shifting focus next run to either genuinely new catalog/content work (e.g.
+the P0.4 folding best-of page, still blocked on catalog depth) or a fresh
+data-integrity angle not yet swept (e.g. `frame_type` step-over/step-through
+vs description text, sitewide, following the same method as this run's
+suspension/torque/price sweeps -- not yet run as an exhaustive sitewide
+check, only fixed opportunistically on individual bikes like
+`eunorau-flash-lite-st`/P0.39 and `engwe-p275-se`/P0.44 so far). (2)
+`samebike-cy20-pro` (P0.28, torque mismatch) and `eunorau-defender-s-fat-hs`
+(P0.16b) still need a Dylan/human call. (3) `/best/cargo-ebikes` remains an
+authority-ceiling case (pos 72+, 0 clicks) -- do not re-chase with content
+edits. (4) keep the price-drift and torque-in-prose sweeps as standing
+checks whenever touching pricing or motor spec copy, even though both came
+back clean this run.
