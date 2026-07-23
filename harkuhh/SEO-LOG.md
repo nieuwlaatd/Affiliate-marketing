@@ -4978,3 +4978,96 @@ remaining stragglers faster than spot-checking one bike group at a time.
 `eunorau-defender-s-fat-hs` (P0.16b) still need a Dylan/human call. (4)
 `/best/cargo-ebikes` remains an authority-ceiling case (102 impr, pos 72,
 flat for 6+ runs) -- do not re-chase with content edits.
+
+---
+
+## Run 48 (2026-07-23)
+
+**GSC signals (28-day window):** 2 clicks / 1,581 impressions / 0.1% CTR --
+identical to runs 44-47 (5th consecutive flat window). Same top query
+("electric bike for heavy riders", 73 impr/2 clicks/pos 40.1), same top
+pages (`/`, `samebike-rs-a01-pro`, heavy-riders post at 418 impr/pos 30.5,
+`/best/folding-ebikes`, `duotts-c29-k`, `duotts-f20`, `duotts-s26`). No new
+striking-distance queries, no new high-impression/low-CTR pages.
+
+**PostHog signals (28-day window):** 159 pageviews / 75 visitors (unchanged
+from run 47), 10 `affiliate_link_clicked` events, 1 `quiz_completed`. Same
+top pages/converters as runs 45-47: `engwe-p275-se` #1 pageview page
+(13/13/13, still out of stock, deeply audited run 39); Eunorau FLASH LITE
+ST top affiliate-click bike (4 clicks); DYU M20 and ENGWE N1 Pro tied at 2
+clicks each. No new first-signal bikes.
+
+**This run's target:** with both data sources now flat for a 5th straight
+run, followed run 47's queued next candidate: extended the "identical
+score across a real spec spread" detection method (which caught
+`score_value` in P0.24, `score_power` in P0.51, and `score_comfort` in
+P0.52) to `score_range`.
+
+A `GROUP BY brand, score_range` sweep (filtered to groups spanning >15 mi
+of `range_practical` within the same score) found **15 Eunorau bikes all
+scored `score_range=10.0`** despite `range_practical` spanning 60 to 165
+miles -- a 60mi bike and a 165mi bike (2.75x the range) rated identically.
+Built a reference curve from every non-Eunorau brand's own range-to-score
+relationship to check whether 10.0 is a legitimate ceiling at 60mi+: it
+is not -- the curve is a clean gradient (20mi=4.5, 40mi=7.0, 60mi=8.0-8.7,
+63mi=8.2, 75mi=9.0, 81mi=9.5, 112mi=9.5, 121mi=9.2), confirming the scale
+keeps rewarding real range gains well past 60mi elsewhere in the catalog.
+
+**Fix:** corrected 12 of the 15 bikes using the reference curve: 7 bikes
+at 60mi (`eunorau-fat-awd-2`, `eunorau-fat-awd-3-0`, `eunorau-fat-hd-2-0`,
+`eunorau-defender-s-fat-hs`, `eunorau-fat-hs`, `eunorau-specter-s-hunter`,
+`eunorau-specter-st-1`) -> `score_range` 10.0 -> 8.3 (matching the
+non-Eunorau 60-63mi cluster); 5 bikes at 75mi (`eunorau-meta275-2`,
+`eunorau-flash-lite-st`, `eunorau-meta-20-1`, `eunorau-meta-24-1`,
+`eunorau-meta-26-1`) -> `score_range` 10.0 -> 9.0 (an exact match to a
+non-Eunorau bike at the identical 75mi figure). Recomputed `score_overall`
+for all 12 via the standing P0.24 weighted formula (value 0.29 / range
+0.19 / power 0.15 / comfort 0.14 / build 0.17 / versatility 0.09) --
+sanity-checked the formula first against `eunorau-fat-awd-2`'s own known
+values (computed 8.115 vs. its stored 8.1, confirming the fit still
+holds) -- each bike shifted down 0.2-0.3 overall points (e.g.
+`eunorau-fat-hd-2-0` 8.3->8.0, `eunorau-meta275-2` 6.8->6.6).
+
+**Left untouched, deliberately:** the remaining 3 bikes at `range_practical=165`
+(`eunorau-flash-lite-2-0`, `eunorau-flash-awd-1-0`, `eunorau-flash-2` --
+the highest range in the entire 109-bike catalog) stay at `score_range=10.0`.
+The non-Eunorau curve's own trajectory (81mi=9.5, 112mi=9.5, 121mi=9.2)
+extrapolates comfortably above 9.5 by 165mi, so a 10.0 ceiling here is a
+legitimate top-of-scale score, not a repeat of the bug -- verified against
+the curve rather than assumed just because it shares the same "10.0"
+value as the 12 bikes that were wrong.
+
+**Also checked, no bug found:** the run-47 "next candidate" sanity check on
+`score_build_quality` -- cross-tabulated against `frame_material` per
+brand across all 7 brands and found normal, expected variance (e.g.
+Eunorau Aluminum bikes span 6.0-9.0 depending on componentry, not a flat
+value), not the flat-placeholder signature that flagged `score_value`/
+`score_power`/`score_range`. Closing this axis unless new evidence
+surfaces.
+
+**Verified:** query-confirmed in Supabase (all 12 corrected rows show the
+target `score_range`/`score_overall` pair). `tsc --noEmit` clean (DB-only
+run, no code files touched).
+
+**Expected impact:** closes a 4th instance of the same score-integrity bug
+class this cycle (value/power/comfort/range), on 12 bikes across 7 SKUs
+whose real-world range was being scored identically to bikes with nearly
+3x the range -- a direct trust gap against the site's own "How We Test"
+promise that range is judged on its own merits, and a value that flows
+into `score_overall` and every best-of ranking that sorts on it (e.g.
+`/best/long-range-ebikes`, `/best/off-road-ebikes`).
+
+**Next candidates:** (1) GSC/PostHog have now been flat for 5 consecutive
+runs (44-48) -- keep treating the current top pages as at an authority
+ceiling and lean on data-quality sweeps or net-new content/catalog work
+until a new signal appears. (2) `score_versatility` is the one score axis
+never explicitly swept with this method -- a `GROUP BY brand,
+score_versatility` cross-referenced against `suitable_for` array length/
+category mix would close out the full 6-axis sweep. (3) `score_build_quality`
+is now confirmed clean, close unless new evidence surfaces. (4)
+`samebike-cy20-pro` (P0.28, torque mismatch) and `eunorau-defender-s-fat-hs`
+(P0.16b) still need a Dylan/human call. (5) `/best/cargo-ebikes` remains an
+authority-ceiling case (pos 73+, 0 clicks) -- do not re-chase with content
+edits. (6) the P0.30 price-drift bug class remains a standing check --
+re-verify `description ~ '\$[0-9]'` vs `price` whenever touching pricing
+copy.
