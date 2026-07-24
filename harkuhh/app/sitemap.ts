@@ -33,6 +33,7 @@ const VS_MATCHUPS = [
   'duotts-duotts-c29-k-vs-eunorau-meta-24-1',
   'eunorau-meta-275-st-1-vs-engwe-l20',
   'eunorau-flash-lite-st-vs-eunorau-flash-lite-2-0',
+  'dyu-m20-vs-dyu-c9',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

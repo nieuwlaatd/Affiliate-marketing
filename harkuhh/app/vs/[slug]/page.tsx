@@ -27,6 +27,7 @@ const MATCHUPS: [string, string][] = [
   ['duotts-duotts-c29-k', 'eunorau-meta-24-1'], // both have a confirmed GSC click this run, mid-range price tier
   ['eunorau-meta-275-st-1', 'engwe-l20'], // both recurring PostHog signal (3 visitors, 2 consecutive pulls) with no vs-page yet, identical $1,399 price -- a natural "same price, which one" query
   ['eunorau-flash-lite-st', 'eunorau-flash-lite-2-0'], // FLASH LITE ST is this run's #1 affiliate-click bike (4 clicks, the highest single-bike click count logged yet) with no vs-page; FLASH LITE is the identical $1,899/92Nm platform differing only in frame geometry (step-through vs step-over) -- the exact "which frame should I get" query a buyer comparing this bike would search
+  ['dyu-m20', 'dyu-c9'], // DYU M20 has tied for the #2 affiliate-click bike across 2 consecutive runs with no vs-page; C9 is DYU's only other bike at the identical $899 price point, but a very different build (66 lb light city bike, 93mi manufacturer range vs M20's 88 lb full-suspension fat-tire commuter) -- a real "same price, which DYU" query
 ];
 
 function brandSlug(b: EBike): string {
