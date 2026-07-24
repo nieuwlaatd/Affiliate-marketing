@@ -32,6 +32,7 @@ const VS_MATCHUPS = [
   'samebike-rs-a01-pro-vs-samebike-rs-a01-men',
   'duotts-duotts-c29-k-vs-eunorau-meta-24-1',
   'eunorau-meta-275-st-1-vs-engwe-l20',
+  'eunorau-flash-lite-st-vs-eunorau-flash-lite-2-0',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

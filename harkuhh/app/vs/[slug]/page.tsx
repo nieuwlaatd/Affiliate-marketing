@@ -26,6 +26,7 @@ const MATCHUPS: [string, string][] = [
   ['samebike-rs-a01-pro', 'samebike-rs-a01-men'], // two variants of the same model, both climbing in GSC (pos 14.7 / pos 9.1) -- a natural "which RS-A01 should I buy" query
   ['duotts-duotts-c29-k', 'eunorau-meta-24-1'], // both have a confirmed GSC click this run, mid-range price tier
   ['eunorau-meta-275-st-1', 'engwe-l20'], // both recurring PostHog signal (3 visitors, 2 consecutive pulls) with no vs-page yet, identical $1,399 price -- a natural "same price, which one" query
+  ['eunorau-flash-lite-st', 'eunorau-flash-lite-2-0'], // FLASH LITE ST is this run's #1 affiliate-click bike (4 clicks, the highest single-bike click count logged yet) with no vs-page; FLASH LITE is the identical $1,899/92Nm platform differing only in frame geometry (step-through vs step-over) -- the exact "which frame should I get" query a buyer comparing this bike would search
 ];
 
 function brandSlug(b: EBike): string {
