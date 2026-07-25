@@ -29,6 +29,7 @@ const MATCHUPS: [string, string][] = [
   ['eunorau-flash-lite-st', 'eunorau-flash-lite-2-0'], // FLASH LITE ST is this run's #1 affiliate-click bike (4 clicks, the highest single-bike click count logged yet) with no vs-page; FLASH LITE is the identical $1,899/92Nm platform differing only in frame geometry (step-through vs step-over) -- the exact "which frame should I get" query a buyer comparing this bike would search
   ['dyu-m20', 'dyu-c9'], // DYU M20 has tied for the #2 affiliate-click bike across 2 consecutive runs with no vs-page; C9 is DYU's only other bike at the identical $899 price point, but a very different build (66 lb light city bike, 93mi manufacturer range vs M20's 88 lb full-suspension fat-tire commuter) -- a real "same price, which DYU" query
   ['duotts-f20', 'duotts-duotts-f26lite-electric-bike'], // F20 logged an affiliate click this run with no vs-page; F26 Lite is its closest DUOTTS "F-series" fat-tire sibling ($1,099 vs $1,199, both full suspension) but trades range for torque (F20: 87mi manufacturer/70 Nm vs F26 Lite: 50mi manufacturer/80 Nm) -- a real "which F-series DUOTTS" query
+  ['engwe-p275-se', 'engwe-p275-pro'], // P275 SE tied for the site's #1 PostHog page this run (13 views/13 visitors/13 sessions) with no vs-page; P275 Pro is its natural same-family sibling ($899 step-through rear-hub with torque sensor vs $1,099 step-over mid-drive with Gates belt drive) -- a real "which ENGWE P275 should I buy" query given both share the same product-line name
 ];
 
 function brandSlug(b: EBike): string {
