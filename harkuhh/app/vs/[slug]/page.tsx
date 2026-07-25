@@ -30,6 +30,12 @@ const MATCHUPS: [string, string][] = [
   ['dyu-m20', 'dyu-c9'], // DYU M20 has tied for the #2 affiliate-click bike across 2 consecutive runs with no vs-page; C9 is DYU's only other bike at the identical $899 price point, but a very different build (66 lb light city bike, 93mi manufacturer range vs M20's 88 lb full-suspension fat-tire commuter) -- a real "same price, which DYU" query
   ['duotts-f20', 'duotts-duotts-f26lite-electric-bike'], // F20 logged an affiliate click this run with no vs-page; F26 Lite is its closest DUOTTS "F-series" fat-tire sibling ($1,099 vs $1,199, both full suspension) but trades range for torque (F20: 87mi manufacturer/70 Nm vs F26 Lite: 50mi manufacturer/80 Nm) -- a real "which F-series DUOTTS" query
   ['engwe-p275-se', 'engwe-p275-pro'], // P275 SE tied for the site's #1 PostHog page this run (13 views/13 visitors/13 sessions) with no vs-page; P275 Pro is its natural same-family sibling ($899 step-through rear-hub with torque sensor vs $1,099 step-over mid-drive with Gates belt drive) -- a real "which ENGWE P275 should I buy" query given both share the same product-line name
+  // 2026-07-25 run 55: P4.2 (programmatic long-tail expansion) first slice -- naming-confusion
+  // sibling pairs within a brand's own model family that share a name stem but have real spec
+  // gaps, a genuine "which one do I buy" query for anyone comparing the brand's own lineup.
+  ['samebike-m20', 'samebike-m20-iii'], // "M20 vs M20-III" -- same base name, real generational upgrade ($1,299/100Nm/87mi vs $1,599/160Nm/174mi manufacturer range, nearly double)
+  ['engwe-l20', 'engwe-l20-boost'], // "L20 vs L20 Boost" -- ENGWE's L20 line has 4 similarly-named SKUs (L20, L20 Boost, L20 3.0 Boost, L20 3.0 Pro); L20 Boost is actually $250 cheaper than base L20 while carrying more torque (75 vs 50 Nm), a genuinely counterintuitive naming trap worth a direct comparison
+  ['samebike-rs-a02-pro', 'samebike-rs-a02-plus'], // "RS-A02 Pro vs Plus" -- same chassis, Plus is a clear torque/range upgrade ($959/80Nm/68mi vs $1,399/100Nm/81mi)
 ];
 
 function brandSlug(b: EBike): string {
