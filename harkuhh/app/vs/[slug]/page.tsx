@@ -36,6 +36,12 @@ const MATCHUPS: [string, string][] = [
   ['samebike-m20', 'samebike-m20-iii'], // "M20 vs M20-III" -- same base name, real generational upgrade ($1,299/100Nm/87mi vs $1,599/160Nm/174mi manufacturer range, nearly double)
   ['engwe-l20', 'engwe-l20-boost'], // "L20 vs L20 Boost" -- ENGWE's L20 line has 4 similarly-named SKUs (L20, L20 Boost, L20 3.0 Boost, L20 3.0 Pro); L20 Boost is actually $250 cheaper than base L20 while carrying more torque (75 vs 50 Nm), a genuinely counterintuitive naming trap worth a direct comparison
   ['samebike-rs-a02-pro', 'samebike-rs-a02-plus'], // "RS-A02 Pro vs Plus" -- same chassis, Plus is a clear torque/range upgrade ($959/80Nm/68mi vs $1,399/100Nm/81mi)
+  // 2026-07-25 run 56: P4.2 naming-confusion pairs, part 2 -- CREST vs STORM skipped
+  // (byte-identical spec columns in the DB per run 55's own caution; needs a samebike.com
+  // verification pass before pairing, not a guess).
+  ['duotts-f26', 'duotts-n26'], // "F26 vs N26" -- same 130 Nm dual-motor platform, same $1,299-1,349 price band, but N26 is actually *cheaper* ($1,299 vs $1,349) while adding full front+rear suspension where F26 is front-only -- a genuine "why would I pay more for less suspension" trap worth surfacing directly
+  ['engwe-l20-3-0-boost', 'engwe-l20-3-0-pro'], // "L20 3.0 Boost vs L20 3.0 Pro" -- the other half of ENGWE's confusing L20 family (after L20 vs L20 Boost); Pro is a real $300 upgrade (100 Nm/75mi practical range vs Boost's 75 Nm/63mi) for anyone deciding between the two "3.0" tiers
+  ['vtuvia-sx20', 'vtuvia-sn100'], // "SX20 vs SN100" -- identical price ($1,599), torque (85 Nm), battery and range, but SX20 is a 20in step-through with a 330 lb payload while SN100 is a 26in step-over rated to 400 lb -- same platform, different frame geometry and payload, a real "which frame fits me" query
 ];
 
 function brandSlug(b: EBike): string {

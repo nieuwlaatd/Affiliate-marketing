@@ -39,6 +39,9 @@ const VS_MATCHUPS = [
   'samebike-m20-vs-samebike-m20-iii',
   'engwe-l20-vs-engwe-l20-boost',
   'samebike-rs-a02-pro-vs-samebike-rs-a02-plus',
+  'duotts-f26-vs-duotts-n26',
+  'engwe-l20-3-0-boost-vs-engwe-l20-3-0-pro',
+  'vtuvia-sx20-vs-vtuvia-sn100',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
