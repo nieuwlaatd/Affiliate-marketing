@@ -481,7 +481,7 @@ Browse our [all e-bikes overview](/e-bikes/overzicht) and filter by weight capac
     description: 'Not all e-bike motors handle hills equally. Here is what torque, motor type, and gearing mean for real hill climbing performance.',
     category: 'Buying Advice',
     publishedAt: '2026-05-29',
-    updatedAt: '2026-06-27',
+    updatedAt: '2026-07-25',
     readingTime: 11,
     coverAlt: 'Electric bike climbing a steep residential hill',
     relatedSlugs: ['how-to-choose-an-electric-bike', 'ebike-classes-explained'],
@@ -531,7 +531,7 @@ The [DUOTTS S26 AWD](/e-bikes/duotts/duotts-s26) combines two hub motors for 110
 
 ### Best for power and range on hills: Eunorau FLASH
 
-At 220 Nm from a single rear hub, the [Eunorau FLASH](/e-bikes/eunorau/eunorau-flash-2) is the most powerful single-motor bike in our catalog. That raw torque makes it less dependent on gear selection for hill climbing, which matters if you are not used to shifting aggressively. A 48V battery provides enough capacity for extended hill-heavy routes. Price: around $2,499.
+At 220 Nm from a single rear hub, the [Eunorau FLASH](/e-bikes/eunorau/eunorau-flash-2) is the most powerful single-motor rear-hub bike in our catalog (Eunorau's mid-drive R1 and R1+ flagships produce more torque but at nearly double the price and a different motor architecture). That raw torque makes it less dependent on gear selection for hill climbing, which matters if you are not used to shifting aggressively. A 48V battery provides enough capacity for extended hill-heavy routes. Price: around $2,499.
 
 ### Best AWD fat-tire hill climber: Eunorau FAT-AWD 3.0
 
