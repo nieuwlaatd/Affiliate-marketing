@@ -1128,3 +1128,21 @@ export function getStateBySlug(slug: string): StateInfo | undefined {
 export function getAllStateSlugs(): string[] {
   return STATES.map((s) => s.slug);
 }
+
+export type StateTerrainCategory = 'hilly' | 'flat' | 'mixed';
+
+const HILLY_TERRAIN = /mountain|steep|rockies|appalachian|elevation|glacier|fjord|sawtooth/i;
+const FLAT_TERRAIN = /flat|plains|prairie/i;
+
+/** Buckets a state's free-text `terrain` description into a category used to
+ *  weight which bikes get surfaced first on its state page (climbing-capable
+ *  for genuinely hilly states, range-focused for genuinely flat ones). Both
+ *  or neither keyword set matching falls back to 'mixed' so genuinely diverse
+ *  states (e.g. California, Virginia) don't get a one-sided bike list. */
+export function getStateTerrainCategory(state: StateInfo): StateTerrainCategory {
+  const hilly = HILLY_TERRAIN.test(state.terrain);
+  const flat = FLAT_TERRAIN.test(state.terrain);
+  if (hilly && !flat) return 'hilly';
+  if (flat && !hilly) return 'flat';
+  return 'mixed';
+}

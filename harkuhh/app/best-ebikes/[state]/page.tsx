@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import BikeCard from '@/components/BikeCard';
 import { ShortlistProvider } from '@/lib/shortlist-context';
 import { getAllBikes } from '@/lib/ebike-data';
-import { getAllStateSlugs, getStateBySlug } from '@/lib/state-data';
+import { getAllStateSlugs, getStateBySlug, getStateTerrainCategory } from '@/lib/state-data';
 import { STORES } from '@/lib/store-data';
 
 export function generateStaticParams() {
@@ -38,9 +38,37 @@ export default async function StatePage({
   if (!state) notFound();
 
   const allBikes = await getAllBikes();
+  const terrainCategory = getStateTerrainCategory(state);
   const bikes = allBikes
-    .sort((a, b) => b.scoreOverall - a.scoreOverall)
+    .sort((a, b) => {
+      if (terrainCategory === 'hilly') {
+        const climbA = a.scoreOverall + (a.motorType === 'mid-drive' ? 1.0 : 0) + a.torque / 300;
+        const climbB = b.scoreOverall + (b.motorType === 'mid-drive' ? 1.0 : 0) + b.torque / 300;
+        return climbB - climbA;
+      }
+      if (terrainCategory === 'flat') {
+        const rangeA = a.scoreOverall + a.rangePractical / 100;
+        const rangeB = b.scoreOverall + b.rangePractical / 100;
+        return rangeB - rangeA;
+      }
+      return b.scoreOverall - a.scoreOverall;
+    })
     .slice(0, 9);
+
+  const terrainNote =
+    terrainCategory === 'hilly'
+      ? {
+          text: `${state.name}'s terrain means real climbs, so these picks lean toward higher-torque and mid-drive motors that handle grades without draining the battery.`,
+          href: '/blog/best-ebikes-for-hills',
+          label: 'See our full hill-climbing e-bike guide',
+        }
+      : terrainCategory === 'flat'
+        ? {
+            text: `${state.name} is mostly flat, so range and efficiency matter more than raw torque here. These picks lead with our longest-range bikes.`,
+            href: '/best/long-range-ebikes',
+            label: 'See our full long-range e-bike guide',
+          }
+        : null;
 
   const dealers = STORES.filter(
     (s) =>
@@ -184,8 +212,10 @@ export default async function StatePage({
           <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">
             Top-Rated E-Bikes for {state.name}
           </h2>
-          <p className="text-sm text-[var(--muted)] mb-6">
-            Our highest-scoring e-bikes, ranked by value, range, and build quality.
+          <p className={`text-sm text-[var(--muted)] ${terrainNote ? 'mb-2' : 'mb-6'}`}>
+            {terrainNote
+              ? terrainNote.text
+              : 'Our highest-scoring e-bikes, ranked by value, range, and build quality.'}{' '}
             Not sure which one fits?{' '}
             <Link
               href="/e-bikes/quiz"
@@ -195,6 +225,13 @@ export default async function StatePage({
             </Link>{' '}
             for a personalized match.
           </p>
+          {terrainNote && (
+            <p className="text-sm text-[var(--muted)] mb-6">
+              <Link href={terrainNote.href} className="text-[var(--accent)] underline">
+                {terrainNote.label} &rarr;
+              </Link>
+            </p>
+          )}
           <ShortlistProvider>
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
               {bikes.map((bike) => (
