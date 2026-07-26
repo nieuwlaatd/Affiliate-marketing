@@ -43,6 +43,9 @@ const VS_MATCHUPS = [
   'engwe-l20-3-0-boost-vs-engwe-l20-3-0-pro',
   'vtuvia-sx20-vs-vtuvia-sn100',
   'samebike-crest-fat-tire-mountain-e-bike-vs-samebike-storm-fat-tire-mountain-e-bike',
+  'duotts-c29-vs-duotts-duotts-c29max-electric-bike',
+  'vtuvia-zeal-lt7-vs-vtuvia-zeal-xt8',
+  'samebike-lo26-plus-vs-samebike-lo26-ii-yd',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

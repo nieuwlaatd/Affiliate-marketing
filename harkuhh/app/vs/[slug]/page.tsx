@@ -47,6 +47,12 @@ const MATCHUPS: [string, string][] = [
   // top tube for a low-step step-through design. Fixed `frame_type` in the DB to match
   // (both were 'sport', a non-differentiating placeholder) before adding this pairing.
   ['samebike-crest-fat-tire-mountain-e-bike', 'samebike-storm-fat-tire-mountain-e-bike'], // "Crest vs Storm" -- identical motor/battery/range/price, the only real difference is frame geometry (step-through vs step-over) -- a genuine "which frame fits me" query, same pattern as the SX20/SN100 pairing
+  // 2026-07-26 run 59: P4.2 naming-confusion slice 3 -- GSC/PostHog flat for a 16th
+  // consecutive run with no new signal bikes, so continued mining the catalog for
+  // remaining within-brand naming-confusion pairs with a real spec story.
+  ['duotts-c29', 'duotts-duotts-c29max-electric-bike'], // "C29 vs C29Max" -- same 799/1149 platform, C29Max adds a torque sensor and 10 more Nm but loses 2mi of practical range and costs $350 more, a real "is the torque sensor worth it" query within DUOTTS' own C29 family (C29 Lite and C29-K already covered by other angles)
+  ['vtuvia-zeal-lt7', 'vtuvia-zeal-xt8'], // "Zeal LT7 vs Zeal XT8" -- same step-through rear-hub platform, XT8 is a genuine $500 upgrade (85 Nm/52mi practical/350 lb payload vs LT7's 65 Nm/45mi/350 lb) -- a real "which Zeal" query given both share the product-line name
+  ['samebike-lo26-plus', 'samebike-lo26-ii-yd'], // "LO26 Plus vs LO26-II-YD" -- both full-suspension step-over 75 Nm fat-tire bikes sharing the LO26 name stem, but LO26-II-YD is $100 cheaper with a smaller payload rating (264 vs 330 lb) and shorter range (40mi vs 44mi practical) -- a genuine "which LO26" query
 ];
 
 function brandSlug(b: EBike): string {
