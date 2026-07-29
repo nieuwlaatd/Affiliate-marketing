@@ -59,6 +59,14 @@ const MATCHUPS: [string, string][] = [
   ['engwe-p275-se', 'engwe-p275-st'], // "P275 SE vs P275 ST" -- both step-through frames (unlike the already-shipped SE vs Pro, which pairs step-through against step-over), but a genuinely different motor architecture: SE is rear-hub/55Nm/$899/46mi practical range, ST is mid-drive/70Nm/$1,199/121mi practical range -- a real "which step-through P275" query for a buyer who already knows they want the low-step frame
   ['samebike-rs-a01-pro', 'samebike-rs-a01-plus'], // "RS-A01 Pro vs Plus" -- the third RS-A01 variant (already have Pro vs Men); both step-through, but Plus is a genuine $240 power upgrade (70 Nm/48V 14Ah vs Pro's 55 Nm/36V 15Ah) that trades some range (40mi vs 44mi practical) for torque -- a real "is the Plus worth $240 more" query
   ['dyu-c5-27-5-inch-city-electric-bike', 'dyu-c6-26-inch-city-electric-bike'], // "C5 vs C6" -- DYU's closest same-price pair ($799 vs $819), both rear-hub/front-suspension city bikes, differing mainly in frame geometry (C5 step-over 27.5in wheels vs C6 step-through 26in wheels) and battery (10Ah vs 12Ah) -- a real "which frame" query, same pattern as the SX20/SN100 and CREST/STORM pairings
+  // 2026-07-29 run 61: P4.2 naming-confusion slice 5 -- GSC/PostHog flat for an 18th
+  // consecutive run with no new signal bikes, so did a fresh per-brand sweep of the full
+  // catalog for remaining same-stem sibling pairs (the run-59/60 candidate list was
+  // exhausted). While sourcing the META275 pairing, found and fixed a real data bug: see
+  // SEO-LOG for details.
+  ['eunorau-specter-s-hunter', 'eunorau-specter-st-1'], // "SPECTER-S 3.0 vs SPECTER-ST 2.0" -- identical price ($2,999), motor (1000W Bafang M620 mid-drive, 160 Nm), battery, and dual-battery range (80mi), the only real difference is frame geometry (sport/step-over vs step-through) -- same pattern as CREST/STORM and SX20/SN100
+  ['vtuvia-reindeer-step-thru-electric-bike', 'vtuvia-reindeer-2'], // "Reindeer 1.0 vs Reindeer 2.0" -- a genuinely counterintuitive upgrade: 2.0 is $100 cheaper than 1.0 ($1,599 vs $1,699) while adding more torque (85 vs 80 Nm) and a torque sensor, at the cost of a slightly heavier build (75 vs 72 lbs) and less range (70mi vs 55mi manufacturer) -- a real "why is the newer one cheaper" query
+  ['eunorau-meta-275-1', 'eunorau-meta-275-st-1'], // "META275 1.0 vs META275 ST" -- byte-identical specs (price, motor, torque, battery, weight, range all match exactly), the only difference is frame geometry (step-over vs step-through) -- same pattern as CREST/STORM; fixed a real bug on META275 1.0 first (see SEO-LOG: its description wrongly claimed "step-through" despite a correct step-over `frame_type` field, confirmed against Eunorau's own product page)
 ];
 
 function brandSlug(b: EBike): string {

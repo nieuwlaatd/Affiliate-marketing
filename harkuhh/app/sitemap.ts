@@ -49,6 +49,9 @@ const VS_MATCHUPS = [
   'engwe-p275-se-vs-engwe-p275-st',
   'samebike-rs-a01-pro-vs-samebike-rs-a01-plus',
   'dyu-c5-27-5-inch-city-electric-bike-vs-dyu-c6-26-inch-city-electric-bike',
+  'eunorau-specter-s-hunter-vs-eunorau-specter-st-1',
+  'vtuvia-reindeer-step-thru-electric-bike-vs-vtuvia-reindeer-2',
+  'eunorau-meta-275-1-vs-eunorau-meta-275-st-1',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
