@@ -1,3 +1,77 @@
+## 2026-07-29: weekly catalog sync
+
+### Summary
+
+| Brand    | Vendor bikes (kept) | DB rows | Prices applied | New inserted | Discontinued applied | Deferred (review) |
+|----------|--------------------:|--------:|---------------:|-------------:|---------------------:|------------------:|
+| ENGWE    | 23                  | 26      | 1              | 0            | 0                    | 2 price + 7 new + 3 disc (rollover, 5th cycle) |
+| Eunorau  | 30                  | 26      | 1              | 0            | 0                    | 6 new + 1 dup (META275) |
+| Walfisk  | 6                   | 3       | 0              | 0            | 0                    | 3 new (ET-7 variants + frame accessory) |
+| DUOTTS   | 12                  | 11      | 0              | 0            | 0                    | 1 new (APEFOX co-listing) |
+| SAMEBIKE | 21                  | 22      | 0              | 0            | 0                    | (clean) |
+| DYU      | 12                  | 10      | 0              | 0            | 0                    | 1 ambiguous (A1F Pro) + 2 new (D3S, SP1) |
+| VTUVIA   | 20                  | 11      | 0              | 0            | 0                    | 9 color-variant duplicates + 1 new (CMB 10-Speed) |
+
+### Applied changes (2 total)
+
+**Price updates (2):**
+
+_ENGWE (1):_
+- **L16** (`engwe-l16`): $899 -> $849 (-$50). Exact-handle match on vendor `engwe-l16` (title "ENGWE L16"), score 1.0. Clean markdown.
+
+_Eunorau (1):_
+- **R1** (`eunorau-r1`): $4299 -> $3750 (-$549, -12.8%). Exact-handle match on vendor `r1` (title "R1-19"), score 1.0. 3rd consecutive cycle showing the same rename + price cut; matcher confidence is now full and delta is well within the auto-apply threshold. R1-17 remains a separate SKU (higher trim, $3749) and is not touched by this update.
+
+**New inserted (0), Discontinued applied (0), Returned (0).**
+
+### Deferred (need owner sign-off)
+
+**ENGWE** - 5th consecutive cycle of vendor generation rollover; not applying without owner decision:
+
+- 2 price changes still deferred (unchanged from prior cycles):
+  - `engwe-ep-2-3-0-boost` ($999 vs vendor `electric-commuter-bike-...-engwe-ep-2-3-0` $1499, +50.1%): vendor dropped "Boost" from name; delta above auto-apply threshold.
+  - `engwe-l20-3-0-pro` ($1699 vs vendor `comfort-ebike-full-suspension-ebike-engwe-l20-3-0` $1399, -17.7%): matcher score 0.70 below threshold; possible rename of L20 3.0 Pro to plain "L20 3.0".
+- 7 NEW ENGWE candidates (still deferred, mostly repeating from prior cycles):
+  - **M20 2.0** ($999), **L20 2.0** ($699), **M20 3.0** ($1399), **X26** ($1499), **Ease 1** ($799), **Ease 3** ($899) - new-generation SKUs.
+  - **ENGINE PRO** ($1599) via `usengine-pro-750w-16ah-high-performance-electric-bike` - separate from `engwe-engine-pro-2-0`, owner call.
+- 3 rows still absent from vendor and NOT auto-applied to available=false (rollover context still ambiguous per prior policy):
+  - `engwe-engine-pro-3-0-boost` ($1699), `engwe-ep-2-boost` ($1049), `engwe-l20-3-0-boost` ($1399). Vendor now sells non-"Boost" 3.0 variants.
+
+**Eunorau** - 1 known duplicate DB row + 6 new deferred:
+- `eunorau-meta-275-st-1` (META275, $1399): duplicate of `eunorau-meta-275-1` (same price, same specs). 4th+ cycle flagged. Owner cleanup, not sync's job. Kept `available=true` (do not mark discontinued).
+- 6 NEW candidates:
+  - **R1-17** ($3749), **2x Fat-HS** ($3449), **ICEX 1.0** ($2499) via `sled-xd-1500pro`, **JUMBO** ($1699) - real new SKUs, all recurring from prior cycles; owner spec review before insert.
+  - **Safety Seat for Child** ($251.10), **TEKTRO 4-Piston Hydraulic Brake Set** ($299) - accessories that leaked past the reject filter; skip.
+
+**Walfisk** - 3 new candidates all non-actionable:
+- `walfisk-electric-bike-et-7-3000w-...-cushioneu` ($2299.99) - EU/UK variant of ET-7 Ultra (already tracked as `walfisk-...-et-7-3000w-brushless-motor-60v45ah-big-battery-bla`).
+- `walfisk-et-7-1500w-brushless-motor-60ah-...` ($1999.99) - ET-7 1500W variant; DB tracks the 3000W flagship, prior policy is one row per model.
+- `walfisk-et-7-ultra-electric-bike-frame-...` ($259) - frame-only accessory that leaked past the filter; skip.
+- ET-7 Ultra false-match to `walfisk-electric-bike-et-7-1500w-3000w-rear-motor` ($599) no longer surfaces this cycle (kept the same accessory-blocklist tweak).
+
+**DUOTTS** - clean; 1 low-confidence new candidate:
+- `apefox-rh20-e-bike` (APEFOX RH20 E-Bike, $1099) - third-party brand co-listed on DUOTTS' store, score 0.19 to all DB rows; skip.
+
+**SAMEBIKE** - clean. All 21 remaining DB rows matched vendor at identical prices (except `samebike-yinyu14` which stayed `available=false` from prior cycles - vendor still doesn't list it).
+
+**DYU** - 1 ambiguous + 2 new:
+- **A1F Pro** (`dyu-a1f-pro`, $429): matcher's best pair (`a1f-ebike` at $499) scored 0.53 - just below the 0.55 assignment threshold, so DB row surfaces as "no vendor match". Vendor title explicitly says "DYU A1F Pro 16 Inch Full Folding Electric Bike"; product is still sold. Kept `available=true` (not discontinued). Price delta +$70/+16% deferred as in prior weeks.
+- **DYU D3S** ($499) and **DYU SP1** ($1299): 3rd cycle deferred, real new SKUs pending spec review.
+
+**VTUVIA** - 9 color/variant duplicates + 1 new (all deferred as in prior cycles):
+- Color variants of existing DB rows: SF20H black/red/green/white, SX20 Antelope silvery/red/white/blue, SX20 Folding. All at DB row prices; skip per one-row-per-model rule.
+- **CMB 10-Speed Ebike** ($2149): 5+ cycles deferred pending owner decision (DB has `vtuvia-cmb` at $1899, matches the 8-speed).
+
+### Notes
+
+- Filter: shopify `/products.json` for each brand (all 7 use Shopify), tightened accessory reject to drop battery/kit/combo/rack/trailer/mirror/light/handle/etc suffixes and phrases while allowing "battery" in the middle of a bike handle (e.g. `walfisk-26-fat-tire-...22-5ah-large-capacity-battery-wf26` is a bike; `19-2ah-battery-only-for-m20` is an accessory).
+- Matcher: greedy 1:1 assignment. Score = max(exact-handle-equality, 0.5*token_f1 + 0.5*SequenceMatcher). Auto-apply thresholds: score >= 0.75 & |delta| <= 35%, OR score >= 0.85 & |delta| <= 45%. Below -> deferred. Base-vs-variant pairing (e.g. base `l20` handle vs `engwe-l20-boost` DB row) is prevented by greedy 1:1 (base `engwe-l20` claims vendor `l20` first).
+- Canonical scraper (`scripts/scrape-us-ebikes.ts`) BRANDS array still contains only Walfisk/Eunorau/DUOTTS; all 7 brands were fetched via direct `/products.json` this cycle, matching prior weekly runs.
+- No spec-only changes applied this run; full spec re-scoring would need running the canonical scraper for all 7 brands and diffing every field. Scheduled for a future manual pass.
+- `affiliate-partners.xlsx` updated for all 7 active brands; Last Updated = 2026-07-29.
+
+---
+
 ## 2026-07-20: weekly catalog sync
 
 ### Summary
