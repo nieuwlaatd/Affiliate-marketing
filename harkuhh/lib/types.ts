@@ -89,7 +89,7 @@ export interface EBike {
   images: string[];
 
   motorType: MotorType;
-  motorBrand: string;
+  motorBrand?: string;
   torque: number; // Nm
   supportLevels: number;
 

@@ -215,7 +215,9 @@ export default function VergelijkClient({ initialBikes }: { initialBikes: EBike[
             {/* Motor */}
             <SectionHeader title="Motor" />
             <SpecRow cols={selectedBikes.length} label="Type" values={selectedBikes.map(b => motorLabels[b.motorType] || b.motorType)} />
-            <SpecRow cols={selectedBikes.length} label="Brand" values={selectedBikes.map(b => b.motorBrand)} />
+            {selectedBikes.some(b => b.motorBrand) && (
+              <SpecRow cols={selectedBikes.length} label="Brand" values={selectedBikes.map(b => b.motorBrand || '—')} />
+            )}
             <SpecRow cols={selectedBikes.length} label="Torque" values={selectedBikes.map(b => `${b.torque} Nm`)} bestIdx={bestValue(b => b.torque)} />
             <SpecRow cols={selectedBikes.length} label="Assist levels" values={selectedBikes.map(b => `${b.supportLevels}`)} />
 

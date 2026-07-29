@@ -307,7 +307,7 @@ export default async function ProductPage({ params }: { params: Promise<{ brand:
               <h3 className="text-sm font-bold text-[var(--muted)] uppercase tracking-wide mb-4">Motor & Drivetrain</h3>
               <dl className="space-y-3">
                 <div className="flex justify-between text-sm"><dt className="text-[var(--muted)]">Motor type</dt><dd className="font-medium text-[var(--foreground)]">{motorLabels[bike.motorType]}</dd></div>
-                <div className="flex justify-between text-sm"><dt className="text-[var(--muted)]">Motor brand</dt><dd className="font-medium text-[var(--foreground)]">{bike.motorBrand}</dd></div>
+                {bike.motorBrand && <div className="flex justify-between text-sm"><dt className="text-[var(--muted)]">Motor brand</dt><dd className="font-medium text-[var(--foreground)]">{bike.motorBrand}</dd></div>}
                 <div className="flex justify-between text-sm"><dt className="text-[var(--muted)]">Torque</dt><dd className="font-medium text-[var(--foreground)]">{bike.torque} Nm</dd></div>
                 <div className="flex justify-between text-sm"><dt className="text-[var(--muted)]">Assist levels</dt><dd className="font-medium text-[var(--foreground)]">{bike.supportLevels}</dd></div>
                 {bike.bikeClass && <div className="flex justify-between text-sm"><dt className="text-[var(--muted)]">Class</dt><dd className="font-medium text-[var(--foreground)]">{classLabels[bike.bikeClass]}</dd></div>}

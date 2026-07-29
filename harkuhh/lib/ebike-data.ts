@@ -186,7 +186,12 @@ export function mapRowToEBike(row: Record<string, unknown>): EBike {
     priceCategory: (row.price_category as EBike['priceCategory']) || 'mid-range',
     images: (row.images as string[]) || [],
     motorType: (row.motor_type as EBike['motorType']) || 'rear-hub',
-    motorBrand: row.motor_brand as string,
+    // "Hub" / "Mid-drive" are leftover motor-type placeholders, not real brand
+    // names (see harkuhh/SEO-LOG.md run 62) -- treat them as unset so the UI
+    // doesn't show a redundant or blank "Motor brand" row.
+    motorBrand: ['Hub', 'Mid-drive'].includes(row.motor_brand as string)
+      ? undefined
+      : (row.motor_brand as string) || undefined,
     torque: row.torque as number,
     supportLevels: row.support_levels as number,
     batteryCapacity: row.battery_capacity as number,
