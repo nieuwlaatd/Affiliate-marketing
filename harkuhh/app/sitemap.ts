@@ -46,6 +46,9 @@ const VS_MATCHUPS = [
   'duotts-c29-vs-duotts-duotts-c29max-electric-bike',
   'vtuvia-zeal-lt7-vs-vtuvia-zeal-xt8',
   'samebike-lo26-plus-vs-samebike-lo26-ii-yd',
+  'engwe-p275-se-vs-engwe-p275-st',
+  'samebike-rs-a01-pro-vs-samebike-rs-a01-plus',
+  'dyu-c5-27-5-inch-city-electric-bike-vs-dyu-c6-26-inch-city-electric-bike',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

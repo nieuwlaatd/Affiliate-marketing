@@ -53,6 +53,12 @@ const MATCHUPS: [string, string][] = [
   ['duotts-c29', 'duotts-duotts-c29max-electric-bike'], // "C29 vs C29Max" -- same 799/1149 platform, C29Max adds a torque sensor and 10 more Nm but loses 2mi of practical range and costs $350 more, a real "is the torque sensor worth it" query within DUOTTS' own C29 family (C29 Lite and C29-K already covered by other angles)
   ['vtuvia-zeal-lt7', 'vtuvia-zeal-xt8'], // "Zeal LT7 vs Zeal XT8" -- same step-through rear-hub platform, XT8 is a genuine $500 upgrade (85 Nm/52mi practical/350 lb payload vs LT7's 65 Nm/45mi/350 lb) -- a real "which Zeal" query given both share the product-line name
   ['samebike-lo26-plus', 'samebike-lo26-ii-yd'], // "LO26 Plus vs LO26-II-YD" -- both full-suspension step-over 75 Nm fat-tire bikes sharing the LO26 name stem, but LO26-II-YD is $100 cheaper with a smaller payload rating (264 vs 330 lb) and shorter range (40mi vs 44mi practical) -- a genuine "which LO26" query
+  // 2026-07-29 run 60: P4.2 naming-confusion slice 4 -- GSC/PostHog flat for a 17th
+  // consecutive run with no new signal bikes, so continued mining remaining within-brand
+  // pairs flagged as candidates in run 59's log.
+  ['engwe-p275-se', 'engwe-p275-st'], // "P275 SE vs P275 ST" -- both step-through frames (unlike the already-shipped SE vs Pro, which pairs step-through against step-over), but a genuinely different motor architecture: SE is rear-hub/55Nm/$899/46mi practical range, ST is mid-drive/70Nm/$1,199/121mi practical range -- a real "which step-through P275" query for a buyer who already knows they want the low-step frame
+  ['samebike-rs-a01-pro', 'samebike-rs-a01-plus'], // "RS-A01 Pro vs Plus" -- the third RS-A01 variant (already have Pro vs Men); both step-through, but Plus is a genuine $240 power upgrade (70 Nm/48V 14Ah vs Pro's 55 Nm/36V 15Ah) that trades some range (40mi vs 44mi practical) for torque -- a real "is the Plus worth $240 more" query
+  ['dyu-c5-27-5-inch-city-electric-bike', 'dyu-c6-26-inch-city-electric-bike'], // "C5 vs C6" -- DYU's closest same-price pair ($799 vs $819), both rear-hub/front-suspension city bikes, differing mainly in frame geometry (C5 step-over 27.5in wheels vs C6 step-through 26in wheels) and battery (10Ah vs 12Ah) -- a real "which frame" query, same pattern as the SX20/SN100 and CREST/STORM pairings
 ];
 
 function brandSlug(b: EBike): string {
