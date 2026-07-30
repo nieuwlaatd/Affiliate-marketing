@@ -42,3 +42,7 @@ Thumbs.db
 ~$*.docx
 ~$*.xlsx
 ~$*.pptx
+
+.vercel
+__pycache__/
+*.pyc

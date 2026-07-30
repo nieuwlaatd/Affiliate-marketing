@@ -1,0 +1,1320 @@
+{
+  "ENGWE": {
+    "vendor_kept": 23,
+    "db_rows": 26,
+    "matches": [
+      {
+        "db_slug": "engwe-e26",
+        "db_model": "E26",
+        "db_price": 1699.0,
+        "vendor_handle": "engwe-e26",
+        "vendor_title": "ENGWE E26",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "engwe-ease-2-pro",
+        "db_model": "EASE 2 PRO",
+        "db_price": 999.0,
+        "vendor_handle": "engwe-ease-2-pro",
+        "vendor_title": "ENGWE Ease 2 Pro",
+        "vendor_price": 999.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "engwe-engine-pro-2-0",
+        "db_model": "Engine Pro 2.0",
+        "db_price": 1699.0,
+        "vendor_handle": "engwe-engine-pro-2-0",
+        "vendor_title": "Engine Pro 2.0",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "engwe-engine-pro-3-0-boost",
+        "db_model": "Engine Pro 3.0 Boost",
+        "db_price": 1699.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "engwe-engine-x",
+        "db_model": "Engine X",
+        "db_price": 1299.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "engwe-ep-2-3-0-boost",
+        "db_model": "EP-2 3.0 Boost",
+        "db_price": 999.0,
+        "vendor_handle": "electric-commuter-bike-fast-electric-bike-engwe-ep-2-3-0",
+        "vendor_title": "EP-2 3.0",
+        "vendor_price": 1499.0,
+        "score": 0.684
+      },
+      {
+        "db_slug": "engwe-ep-2-boost",
+        "db_model": "EP-2 Boost",
+        "db_price": 1049.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "engwe-ep-2-pro",
+        "db_model": "EP-2 Pro",
+        "db_price": 1399.0,
+        "vendor_handle": "engwe-ep-2-pro-750w-folding-electric-mountain-bike",
+        "vendor_title": "ENGWE EP-2 Pro",
+        "vendor_price": 1399.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "engwe-l16",
+        "db_model": "L16",
+        "db_price": 899.0,
+        "vendor_handle": "engwe-l16",
+        "vendor_title": "ENGWE L16",
+        "vendor_price": 849.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "engwe-l20",
+        "db_model": "L20",
+        "db_price": 1399.0,
+        "vendor_handle": "l20",
+        "vendor_title": "ENGWE L20",
+        "vendor_price": 1399.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "engwe-l20-3-0-boost",
+        "db_model": "L20 3.0 Boost",
+        "db_price": 1399.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "engwe-l20-3-0-pro",
+        "db_model": "L20 3.0 Pro",
+        "db_price": 1699.0,
+        "vendor_handle": "comfort-ebike-full-suspension-ebike-engwe-l20-3-0",
+        "vendor_title": "L20 3.0",
+        "vendor_price": 1399.0,
+        "score": 0.697
+      },
+      {
+        "db_slug": "engwe-l20-boost",
+        "db_model": "L20 Boost",
+        "db_price": 1149.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "engwe-le20",
+        "db_model": "LE20",
+        "db_price": 1699.0,
+        "vendor_handle": "le20",
+        "vendor_title": "ENGWE LE20",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "engwe-m1",
+        "db_model": "M1",
+        "db_price": 1099.0,
+        "vendor_handle": "engwe-x24",
+        "vendor_title": "ENGWE X24",
+        "vendor_price": 1799.0,
+        "score": 0.603
+      },
+      {
+        "db_slug": "engwe-m20",
+        "db_model": "M20",
+        "db_price": 1399.0,
+        "vendor_handle": "m20",
+        "vendor_title": "ENGWE M20",
+        "vendor_price": 1399.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "engwe-n1-air",
+        "db_model": "N1 Air",
+        "db_price": 1249.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "engwe-n1-pro",
+        "db_model": "N1 Pro",
+        "db_price": 1599.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "engwe-p20",
+        "db_model": "P20",
+        "db_price": 999.0,
+        "vendor_handle": "engwe-x20",
+        "vendor_title": "ENGWE X20",
+        "vendor_price": 1599.0,
+        "score": 0.694
+      },
+      {
+        "db_slug": "engwe-p275-pro",
+        "db_model": "P275 Pro",
+        "db_price": 1099.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "engwe-p275-se",
+        "db_model": "P275 SE",
+        "db_price": 899.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "engwe-p275-st",
+        "db_model": "P275 ST",
+        "db_price": 1199.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "engwe-t14",
+        "db_model": "T14",
+        "db_price": 650.0,
+        "vendor_handle": "engwe-t14-350w-miniebike",
+        "vendor_title": "ENGWE T14",
+        "vendor_price": 650.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "engwe-x20-x24-x26",
+        "db_model": "X20/X24/X26",
+        "db_price": 1599.0,
+        "vendor_handle": "engwe-x26-x24-x20",
+        "vendor_title": "X26/24/X20",
+        "vendor_price": 1599.0,
+        "score": 0.941
+      },
+      {
+        "db_slug": "engwe-y400",
+        "db_model": "Y400",
+        "db_price": 599.0,
+        "vendor_handle": "engwe-y400",
+        "vendor_title": "ENGWE Y400",
+        "vendor_price": 599.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "engwe-y600",
+        "db_model": "Y600",
+        "db_price": 699.0,
+        "vendor_handle": "engwe-y600",
+        "vendor_title": "ENGWE Y600",
+        "vendor_price": 699.0,
+        "score": 1.0
+      }
+    ],
+    "price_updates_apply": [
+      {
+        "slug": "engwe-l16",
+        "model": "L16",
+        "db_price": 899.0,
+        "new_price": 849.0,
+        "delta": -50.0,
+        "delta_pct": 5.6,
+        "vendor_handle": "engwe-l16",
+        "vendor_title": "ENGWE L16",
+        "score": 1.0
+      }
+    ],
+    "price_updates_defer": [
+      {
+        "slug": "engwe-ep-2-3-0-boost",
+        "model": "EP-2 3.0 Boost",
+        "db_price": 999.0,
+        "new_price": 1499.0,
+        "delta": 500.0,
+        "delta_pct": 50.1,
+        "vendor_handle": "electric-commuter-bike-fast-electric-bike-engwe-ep-2-3-0",
+        "vendor_title": "EP-2 3.0",
+        "score": 0.684
+      },
+      {
+        "slug": "engwe-l20-3-0-pro",
+        "model": "L20 3.0 Pro",
+        "db_price": 1699.0,
+        "new_price": 1399.0,
+        "delta": -300.0,
+        "delta_pct": 17.7,
+        "vendor_handle": "comfort-ebike-full-suspension-ebike-engwe-l20-3-0",
+        "vendor_title": "L20 3.0",
+        "score": 0.697
+      }
+    ],
+    "discontinued_defer": [
+      {
+        "slug": "engwe-engine-pro-3-0-boost",
+        "model": "Engine Pro 3.0 Boost",
+        "price": 1699.0,
+        "reason": "no vendor match"
+      },
+      {
+        "slug": "engwe-ep-2-boost",
+        "model": "EP-2 Boost",
+        "price": 1049.0,
+        "reason": "no vendor match"
+      },
+      {
+        "slug": "engwe-l20-3-0-boost",
+        "model": "L20 3.0 Boost",
+        "price": 1399.0,
+        "reason": "no vendor match"
+      }
+    ],
+    "returned_apply": [],
+    "new_candidates": [
+      {
+        "handle": "3300-w-electric-bike-motor-engwe-m20-3-0-moped-style-ebike",
+        "title": "ENGWE M20 3.0",
+        "price": 1399.0,
+        "best_db_score": 0.75
+      },
+      {
+        "handle": "usengine-pro-750w-16ah-high-performance-electric-bike",
+        "title": "ENGINE PRO",
+        "price": 1599.0,
+        "best_db_score": 0.44
+      },
+      {
+        "handle": "ease-3",
+        "title": "ENGWE Ease 3",
+        "price": 899.0,
+        "best_db_score": 0.43
+      },
+      {
+        "handle": "engwe-ease-1",
+        "title": "ENGWE Ease 1",
+        "price": 799.0,
+        "best_db_score": 0.73
+      },
+      {
+        "handle": "m20-2-0",
+        "title": "ENGWE M20 2.0",
+        "price": 999.0,
+        "best_db_score": 0.9
+      },
+      {
+        "handle": "l20-2-0",
+        "title": "ENGWE L20 2.0",
+        "price": 699.0,
+        "best_db_score": 0.9
+      },
+      {
+        "handle": "x26",
+        "title": "ENGWE X26",
+        "price": 1499.0,
+        "best_db_score": 0.75
+      }
+    ]
+  },
+  "Eunorau": {
+    "vendor_kept": 30,
+    "db_rows": 26,
+    "matches": [
+      {
+        "db_slug": "eunorau-defender",
+        "db_model": "DEFENDER",
+        "db_price": 1599.0,
+        "vendor_handle": "defender",
+        "vendor_title": "DEFENDER",
+        "vendor_price": 1599.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-defender-s-fat-hs",
+        "db_model": "Defender-S",
+        "db_price": 2999.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "eunorau-e-fat-mn",
+        "db_model": "E-FAT-MN",
+        "db_price": 1099.0,
+        "vendor_handle": "e-fat-mn",
+        "vendor_title": "E-FAT-MN",
+        "vendor_price": 1099.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-fat-awd-2",
+        "db_model": "FAT-AWD 2.0",
+        "db_price": 1699.0,
+        "vendor_handle": "fat-awd-2",
+        "vendor_title": "FAT-AWD 2.0",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-fat-awd-3-0",
+        "db_model": "FAT-AWD 3.0",
+        "db_price": 1699.0,
+        "vendor_handle": "fat-awd-3-0",
+        "vendor_title": "FAT-AWD 3.0",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-fat-hd",
+        "db_model": "FAT-HD 1.0",
+        "db_price": 1999.0,
+        "vendor_handle": "fat-hd",
+        "vendor_title": "FAT-HD 1.0 Pro / Hunter X7",
+        "vendor_price": 1999.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-fat-hd-2-0",
+        "db_model": "FAT-HD 2.0",
+        "db_price": 2399.0,
+        "vendor_handle": "fat-hd-2-0",
+        "vendor_title": "FAT-HD 2.0/Hunter X7",
+        "vendor_price": 2399.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-fat-hs",
+        "db_model": "FAT-HS",
+        "db_price": 2999.0,
+        "vendor_handle": "fat-hs",
+        "vendor_title": "FAT-HS / Hunter X8",
+        "vendor_price": 2999.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-flash-2",
+        "db_model": "FLASH",
+        "db_price": 2499.0,
+        "vendor_handle": "flash-2",
+        "vendor_title": "FLASH 2.0",
+        "vendor_price": 2499.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-flash-awd-1-0",
+        "db_model": "FLASH AWD",
+        "db_price": 2099.0,
+        "vendor_handle": "flash-awd-1-0",
+        "vendor_title": "FLASH AWD 1.0",
+        "vendor_price": 2099.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-flash-lite-2-0",
+        "db_model": "FLASH LITE",
+        "db_price": 1899.0,
+        "vendor_handle": "flash-lite-2-0",
+        "vendor_title": "FLASH LITE 2.0",
+        "vendor_price": 1899.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-flash-lite-st",
+        "db_model": "FLASH LITE ST",
+        "db_price": 1899.0,
+        "vendor_handle": "flash-lite-st",
+        "vendor_title": "FLASH LITE  ST 1.0",
+        "vendor_price": 1899.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-g30-cargo",
+        "db_model": "G30",
+        "db_price": 1699.0,
+        "vendor_handle": "g30-cargo",
+        "vendor_title": "G30-CARGO 2.0",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-max-cargo",
+        "db_model": "MAX-CARGO 2.0",
+        "db_price": 1699.0,
+        "vendor_handle": "max-cargo",
+        "vendor_title": "MAX-CARGO 2.0",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-meta-20-1",
+        "db_model": "META20 1.0",
+        "db_price": 1699.0,
+        "vendor_handle": "meta-20-1",
+        "vendor_title": "META20 1.0",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-meta-24-1",
+        "db_model": "META24 1.0",
+        "db_price": 1699.0,
+        "vendor_handle": "meta-24-1",
+        "vendor_title": "META24 1.0",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-meta-26-1",
+        "db_model": "META26 1.0",
+        "db_price": 1699.0,
+        "vendor_handle": "meta-26-1",
+        "vendor_title": "META26 1.0",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-meta-275-1",
+        "db_model": "META275 1.0",
+        "db_price": 1399.0,
+        "vendor_handle": "meta-275-1",
+        "vendor_title": "META275 1.0",
+        "vendor_price": 1399.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-meta-275-st-1",
+        "db_model": "META275",
+        "db_price": 1399.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "eunorau-meta275-2",
+        "db_model": "META275 2.0",
+        "db_price": 1699.0,
+        "vendor_handle": "meta275-2",
+        "vendor_title": "META275 2.0",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-r1",
+        "db_model": "R1",
+        "db_price": 4299.0,
+        "vendor_handle": "r1",
+        "vendor_title": "R1-19",
+        "vendor_price": 3750.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-r1-plus",
+        "db_model": "R1+",
+        "db_price": 4499.0,
+        "vendor_handle": "r1-plus",
+        "vendor_title": "R1+",
+        "vendor_price": 4499.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-s1-dirt-bike",
+        "db_model": "S1",
+        "db_price": 1699.0,
+        "vendor_handle": "s1-dirt-bike",
+        "vendor_title": "S1 Dirt Bike",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-specter-s-hunter",
+        "db_model": "SPECTER-S 3.0",
+        "db_price": 2999.0,
+        "vendor_handle": "specter-s-hunter",
+        "vendor_title": "SPECTER-S 3.0 / Hunter X9",
+        "vendor_price": 2999.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-specter-st-1",
+        "db_model": "SPECTER-ST 2.0",
+        "db_price": 2999.0,
+        "vendor_handle": "specter-st-1",
+        "vendor_title": "SPECTER-ST 2.0",
+        "vendor_price": 2999.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "eunorau-urus",
+        "db_model": "URUS 2.0",
+        "db_price": 3999.0,
+        "vendor_handle": "urus",
+        "vendor_title": "URUS 2.0",
+        "vendor_price": 3999.0,
+        "score": 1.0
+      }
+    ],
+    "price_updates_apply": [
+      {
+        "slug": "eunorau-r1",
+        "model": "R1",
+        "db_price": 4299.0,
+        "new_price": 3750.0,
+        "delta": -549.0,
+        "delta_pct": 12.8,
+        "vendor_handle": "r1",
+        "vendor_title": "R1-19",
+        "score": 1.0
+      }
+    ],
+    "price_updates_defer": [],
+    "discontinued_defer": [
+      {
+        "slug": "eunorau-meta-275-st-1",
+        "model": "META275",
+        "price": 1399.0,
+        "reason": "no vendor match"
+      }
+    ],
+    "returned_apply": [],
+    "new_candidates": [
+      {
+        "handle": "2x-fat-hs",
+        "title": "2x Fat-HS",
+        "price": 3449.0,
+        "best_db_score": 0.9
+      },
+      {
+        "handle": "r1-17",
+        "title": "R1-17",
+        "price": 3749.0,
+        "best_db_score": 0.9
+      },
+      {
+        "handle": "sled-xd-1500pro",
+        "title": "ICEX 1.0",
+        "price": 2499.0,
+        "best_db_score": 0.46
+      },
+      {
+        "handle": "eunorau-safety-seat-for-child",
+        "title": "EUNORAU Safety Seat for Child",
+        "price": 251.1,
+        "best_db_score": 0.49
+      },
+      {
+        "handle": "jumbo",
+        "title": "JUMBO",
+        "price": 1699.0,
+        "best_db_score": 0.13
+      },
+      {
+        "handle": "tektro-4-pistons-hydraulic-brake-set-with-203-disc-brake-rotor",
+        "title": "TEKTRO 4 Pistons Hydraulic Brake Set with 203MM Disc Brake Rotor",
+        "price": 299.0,
+        "best_db_score": 0.17
+      }
+    ]
+  },
+  "Walfisk": {
+    "vendor_kept": 6,
+    "db_rows": 3,
+    "matches": [
+      {
+        "db_slug": "walfisk-walfisk-26-fat-tire-bafang-750w-powerful-brushless-motor-22-5ah-large-ca",
+        "db_model": "WF26",
+        "db_price": 999.0,
+        "vendor_handle": "walfisk-26-fat-tire-bafang-750w-powerful-brushless-motor-22-5ah-large-capacity-battery-wf26",
+        "vendor_title": "WALFISK 26\u201c Fat Tire BAFANG 750W Powerful Brushless Motor 22.5AH Large Capacity Battery WF26",
+        "vendor_price": 999.0,
+        "score": 0.85
+      },
+      {
+        "db_slug": "walfisk-walfisk-electric-bike-et-7-3000w-brushless-motor-60v45ah-big-battery-bla",
+        "db_model": "ET-7 Ultra",
+        "db_price": 2299.99,
+        "vendor_handle": "walfisk-electric-bike-et-7-3000w-brushless-motor-60v45ah-big-battery-black-warrior-ebike-full-suspension-50mph-100miles-free-rear-cushion-canada",
+        "vendor_title": "WALFISK Electric bike ET-7 3000W Brushless Motor 60V45AH Big Battery Black Warrior Ebike Full suspension 50MPH 100miles Free Rear Cushion\uff08Canada\uff09",
+        "vendor_price": 2299.99,
+        "score": 0.75
+      },
+      {
+        "db_slug": "walfisk-walfisk-wf750-urbanx-fat-tire-electric-bike-48v-750w-25ah-battery-up-to-",
+        "db_model": "WF750 UrbanX",
+        "db_price": 1499.99,
+        "vendor_handle": "walfisk-wf750-urbanx-fat-tire-electric-bike-48v-750w-25ah-battery-up-to-28mph",
+        "vendor_title": "WALFISK WF750 URBANX Fat Tire Electric Bike 48V 750W 35Ah Battery Up to 28MPH",
+        "vendor_price": 1499.99,
+        "score": 0.926
+      }
+    ],
+    "price_updates_apply": [],
+    "price_updates_defer": [],
+    "discontinued_defer": [],
+    "returned_apply": [],
+    "new_candidates": [
+      {
+        "handle": "walfisk-et-7-ultra-electric-bike-frame-high-strength-aluminum-chassis",
+        "title": "Walfisk ET-7 ULTRA Electric Bike Frame \u2013 High-Strength Aluminum Chassis",
+        "price": 259.0,
+        "best_db_score": 0.49
+      },
+      {
+        "handle": "walfisk-electric-bike-et-7-3000w-brushless-motor-60v45ah-big-battery-black-warrior-ebike-full-suspension-50mph-100miles-free-rear-cushioneu",
+        "title": "WALFISK Electric bike ET-7 3000W Brushless Motor 60V45AH Big Battery Black Warrior Ebike Full suspension 50MPH 100miles\uff08Free Rear Cushion)EU&UK",
+        "price": 2299.99,
+        "best_db_score": 0.75
+      },
+      {
+        "handle": "walfisk-et-7-1500w-brushless-motor-60ah-big-battery-full-suspension-40mph",
+        "title": "WALFISK Electric bike ET-7 3000W Brushless Motor 60V45AH Big Battery Black Warrior Ebike Full suspension 50MPH 100miles\uff08Free Rear Cushion",
+        "price": 1999.99,
+        "best_db_score": 0.63
+      }
+    ]
+  },
+  "DUOTTS": {
+    "vendor_kept": 12,
+    "db_rows": 11,
+    "matches": [
+      {
+        "db_slug": "duotts-c29",
+        "db_model": "C29",
+        "db_price": 799.0,
+        "vendor_handle": "c29",
+        "vendor_title": "DUOTTS C29 Electric Bike",
+        "vendor_price": 799.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "duotts-duotts-c29-k",
+        "db_model": "C29-K",
+        "db_price": 1149.0,
+        "vendor_handle": "duotts-c29-k",
+        "vendor_title": "DUOTTS C29-K Electric Bike",
+        "vendor_price": 1149.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "duotts-duotts-c29lite-electric-bike",
+        "db_model": "C29 Lite",
+        "db_price": 729.0,
+        "vendor_handle": "duotts-c29lite-electric-bike",
+        "vendor_title": "DUOTTS C29Lite Electric Bike",
+        "vendor_price": 729.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "duotts-duotts-c29max-electric-bike",
+        "db_model": "C29Max",
+        "db_price": 1149.0,
+        "vendor_handle": "duotts-c29max-electric-bike",
+        "vendor_title": "DUOTTS C29Max Electric Bike",
+        "vendor_price": 1149.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "duotts-duotts-f26lite-electric-bike",
+        "db_model": "F26 Lite",
+        "db_price": 1199.0,
+        "vendor_handle": "duotts-f26lite-electric-bike",
+        "vendor_title": "DUOTTS F26Lite Electric Bike",
+        "vendor_price": 1199.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "duotts-e26",
+        "db_model": "E26",
+        "db_price": 1899.0,
+        "vendor_handle": "duotts-e26-electric-bike",
+        "vendor_title": "DUOTTS E26 Electric Bike",
+        "vendor_price": 1899.0,
+        "score": 0.794
+      },
+      {
+        "db_slug": "duotts-e29",
+        "db_model": "E29",
+        "db_price": 1299.0,
+        "vendor_handle": "duotts-e29-electric-bike",
+        "vendor_title": "DUOTTS E29 Electric Bike",
+        "vendor_price": 1299.0,
+        "score": 0.794
+      },
+      {
+        "db_slug": "duotts-f20",
+        "db_model": "F20",
+        "db_price": 1099.0,
+        "vendor_handle": "duotts-f20-electric-bike",
+        "vendor_title": "DUOTTS F20 Electric Bike",
+        "vendor_price": 1099.0,
+        "score": 0.794
+      },
+      {
+        "db_slug": "duotts-f26",
+        "db_model": "F26",
+        "db_price": 1349.0,
+        "vendor_handle": "f26",
+        "vendor_title": "DUOTTS F26 Electric Bike",
+        "vendor_price": 1349.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "duotts-n26",
+        "db_model": "N26",
+        "db_price": 1299.0,
+        "vendor_handle": "duotts-n26-electric-bike",
+        "vendor_title": "DUOTTS N26 Electric Bike",
+        "vendor_price": 1299.0,
+        "score": 0.794
+      },
+      {
+        "db_slug": "duotts-s26",
+        "db_model": "S26 AWD",
+        "db_price": 1299.0,
+        "vendor_handle": "s26",
+        "vendor_title": "DUOTTS S26 Electric Bike",
+        "vendor_price": 1299.0,
+        "score": 1.0
+      }
+    ],
+    "price_updates_apply": [],
+    "price_updates_defer": [],
+    "discontinued_defer": [],
+    "returned_apply": [],
+    "new_candidates": [
+      {
+        "handle": "apefox-rh20-e-bike",
+        "title": "APEFOX RH20 E-Bike",
+        "price": 1099.0,
+        "best_db_score": 0.19
+      }
+    ]
+  },
+  "SAMEBIKE": {
+    "vendor_kept": 21,
+    "db_rows": 22,
+    "matches": [
+      {
+        "db_slug": "samebike-20lvxd30-ii",
+        "db_model": "20LVXD30-II",
+        "db_price": 699.0,
+        "vendor_handle": "samebike-20lvxd30-ii-electric-bike",
+        "vendor_title": "20LVXD30-II 250W Folding Electric Bike",
+        "vendor_price": 699.0,
+        "score": 0.87
+      },
+      {
+        "db_slug": "samebike-c05-pro",
+        "db_model": "C05 Pro",
+        "db_price": 859.0,
+        "vendor_handle": "c05-pro-foldable-fat-tire-ebike",
+        "vendor_title": "C05 Pro Step-through Folding E-Bike",
+        "vendor_price": 859.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-crest-fat-tire-mountain-e-bike",
+        "db_model": "CREST",
+        "db_price": 1549.0,
+        "vendor_handle": "crest-fat-tire-mountain-e-bike",
+        "vendor_title": "CREST Fat Tire Mountain E-Bike",
+        "vendor_price": 1549.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "samebike-cy20",
+        "db_model": "CY20",
+        "db_price": 699.0,
+        "vendor_handle": "cy20-portable-commuter-electric-bike",
+        "vendor_title": "CY20 250W Portable Folding E-Bike",
+        "vendor_price": 699.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-cy20-pro",
+        "db_model": "CY20 Pro",
+        "db_price": 759.0,
+        "vendor_handle": "cy20-pro-portable-commuter-electric-bike",
+        "vendor_title": "CY20 Pro Portable Commuter Electric Bike",
+        "vendor_price": 759.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-ebe2",
+        "db_model": "EBE2",
+        "db_price": 619.0,
+        "vendor_handle": "ebe2-commuting-mountain-e-bike",
+        "vendor_title": "EBE2 Commuting Mountain E-Bike",
+        "vendor_price": 619.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-lo26-ii-yd",
+        "db_model": "LO26-II-YD",
+        "db_price": 899.0,
+        "vendor_handle": "samebike-lo26-ii-electric-mountain-bike",
+        "vendor_title": "LO26-II-YD Foldable Mountain E-bike",
+        "vendor_price": 899.0,
+        "score": 0.693
+      },
+      {
+        "db_slug": "samebike-lo26-plus",
+        "db_model": "LO26 Plus",
+        "db_price": 999.0,
+        "vendor_handle": "lo26-plus",
+        "vendor_title": "LO26 Plus Fat Tire Mountain E-Bike",
+        "vendor_price": 999.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "samebike-lotdm200-ii",
+        "db_model": "LOTDM200-II",
+        "db_price": 899.0,
+        "vendor_handle": "lotdm200-ii-step-through-ebike",
+        "vendor_title": "LOTDM200-II Fat Tire Off Road E-bike",
+        "vendor_price": 899.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-m20",
+        "db_model": "M20",
+        "db_price": 1299.0,
+        "vendor_handle": "samebike-m20-electric-motorcycle",
+        "vendor_title": "M20 100+Nm Retro Electric Bicycle",
+        "vendor_price": 1299.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-m20-iii",
+        "db_model": "M20-III",
+        "db_price": 1599.0,
+        "vendor_handle": "m20-iii-retro-motorcycle",
+        "vendor_title": "M20-III 160+Nm High-Torque E-bike",
+        "vendor_price": 1599.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-rs-a01-men",
+        "db_model": "RS-A01 MEN",
+        "db_price": 759.0,
+        "vendor_handle": "rsa01-men-electric-commuter-bike",
+        "vendor_title": "RS-A01 MEN Electric City Bike",
+        "vendor_price": 759.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-rs-a01-plus",
+        "db_model": "RS-A01 Plus",
+        "db_price": 999.0,
+        "vendor_handle": "rs-a01-plus-electric-city-bike",
+        "vendor_title": "RS-A01 Plus Electric City Bike",
+        "vendor_price": 999.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-rs-a01-pro",
+        "db_model": "RS-A01 Pro",
+        "db_price": 759.0,
+        "vendor_handle": "rs-a01-pro-t-urban-ebike",
+        "vendor_title": "RS-A01 Pro Commuter E-Bike",
+        "vendor_price": 759.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-rs-a02-plus",
+        "db_model": "RS-A02 Plus",
+        "db_price": 1399.0,
+        "vendor_handle": "samebike-rsa02plus-foldable-off-road-ebike",
+        "vendor_title": "RS-A02 Plus Fat Tire Off Road Ebike",
+        "vendor_price": 1399.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-rs-a02-pro",
+        "db_model": "RS-A02 Pro",
+        "db_price": 959.0,
+        "vendor_handle": "rs-a02-pro-fat-tire-off-road-e-bike",
+        "vendor_title": "RS-A02 Pro Fat Tire Off Road E-bike",
+        "vendor_price": 959.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-rs-a07",
+        "db_model": "RS-A07",
+        "db_price": 899.0,
+        "vendor_handle": "rs-a07-powerful-city-leisure-ebike",
+        "vendor_title": "RS-A07 250W Step-through City E-bike",
+        "vendor_price": 899.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-rsa08-ii-powerful-all-terrain-electric-bicycle",
+        "db_model": "RS-A08-II",
+        "db_price": 1599.0,
+        "vendor_handle": "rsa08-ii-powerful-all-terrain-electric-bicycle",
+        "vendor_title": "RS-A08-II High-performance Fat Tire Mountain E-Bike",
+        "vendor_price": 1599.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "samebike-storm-fat-tire-mountain-e-bike",
+        "db_model": "STORM",
+        "db_price": 1549.0,
+        "vendor_handle": "storm-fat-tire-mountain-e-bike",
+        "vendor_title": "STORM Fat Tire Mountain E-Bike",
+        "vendor_price": 1549.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "samebike-sy26-ii",
+        "db_model": "SY26-II",
+        "db_price": 699.0,
+        "vendor_handle": "sy26-ii-commuter-electric-bike",
+        "vendor_title": "SY26-II Mountain Electric Bike",
+        "vendor_price": 699.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "samebike-xd26-ii",
+        "db_model": "XD26-II",
+        "db_price": 859.0,
+        "vendor_handle": "samebike-xd26-urban-electric-bike",
+        "vendor_title": "XD26-II Urban Commuting E-Bike",
+        "vendor_price": 859.0,
+        "score": 0.827
+      },
+      {
+        "db_slug": "samebike-yinyu14",
+        "db_model": "YINYU14",
+        "db_price": 449.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      }
+    ],
+    "price_updates_apply": [],
+    "price_updates_defer": [],
+    "discontinued_defer": [],
+    "returned_apply": [],
+    "new_candidates": []
+  },
+  "DYU": {
+    "vendor_kept": 12,
+    "db_rows": 10,
+    "matches": [
+      {
+        "db_slug": "dyu-a1f-pro",
+        "db_model": "A1F Pro",
+        "db_price": 429.0,
+        "vendor_handle": null,
+        "vendor_title": null,
+        "vendor_price": null,
+        "score": 0.0
+      },
+      {
+        "db_slug": "dyu-a5",
+        "db_model": "A5",
+        "db_price": 519.0,
+        "vendor_handle": "dyu-a5-14inch-folding-electric-bike",
+        "vendor_title": "DYU A5 14 Inch Full Foldable Electric Bike",
+        "vendor_price": 519.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "dyu-c2-16-inch-full-folding-electric-bike",
+        "db_model": "C2",
+        "db_price": 549.0,
+        "vendor_handle": "dyu-c2-16-inch-full-folding-electric-bike",
+        "vendor_title": "DYU C2 16 Inch Full Folding Electric Bike",
+        "vendor_price": 549.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "dyu-c5-27-5-inch-city-electric-bike",
+        "db_model": "C5",
+        "db_price": 799.0,
+        "vendor_handle": "dyu-c5-27-5-inch-city-electric-bike",
+        "vendor_title": "DYU C5 27.5 Inch City Electric Bike",
+        "vendor_price": 799.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "dyu-c6-26-inch-city-electric-bike",
+        "db_model": "C6",
+        "db_price": 819.0,
+        "vendor_handle": "c6-26-inch-city-electric-bike",
+        "vendor_title": "DYU C6 26 Inch City Electric Bike",
+        "vendor_price": 819.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "dyu-c9",
+        "db_model": "C9",
+        "db_price": 899.0,
+        "vendor_handle": "dyu-c9-20-inch-long-range-ebike",
+        "vendor_title": "DYU C9 20 Inch Long-Range Ebike",
+        "vendor_price": 899.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "dyu-d3f",
+        "db_model": "D3F",
+        "db_price": 499.0,
+        "vendor_handle": "dyu-small-electric-bike-d3f",
+        "vendor_title": "DYU D3S 14 Inch Mini Folding Electric Bike\u3000",
+        "vendor_price": 499.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "dyu-m20",
+        "db_model": "M20",
+        "db_price": 899.0,
+        "vendor_handle": "dyu-m20-all-terrain-long-range-electric-bike",
+        "vendor_title": "M20 All-Terrain Long-Range Electric Bike",
+        "vendor_price": 899.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "dyu-stroll-1",
+        "db_model": "Stroll 1",
+        "db_price": 999.0,
+        "vendor_handle": "dyu-stroll-1-700c-city-electric-bike",
+        "vendor_title": "DYU Stroll 1 700C City Electric Bike",
+        "vendor_price": 999.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "dyu-t1",
+        "db_model": "T1",
+        "db_price": 699.0,
+        "vendor_handle": "dyu-t1-pedal-assist-torque-sensor-electric-bike",
+        "vendor_title": "DYU T1 20 Inch Foldable Electric Bike",
+        "vendor_price": 699.0,
+        "score": 0.75
+      }
+    ],
+    "price_updates_apply": [],
+    "price_updates_defer": [],
+    "discontinued_defer": [
+      {
+        "slug": "dyu-a1f-pro",
+        "model": "A1F Pro",
+        "price": 429.0,
+        "reason": "no vendor match"
+      }
+    ],
+    "returned_apply": [],
+    "new_candidates": [
+      {
+        "handle": "dyu-d3s-14-inch-mini-folding-electric-bike",
+        "title": "DYU D3S 14 Inch Mini Folding Electric Bike",
+        "price": 499.0,
+        "best_db_score": 0.63
+      },
+      {
+        "handle": "dyu-sp1-20-inch-removable-power-bank-folding-ebike",
+        "title": "DYU SP1 20\" Removable Power Bank Folding Ebike",
+        "price": 1299.0,
+        "best_db_score": 0.47
+      },
+      {
+        "handle": "a1f-ebike",
+        "title": "DYU A1F Pro 16 Inch Full Folding Electric Bike",
+        "price": 499.0,
+        "best_db_score": 0.53
+      }
+    ]
+  },
+  "VTUVIA": {
+    "vendor_kept": 20,
+    "db_rows": 11,
+    "matches": [
+      {
+        "db_slug": "vtuvia-cmb",
+        "db_model": "CMB",
+        "db_price": 1899.0,
+        "vendor_handle": "cmb-mid-drive-500-watt-electric-city-bike-vtuvia-ebike",
+        "vendor_title": "VTUVIA CMB 8-Speed Ebike",
+        "vendor_price": 1899.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "vtuvia-fmb-full-suspension-mountain-ebike",
+        "db_model": "FMB",
+        "db_price": 2999.0,
+        "vendor_handle": "fmb-full-suspension-mountain-ebike",
+        "vendor_title": "VTUVIA FMB Ebike",
+        "vendor_price": 2999.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "vtuvia-gemini",
+        "db_model": "Gemini",
+        "db_price": 1899.0,
+        "vendor_handle": "gemini-dual-battery-1000w-electric-bike-all-terrain-vtuvia-ebike",
+        "vendor_title": "VTUVIA Gemini 1000W Ebike",
+        "vendor_price": 1899.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "vtuvia-giraffe-step-thru-city-commuter-electric-bike",
+        "db_model": "GIRAFFE",
+        "db_price": 1599.0,
+        "vendor_handle": "giraffe-step-thru-city-commuter-electric-bike",
+        "vendor_title": "VTUVIA Giraffe Ebike",
+        "vendor_price": 1599.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "vtuvia-reindeer-2",
+        "db_model": "Reindeer 2.0",
+        "db_price": 1599.0,
+        "vendor_handle": "reindeer-2-step-through-fat-tire-ebike",
+        "vendor_title": "VTUVIA Reindeer 2.0 Ebike",
+        "vendor_price": 1599.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "vtuvia-reindeer-step-thru-electric-bike",
+        "db_model": "REINDEER 1.0",
+        "db_price": 1699.0,
+        "vendor_handle": "reindeer-step-thru-electric-bike",
+        "vendor_title": "VTUVIA Reindeer 1.0",
+        "vendor_price": 1699.0,
+        "score": 1.0
+      },
+      {
+        "db_slug": "vtuvia-sf20h",
+        "db_model": "SF20H",
+        "db_price": 1399.0,
+        "vendor_handle": "sf20h-fat-tire-folding-electric-bike-ul-certified-ebike",
+        "vendor_title": "VTUVIA SF20H Utility Ebike",
+        "vendor_price": 1399.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "vtuvia-sn100",
+        "db_model": "SN100",
+        "db_price": 1599.0,
+        "vendor_handle": "sn100-750w-fat-tire-hunting-electric-mountain-bike",
+        "vendor_title": "VTUVIA SN100 Hunting Ebike",
+        "vendor_price": 1599.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "vtuvia-sx20",
+        "db_model": "SX20",
+        "db_price": 1599.0,
+        "vendor_handle": "sx20-foldable-step-through-electric-bike",
+        "vendor_title": "VTUVIA SX20 Folding Ebike",
+        "vendor_price": 1599.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "vtuvia-zeal-lt7",
+        "db_model": "Zeal LT7",
+        "db_price": 1299.0,
+        "vendor_handle": "zeal-lt7-step-through-commuter-electric-bike",
+        "vendor_title": "VTUVIA Zeal LT7 Ebike",
+        "vendor_price": 1299.0,
+        "score": 0.75
+      },
+      {
+        "db_slug": "vtuvia-zeal-xt8",
+        "db_model": "Zeal XT8",
+        "db_price": 1799.0,
+        "vendor_handle": "zeal-xt8-high-power-step-through-ebike-for-hilly-commutes-and-long-distance-riding",
+        "vendor_title": "VTUVIA Zeal XT8 Ebike",
+        "vendor_price": 1799.0,
+        "score": 0.75
+      }
+    ],
+    "price_updates_apply": [],
+    "price_updates_defer": [],
+    "discontinued_defer": [],
+    "returned_apply": [],
+    "new_candidates": [
+      {
+        "handle": "cmb-10-speed-ebike",
+        "title": "CMB 10-Speed Ebike",
+        "price": 2149.0,
+        "best_db_score": 0.75
+      },
+      {
+        "handle": "vtuvia-sx20-ebike-silvery",
+        "title": "VTUVIA SX20 Antelope Ebike Silvery",
+        "price": 1599.0,
+        "best_db_score": 0.75
+      },
+      {
+        "handle": "sf20h-folding-ebike-black",
+        "title": "VTUVIA SF20H Folding Ebike Black",
+        "price": 1399.0,
+        "best_db_score": 0.75
+      },
+      {
+        "handle": "sf20h-folding-ebike-red",
+        "title": "VTUVIA SF20H Folding Ebike Red",
+        "price": 1399.0,
+        "best_db_score": 0.75
+      },
+      {
+        "handle": "sf20h-folding-ebike-green",
+        "title": "VTUVIA SF20H Folding Ebike Green",
+        "price": 1399.0,
+        "best_db_score": 0.75
+      },
+      {
+        "handle": "sf20h-folding-ebike-white",
+        "title": "VTUVIA SF20H Folding Ebike White",
+        "price": 1399.0,
+        "best_db_score": 0.75
+      },
+      {
+        "handle": "sx20-ebike-red",
+        "title": "VTUVIA SX20 Antelope Ebike Red",
+        "price": 1599.0,
+        "best_db_score": 0.75
+      },
+      {
+        "handle": "sx20-ebike-white",
+        "title": "VTUVIA SX20 Antelope Ebike White",
+        "price": 1599.0,
+        "best_db_score": 0.75
+      },
+      {
+        "handle": "sx20-ebike-blue",
+        "title": "VTUVIA SX20 Antelope Ebike Blue",
+        "price": 1599.0,
+        "best_db_score": 0.75
+      }
+    ]
+  }
+}

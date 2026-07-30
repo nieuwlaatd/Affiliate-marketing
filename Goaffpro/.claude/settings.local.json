@@ -7,7 +7,8 @@
       "WebFetch(domain:apidoc.goaffpro.com)",
       "WebFetch(domain:docs.goaffpro.com)",
       "WebFetch(domain:storeleads.app)",
-      "WebFetch(domain:blog.goaffpro.com)"
+      "WebFetch(domain:blog.goaffpro.com)",
+      "Bash(ls \"C:/Users/Dylan/OneDrive/Documenten/Affiliate marketing/harkuhh/\" | head -50)"
     ]
   }
 }

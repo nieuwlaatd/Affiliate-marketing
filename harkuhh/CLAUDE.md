@@ -1,13 +1,10 @@
-@AGENTS.md
-
 ## Terminology
 
-- **"Bovenste filters"** = De KeuzehulpBar component (`components/KeuzehulpBar.tsx`), het blok met 6 filterblokken onder "Find your perfect e-bike" op de overzichtspagina (`/e-bikes/overzicht`). Dit is GEEN vragenlijst.
-- **"De vragenlijst"** = De echte Find My E-Bike quiz die je bereikt via de "Find My E-Bike" knop in de navigatie (`/e-bikes/quiz`). De bovenste filters moeten in dezelfde volgorde staan als de vragen in deze quiz.
-- **"Sidebar filters"** = Het filterpaneel links op de overzichtspagina onder het kopje "Filters".
+- "Bovenste filters" = KeuzehulpBar (`components/KeuzehulpBar.tsx`), 6 filter blocks on /e-bikes/overzicht. NOT a questionnaire; order must match the quiz questions.
+- "De vragenlijst" = the Find My E-Bike quiz (/e-bikes/quiz).
+- "Sidebar filters" = left filter panel on /e-bikes/overzicht.
 
-## Skills
+## Skills (defined in .claude/skills/)
 
-- `/add-brand` — Onboard a new e-bike brand: scrape all bikes from their website into Supabase, scrape dealer locations into store-data.ts, and configure affiliate tracking. Usage: `/add-brand [brand name] [website URL] [optional affiliate code]`
-- `/sync-brands` — Read `affiliate-partners.xlsx`, find all rows with Status="New", and automatically scrape bikes + stores + configure affiliate tracking for each. Updates the Excel file with results.
-- `/add-blog` — Write and publish a new blog post. Usage: `/add-blog [topic or keyword]`. Researches SEO angle, writes human-sounding content (no em-dashes, no AI filler), adds to blog-data.ts, and verifies the build.
+- `/add-brand [name] [url] [affiliate code?]` - onboard brand: scrape bikes to Supabase, dealers to store-data.ts, configure affiliate tracking
+- `/sync-brands` - process Status="New" rows in affiliate-partners.xlsx (scrape + affiliate config), update Excel with results
