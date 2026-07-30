@@ -55,6 +55,9 @@ const VS_MATCHUPS = [
   'engwe-ep-2-boost-vs-engwe-ep-2-pro',
   'eunorau-flash-2-vs-eunorau-flash-awd-1-0',
   'walfisk-walfisk-26-fat-tire-bafang-750w-powerful-brushless-motor-22-5ah-large-ca-vs-walfisk-walfisk-wf750-urbanx-fat-tire-electric-bike-48v-750w-25ah-battery-up-to-',
+  'eunorau-r1-vs-eunorau-r1-plus',
+  'engwe-n1-air-vs-engwe-n1-pro',
+  'eunorau-meta275-2-vs-eunorau-meta-275-st-1',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

@@ -78,6 +78,14 @@ const MATCHUPS: [string, string][] = [
   // (flagged as a fresh candidate in run 62); it only has 3 SKUs, so checked all pairs
   // and found one genuine story rather than forcing one across all three.
   ['walfisk-walfisk-26-fat-tire-bafang-750w-powerful-brushless-motor-22-5ah-large-ca', 'walfisk-walfisk-wf750-urbanx-fat-tire-electric-bike-48v-750w-25ah-battery-up-to-'], // "WF26 vs WF750 UrbanX" -- same 80 Nm rear-hub motor, front suspension, 330 lb payload and Class 3 rating, but WF750 UrbanX has a 55% bigger battery (35Ah vs 22.5Ah) for 45mi vs 38mi practical range at $500 more ($1,499.99 vs $999) -- a real "is the bigger battery worth $500" query. ET-7 Ultra (Walfisk's 3rd SKU) is a 3000W off-road-only motor, not a legal e-bike, so it has no natural same-category pairing with either street-legal sibling.
+  // 2026-07-30 run 64: P4.2 naming-confusion slice 8 -- GSC/PostHog flat for a 21st
+  // consecutive run (one new query, "samebike lo26 plus review", but the matching page
+  // already has full depth and a vs-page, nothing to action there). Fresh full-catalog
+  // sweep found 3 more genuine same-stem sibling pairs that had never been paired despite
+  // sharing an obvious name stem.
+  ['eunorau-r1', 'eunorau-r1-plus'], // "R1 vs R1+" -- the site's two most expensive flagships share the literal "R1"/"R1+" name stem but had never been paired; R1+ is a real generational upgrade (72V 5,000W/500 Nm vs R1's 72V 4,000W/330 Nm, 150 lbs vs 130 lbs) for $749 more -- a genuine "is the Plus worth it" query between the catalog's two priciest bikes
+  ['engwe-n1-air', 'engwe-n1-pro'], // "N1 Air vs N1 Pro" -- both carbon fiber "N1" bikes (confirmed carbon frame material for both, run 38) but a real architecture gap: N1 Air is rear-hub/40 Nm/34.4 lbs (the lightest bike in the ENGWE lineup) at $1,249, N1 Pro is mid-drive/80 Nm/41.9 lbs with a 1.5hr flash-charge system at $1,599 -- a genuine "lightweight vs climbing power" query, and both bikes carry real GSC/PostHog signal history
+  ['eunorau-meta275-2', 'eunorau-meta-275-st-1'], // "META275 2.0 vs META275 ST" -- while sourcing this pairing, found and fixed a real bug: `eunorau-meta275-2` stored `weight_lbs=60` and `frame_type='step-over'`, but its own description already said "step-thru city commuter," and Eunorau's own product page for this exact SKU (ca.eunorau-ebike.com/products/meta275-2-0) confirms a step-thru frame option and 68.4 lbs, not 60 -- fixed both fields before shipping. With that corrected, 2.0 and ST are both step-through META275s at nearly identical weight, but 2.0 trades 10 Nm of torque (55 vs 65) for a bigger 15Ah battery and much longer range (100mi/75mi vs 65mi/49mi) at $300 more -- a real "which step-through META275" query, same pattern as the P275 SE-vs-ST pairing
 ];
 
 function brandSlug(b: EBike): string {
