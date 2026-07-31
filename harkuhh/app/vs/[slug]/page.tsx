@@ -102,6 +102,12 @@ const MATCHUPS: [string, string][] = [
   // different brand -- the natural cross-brand comparison for anyone browsing that
   // page is CY20 Pro against its closest ENGWE price neighbor.
   ['samebike-cy20-pro', 'engwe-t14'], // "CY20 Pro vs T14" -- the only cross-brand pairing among the site's budget mini-folders: T14 is $109 cheaper (14in wheels, no suspension, 220 lb payload) while CY20 Pro adds front+seat suspension and Shimano 7-speed gearing for a 330 lb payload -- a real "is the extra suspension and payload worth $109" query for anyone comparing the folding category's two cheapest entries across brands
+  // 2026-07-31 run 67: continuing the P4.2 cross-brand pivot (started run 66 with the
+  // folding-bikes CY20 Pro/T14 pairing). GSC/PostHog both essentially flat vs run 66's
+  // same-day pull (folding-ebikes dual signal repeated but not yet a distinct 2nd-run
+  // confirmation), so swept for more genuine same-price/same-spec cross-brand twins.
+  ['engwe-p275-se', 'samebike-rs-a07'], // "P275 SE vs RS-A07" -- near-identical cross-brand twins at the exact same $899 price: both step-through rear-hub commuters with the identical 55 Nm torque figure, differing mainly in payload (P275 SE 265 lb vs RS-A07's meaningfully higher 330 lb) and wheel size (27.5in vs 26in) -- a real "same price, same torque, which one" query, and gives P275 SE (this run's #1 PostHog page at 13 views/13 visitors/13 sessions, and historically the site's top GSC-impression bike page) a fresh cross-brand comparison surface
+  ['engwe-le20', 'eunorau-g30-cargo'], // "LE20 vs G30" -- the site's first cross-brand cargo-bike comparison: identical $1,699 price and near-identical payload capacity (441 vs 440 lb), but LE20 clearly out-specs G30 at the same price with more torque (75 vs 65 Nm) and a much bigger battery for nearly double the practical range (81mi vs 49mi) -- a genuine "why pay the same for less range" query for cargo-bike shoppers comparing brands
 ];
 
 function brandSlug(b: EBike): string {
