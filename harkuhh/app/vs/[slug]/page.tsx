@@ -94,6 +94,14 @@ const MATCHUPS: [string, string][] = [
   ['eunorau-fat-awd-2', 'eunorau-fat-awd-3-0'], // "FAT-AWD 2.0 vs 3.0" -- identical price ($1,699), motor (dual 500W hub, 110 Nm combined), battery (48V 15Ah) and weight (79.4 lbs); the only real difference, already spelled out in both bikes' own descriptions, is the pedal-assist sensor: 2.0 uses a cadence sensor, 3.0 upgrades to a torque sensor for smoother assist -- a genuine "is the torque sensor worth it" query at the exact same price point
   ['engwe-m1', 'engwe-m20'], // "M1 vs M20" -- a counterintuitive naming trap: M1 ($1,099) actually beats M20 ($1,399) on torque (65 vs 55 Nm) and payload (441 vs 265 lbs) despite the lower model number and lower price -- M20's extra cost buys different styling and portability tradeoffs, not more power, a real "why does the bigger number cost more for less bike" query
   ['engwe-ep-2-3-0-boost', 'engwe-ep-2-boost'], // "EP-2 3.0 Boost vs EP-2 Boost" -- another counterintuitive "3.0" trap: EP-2 3.0 Boost ($999, 75 Nm, torque sensor, hydraulic brakes, magnesium step-through frame) is actually cheaper and more powerful than the plain EP-2 Boost ($1,049, 55 Nm) -- a real "does the plain Boost or the 3.0 Boost cost more" query given both share the "EP-2 ... Boost" name stem
+  // 2026-07-31 run 66: P4.2 pivot to cross-brand pairs (run 65's own log flagged
+  // same-stem pairs as "very thin after 9 slices"). GSC/PostHog both flagged
+  // `/best/folding-ebikes` this run: its first-ever GSC click (pos 21.7) plus a
+  // PostHog pageview/session signal, a genuine dual-signal convergence. Of the 12
+  // folding bikes in the catalog, 11 are ENGWE and only 1 (SAMEBIKE CY20 Pro) is a
+  // different brand -- the natural cross-brand comparison for anyone browsing that
+  // page is CY20 Pro against its closest ENGWE price neighbor.
+  ['samebike-cy20-pro', 'engwe-t14'], // "CY20 Pro vs T14" -- the only cross-brand pairing among the site's budget mini-folders: T14 is $109 cheaper (14in wheels, no suspension, 220 lb payload) while CY20 Pro adds front+seat suspension and Shimano 7-speed gearing for a 330 lb payload -- a real "is the extra suspension and payload worth $109" query for anyone comparing the folding category's two cheapest entries across brands
 ];
 
 function brandSlug(b: EBike): string {
