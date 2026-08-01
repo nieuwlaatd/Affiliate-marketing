@@ -64,6 +64,9 @@ const VS_MATCHUPS = [
   'samebike-cy20-pro-vs-engwe-t14',
   'engwe-p275-se-vs-samebike-rs-a07',
   'engwe-le20-vs-eunorau-g30-cargo',
+  'samebike-yinyu14-vs-dyu-d3f',
+  'samebike-sy26-ii-vs-dyu-t1',
+  'engwe-e26-vs-vtuvia-reindeer-step-thru-electric-bike',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

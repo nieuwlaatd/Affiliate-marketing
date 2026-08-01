@@ -108,6 +108,16 @@ const MATCHUPS: [string, string][] = [
   // confirmation), so swept for more genuine same-price/same-spec cross-brand twins.
   ['engwe-p275-se', 'samebike-rs-a07'], // "P275 SE vs RS-A07" -- near-identical cross-brand twins at the exact same $899 price: both step-through rear-hub commuters with the identical 55 Nm torque figure, differing mainly in payload (P275 SE 265 lb vs RS-A07's meaningfully higher 330 lb) and wheel size (27.5in vs 26in) -- a real "same price, same torque, which one" query, and gives P275 SE (this run's #1 PostHog page at 13 views/13 visitors/13 sessions, and historically the site's top GSC-impression bike page) a fresh cross-brand comparison surface
   ['engwe-le20', 'eunorau-g30-cargo'], // "LE20 vs G30" -- the site's first cross-brand cargo-bike comparison: identical $1,699 price and near-identical payload capacity (441 vs 440 lb), but LE20 clearly out-specs G30 at the same price with more torque (75 vs 65 Nm) and a much bigger battery for nearly double the practical range (81mi vs 49mi) -- a genuine "why pay the same for less range" query for cargo-bike shoppers comparing brands
+  // 2026-08-01 run 68: GSC/PostHog both essentially flat vs run 67's pull (same top
+  // query/pages, "samebike lo26 plus review" and the homepage pos-4.0 click did not
+  // repeat -- confirming both were one-off noise, not a real trend). Standing price-drift
+  // sweep (`description ~ '\$[0-9]'` vs `price`, all 61 rows) came back clean -- 6th
+  // consecutive clean run. Continued the P4.2 cross-brand pivot with 3 more pairs mined
+  // from a full-catalog price/torque/suitable_for cross-tab, all verified spec-clean
+  // (description matches DB fields) before shipping.
+  ['samebike-yinyu14', 'dyu-d3f'], // "YINYU14 vs D3F" -- the catalog's two cheapest e-bikes, both ultra-compact 14in folders with identical 30 Nm torque and no suspension: YINYU14 is $50 cheaper with more practical range (24mi vs 20mi), D3F is lighter (41.9 vs 44 lbs) with a higher payload (264 vs 220 lb) -- a real "which budget mini-folder" query between the two smallest bikes in the catalog
+  ['samebike-sy26-ii', 'dyu-t1'], // "SY26-II vs T1" -- identical $699 price and both front-suspension city commuters, but SY26-II wins on torque (45 vs 35 Nm), payload (330 vs 264 lb) and practical range (36mi vs 24mi) while T1 counters with a lighter die-cast magnesium frame (50.7 vs 55 lbs) and a torque-sensor pedal feel -- a genuine "same price, which matters more" query
+  ['engwe-e26', 'vtuvia-reindeer-step-thru-electric-bike'], // "E26 vs Reindeer 1.0" -- both exactly $1,699 fat-tire 26in bikes, but E26 adds full front-and-rear suspension and more real-world range (65mi vs 38mi) while Reindeer 1.0 counters with more torque (80 vs 70 Nm) and a much higher payload (400 vs 331 lb) plus a lower step-through frame -- a real "suspension and range vs torque and payload" cross-brand query at an identical price point
 ];
 
 function brandSlug(b: EBike): string {
