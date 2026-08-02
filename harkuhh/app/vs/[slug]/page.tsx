@@ -132,6 +132,13 @@ const MATCHUPS: [string, string][] = [
   // working the $1,699-tier candidates queued in run 69's next-candidates list.
   ['eunorau-meta-20-1', 'eunorau-meta-26-1'], // "META20 1.0 vs META26 1.0" -- identical price ($1,699), motor (48V 500W hub, 55 Nm), battery and range (100mi manufacturer/75mi practical), the only real difference is wheel size and the rider-height guidance each description already carries (20in for 5'1"-6'1" vs 26in for 5'4"-6'3") -- a genuine "which size fits me" query within Eunorau's own META family
   ['engwe-engine-pro-2-0', 'engwe-engine-pro-3-0-boost'], // "Engine Pro 2.0 vs Engine Pro 3.0 Boost" -- identical $1,699 price and payload (331 lb), but 3.0 Boost is a real generational upgrade (90 vs 75 Nm, 60mi vs 51mi practical range, hydraulic dual-piston brakes plus GPS/4G anti-theft) for 6.8 lbs more and one fewer gear (7-speed vs 2.0's 8-speed) -- a genuine "is the newer generation worth the tradeoff" query
+  // 2026-08-02 run 71: GSC/PostHog pulls essentially identical to run 70's same-day
+  // numbers (4 clicks/1,856 impr GSC; 147 pageviews/79 visitors PostHog, same top pages
+  // and converter set) -- no distinct new signal. Standing price-drift sweep found a
+  // real bug instead: see SEO-LOG (FLASH LITE 2.0/ST mutual "undercuts" contradiction,
+  // fixed in Supabase). Continued P4.2 with a fresh full-catalog sweep for same-stem
+  // pairs not yet in this list.
+  ['eunorau-fat-hd', 'eunorau-fat-hd-2-0'], // "FAT-HD 1.0 vs 2.0" -- same 1000W/160 Nm Bafang mid-drive platform and 375 lb payload, but 2.0 adds a dual-battery system (80mi manufacturer/60mi practical vs 1.0's single-battery 60mi/45mi) and front suspension (1.0 has none) for $400 more -- a genuine "is the 2.0 upgrade worth $400" query, same pattern as the FAT-AWD 2.0/3.0 pairing
 ];
 
 function brandSlug(b: EBike): string {

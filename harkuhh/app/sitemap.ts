@@ -72,6 +72,7 @@ const VS_MATCHUPS = [
   'vtuvia-giraffe-step-thru-city-commuter-electric-bike-vs-eunorau-defender',
   'eunorau-meta-20-1-vs-eunorau-meta-26-1',
   'engwe-engine-pro-2-0-vs-engwe-engine-pro-3-0-boost',
+  'eunorau-fat-hd-vs-eunorau-fat-hd-2-0',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
