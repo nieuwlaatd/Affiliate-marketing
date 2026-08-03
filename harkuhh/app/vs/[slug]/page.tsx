@@ -139,6 +139,14 @@ const MATCHUPS: [string, string][] = [
   // fixed in Supabase). Continued P4.2 with a fresh full-catalog sweep for same-stem
   // pairs not yet in this list.
   ['eunorau-fat-hd', 'eunorau-fat-hd-2-0'], // "FAT-HD 1.0 vs 2.0" -- same 1000W/160 Nm Bafang mid-drive platform and 375 lb payload, but 2.0 adds a dual-battery system (80mi manufacturer/60mi practical vs 1.0's single-battery 60mi/45mi) and front suspension (1.0 has none) for $400 more -- a genuine "is the 2.0 upgrade worth $400" query, same pattern as the FAT-AWD 2.0/3.0 pairing
+  // 2026-08-03 run 72: GSC/PostHog essentially flat vs run 71's pull (4 clicks/1,918
+  // impr GSC, "duotts c29-k" repeated at identical numbers; 149 pageviews/81 visitors
+  // PostHog, same top pages/converters) -- no distinct new signal. Standing price-drift
+  // sweep (all 61 `description ~ '\$[0-9]'` rows) came back clean this run. Continued
+  // P4.2 by working run 71's queued DYU candidate list (`dyu-a1f-pro`, `dyu-a5`,
+  // `dyu-c2`, `dyu-stroll-1` -- all unpaired in every prior MATCHUPS entry).
+  ['dyu-a1f-pro', 'dyu-a5'], // "A1F Pro vs A5" -- identical 25 Nm torque and near-identical folding city-bike builds, but A5 adds a front suspension fork (A1F Pro has none) for $90 more ($519 vs $429) -- a genuine "is the suspension worth $90" query within DYU's own budget folding lineup, both previously unpaired
+  ['dyu-stroll-1', 'samebike-lo26-plus'], // "Stroll 1 vs LO26 Plus" -- identical $999 price but opposite use cases: Stroll 1 is DYU's lightest, most road-bike-like model (43 lbs, no suspension, 40 Nm, 700C wheels) built for stylish paved commuting, while LO26 Plus is a full-suspension 26x4.0 fat-tire off-roader (68 lbs, 75 Nm, 330 lb payload) -- a real "commuter vs off-road" cross-brand query at the identical price point. `dyu-c2` (torque not publicly documented, same unresolved gap as the DYU C2/C5/C6 trio since run 32) had no genuine same-price sibling this run -- left unpaired by design rather than forcing a weak match, same treatment as `eunorau-max-cargo`/`eunorau-s1-dirt-bike`.
 ];
 
 function brandSlug(b: EBike): string {
