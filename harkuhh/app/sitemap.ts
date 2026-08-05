@@ -75,6 +75,8 @@ const VS_MATCHUPS = [
   'eunorau-fat-hd-vs-eunorau-fat-hd-2-0',
   'dyu-a1f-pro-vs-dyu-a5',
   'dyu-stroll-1-vs-samebike-lo26-plus',
+  'samebike-ebe2-vs-samebike-sy26-ii',
+  'vtuvia-cmb-vs-vtuvia-gemini',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
